@@ -31,7 +31,7 @@
             }
         }
 
-        public Vector3 normailzed
+        public Vector3 normalized
         {
             get
             {
@@ -110,7 +110,7 @@
 
         public void Normalize()
         {
-            this = normailzed;
+            this = normalized;
         }
 
         public static int Dot(Vector3 lhs, Vector3 rhs)
@@ -172,6 +172,53 @@
             }
             return new Vector3(x, y, z);
         }
+
+        /*
+        public static int Angle(Vector3 lhs, Vector3 rhs)
+        {
+            int dot = Dot(lhs, rhs);    //2 POF
+            int dot1 = Dot(lhs, rhs);   //2 POF
+            int dot2 = Dot(lhs, rhs);   //2 POF
+            long dot1xdot2 = (long)dot1 * dot2; //4 POF
+            int cos = 0;
+            if (dot1xdot2 > (long)int.MaxValue)
+            {
+                dot1xdot2 = Math.RndDiv(dot1xdot2, Math.SQR_FACTOR);    //2 POF
+                if (dot1xdot2 > (long)int.MaxValue)
+                {
+                    dot1xdot2 = Math.RndDiv(dot1xdot2, Math.SQR_FACTOR);    //0 POF
+                    int d1xd2 = (int)dot1xdot2;
+                    int sqrtd1xd2 = Math.Sqrt(d1xd2);   //0 POF
+                    cos = Math.RndDiv(dot, sqrtd1xd2);  //2 POF
+                    cos = Math.RndDiv(cos, Math.FACTOR);    //1 POF
+                }
+                else
+                {
+                    int d1xd2 = (int)dot1xdot2;     //2 POF
+                    int sqrtd1xd2 = Math.Sqrt(d1xd2);   //1 POF
+                    cos = Math.RndDiv(dot, sqrtd1xd2);  //1 POF
+                }
+            }
+            else
+            {
+                int d1xd2 = (int)dot1xdot2;
+                int sqrtd1xd2 = Math.Sqrt(d1xd2);   //2 POF
+                cos = (int)Math.RndDiv((long)dot * Math.FACTOR, sqrtd1xd2);  //1 POF
+            }
+            int radians = Math.Acos(Math.Clamp(cos, -Math.FACTOR, Math.FACTOR));
+            return Math.Rad2Deg(radians);
+        }
+        //*/
+
+        //*
+        public static int Angle(Vector3 lhs, Vector3 rhs)
+        {
+            lhs.Normalize();
+            rhs.Normalize();
+            int radians = Math.Acos(Math.Clamp(Math.RndDiv(Dot(lhs, rhs), Math.FACTOR), -Math.FACTOR, Math.FACTOR));
+            return Math.Rad2Deg(radians);
+        }
+        //*/
 
         public override string ToString()
         {

@@ -15,6 +15,7 @@ namespace IM.Test
 
     public delegate T Func1<T>(T x);
     public delegate T Func2<T, U>(T x, U y);
+    public delegate V Func2<T, U, V>(T x, U y);
 
     public class Tester<T>
     {

@@ -15,6 +15,7 @@ namespace IM.Test
             AddStep("Sin", TestSin);
             AddStep("Cos", TestCos);
             AddStep("Asin", TestAsin);
+            AddStep("Acos", TestAcos);
         }
 
         bool TestSin()
@@ -36,6 +37,13 @@ namespace IM.Test
         bool TestAsin()
         {
             var tester = Utils.GenerateTester("Asin", IM.Math.Asin, UnityEngine.Mathf.Asin,
+                -Math.FACTOR, Math.FACTOR, Math.FACTOR, DevMode.Absolute, 1f);
+            return Utils.TestSequence(tester, -Math.FACTOR, Math.FACTOR, 1);
+        }
+
+        bool TestAcos()
+        {
+            var tester = Utils.GenerateTester("Acos", IM.Math.Acos, UnityEngine.Mathf.Acos,
                 -Math.FACTOR, Math.FACTOR, Math.FACTOR, DevMode.Absolute, 1f);
             return Utils.TestSequence(tester, -Math.FACTOR, Math.FACTOR, 1);
         }

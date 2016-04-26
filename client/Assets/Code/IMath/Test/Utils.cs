@@ -78,6 +78,25 @@ namespace IM.Test
             tester.test = test;
             return tester;
         }
+        public static Tester<Vector3, Vector3> GenerateTester(
+            string name, Func2<Vector3, Vector3, int> testFunc, Func2<UE.Vector3, UE.Vector3, float> refFunc,
+            int minValue, int maxValue, int factor, DevMode devMode, float maxDev)
+        {
+            TestFunc2<Vector3, Vector3> test = (Vector3 x, Vector3 y) =>
+            {
+                int result = testFunc(x, y);
+                float refResult = refFunc((UE.Vector3)x / factor, (UE.Vector3)y / factor);
+                return CheckResult(name, x, y, (float)result, refResult, minValue, maxValue, devMode, maxDev);
+            };
+            Tester<Vector3, Vector3> tester = new Tester<Vector3, Vector3>();
+            tester.name = name;
+            tester.minValue1 = new Vector3(minValue);
+            tester.maxValue1 = new Vector3(maxValue);
+            tester.minValue2 = new Vector3(minValue);
+            tester.maxValue2 = new Vector3(maxValue);
+            tester.test = test;
+            return tester;
+        }
 
         public static bool TestCritical(Tester<int> tester)
         {
@@ -329,6 +348,20 @@ namespace IM.Test
                     "TestName:{0} Input:{1} {2} Result:{3} RefResult:{4} Diff:{5} Dev:{6} MaxDev{7}",
                     name, input1, input2, result.ToString("F4"), refResult.ToString("F4"),
                     diff.ToString("F4"), new UE.Vector3(devX, devY, devZ).ToString("F4"), maxDev));
+                return false;
+            }
+            return true;
+        }
+        static bool CheckResult(string name, Vector3 input1, Vector3 input2, float result, float refResult,
+            int minValue, int maxValue, DevMode devMode, float maxDev)
+        {
+            float diff = result - refResult;
+            float dev = CalcDev(System.Math.Abs(diff), input1.x, refResult, minValue, maxValue, devMode);
+            if (dev > maxDev)
+            {
+                Logger.LogError(string.Format(
+                    "TestName:{0} Input:{1} {2} Result:{3} RefResult:{4} Diff:{5} Dev:{6} MaxDev{7}",
+                    name, input1, input2, result, refResult, diff, dev, maxDev));
                 return false;
             }
             return true;
