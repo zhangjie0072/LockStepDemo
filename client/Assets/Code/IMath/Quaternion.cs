@@ -133,8 +133,7 @@ namespace IM
 
             return new Quaternion(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs, lhs.w * rhs);
         }
-        //*
-        public static Vector3 operator *(Quaternion lhs, Vector3 rhs)
+        public static Vector3 operator * (Quaternion lhs, Vector3 rhs)
         {
             Math.CheckRange(rhs);
 
@@ -147,29 +146,18 @@ namespace IM
             Vector3 result = rhs + (uvw + uuv) * 2;
             return result;
         }
-        //*/
-        /*
-        public static Vector3 operator *(Quaternion lhs, Vector3 rhs)
+        public static Quaternion operator *(Quaternion lhs, Quaternion rhs)
         {
-            Math.CheckRange(rhs);
-
-            UnityEngine.Quaternion q = (UnityEngine.Quaternion)lhs;
-            UnityEngine.Vector3 v = (UnityEngine.Vector3)rhs;
-
-            UnityEngine.Vector3 vec = new UnityEngine.Vector3(q.x, q.y, q.z);
-            UnityEngine.Vector3 uv = UnityEngine.Vector3.Cross(vec, v);
-            UnityEngine.Vector3 uuv = UnityEngine.Vector3.Cross(vec, uv);
-
-            UnityEngine.Vector3 uvw = uv * q.w;
-            //uvw /= Math.FACTOR;
-            UnityEngine.Vector3 result = v + (uvw + uuv) * 2;
-            //return result;
-            return new Vector3(
-                UnityEngine.Mathf.RoundToInt(result.x * Math.FACTOR),
-                UnityEngine.Mathf.RoundToInt(result.y * Math.FACTOR),
-                UnityEngine.Mathf.RoundToInt(result.z * Math.FACTOR));
+            int w = lhs.w * rhs.w - lhs.x * rhs.x - lhs.y * rhs.y - lhs.z * rhs.z;
+            int x = lhs.w * rhs.x + lhs.x * rhs.w + lhs.y * rhs.z - lhs.z * rhs.y;
+            int y = lhs.w * rhs.y + lhs.y * rhs.w + lhs.z * rhs.x - lhs.x * rhs.z;
+            int z = lhs.w * rhs.z + lhs.z * rhs.w + lhs.x * rhs.y - lhs.y * rhs.x;
+            w = Math.RndDiv(w, Math.FACTOR);
+            x = Math.RndDiv(x, Math.FACTOR);
+            y = Math.RndDiv(y, Math.FACTOR);
+            z = Math.RndDiv(z, Math.FACTOR);
+            return new Quaternion(x, y, z, w);
         }
-        */
 
         public static Quaternion operator / (Quaternion lhs, int rhs)
         {

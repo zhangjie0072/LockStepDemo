@@ -217,6 +217,33 @@ namespace IM.Test
             tester.test = test;
             return tester;
         }
+        public static Tester<Vector3, Vector3> GenerateTester(
+            string name, Func2<Vector3, Vector3, Quaternion> testFunc, Func2<UE.Vector3, UE.Vector3, UE.Quaternion> refFunc,
+            int minValue, int maxValue, int factor, DevMode devMode, float maxDev)
+        {
+            TestFunc2<Vector3, Vector3> test = (Vector3 x, Vector3 y) =>
+            {
+                try
+                {
+                    Quaternion result = testFunc(x, y);
+                    UE.Quaternion refResult = refFunc((UE.Vector3)x / factor, (UE.Vector3)y / factor);
+                    return CheckResult(name, x, y, (UE.Quaternion)result, refResult, minValue, maxValue, devMode, maxDev);
+                }
+                catch (Exception ex)
+                {
+                    ExOutput(name, ex, x, y);
+                    return false;
+                }
+            };
+            Tester<Vector3, Vector3> tester = new Tester<Vector3, Vector3>();
+            tester.name = name;
+            tester.minValue1 = new Vector3(minValue);
+            tester.maxValue1 = new Vector3(maxValue);
+            tester.minValue2 = new Vector3(minValue);
+            tester.maxValue2 = new Vector3(maxValue);
+            tester.test = test;
+            return tester;
+        }
 
         public static bool TestCritical(Tester<int> tester)
         {
@@ -545,6 +572,28 @@ namespace IM.Test
                     "TestName:{0} Input:{1} {2} Result:{3} RefResult:{4} Diff:{5} Dev:{6} MaxDev:{7} DevMode:{8}",
                     name, input1, input2, result.ToString("F4"), refResult.ToString("F4"),
                     diff.ToString("F4"), new UE.Vector3(devX, devY, devZ).ToString("F4"), maxDev, devMode));
+                return false;
+            }
+            return true;
+        }
+        static bool CheckResult(string name, Vector3 input1, Vector3 input2, UE.Quaternion result, UE.Quaternion refResult,
+            int minValue, int maxValue, DevMode devMode, float maxDev)
+        {
+            float diffX = result.x - refResult.x;
+            float diffY = result.y - refResult.y;
+            float diffZ = result.z - refResult.z;
+            float diffW = result.w - refResult.w;
+            float devX = CalcDev(System.Math.Abs(diffX), input1.x, refResult.x, minValue, maxValue, devMode);
+            float devY = CalcDev(System.Math.Abs(diffY), input1.y, refResult.y, minValue, maxValue, devMode);
+            float devZ = CalcDev(System.Math.Abs(diffZ), input1.z, refResult.z, minValue, maxValue, devMode);
+            float devW = CalcDev(System.Math.Abs(diffW), input1.x, refResult.w, minValue, maxValue, devMode);
+            if (devX > maxDev || devY > maxDev || devZ > maxDev || devW > maxDev)
+            {
+                Logger.LogError(string.Format(
+                    "TestName:{0} Input:{1} {2} Result:{3} RefResult:{4} Diff:{5} Dev:{6} MaxDev:{7} DevMode:{8}",
+                    name, input1, input2, result.ToString("F4"), refResult.ToString("F4"),
+                    new UE.Quaternion(diffX, diffY, diffZ, diffW).ToString("F4"),
+                    new UE.Vector3(devX, devY, devZ).ToString("F4"), maxDev, devMode));
                 return false;
             }
             return true;

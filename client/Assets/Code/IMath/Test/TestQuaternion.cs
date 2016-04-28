@@ -15,7 +15,8 @@ namespace IM.Test
             //AddStep("Quaternion.Euler", TestEuler);
             //AddStep("Quaternion.eulerAngles", TestEulerAngles);
             //AddStep("Quaternion.AngleAxis", TestAngleAxis);
-            AddStep("Quaternion.MultiplyVector3", TestMultiplyVector3);
+            //AddStep("Quaternion.MultiplyVector3", TestMultiplyVector3);
+            AddStep("Quaternion.MultiplyQuaternion", TestMultiplyQuaternion);
         }
 
         bool TestEuler()
@@ -101,6 +102,25 @@ namespace IM.Test
                     return v;
                 },
                 Math.SUPPORTED_MIN, Math.SUPPORTED_MAX, 1, DevMode.Absolute, 0.006f);
+            return Utils.TestCritical(tester) && Utils.TestRandom(tester, 100);
+        }
+
+        bool TestMultiplyQuaternion()
+        {
+            var tester = Utils.GenerateTester("MultiplyQuaternion",
+                (Vector3 le, Vector3 re) =>
+                {
+                    Quaternion lhs = Quaternion.Euler(le);
+                    Quaternion rhs = Quaternion.Euler(re);
+                    return lhs * rhs;
+                },
+                (UE.Vector3 le, UE.Vector3 re) =>
+                {
+                    UE.Quaternion lhs = UE.Quaternion.Euler(le);
+                    UE.Quaternion rhs = UE.Quaternion.Euler(re);
+                    return lhs * rhs;
+                },
+                Math.SUPPORTED_MIN, Math.SUPPORTED_MAX, 1, DevMode.Absolute, 0.004f);
             return Utils.TestCritical(tester) && Utils.TestRandom(tester, 100);
         }
     }
