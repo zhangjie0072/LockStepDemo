@@ -47,7 +47,7 @@
 
         public Vector3(int x)
         {
-            Math.CheckRange(x, "x");
+            Math.CheckRange(x, "Vector3.x");
 
             this.x = x;
             this.y = x;
@@ -55,8 +55,8 @@
         }
         public Vector3(int x, int y)
         {
-            Math.CheckRange(x, "x");
-            Math.CheckRange(y, "y");
+            Math.CheckRange(x, "Vector3.x");
+            Math.CheckRange(y, "Vector3.y");
 
             this.x = x;
             this.y = y;
@@ -64,9 +64,9 @@
         }
         public Vector3(int x, int y, int z)
         {
-            Math.CheckRange(x, "x");
-            Math.CheckRange(y, "y");
-            Math.CheckRange(z, "z");
+            Math.CheckRange(x, "Vector3.x");
+            Math.CheckRange(y, "Vector3.y");
+            Math.CheckRange(z, "Vector3.z");
 
             this.x = x;
             this.y = y;

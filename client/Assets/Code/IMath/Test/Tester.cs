@@ -8,12 +8,14 @@ namespace IM.Test
         RefResult,
         ValueRange,
         Absolute,
+        AbsoluteWrap360,
     }
 
     public delegate bool TestFunc1<T>(T x);
     public delegate bool TestFunc2<T, U>(T x, U y);
 
     public delegate T Func1<T>(T x);
+    public delegate U Func1<T, U>(T x);
     public delegate T Func2<T, U>(T x, U y);
     public delegate V Func2<T, U, V>(T x, U y);
 

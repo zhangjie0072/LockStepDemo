@@ -11,9 +11,17 @@ namespace IM.Test
         {
             TestFunc1<int> test = (int x) =>
             {
-                int result = testFunc(x);
-                float refResult = refFunc((float)x / factor) * factor;
-                return CheckResult(name, x, (float)result, refResult, minValue, maxValue, devMode, maxDev);
+                try
+                {
+                    int result = testFunc(x);
+                    float refResult = refFunc((float)x / factor) * factor;
+                    return CheckResult(name, x, (float)result, refResult, minValue, maxValue, devMode, maxDev);
+                }
+                catch (Exception ex)
+                {
+                    ExOutput(name, ex, x);
+                    return false;
+                }
             };
             Tester<int> tester = new Tester<int>();
             tester.name = name;
@@ -29,9 +37,45 @@ namespace IM.Test
         {
             TestFunc2<int, int> test = (int x, int y) =>
             {
-                int result = testFunc(x, y);
-                int refResult = refFunc(x, y);
-                return CheckResult(name, System.Math.Max(x, y), result, refResult, minValue1, maxValue1, devMode, maxDev);
+                try
+                {
+                    int result = testFunc(x, y);
+                    int refResult = refFunc(x, y);
+                    return CheckResult(name, System.Math.Max(x, y), result, refResult, minValue1, maxValue1, devMode, maxDev);
+                }
+                catch (Exception ex)
+                {
+                    ExOutput(name, ex, x, y);
+                    return false;
+                }
+            };
+            Tester<int, int> tester = new Tester<int, int>();
+            tester.name = name;
+            tester.minValue1 = minValue1;
+            tester.maxValue1 = maxValue1;
+            tester.minValue2 = minValue2;
+            tester.maxValue2 = maxValue2;
+            tester.test = test;
+            return tester;
+        }
+        public static Tester<int, int> GenerateTester(
+            string name, Func2<int, int> testFunc, Func2<float, float> refFunc,
+            int minValue1, int maxValue1, int minValue2, int maxValue2,
+            int factor, DevMode devMode, float maxDev)
+        {
+            TestFunc2<int, int> test = (int x, int y) =>
+            {
+                try
+                {
+                    int result = testFunc(x, y);
+                    float refResult = refFunc((float)x / factor, (float)y / factor) * factor;
+                    return CheckResult(name, x, y, (float)result, refResult, minValue1, maxValue1, devMode, maxDev);
+                }
+                catch (Exception ex)
+                {
+                    ExOutput(name, ex, x, y);
+                    return false;
+                }
             };
             Tester<int, int> tester = new Tester<int, int>();
             tester.name = name;
@@ -48,9 +92,42 @@ namespace IM.Test
         {
             TestFunc1<Vector3> test = (Vector3 x) =>
             {
-                Vector3 result = testFunc(x);
-                UE.Vector3 refResult = refFunc((UE.Vector3)x / factor) * factor;
-                return CheckResult(name, x, (UE.Vector3)result, refResult, minValue, maxValue, devMode, maxDev);
+                try
+                {
+                    Vector3 result = testFunc(x);
+                    UE.Vector3 refResult = refFunc((UE.Vector3)x / factor) * factor;
+                    return CheckResult(name, x, (UE.Vector3)result, refResult, minValue, maxValue, devMode, maxDev);
+                }
+                catch (Exception ex)
+                {
+                    ExOutput(name, ex, x);
+                    return false;
+                }
+            };
+            Tester<Vector3> tester = new Tester<Vector3>();
+            tester.name = name;
+            tester.minValue = minValue;
+            tester.maxValue = maxValue;
+            tester.test = test;
+            return tester;
+        }
+        public static Tester<Vector3> GenerateTester(
+            string name, Func1<Vector3, Quaternion> testFunc, Func1<UE.Vector3, UE.Quaternion> refFunc,
+            int minValue, int maxValue, DevMode devMode, float maxDev)
+        {
+            TestFunc1<Vector3> test = (Vector3 x) =>
+            {
+                try
+                {
+                    Quaternion result = testFunc(x);
+                    UE.Quaternion refResult = refFunc((UE.Vector3)x);
+                    return CheckResult(name, x, (UE.Quaternion)result, refResult, minValue, maxValue, devMode, maxDev);
+                }
+                catch (Exception ex)
+                {
+                    ExOutput(name, ex, x);
+                    return false;
+                }
             };
             Tester<Vector3> tester = new Tester<Vector3>();
             tester.name = name;
@@ -65,9 +142,17 @@ namespace IM.Test
         {
             TestFunc2<Vector3, Vector3> test = (Vector3 x, Vector3 y) =>
             {
-                Vector3 result = testFunc(x, y);
-                UE.Vector3 refResult = refFunc((UE.Vector3)x / factor, (UE.Vector3)y / factor);
-                return CheckResult(name, x, y, (UE.Vector3)result, refResult, minValue, maxValue, devMode, maxDev);
+                try
+                {
+                    Vector3 result = testFunc(x, y);
+                    UE.Vector3 refResult = refFunc((UE.Vector3)x / factor, (UE.Vector3)y / factor);
+                    return CheckResult(name, x, y, (UE.Vector3)result, refResult, minValue, maxValue, devMode, maxDev);
+                }
+                catch (Exception ex)
+                {
+                    ExOutput(name, ex, x, y);
+                    return false;
+                }
             };
             Tester<Vector3, Vector3> tester = new Tester<Vector3, Vector3>();
             tester.name = name;
@@ -84,9 +169,17 @@ namespace IM.Test
         {
             TestFunc2<Vector3, Vector3> test = (Vector3 x, Vector3 y) =>
             {
-                int result = testFunc(x, y);
-                float refResult = refFunc((UE.Vector3)x / factor, (UE.Vector3)y / factor);
-                return CheckResult(name, x, y, (float)result, refResult, minValue, maxValue, devMode, maxDev);
+                try
+                {
+                    int result = testFunc(x, y);
+                    float refResult = refFunc((UE.Vector3)x / factor, (UE.Vector3)y / factor);
+                    return CheckResult(name, x, y, (float)result, refResult, minValue, maxValue, devMode, maxDev);
+                }
+                catch (Exception ex)
+                {
+                    ExOutput(name, ex, x, y);
+                    return false;
+                }
             };
             Tester<Vector3, Vector3> tester = new Tester<Vector3, Vector3>();
             tester.name = name;
@@ -301,6 +394,11 @@ namespace IM.Test
                 dev = (float)diff / (maxValue - minValue + 1);
             else if (devMode == DevMode.Absolute)
                 dev = (float)diff;
+            else if (devMode == DevMode.AbsoluteWrap360)
+            {
+                dev = System.Math.Abs((float)diff);
+                dev = System.Math.Min(dev, 360 - dev);
+            }
             return System.Math.Abs(dev);
         }
 
@@ -312,8 +410,22 @@ namespace IM.Test
             if (dev > maxDev)
             {
                 Logger.LogError(string.Format(
-                    "TestName:{0} Input:{1} Result:{2} RefResult:{3} Diff:{4} Dev:{5} MaxDev{6}",
-                    name, input, result, refResult, diff, dev, maxDev));
+                    "TestName:{0} Input:{1} Result:{2} RefResult:{3} Diff:{4} Dev:{5} MaxDev:{6} DevMode:{7}",
+                    name, input, result, refResult, diff, dev, maxDev, devMode));
+                return false;
+            }
+            return true;
+        }
+        static bool CheckResult(string name, int input1, int input2, float result, float refResult,
+            int minValue, int maxValue, DevMode devMode, float maxDev)
+        {
+            float diff = System.Math.Abs(result - refResult);
+            float dev = CalcDev(diff, System.Math.Max(input1, input2), refResult, minValue, maxValue, devMode);
+            if (dev > maxDev)
+            {
+                Logger.LogError(string.Format(
+                    "TestName:{0} Input:{1},{2} Result:{3} RefResult:{4} Diff:{5} Dev:{6} MaxDev:{7} DevMode:{8}",
+                    name, input1, input2, result, refResult, diff, dev, maxDev, devMode));
                 return false;
             }
             return true;
@@ -328,9 +440,31 @@ namespace IM.Test
             if (devX > maxDev || devY > maxDev || devZ > maxDev)
             {
                 Logger.LogError(string.Format(
-                    "TestName:{0} Input:{1} Result:{2} RefResult:{3} Diff:{4} Dev:{5} MaxDev{6}",
+                    "TestName:{0} Input:{1} Result:{2} RefResult:{3} Diff:{4} Dev:{5} MaxDev:{6} DevMode:{7}",
                     name, input, result.ToString("F4"), refResult.ToString("F4"), 
-                    diff.ToString("F4"), new UE.Vector3(devX, devY, devZ), maxDev));
+                    diff.ToString("F4"), new UE.Vector3(devX, devY, devZ).ToString("F4"), maxDev, devMode));
+                return false;
+            }
+            return true;
+        }
+        static bool CheckResult(string name, Vector3 input, UE.Quaternion result, UE.Quaternion refResult,
+            int minValue, int maxValue, DevMode devMode, float maxDev)
+        {
+            float diffX = System.Math.Abs(result.x - refResult.x);
+            float diffY = System.Math.Abs(result.y - refResult.y);
+            float diffZ = System.Math.Abs(result.z - refResult.z);
+            float diffW = System.Math.Abs(result.w - refResult.w);
+            float devX = CalcDev(System.Math.Abs(diffX), input.x, refResult.x, minValue, maxValue, devMode);
+            float devY = CalcDev(System.Math.Abs(diffY), input.x, refResult.y, minValue, maxValue, devMode);
+            float devZ = CalcDev(System.Math.Abs(diffZ), input.x, refResult.z, minValue, maxValue, devMode);
+            float devW = CalcDev(System.Math.Abs(diffW), input.x, refResult.w, minValue, maxValue, devMode);
+            if (devX > maxDev || devY > maxDev || devZ > maxDev)
+            {
+                Logger.LogError(string.Format(
+                    "TestName:{0} Input:{1} Result:{2} RefResult:{3} Diff:{4} Dev:{5} MaxDev:{6} DevMode:{7}",
+                    name, input, result.ToString("F4"), refResult.ToString("F4"), 
+                    (new UE.Quaternion(diffX, diffY, diffZ, diffW)).ToString("F4"),
+                    (new UE.Quaternion(devX, devY, devZ, devW)).ToString("F4"), maxDev, devMode));
                 return false;
             }
             return true;
@@ -345,9 +479,9 @@ namespace IM.Test
             if (devX > maxDev || devY > maxDev || devZ > maxDev)
             {
                 Logger.LogError(string.Format(
-                    "TestName:{0} Input:{1} {2} Result:{3} RefResult:{4} Diff:{5} Dev:{6} MaxDev{7}",
+                    "TestName:{0} Input:{1} {2} Result:{3} RefResult:{4} Diff:{5} Dev:{6} MaxDev:{7} DevMode:{8}",
                     name, input1, input2, result.ToString("F4"), refResult.ToString("F4"),
-                    diff.ToString("F4"), new UE.Vector3(devX, devY, devZ).ToString("F4"), maxDev));
+                    diff.ToString("F4"), new UE.Vector3(devX, devY, devZ).ToString("F4"), maxDev, devMode));
                 return false;
             }
             return true;
@@ -360,11 +494,22 @@ namespace IM.Test
             if (dev > maxDev)
             {
                 Logger.LogError(string.Format(
-                    "TestName:{0} Input:{1} {2} Result:{3} RefResult:{4} Diff:{5} Dev:{6} MaxDev{7}",
-                    name, input1, input2, result, refResult, diff, dev, maxDev));
+                    "TestName:{0} Input:{1} {2} Result:{3} RefResult:{4} Diff:{5} Dev:{6} MaxDev:{7} DevMode:{8}",
+                    name, input1, input2, result, refResult, diff, dev, maxDev, devMode));
                 return false;
             }
             return true;
+        }
+
+        static void ExOutput<T>(string name, Exception ex, T input)
+        {
+            Logger.LogError(ex);
+            Logger.LogError(string.Format("Test:{0} Input:{1}", name, input));
+        }
+        static void ExOutput<T, U>(string name, Exception ex, T input1, U input2)
+        {
+            Logger.LogError(ex);
+            Logger.LogError(string.Format("Test:{0} Input:{1}, {2}", name, input1, input2));
         }
     }
 }
