@@ -86,6 +86,33 @@ namespace IM.Test
             tester.test = test;
             return tester;
         }
+        public static Tester<int, Vector3> GenerateTester(
+            string name, Func2<int, Vector3, Quaternion> testFunc, Func2<float, UE.Vector3, UE.Quaternion> refFunc,
+            int minValue1, int maxValue1, int minValue2, int maxValue2, int factor, DevMode devMode, float maxDev)
+        {
+            TestFunc2<int, Vector3> test = (int x, Vector3 y) =>
+            {
+                try
+                {
+                    Quaternion result = testFunc(x, y);
+                    UE.Quaternion refResult = refFunc((float)x / factor, (UE.Vector3)y);
+                    return CheckResult(name, x, y, (UE.Quaternion)result, refResult, minValue1, maxValue1, devMode, maxDev);
+                }
+                catch (Exception ex)
+                {
+                    ExOutput(name, ex, x, y);
+                    return false;
+                }
+            };
+            Tester<int, Vector3> tester = new Tester<int, Vector3>();
+            tester.name = name;
+            tester.minValue1 = minValue1;
+            tester.maxValue1 = maxValue1;
+            tester.minValue2 = new Vector3(minValue2);
+            tester.maxValue2 = new Vector3(maxValue2);
+            tester.test = test;
+            return tester;
+        }
         public static Tester<Vector3> GenerateTester(
             string name, Func1<Vector3> testFunc, Func1<UE.Vector3> refFunc,
             int minValue, int maxValue, int factor, DevMode devMode, float maxDev)
@@ -382,6 +409,20 @@ namespace IM.Test
             }
             return true;
         }
+        public static bool TestRandom(Tester<int, Vector3> tester, int count)
+        {
+            Logger.Log("IMath test, Test random:" + tester.name + " count:" + count);
+            for (int i = 0; i < count; ++i)
+            {
+                int input1 = UE.Random.Range(tester.minValue1, tester.maxValue1);
+                int x2 = UE.Random.Range(tester.minValue2.x, tester.maxValue2.x);
+                int y2 = UE.Random.Range(tester.minValue2.y, tester.maxValue2.y);
+                int z2 = UE.Random.Range(tester.minValue2.z, tester.maxValue2.z);
+                if (!tester.test(input1, new Vector3(x2, y2, z2)))
+                    return false;
+            }
+            return true;
+        }
 
         static float CalcDev(float diff, int input, float refResult, int minValue, int maxValue, DevMode devMode)
         {
@@ -463,6 +504,28 @@ namespace IM.Test
                 Logger.LogError(string.Format(
                     "TestName:{0} Input:{1} Result:{2} RefResult:{3} Diff:{4} Dev:{5} MaxDev:{6} DevMode:{7}",
                     name, input, result.ToString("F4"), refResult.ToString("F4"), 
+                    (new UE.Quaternion(diffX, diffY, diffZ, diffW)).ToString("F4"),
+                    (new UE.Quaternion(devX, devY, devZ, devW)).ToString("F4"), maxDev, devMode));
+                return false;
+            }
+            return true;
+        }
+        static bool CheckResult(string name, int input1, Vector3 input2, UE.Quaternion result, UE.Quaternion refResult,
+            int minValue, int maxValue, DevMode devMode, float maxDev)
+        {
+            float diffX = System.Math.Abs(result.x - refResult.x);
+            float diffY = System.Math.Abs(result.y - refResult.y);
+            float diffZ = System.Math.Abs(result.z - refResult.z);
+            float diffW = System.Math.Abs(result.w - refResult.w);
+            float devX = CalcDev(System.Math.Abs(diffX), input1, refResult.x, minValue, maxValue, devMode);
+            float devY = CalcDev(System.Math.Abs(diffY), input1, refResult.y, minValue, maxValue, devMode);
+            float devZ = CalcDev(System.Math.Abs(diffZ), input1, refResult.z, minValue, maxValue, devMode);
+            float devW = CalcDev(System.Math.Abs(diffW), input1, refResult.w, minValue, maxValue, devMode);
+            if (devX > maxDev || devY > maxDev || devZ > maxDev)
+            {
+                Logger.LogError(string.Format(
+                    "TestName:{0} Input:{1} {2} Result:{3} RefResult:{4} Diff:{5} Dev:{6} MaxDev:{7} DevMode:{8}",
+                    name, input1, input2, result.ToString("F4"), refResult.ToString("F4"), 
                     (new UE.Quaternion(diffX, diffY, diffZ, diffW)).ToString("F4"),
                     (new UE.Quaternion(devX, devY, devZ, devW)).ToString("F4"), maxDev, devMode));
                 return false;

@@ -25,6 +25,12 @@ namespace IM
                     string.Format("Number {0}:{1} out of range:({2}, {3})", name, x, min, max));
             }
         }
+        public static void CheckRange(Vector3 vec)
+        {
+            CheckRange(vec.x, "Vector3.x");
+            CheckRange(vec.y, "Vector3.y");
+            CheckRange(vec.z, "Vector3.z");
+        }
         public static void CheckNotEqual(int x, int r, string name = "")
         {
             if (x == r)

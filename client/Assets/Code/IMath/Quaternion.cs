@@ -14,6 +14,7 @@ namespace IM
         {
             get
             {
+                //*
                 int Y = (y * z + w * x) * 2;
                 int X = w * w - x * x - y * y + z * z;
                 int pitch = Math.Atan2(Y, X);
@@ -22,6 +23,19 @@ namespace IM
                 int deg = Math.Rad2Deg(pitch);
                 Math.CheckRange(deg, 0, 360 * Math.FACTOR, "pitch");
                 return deg;
+                //return pitch;
+                //*/
+                /*
+                UnityEngine.Quaternion q = (UnityEngine.Quaternion)this;
+                float Y = (q.y * q.z + q.w * q.x) * 2;
+                float X = (q.w * q.w - q.x * q.x - q.y * q.y + q.z * q.z);
+                //float X = 1 - 2 * (q.x * q.x + q.y * q.y);
+                float pitch = UnityEngine.Mathf.Atan2(Y, X);
+                if (pitch < 0)
+                    pitch += UnityEngine.Mathf.PI * 2;
+                float deg = pitch * UnityEngine.Mathf.Rad2Deg;
+                return (int)(deg * Math.FACTOR);
+                */
             }
         }
 
@@ -36,6 +50,7 @@ namespace IM
                 int deg = Math.Rad2Deg(yaw);
                 Math.CheckRange(deg, 0, 360 * Math.FACTOR, "yaw");
                 return deg;
+                //return yaw;
             }
         }
 
@@ -51,6 +66,7 @@ namespace IM
                 int deg = Math.Rad2Deg(roll);
                 Math.CheckRange(deg, 0, 360 * Math.FACTOR, "roll");
                 return deg;
+                //return roll;
             }
         }
 
@@ -64,6 +80,37 @@ namespace IM
                 vec.y = yaw;
                 vec.z = roll;
                 return vec;
+            }
+        }
+
+        public int sqrMagnitude
+        {
+            get
+            {
+                return x * x + y * y + z * z + w * w;
+            }
+        }
+
+        public int magnitude
+        {
+            get
+            {
+                return Math.Sqrt(sqrMagnitude);
+            }
+        }
+
+        public Quaternion normalized
+        {
+            get
+            {
+                int sqrMag = sqrMagnitude;
+                if (sqrMag <= 0)
+                    return Quaternion.identity;
+                return new Quaternion(
+                    Math.Sqrt((int)Math.RndDiv((long)x * x * Math.SQR_FACTOR, sqrMag)) * Math.Sign(x),
+                    Math.Sqrt((int)Math.RndDiv((long)y * y * Math.SQR_FACTOR, sqrMag)) * Math.Sign(y),
+                    Math.Sqrt((int)Math.RndDiv((long)z * z * Math.SQR_FACTOR, sqrMag)) * Math.Sign(z),
+                    Math.Sqrt((int)Math.RndDiv((long)w * w * Math.SQR_FACTOR, sqrMag)) * Math.Sign(w));
             }
         }
 
@@ -82,8 +129,48 @@ namespace IM
 
         public static Quaternion operator * (Quaternion lhs, int rhs)
         {
+            Math.CheckRange(rhs);
+
             return new Quaternion(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs, lhs.w * rhs);
         }
+        //*
+        public static Vector3 operator *(Quaternion lhs, Vector3 rhs)
+        {
+            Math.CheckRange(rhs);
+
+            Vector3 vec = new Vector3(lhs.x, lhs.y, lhs.z);
+            Vector3 uv = Vector3.Cross(vec, rhs);
+            Vector3 uuv = Vector3.Cross(vec, uv);
+
+            Vector3 uvw = uv * lhs.w;
+            uvw /= Math.FACTOR;
+            Vector3 result = rhs + (uvw + uuv) * 2;
+            return result;
+        }
+        //*/
+        /*
+        public static Vector3 operator *(Quaternion lhs, Vector3 rhs)
+        {
+            Math.CheckRange(rhs);
+
+            UnityEngine.Quaternion q = (UnityEngine.Quaternion)lhs;
+            UnityEngine.Vector3 v = (UnityEngine.Vector3)rhs;
+
+            UnityEngine.Vector3 vec = new UnityEngine.Vector3(q.x, q.y, q.z);
+            UnityEngine.Vector3 uv = UnityEngine.Vector3.Cross(vec, v);
+            UnityEngine.Vector3 uuv = UnityEngine.Vector3.Cross(vec, uv);
+
+            UnityEngine.Vector3 uvw = uv * q.w;
+            //uvw /= Math.FACTOR;
+            UnityEngine.Vector3 result = v + (uvw + uuv) * 2;
+            //return result;
+            return new Vector3(
+                UnityEngine.Mathf.RoundToInt(result.x * Math.FACTOR),
+                UnityEngine.Mathf.RoundToInt(result.y * Math.FACTOR),
+                UnityEngine.Mathf.RoundToInt(result.z * Math.FACTOR));
+        }
+        */
+
         public static Quaternion operator / (Quaternion lhs, int rhs)
         {
             return new Quaternion(Math.RndDiv(lhs.x, rhs), Math.RndDiv(lhs.y, rhs), Math.RndDiv(lhs.z, rhs), Math.RndDiv(lhs.w, rhs));
@@ -100,6 +187,8 @@ namespace IM
 
         public static Quaternion Euler(Vector3 euler)
         {
+            Math.CheckRange(euler);
+
             int eulerX = Math.Deg2Rad(euler.x) >> 1;
             int eulerY = Math.Deg2Rad(euler.y) >> 1;
             int eulerZ = Math.Deg2Rad(euler.z) >> 1;
@@ -123,6 +212,20 @@ namespace IM
             float y = c.x * s.y * c.z - s.x * c.y * s.z;
             float z = c.x * c.y * s.z - s.x * s.y * c.z;
             return new UE.Quaternion(x, y, z, w);
+        }
+
+        public static Quaternion AngleAxis(int angle, Vector3 axis)
+        {
+            Math.CheckRange(angle);
+            Math.CheckRange(axis);
+
+            int rad = Math.Deg2Rad(angle);
+            int s = Math.Sin(rad >> 1);
+            int w = Math.Cos(rad >> 1);
+            int x = Math.RndDiv(axis.x * s, Math.FACTOR);
+            int y = Math.RndDiv(axis.y * s, Math.FACTOR);
+            int z = Math.RndDiv(axis.z * s, Math.FACTOR);
+            return new Quaternion(x, y, z, w);
         }
     }
 }

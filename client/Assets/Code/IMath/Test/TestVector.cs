@@ -27,7 +27,7 @@ namespace IM.Test
 
         bool TestCross()
         {
-            var tester = Utils.GenerateTester("Cross", Vector3.Cross, 
+            var tester = Utils.GenerateTester("Cross", Vector3.CrossAndNormalize, 
                 (UE.Vector3 v1, UE.Vector3 v2) => UE.Vector3.Cross(v1, v2).normalized,
                 Math.SUPPORTED_MIN, Math.SUPPORTED_MAX, 1, DevMode.Absolute, 0.02f);
             return Utils.TestCritical(tester) && Utils.TestRandom(tester, 1000);

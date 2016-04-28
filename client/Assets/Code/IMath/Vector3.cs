@@ -17,6 +17,8 @@
         {
             get
             {
+                Math.CheckRange(this);
+
                 int dot = Dot(this, this);
                 int sqrt = Math.Sqrt(dot);
                 return sqrt;
@@ -27,6 +29,8 @@
         {
             get
             {
+                Math.CheckRange(this);
+
                 return Dot(this, this);
             }
         }
@@ -35,6 +39,8 @@
         {
             get
             {
+                Math.CheckRange(this);
+
                 int mag = magnitude;
                 if (mag == 0)
                     return this;
@@ -47,27 +53,18 @@
 
         public Vector3(int x)
         {
-            Math.CheckRange(x, "Vector3.x");
-
             this.x = x;
             this.y = x;
             this.z = x;
         }
         public Vector3(int x, int y)
         {
-            Math.CheckRange(x, "Vector3.x");
-            Math.CheckRange(y, "Vector3.y");
-
             this.x = x;
             this.y = y;
             this.z = 0;
         }
         public Vector3(int x, int y, int z)
         {
-            Math.CheckRange(x, "Vector3.x");
-            Math.CheckRange(y, "Vector3.y");
-            Math.CheckRange(z, "Vector3.z");
-
             this.x = x;
             this.y = y;
             this.z = z;
@@ -88,9 +85,9 @@
             return new Vector3(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z);
         }
 
-        public static Vector3 operator *(Vector3 lhs, int factor)
+        public static Vector3 operator *(Vector3 lhs, int rhs)
         {
-            return new Vector3(lhs.x * factor, lhs.y * factor, lhs.z * factor);
+            return new Vector3(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
         }
 
         public static Vector3 operator / (Vector3 lhs, Vector3 rhs)
@@ -98,9 +95,9 @@
             return new Vector3(Math.RndDiv(lhs.x, rhs.x), Math.RndDiv(lhs.y, rhs.y), Math.RndDiv(lhs.z, rhs.z));
         }
 
-        public static Vector3 operator / (Vector3 lhs, int factor)
+        public static Vector3 operator / (Vector3 lhs, int rhs)
         {
-            return new Vector3(Math.RndDiv(lhs.x, factor), Math.RndDiv(lhs.y, factor), Math.RndDiv(lhs.z, factor));
+            return new Vector3(Math.RndDiv(lhs.x, rhs), Math.RndDiv(lhs.y, rhs), Math.RndDiv(lhs.z, rhs));
         }
 
         public static explicit operator UnityEngine.Vector3 (Vector3 lhs)
@@ -115,31 +112,31 @@
 
         public static int Dot(Vector3 lhs, Vector3 rhs)
         {
+            Math.CheckRange(lhs);
+            Math.CheckRange(rhs);
+
             int xTmp = lhs.x * rhs.x;
             int yTmp = lhs.y * rhs.y;
             int zTmp = lhs.z * rhs.z;
             return xTmp + yTmp + zTmp;
         }
 
-        static long dot_long(Vector3 lhs, Vector3 rhs)
-        {
-            long xTmp = (long)lhs.x * (long)rhs.x;
-            long yTmp = (long)lhs.y * (long)rhs.y;
-            long zTmp = (long)lhs.z * (long)rhs.z;
-            //return (int)(Math.RndDiv(xTmp + yTmp + zTmp, Math.FACTOR));
-            return (long)(xTmp + yTmp + zTmp);
-        }
-
         public static Vector3 Cross(Vector3 lhs, Vector3 rhs)
         {
-            //return new Vector3(
-            //    (int)((long)lhs.y * (long)rhs.z - (long)rhs.y * (long)lhs.z),
-            //    (int)((long)lhs.z * (long)rhs.x - (long)rhs.z * (long)lhs.x),
-            //    (int)((long)lhs.x * (long)rhs.y - (long)rhs.x * (long)lhs.y));
-            //return new Vector3(
-            //    Math.RndDiv((lhs.y * rhs.z - rhs.y * lhs.z), Math.FACTOR),
-            //    Math.RndDiv((lhs.z * rhs.x - rhs.z * lhs.x), Math.FACTOR),
-            //    Math.RndDiv((lhs.x * rhs.y - rhs.x * lhs.y), Math.FACTOR));
+            Math.CheckRange(lhs);
+            Math.CheckRange(rhs);
+
+            int x = lhs.y * rhs.z - rhs.y * lhs.z;
+            int y = lhs.z * rhs.x - rhs.z * lhs.x;
+            int z = lhs.x * rhs.y - rhs.x * lhs.y;          //2 power of factor
+            return new Vector3(Math.RndDiv(x, Math.FACTOR), Math.RndDiv(y, Math.FACTOR), Math.RndDiv(z, Math.FACTOR));
+        }
+
+        public static Vector3 CrossAndNormalize(Vector3 lhs, Vector3 rhs)
+        {
+            Math.CheckRange(lhs);
+            Math.CheckRange(rhs);
+
             int x = lhs.y * rhs.z - rhs.y * lhs.z;
             int y = lhs.z * rhs.x - rhs.z * lhs.x;
             int z = lhs.x * rhs.y - rhs.x * lhs.y;          //2 power of factor
@@ -213,6 +210,9 @@
         //*
         public static int Angle(Vector3 lhs, Vector3 rhs)
         {
+            Math.CheckRange(lhs);
+            Math.CheckRange(rhs);
+
             lhs.Normalize();
             rhs.Normalize();
             int radians = Math.Acos(Math.Clamp(Math.RndDiv(Dot(lhs, rhs), Math.FACTOR), -Math.FACTOR, Math.FACTOR));
