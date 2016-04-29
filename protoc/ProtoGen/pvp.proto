@@ -1,0 +1,64 @@
+package fogs.proto.msg;
+
+message ClientInput
+{
+	optional uint32 dir		= 1;
+    optional uint32 cmd		= 2;
+	optional uint32 acc_id	= 3;
+}
+
+message FrameInfo
+{
+	repeated ClientInput info	= 1; //帧信息
+	optional uint32 frameNum 	= 2; //帧编号
+	optional double time		= 3;
+}
+
+message SVector3
+{
+	required float	x = 1;
+	required float	y = 2;
+	required float	z = 3;
+}
+
+message GameBeginReq
+{
+	required uint32 acc_id	= 1;
+}
+
+//比赛开始
+message GameBeginResp
+{
+	repeated uint32 acc_id	= 1;
+}
+
+//帧校验
+message CheckFrame
+{
+	optional uint32 frameNum		= 1; //帧编号
+    repeated PlayerKeyState datas   = 2; //玩家数据
+}
+
+//玩家关键数据
+message PlayerKeyState
+{
+    required uint32     acc_id      = 1;
+    required SVector3   position    = 2;
+    required SVector3   velocity    = 3;
+    required uint32     state       = 4;
+}
+
+//进入PlatServer请求(C --> S)
+message EnterPlat
+{
+	required uint32 acc_id				= 1; //AccountID
+	optional uint64 session				= 2; //登录SessionID
+	optional uint32 login_index			= 3; //LoginServer Index
+}
+
+//进入PlatServer回复(S --> C)
+message EnterPlatResp
+{
+	required uint32 result				= 1; //请求结果（0：OK，其他：Failed）
+	optional uint32 acc_id				= 2; //AccountID
+}
