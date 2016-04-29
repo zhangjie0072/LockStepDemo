@@ -1,0 +1,9 @@
+*lock
+*.suo
+*.sln
+*.csproj
+*.swp
+obj
+Library
+Temp
+bin

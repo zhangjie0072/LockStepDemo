@@ -374,16 +374,118 @@ namespace IM.Test
                 return false;
             return true;
         }
+
+        public static bool interruptTest = false;
+        public static bool TestSequence(Tester<int> tester)
+        {
+            return TestSequence(tester, tester.minValue, tester.maxValue, 1);
+        }
         public static bool TestSequence(Tester<int> tester, int start, int end, int step)
         {
             Logger.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3}", 
                 tester.name, start, end, step));
-            for (int i = start; i <= end; i += step)
+            bool succ = true;
+            for (long i = start; i <= end; i += step)
             {
-                if (!tester.test(i))
-                    return false;
+                if (!tester.test((int)i))
+                    succ = false;
+                if (interruptTest)
+                    return succ;
             }
-            return true;
+            return succ;
+        }
+        public static bool TestSequence(Tester<int, int> tester)
+        {
+            return TestSequence(tester, tester.minValue1, tester.maxValue1, 1, tester.minValue2, tester.maxValue2, 1);
+        }
+        public static bool TestSequence(Tester<int, int> tester, int start1, int end1, int step1, int start2, int end2, int step2)
+        {
+            Logger.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3} start:{4} end:{5} step:{6}", 
+                tester.name, start1, end1, step1, start2, end2, step2));
+            bool succ = true;
+            for (long i = start1; i <= end1; i += step1)
+            {
+                for (long j = start2; j <= end2; j += step2)
+                {
+                    if (!tester.test((int)i, (int)j))
+                        succ = false;
+                    if (interruptTest)
+                        return succ;
+                }
+            }
+            return succ;
+        }
+        public static bool TestSequence(Tester<Vector3> tester)
+        {
+            Logger.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3}", 
+                tester.name, tester.minValue, tester.maxValue, 1));
+            bool succ = true;
+            for (long x = tester.minValue; x <= tester.maxValue; x += 1)
+            {
+                for (long y = tester.minValue; y <= tester.maxValue; y += 1)
+                {
+                    for (long z = tester.minValue; z <= tester.maxValue; z += 1)
+                    {
+                        if (!tester.test(new Vector3((int)x, (int)y, (int)z)))
+                            succ = false;
+                        if (interruptTest)
+                            return succ;
+                    }
+                }
+            }
+            return succ;
+        }
+        public static bool TestSequence(Tester<int, Vector3> tester)
+        {
+            Logger.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3} start:{4} end:{5} step:{6}", 
+                tester.name, tester.minValue1, tester.maxValue1, 1, tester.minValue2, tester.maxValue2, 1));
+            bool succ = true;
+            for (long i = tester.minValue1; i <= tester.maxValue1; ++i)
+            {
+                for (long x = tester.minValue2.x; x <= tester.maxValue2.x; x += 1)
+                {
+                    for (long y = tester.minValue2.y; y <= tester.maxValue2.y; y += 1)
+                    {
+                        for (long z = tester.minValue2.z; z <= tester.maxValue2.z; z += 1)
+                        {
+                            if (!tester.test((int)i, new Vector3((int)x, (int)y, (int)z)))
+                                succ = false;
+                            if (interruptTest)
+                                return succ;
+                        }
+                    }
+                }
+            }
+            return succ;
+        }
+        public static bool TestSequence(Tester<Vector3, Vector3> tester)
+        {
+            Logger.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3} start:{4} end:{5} step:{6}", 
+                tester.name, tester.minValue1, tester.maxValue1, 1, tester.minValue2, tester.maxValue2, 1));
+            bool succ = true;
+            for (long x1 = tester.minValue1.x; x1 <= tester.maxValue1.x; x1 += 1)
+            {
+                for (long y1 = tester.minValue1.y; y1 <= tester.maxValue1.y; y1 += 1)
+                {
+                    for (long z1 = tester.minValue1.z; z1 <= tester.maxValue1.z; z1 += 1)
+                    {
+                        for (long x2 = tester.minValue2.x; x2 <= tester.maxValue2.x; x2 += 1)
+                        {
+                            for (long y2 = tester.minValue2.y; y2 <= tester.maxValue2.y; y2 += 1)
+                            {
+                                for (long z2 = tester.minValue2.z; z2 <= tester.maxValue2.z; z2 += 1)
+                                {
+                                    if (!tester.test(new Vector3((int)x1, (int)y1, (int)z1), new Vector3((int)x2, (int)y2, (int)z2)))
+                                        succ = false;
+                                    if (interruptTest)
+                                        return succ;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return succ;
         }
         public static bool TestRandom(Tester<int> tester, int count)
         {

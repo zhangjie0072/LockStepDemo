@@ -5,10 +5,10 @@ namespace IM
 {
     public abstract class UnitTest : MonoBehaviour
     {
+        public bool autoStart = true;
         public bool stopAtFail = true;
 
-
-        protected delegate bool TestFunc();
+        protected delegate bool TestFunc(bool longTime);
         struct Step
         {
             public string name;
@@ -28,12 +28,18 @@ namespace IM
 
         void Start()
         {
+            if (autoStart)
+                Test(false);
+        }
+
+        public void Test(bool longTime)
+        {
             PrepareSteps();
             Logger.Log("--->IMath test, Begin unit: " + Name());
             foreach (Step step in steps)
             {
                 Logger.Log("*******>IMath test, Begin step: " + step.name);
-                bool passed = step.test();
+                bool passed = step.test(longTime);
                 if (passed)
                     Logger.Log("<*******IMath test, End step: " + step.name + " passed.");
                 else
@@ -42,6 +48,8 @@ namespace IM
                     if (stopAtFail)
                         break;
                 }
+                if (IM.Test.Utils.interruptTest)
+                    break;
             }
             Logger.Log("<---IMath test, End unit: " + Name());
         }

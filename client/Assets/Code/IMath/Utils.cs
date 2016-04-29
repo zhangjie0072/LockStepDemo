@@ -2,7 +2,7 @@
 {
     public static class Utils
     {
-        public static bool EnableTrace = true;
+        public static bool EnableTrace = false;
 
         static public void Trace(object message)
         {

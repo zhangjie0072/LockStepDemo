@@ -252,6 +252,7 @@ namespace IM
             return fastCos(HALF_PI - radians);
         }
 
+#if UNITY_EDITOR
         [UnityEditor.MenuItem("TriFunc/Generate Asin Table")]
         static void GenerateAsinTable()
         {
@@ -321,6 +322,7 @@ namespace IM
             builder.Append("};");
             System.IO.File.AppendAllText("Assets/Code/IMath/Math.cs", builder.ToString());
         }
+#endif
 
         static int[] asinTable = { 
                0,    1,    2,    3,    4,    5,    6,    7,    8,    9, 
