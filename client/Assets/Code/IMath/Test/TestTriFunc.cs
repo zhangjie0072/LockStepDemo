@@ -78,7 +78,9 @@ namespace IM.Test
                 new Number(0, 1), Number.max, DevMode.Absolute, new Number(0, 45));
             if (longTime)
             {
-                if (!Utils.TestSequence(tester))
+                if (!Utils.TestSequence(tester,
+                    tester.minValue1, tester.maxValue1, new Number(1000),
+                    tester.minValue2, tester.maxValue2, new Number(1000)))
                     return false;
             }
             else
@@ -92,7 +94,9 @@ namespace IM.Test
                 Number.Raw(int.MinValue / Math.FACTOR), Number.Raw(int.MaxValue / Math.FACTOR),
                 Number.min, new Number(0, -1), DevMode.Absolute, new Number(0, 45));
             if (longTime)
-                return Utils.TestSequence(tester);
+                return Utils.TestSequence(tester,
+                    tester.minValue1, tester.maxValue1, new Number(1000),
+                    tester.minValue2, tester.maxValue2, new Number(1000));
             else
                 return Utils.TestCritical(tester) && Utils.TestRandom(tester, 500000);
         }

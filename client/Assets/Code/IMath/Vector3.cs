@@ -220,6 +220,13 @@
         }
         //*/
 
+        public static Vector3 Lerp(Vector3 from, Vector3 to, Number t)
+        {
+            t = Math.Clamp(t, Number.zero, Number.one);
+            Vector3 vec = from * (Number.one - t) + to * t;
+            return vec;
+        }
+
         public override string ToString()
         {
             return string.Format("({0}, {1}, {2})", x, y, z);

@@ -12,6 +12,7 @@ namespace IM.Test
             AddStep("Vector3.normalized", TestNormalize);
             AddStep("Vector3.Cross", TestCross);
             AddStep("Vector3.Angle", TestAngle);
+            AddStep("Vector3.Lerp", TestLerp);
         }
 
         bool TestNormalize(bool longTime)
@@ -47,6 +48,16 @@ namespace IM.Test
                 return Utils.TestSequence(tester);
             else
                 return Utils.TestCritical(tester) && Utils.TestRandom(tester, 1000);
+        }
+
+        bool TestLerp(bool longTime)
+        {
+            var tester = Utils.GenerateTester("Vector3.Lerp", Vector3.Lerp, UE.Vector3.Lerp, 
+                Math.MIN_LENGTH, Math.MAX_LENGTH, Number.zero, Number.one, DevMode.Absolute, new Number(0, 2));
+            if (longTime)
+                return Utils.TestSequence(tester);
+            else
+                return Utils.TestRandom(tester, 1000);
         }
     }
 }

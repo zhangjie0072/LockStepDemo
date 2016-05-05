@@ -197,7 +197,7 @@ namespace IM
 
         public static Quaternion AngleAxis(Number angle, Vector3 axis)
         {
-            Math.CheckLengthRange(angle);
+            Math.CheckAngleRange(angle);
             Math.CheckRange(axis);
 
             Number rad = Math.Deg2Rad(angle);

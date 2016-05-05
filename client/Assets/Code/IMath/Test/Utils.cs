@@ -191,6 +191,35 @@ namespace IM.Test
             tester.test = test;
             return tester;
         }
+        public static Tester<Vector3, Vector3, Number> GenerateTester(
+            string name, Func3<Vector3, Vector3, Number> testFunc, Func3<UE.Vector3, UE.Vector3, float> refFunc,
+            Number minValue1, Number maxValue1, Number minValue2, Number maxValue2, DevMode devMode, Number maxDev)
+        {
+            TestFunc3<Vector3, Vector3, Number> test = (Vector3 x, Vector3 y, Number z) =>
+            {
+                try
+                {
+                    Vector3 result = testFunc(x, y, z);
+                    UE.Vector3 refResult = refFunc((UE.Vector3)x, (UE.Vector3)y, (float)z);
+                    return CheckResult(name, x, y, z, (UE.Vector3)result, refResult, minValue1, maxValue1, devMode, (float)maxDev);
+                }
+                catch (Exception ex)
+                {
+                    ExOutput(name, ex, x, y, z);
+                    return false;
+                }
+            };
+            Tester<Vector3, Vector3, Number> tester = new Tester<Vector3, Vector3, Number>();
+            tester.name = name;
+            tester.minValue1 = new Vector3(minValue1);
+            tester.maxValue1 = new Vector3(maxValue1);
+            tester.minValue2 = new Vector3(minValue1);
+            tester.maxValue2 = new Vector3(maxValue1);
+            tester.minValue3 = minValue2;
+            tester.maxValue3 = maxValue2;
+            tester.test = test;
+            return tester;
+        }
         public static Tester<Vector3, Vector3> GenerateTester(
             string name, Func2<Vector3, Vector3, Number> testFunc, Func2<UE.Vector3, UE.Vector3, float> refFunc,
             Number minValue, Number maxValue, DevMode devMode, Number maxDev)
@@ -489,6 +518,40 @@ namespace IM.Test
             }
             return succ;
         }
+        public static bool TestSequence(Tester<Vector3, Vector3, Number> tester)
+        {
+            Logger.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3} start:{4} end:{5} step:{6}", 
+                tester.name, tester.minValue1, tester.maxValue1, 1, tester.minValue2, tester.maxValue2, 1));
+            bool succ = true;
+            for (long x1 = tester.minValue1.x.raw; x1 <= tester.maxValue1.x.raw; x1 += 1)
+            {
+                for (long y1 = tester.minValue1.y.raw; y1 <= tester.maxValue1.y.raw; y1 += 1)
+                {
+                    for (long z1 = tester.minValue1.z.raw; z1 <= tester.maxValue1.z.raw; z1 += 1)
+                    {
+                        for (long x2 = tester.minValue2.x.raw; x2 <= tester.maxValue2.x.raw; x2 += 1)
+                        {
+                            for (long y2 = tester.minValue2.y.raw; y2 <= tester.maxValue2.y.raw; y2 += 1)
+                            {
+                                for (long z2 = tester.minValue2.z.raw; z2 <= tester.maxValue2.z.raw; z2 += 1)
+                                {
+                                    for (long n = tester.minValue3.raw; n <= tester.maxValue3.raw; n += 1)
+                                    {
+                                        Vector3 v1 = new Vector3(Number.Raw(x1), Number.Raw(y1), Number.Raw(z1));
+                                        Vector3 v2 = new Vector3(Number.Raw(x2), Number.Raw(y2), Number.Raw(z2));
+                                        if (!tester.test(v1, v2, Number.Raw(n)))
+                                            succ = false;
+                                        if (interruptTest)
+                                            return succ;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return succ;
+        }
         public static bool TestRandom(Tester<Number> tester, int count)
         {
             Logger.Log("IMath test, Test random:" + tester.name + " count:" + count);
@@ -536,6 +599,23 @@ namespace IM.Test
                 Number y2 = Number.Raw(UE.Random.Range(tester.minValue2.y.raw, tester.maxValue2.y.raw));
                 Number z2 = Number.Raw(UE.Random.Range(tester.minValue2.z.raw, tester.maxValue2.z.raw));
                 if (!tester.test(new Vector3(x1, y1, z1), new Vector3(x2, y2, z2)))
+                    return false;
+            }
+            return true;
+        }
+        public static bool TestRandom(Tester<Vector3, Vector3, Number> tester, int count)
+        {
+            Logger.Log("IMath test, Test random:" + tester.name + " count:" + count);
+            for (int i = 0; i < count; ++i)
+            {
+                Number x1 = Number.Raw(UE.Random.Range(tester.minValue1.x.raw, tester.maxValue1.x.raw));
+                Number y1 = Number.Raw(UE.Random.Range(tester.minValue1.y.raw, tester.maxValue1.y.raw));
+                Number z1 = Number.Raw(UE.Random.Range(tester.minValue1.z.raw, tester.maxValue1.z.raw));
+                Number x2 = Number.Raw(UE.Random.Range(tester.minValue2.x.raw, tester.maxValue2.x.raw));
+                Number y2 = Number.Raw(UE.Random.Range(tester.minValue2.y.raw, tester.maxValue2.y.raw));
+                Number z2 = Number.Raw(UE.Random.Range(tester.minValue2.z.raw, tester.maxValue2.z.raw));
+                Number n = Number.Raw(UE.Random.Range(tester.minValue3.raw, tester.maxValue3.raw));
+                if (!tester.test(new Vector3(x1, y1, z1), new Vector3(x2, y2, z2), n))
                     return false;
             }
             return true;
@@ -714,6 +794,23 @@ namespace IM.Test
             }
             return true;
         }
+        static bool CheckResult(string name, Vector3 input1, Vector3 input2, Number input3,
+            UE.Vector3 result, UE.Vector3 refResult, Number minValue, Number maxValue, DevMode devMode, float maxDev)
+        {
+            UE.Vector3 diff = result - refResult;
+            float devX = CalcDev(System.Math.Abs(diff.x), refResult.x, minValue, maxValue, devMode);
+            float devY = CalcDev(System.Math.Abs(diff.y), refResult.y, minValue, maxValue, devMode);
+            float devZ = CalcDev(System.Math.Abs(diff.z), refResult.z, minValue, maxValue, devMode);
+            if (devX > maxDev || devY > maxDev || devZ > maxDev)
+            {
+                Logger.LogError(string.Format(
+                    "TestName:{0} Input:{1} {2} {3} Result:{4} RefResult:{5} Diff:{6} Dev:{7} MaxDev:{8} DevMode:{9}",
+                    name, input1, input2, input3, result.ToString("F4"), refResult.ToString("F4"),
+                    diff.ToString("F4"), new UE.Vector3(devX, devY, devZ).ToString("F4"), maxDev, devMode));
+                return false;
+            }
+            return true;
+        }
 
         static void ExOutput<T>(string name, Exception ex, T input)
         {
@@ -724,6 +821,11 @@ namespace IM.Test
         {
             Logger.LogError(ex);
             Logger.LogError(string.Format("Test:{0} Input:{1}, {2}", name, input1, input2));
+        }
+        static void ExOutput<T, U, V>(string name, Exception ex, T input1, U input2, V input3)
+        {
+            Logger.LogError(ex);
+            Logger.LogError(string.Format("Test:{0} Input:{1}, {2} {3}", name, input1, input2, input3));
         }
     }
 }
