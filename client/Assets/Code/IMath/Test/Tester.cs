@@ -4,7 +4,6 @@ namespace IM.Test
 {
     public enum DevMode
     {
-        Input,
         RefResult,
         ValueRange,
         Absolute,
@@ -22,8 +21,8 @@ namespace IM.Test
     public class Tester<T>
     {
         public string name;
-        public int minValue;
-        public int maxValue;
+        public Number minValue;
+        public Number maxValue;
         public TestFunc1<T> test;
     }
 

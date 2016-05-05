@@ -5,10 +5,7 @@ namespace IM.Test
 {
     public class TestQuaternion : UnitTest
     {
-        public override string Name()
-        {
-            return "Quaternion";
-        }
+        public override string name { get { return "Quaternion"; } }
 
         public override void PrepareSteps()
         {
@@ -22,8 +19,8 @@ namespace IM.Test
         bool TestEuler(bool longTime)
         {
             var tester = Utils.GenerateTester("Euler",
-                Quaternion.Euler, UE.Quaternion.Euler,
-                Math.SUPPORTED_MIN, Math.SUPPORTED_MAX, DevMode.Absolute, 0.003f);
+                (Func1<Vector3, Quaternion>)Quaternion.Euler, UE.Quaternion.Euler,
+                Math.MIN_LENGTH, Math.MAX_LENGTH, DevMode.Absolute, new Number(0, 3));
             if (longTime)
                 return Utils.TestSequence(tester);
             else
@@ -35,7 +32,7 @@ namespace IM.Test
             var tester = Utils.GenerateTester("eulerAngles",
                 (Vector3 e) => Quaternion.Euler(e).eulerAngles,
                 (UE.Vector3 e) => UE.Quaternion.Euler(e).eulerAngles,
-                Math.SUPPORTED_MIN, Math.SUPPORTED_MAX, 1, DevMode.AbsoluteWrap360, 10f);
+                Math.MIN_LENGTH, Math.MAX_LENGTH, DevMode.AbsoluteWrap360, new Number(11));
             if (longTime)
                 return Utils.TestSequence(tester);
             else
@@ -45,10 +42,9 @@ namespace IM.Test
         bool TestAngleAxis(bool longTime)
         {
             var tester = Utils.GenerateTester("AngleAxis", 
-                (int angle, Vector3 axis) => Quaternion.AngleAxis(angle, axis.normalized),
+                (Number angle, Vector3 axis) => Quaternion.AngleAxis(angle, axis.normalized),
                 (float angle, UE.Vector3 axis) => UE.Quaternion.AngleAxis(angle, axis.normalized),
-                Math.SUPPORTED_MIN, Math.SUPPORTED_MAX, Math.SUPPORTED_MIN, Math.SUPPORTED_MAX, 
-                Math.FACTOR, DevMode.Absolute, 0.002f);
+                Math.MIN_LENGTH, Math.MAX_LENGTH, Math.MIN_LENGTH, Math.MAX_LENGTH, DevMode.Absolute, new Number(0, 2));
             if (longTime)
                 return Utils.TestSequence(tester);
             else
@@ -70,7 +66,7 @@ namespace IM.Test
                     UE.Vector3 v = q * vec.normalized;
                     return v;
                 },
-                Math.SUPPORTED_MIN, Math.SUPPORTED_MAX, 1, DevMode.Absolute, 0.006f);
+                Math.MIN_LENGTH, Math.MAX_LENGTH, DevMode.Absolute, new Number(0, 6));
             if (longTime)
                 return Utils.TestSequence(tester);
             else
@@ -92,7 +88,7 @@ namespace IM.Test
                     UE.Quaternion rhs = UE.Quaternion.Euler(re);
                     return lhs * rhs;
                 },
-                Math.SUPPORTED_MIN, Math.SUPPORTED_MAX, 1, DevMode.Absolute, 0.004f);
+                Math.MIN_LENGTH, Math.MAX_LENGTH, DevMode.Absolute, new Number(0, 4));
             if (longTime)
                 return Utils.TestSequence(tester);
             else

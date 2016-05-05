@@ -4,10 +4,7 @@ namespace IM.Test
 {
     public class TestCommonFunc : UnitTest
     {
-        public override string Name()
-        {
-            return "Common functions";
-        }
+        public override string name { get { return "Common functions"; } }
 
         public override void PrepareSteps()
         {
@@ -19,8 +16,10 @@ namespace IM.Test
 
         bool TestSqrt(bool longTime)
         {
-            var tester = Utils.GenerateTester("Sqrt", IM.Math.Sqrt, UnityEngine.Mathf.Sqrt,
-                0, int.MaxValue, 1, DevMode.Absolute, 1f);
+            var tester = Utils.GenerateTester("Sqrt", 
+                (Number x) => Number.Raw(IM.Math.Sqrt(x.raw)), 
+                (float x) => UnityEngine.Mathf.Sqrt(x * Math.FACTOR) / Math.FACTOR,
+                Number.zero, Number.Raw(int.MaxValue), DevMode.Absolute, Number.Raw(2));
             if (longTime)
                 return Utils.TestSequence(tester);
             else
@@ -30,10 +29,10 @@ namespace IM.Test
         bool TestRoundDivide(bool longTime)
         {
             var tester = Utils.GenerateTester("RoundDivide", 
-                (int x, int y) => IM.Math.RndDiv(x, y),
-                (int x, int y) => UnityEngine.Mathf.RoundToInt((float)x / y),
-                IM.Math.SUPPORTED_MIN, IM.Math.SUPPORTED_MAX, 1, IM.Math.SUPPORTED_MAX,
-                1, DevMode.Absolute, 0f);
+                (Number x, Number y) => Number.Raw(IM.Math.RndDiv(x.raw, y.raw)),
+                (Number x, Number y) => Number.Raw(UnityEngine.Mathf.RoundToInt((float)x.raw / y.raw)),
+                IM.Math.MIN_LENGTH, IM.Math.MAX_LENGTH, Number.one, IM.Math.MAX_LENGTH,
+                DevMode.Absolute, Number.zero);
             if (longTime)
             {
                 if (!Utils.TestSequence(tester))
@@ -45,10 +44,10 @@ namespace IM.Test
                     return false;
             }
             tester = Utils.GenerateTester("RoundDivide", 
-                (int x, int y) => IM.Math.RndDiv(x, y),
-                (int x, int y) => UnityEngine.Mathf.RoundToInt((float)x / y),
-                IM.Math.SUPPORTED_MIN, IM.Math.SUPPORTED_MAX, IM.Math.SUPPORTED_MIN, -1,
-                1, DevMode.Absolute, 0f);
+                (Number x, Number y) => Number.Raw(IM.Math.RndDiv(x.raw, y.raw)),
+                (Number x, Number y) => Number.Raw(UnityEngine.Mathf.RoundToInt((float)x.raw / y.raw)),
+                IM.Math.MIN_LENGTH, IM.Math.MAX_LENGTH, IM.Math.MIN_LENGTH, -Number.one,
+                DevMode.Absolute, Number.zero);
             if (longTime)
             {
                 if (!Utils.TestSequence(tester))
@@ -66,22 +65,22 @@ namespace IM.Test
         {
             var tester = Utils.GenerateTester("Deg2Rad", 
                 IM.Math.Deg2Rad, (float x) => UnityEngine.Mathf.Deg2Rad * x,
-                Math.SUPPORTED_MIN, Math.SUPPORTED_MAX, Math.FACTOR, DevMode.Absolute, Math.TWO_PI / 360);
+                Math.MIN_LENGTH, Math.MAX_LENGTH, DevMode.Absolute, Math.TWO_PI / new Number(3600));
             if (longTime)
                 return Utils.TestSequence(tester);
             else
-                return Utils.TestSequence(tester, -180, 720 * Math.FACTOR, Math.FACTOR >> 1);
+                return Utils.TestSequence(tester, new Number(-180), new Number(720), Number.Raw(Math.FACTOR >> 1));
         }
 
         bool TestRad2Deg(bool longTime)
         {
-            var tester = Utils.GenerateTester("Rad2Deg", 
+            var tester = Utils.GenerateTester("Rad2Deg",
                 IM.Math.Rad2Deg, (float x) => UnityEngine.Mathf.Rad2Deg * x,
-                Math.SUPPORTED_MIN, Math.SUPPORTED_MAX, Math.FACTOR, DevMode.Absolute, Math.FACTOR);
+                Math.MIN_LENGTH, Math.MAX_LENGTH, DevMode.Absolute, new Number(0, 6));
             if (longTime)
                 return Utils.TestSequence(tester);
             else
-                return Utils.TestSequence(tester, -Math.PI, Math.TWO_PI + Math.PI, Math.TWO_PI / 720);
+                return Utils.TestSequence(tester, -Math.PI, Math.TWO_PI + Math.PI, Number.Raw(Math.TWO_PI.raw / 720));
         }
     }
 }

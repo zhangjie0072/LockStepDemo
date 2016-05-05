@@ -5,15 +5,12 @@ namespace IM.Test
     public class TestTriFunc : UnitTest
     {
 
-        public override string Name()
-        {
-            return "Trigonometric functions";
-        }
+        public override string name { get { return "Trigonometric functions"; } }
 
         public override void PrepareSteps()
         {
-            AddStep("Sin", TestSin);
             AddStep("Cos", TestCos);
+            AddStep("Sin", TestSin);
             AddStep("Asin", TestAsin);
             AddStep("Acos", TestAcos);
             AddStep("Atan", TestAtan);
@@ -23,50 +20,50 @@ namespace IM.Test
         bool TestSin(bool longTime)
         {
             var tester = Utils.GenerateTester("Sin", IM.Math.Sin, UnityEngine.Mathf.Sin,
-                Math.SUPPORTED_MIN, Math.SUPPORTED_MAX, Math.FACTOR, DevMode.Absolute, 0.001f * Math.PI);
+                Math.MIN_ANGLE, Math.MAX_ANGLE, DevMode.Absolute, new Number(0, 30));
 
             if (longTime)
                 return Utils.TestSequence(tester);
             else
                 return Utils.TestCritical(tester) && 
-                    Utils.TestSequence(tester, -Math.HALF_PI, Math.TWO_PI + Math.HALF_PI, Math.TWO_PI / 200);
+                    Utils.TestSequence(tester, Math.MIN_ANGLE, Math.MAX_ANGLE, Math.TWO_PI / new Number(200));
         }
 
         bool TestCos(bool longTime)
         {
             var tester = Utils.GenerateTester("Cos", IM.Math.Cos, UnityEngine.Mathf.Cos,
-                Math.SUPPORTED_MIN, Math.SUPPORTED_MAX, Math.FACTOR, DevMode.Absolute, 0.001f * Math.PI);
+                Math.MIN_ANGLE, Math.MAX_ANGLE, DevMode.Absolute, new Number(0, 30));
             if (longTime)
                 return Utils.TestSequence(tester);
             else
                 return Utils.TestCritical(tester) && 
-                    Utils.TestSequence(tester, -Math.HALF_PI, Math.TWO_PI + Math.HALF_PI, Math.TWO_PI / 200);
+                    Utils.TestSequence(tester, Math.MIN_ANGLE, Math.MAX_ANGLE, Math.TWO_PI / new Number(200));
         }
 
         bool TestAsin(bool longTime)
         {
             var tester = Utils.GenerateTester("Asin", IM.Math.Asin, UnityEngine.Mathf.Asin,
-                -Math.FACTOR, Math.FACTOR, Math.FACTOR, DevMode.Absolute, 1f);
+                -Number.one, Number.one, DevMode.Absolute, Math.PI / new Number(360));
             if (longTime)
                 return Utils.TestSequence(tester);
             else
-                return Utils.TestSequence(tester, -Math.FACTOR, Math.FACTOR, 150);
+                return Utils.TestSequence(tester, -Number.one, Number.one, new Number(0, 150));
         }
 
         bool TestAcos(bool longTime)
         {
             var tester = Utils.GenerateTester("Acos", IM.Math.Acos, UnityEngine.Mathf.Acos,
-                -Math.FACTOR, Math.FACTOR, Math.FACTOR, DevMode.Absolute, 1f);
+                -Number.one, Number.one, DevMode.Absolute, Math.PI / new Number(360));
             if (longTime)
                 return Utils.TestSequence(tester);
             else
-                return Utils.TestSequence(tester, -Math.FACTOR, Math.FACTOR, 150);
+                return Utils.TestSequence(tester, -Number.one, Number.one, new Number(0, 150));
         }
 
         bool TestAtan(bool longTime)
         {
             var tester = Utils.GenerateTester("Atan", IM.Math.Atan, UnityEngine.Mathf.Atan,
-                int.MinValue, int.MaxValue, Math.FACTOR, DevMode.Absolute, 45f);
+                Number.min, Number.max, DevMode.Absolute, new Number(0, 45));
             if (longTime)
                 return Utils.TestSequence(tester);
             else
@@ -76,9 +73,9 @@ namespace IM.Test
         bool TestAtan2(bool longTime)
         {
             var tester = Utils.GenerateTester("Atan2(Pos)", 
-                (Func2<int, int>)IM.Math.Atan2, (Func2<float, float>)UnityEngine.Mathf.Atan2,
-                int.MinValue / Math.FACTOR, int.MaxValue / Math.FACTOR, 1, int.MaxValue,
-                Math.FACTOR, DevMode.Absolute, 45f);
+                IM.Math.Atan2, UnityEngine.Mathf.Atan2,
+                Number.Raw(int.MinValue / Math.FACTOR), Number.Raw(int.MaxValue / Math.FACTOR),
+                new Number(0, 1), Number.max, DevMode.Absolute, new Number(0, 45));
             if (longTime)
             {
                 if (!Utils.TestSequence(tester))
@@ -91,9 +88,9 @@ namespace IM.Test
             }
 
             tester = Utils.GenerateTester("Atan2(Neg)", 
-                (Func2<int, int>)IM.Math.Atan2, (Func2<float, float>)UnityEngine.Mathf.Atan2,
-                int.MinValue / Math.FACTOR, int.MaxValue / Math.FACTOR, int.MinValue, -1,
-                Math.FACTOR, DevMode.Absolute, 45f);
+                IM.Math.Atan2, UnityEngine.Mathf.Atan2,
+                Number.Raw(int.MinValue / Math.FACTOR), Number.Raw(int.MaxValue / Math.FACTOR),
+                Number.min, new Number(0, -1), DevMode.Absolute, new Number(0, 45));
             if (longTime)
                 return Utils.TestSequence(tester);
             else

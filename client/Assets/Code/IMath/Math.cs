@@ -6,18 +6,28 @@ namespace IM
     {
         public const int FACTOR = 1000;
         public const int SQR_FACTOR = FACTOR * FACTOR;
-        public const int SUPPORTED_MIN = -23 * FACTOR;
-        public const int SUPPORTED_MAX = 23 * FACTOR;
-        public const int PI = (int)(3.14159265358979323846264338327950288 * FACTOR);
-        public const int TWO_PI = (int)(6.28318530717958647692528676655900576 * FACTOR);
-        public const int ROOT_PI = (int)(1.772453850905516027 * FACTOR);
-        public const int HALF_PI = (int)(1.57079632679489661923132169163975144 * FACTOR);
+        public static Number PI = new Number(3, 14159);     //3.14159265358979323846264338327950288f
+        public static Number TWO_PI = new Number(6, 283185); //6.28318530717958647692528676655900576f
+        public static Number ROOT_PI = new Number(1, 7724);//1.772453850905516027f
+        public static Number HALF_PI = new Number(1, 57079);//1.57079632679489661923132169163975144f
+        public static Number MIN_LENGTH = new Number(-23);
+        public static Number MAX_LENGTH = new Number(23);
+        public static Number MIN_ANGLE = -TWO_PI * new Number(128);
+        public static Number MAX_ANGLE = TWO_PI * new Number(128);
 
-        public static void CheckRange(int x, string name = "")
+        public static void CheckLengthRange(Number x, string name = "")
         {
-            CheckRange(x, SUPPORTED_MIN, SUPPORTED_MAX, name);
+            CheckRange(x, MIN_LENGTH, MAX_LENGTH, name);
         }
-        public static void CheckRange(int x, int min, int max, string name = "")
+        public static void CheckAngleRange(Number x, string name = "")
+        {
+            CheckRange(x, MIN_ANGLE, MAX_ANGLE, name);
+        }
+        public static void CheckRange(Number x, Number min, Number max, string name = "")
+        {
+            CheckRange((long)x.raw, (long)min.raw, (long)max.raw, name);
+        }
+        public static void CheckRange(long x, long min, long max, string name = "")
         {
             if (x < min || x > max)
             {
@@ -27,11 +37,11 @@ namespace IM
         }
         public static void CheckRange(Vector3 vec)
         {
-            CheckRange(vec.x, "Vector3.x");
-            CheckRange(vec.y, "Vector3.y");
-            CheckRange(vec.z, "Vector3.z");
+            CheckLengthRange(vec.x, "Vector3.x");
+            CheckLengthRange(vec.y, "Vector3.y");
+            CheckLengthRange(vec.z, "Vector3.z");
         }
-        public static void CheckNotEqual(int x, int r, string name = "")
+        public static void CheckNotEqual(Number x, Number r, string name = "")
         {
             if (x == r)
             {
@@ -40,41 +50,41 @@ namespace IM
             }
         }
 
-        public static int Deg2Rad(int degrees)
+        public static Number Deg2Rad(Number degrees)
         {
             const long X = (long)(0.01745329251994329576923690768489 * FACTOR * FACTOR);
-            return (int)Math.RndDiv(Math.RndDiv(degrees * X, FACTOR), FACTOR);
+            return Number.Raw((int)Math.RndDiv(Math.RndDiv(degrees.raw * X, FACTOR), FACTOR));
         }
 
-        public static int Rad2Deg(int radians)
+        public static Number Rad2Deg(Number radians)
         {
             //const long X = (long)(57.295779513082320876798154814105 * SQR_FACTOR * SQR_FACTOR);
             //return (int)(radians * X / SQR_FACTOR / SQR_FACTOR / FACTOR);
             const long X = (long)(57.296 * FACTOR);
-            return (int)(Math.RndDiv(radians * X, FACTOR));
+            return Number.Raw((int)(Math.RndDiv(radians.raw * X, FACTOR)));
         }
 
-        public static int Min(int x, int y)
+        public static Number Min(Number x, Number y)
         {
-            return x < y ? x : y;
+            return y < x ? y : x;
         }
 
         public static long Min(long x, long y)
         {
-            return x < y ? x : y;
+            return y < x ? y : x;
         }
 
-        public static int Max(int x, int y)
+        public static Number Max(Number x, Number y)
         {
-            return x > y ? x : y;
+            return y > x ? y : x;
         }
 
         public static long Max(long x, long y)
         {
-            return x > y ? x : y;
+            return y > x ? y : x;
         }
 
-        public static int Clamp(int x, int min, int max)
+        public static Number Clamp(Number x, Number min, Number max)
         {
             if (x < min)
                 return min;
@@ -94,9 +104,9 @@ namespace IM
                 return x;
         }
 
-        public static int Sign(int x)
+        public static Number Sign(Number x)
         {
-            return x >= 0 ? 1 : -1;
+            return x >= Number.zero ? Number.one : -Number.one;
         }
 
         public static long Sign(long x)
@@ -104,10 +114,6 @@ namespace IM
             return x >= 0L ? 1L : -1L;
         }
 
-        public static int RndDiv(int x, int y)
-        {
-            return (int)RndDiv((long)x, (long)y);
-        }
         public static long RndDiv(long x, long y)
         {
             if (x == 0L)
@@ -133,9 +139,9 @@ namespace IM
             }
         }
 
-        public static int Abs(int x)
+        public static Number Abs(Number x)
         {
-            return System.Math.Abs(x);
+            return Number.Raw(System.Math.Abs(x.raw));
         }
 
         public static long Abs(long x)
@@ -143,80 +149,71 @@ namespace IM
             return System.Math.Abs(x);
         }
 
-        //The parameter radians should be factor multiplied
-        public static int WrapAngle(int radians)
+        public static Number Cos(Number radians)
         {
-            return Abs(radians % TWO_PI);
-        }
-
-        //The parameter radians should be factor multiplied
-        public static int Cos(int radians)
-        {
-            CheckRange(radians, "Cos(radians)");
+            CheckAngleRange(radians, "Cos(radians)");
             return fastCos(radians);
         }
 
-        //The parameter radians should be factor multiplied
-        public static int Sin(int radians)
+        public static Number Sin(Number radians)
         {
-            CheckRange(radians, "Sin(radians)");
+            CheckAngleRange(radians, "Sin(radians)");
             return fastSin(radians);
         }
 
-        //The parameter radians should be factor multiplied
-        public static int Asin(int x)
+        public static Number Asin(Number x)
         {
-            CheckRange(x, "Asin(x)");
+            CheckRange(x, -Number.one, Number.one, "Asin(x)");
             return fastAsin(x);
         }
 
-        public static int Acos(int x)
+        public static Number Acos(Number x)
         {
-            CheckRange(x, "Acos(x)");
-            return 1571 - fastAsin(x);
+            CheckRange(x, -Number.one, Number.one, "Acos(x)");
+            return Number.Raw(1571) - fastAsin(x);
         }
 
-        public static int Atan(int x)
+        public static Number Atan(Number x)
         {
-            int rad = 0;
-            if (x > 3037000)
+            Number rad = Number.zero;
+            if (x > new Number(3037))
                 rad = HALF_PI;
-            else if (x < -3037000)
+            else if (x < new Number(-3037))
                 rad = -HALF_PI;
             else
             {
-                long A = (long)x * x * Math.SQR_FACTOR;
-                long B = (long)x * x + Math.SQR_FACTOR;
-                long C = Math.RndDiv(A, B);
+                long A = (long)x.raw * x.raw * Math.SQR_FACTOR;     //4 POF
+                long B = (long)x.raw * x.raw + Math.SQR_FACTOR;     //2 POF
+                long C = Math.RndDiv(A, B);     //2 POF
                 int sqrSinA = (int)C;
-                int sinA = Sqrt(sqrSinA);
-                rad = Asin(sinA) * Sign(x);
+                int sinA = Sqrt(sqrSinA);       //1 POF
+                rad = Asin(Number.Raw(sinA)) * Sign(x);
             }
             return rad;
         }
 
-        public static int Atan2(int y, int x)
+        public static Number Atan2(Number y, Number x)
         {
-            CheckRange(y, int.MinValue / 1000, int.MaxValue / 1000, "Atan2(y)");
+            CheckRange(y, Number.Raw(int.MinValue), Number.Raw(int.MaxValue), "Atan2(y)");
 
-            if (x == 0)
+            if (x == Number.zero)
             {
-                CheckNotEqual(y, 0, "Atan2(y) when x == 0");
+                CheckNotEqual(y, Number.zero, "Atan2(y) when x == 0");
                 return HALF_PI * Sign(y);
             }
-            int sign = Sign(y) * Sign(x);
-            int result = Abs(Atan(Math.RndDiv(y * Math.FACTOR, x))) * sign;
-            if (y < 0 && x < 0)
+            Number sign = Sign(y) * Sign(x);
+            Number result = Abs(Atan(y / x)) * sign;
+            if (y < Number.zero && x < Number.zero)
                 result -= PI;
-            else if (y >= 0 && x < 0)
+            else if (y >= Number.zero && x < Number.zero)
                 result += PI;
             CheckRange(result, -Math.PI, Math.PI, "Atan2(result)");
             return result;
         }
 
-        static int cos_52s(int x)
+        static Number cos_52s(Number x)
         {
-            long xx = (long)x * x;
+            long xx = (long)x.raw * x.raw;
             Utils.Trace(string.Format("x:{0} xx:{1}", x, xx));
 
             const long A = (long)(0.9999932946f * SQR_FACTOR);
@@ -230,24 +227,24 @@ namespace IM
             long r3 = A + Math.RndDiv(xx * r2, SQR_FACTOR);
             Utils.Trace(string.Format("r1:{0} r2:{1} r3:{2}", r1, r2, r3));
 
-            return (int)Math.RndDiv(r3, FACTOR);
+            return Number.Raw((int)Math.RndDiv(r3, FACTOR));
         }
 
-        static int fastCos(int radians)
+        static Number fastCos(Number radians)
         {
-            int angle = WrapAngle(radians);
+            Number angle = Abs(radians % TWO_PI);
 
             if (angle < HALF_PI)
                 return cos_52s(angle);
             if (angle < PI)
                 return -cos_52s(PI - angle);
-            if (angle < (3 * HALF_PI))
+            if (angle < (HALF_PI * new Number(3)))
                 return -cos_52s(angle - PI);
 
             return cos_52s(TWO_PI - angle);
         }
 
-        static int fastSin(int radians)
+        static Number fastSin(Number radians)
         {
             return fastCos(HALF_PI - radians);
         }
@@ -428,11 +425,11 @@ namespace IM
             1571
         };
 
-        static int fastAsin(int x)
+        static Number fastAsin(Number x)
         {
-            int sign = Sign(x);
-            x = Clamp(Abs(x), 0, Math.FACTOR);
-            int result = asinTable[x];
+            Number sign = Sign(x);
+            x = Clamp(Abs(x), Number.zero, Number.one);
+            Number result = Number.Raw(asinTable[x.raw]);
             return sign * result;
         }
 
