@@ -206,7 +206,12 @@ namespace IM
             Number x = axis.x * s;
             Number y = axis.y * s;
             Number z = axis.z * s;
-            return new Quaternion(x, y, z, w);
+            return new Quaternion(x, y, z, w).normalized;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("({0}, {1}, {2}, {3})", x, y, z, w);
         }
     }
 }

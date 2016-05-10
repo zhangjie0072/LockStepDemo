@@ -4,7 +4,7 @@ namespace IM.Test
 {
     public class TestCommonFunc : UnitTest
     {
-        public override string name { get { return "Common functions"; } }
+        public override string unitName { get { return "Common functions"; } }
 
         public override void PrepareSteps()
         {

@@ -17,7 +17,7 @@ namespace IM
 
         List<Step> steps = new List<Step>();
 
-        public abstract string name { get; }
+        public abstract string unitName { get; }
 
         public abstract void PrepareSteps();
 
@@ -35,7 +35,7 @@ namespace IM
         public void Test(bool longTime)
         {
             PrepareSteps();
-            Logger.Log("--->IMath test, Begin unit: " + name);
+            Logger.Log("--->IMath test, Begin unit: " + unitName);
             foreach (Step step in steps)
             {
                 Logger.Log("*******>IMath test, Begin step: " + step.name);
@@ -51,7 +51,7 @@ namespace IM
                 if (IM.Test.Utils.interruptTest)
                     break;
             }
-            Logger.Log("<---IMath test, End unit: " + name);
+            Logger.Log("<---IMath test, End unit: " + unitName);
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace IM
+﻿using System;
+
+namespace IM
 {
-    public struct Vector3
+    public struct Vector3 : IEquatable<Vector3>
     {
         public Number x, y, z;
 
@@ -95,6 +97,16 @@
         public static Vector3 operator / (Vector3 lhs, Number rhs)
         {
             return new Vector3(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
+        }
+
+        public static bool operator == (Vector3 lhs, Vector3 rhs)
+        {
+            return lhs.Equals(rhs);
+        }
+
+        public static bool operator != (Vector3 lhs, Vector3 rhs)
+        {
+            return !lhs.Equals(rhs);
         }
 
         public static explicit operator UnityEngine.Vector3 (Vector3 lhs)
@@ -207,8 +219,15 @@
         }
         //*/
 
-        //*
         public static Number Angle(Vector3 lhs, Vector3 rhs)
+        {
+            Math.CheckRange(lhs);
+            Math.CheckRange(rhs);
+
+            return Math.Rad2Deg(AngleRad(lhs, rhs));
+        }
+
+        public static Number AngleRad(Vector3 lhs, Vector3 rhs)
         {
             Math.CheckRange(lhs);
             Math.CheckRange(rhs);
@@ -216,15 +235,56 @@
             lhs.Normalize();
             rhs.Normalize();
             Number radians = Math.Acos(Number.Raw(Math.Clamp(Math.RndDiv(Dot(lhs, rhs), Math.FACTOR), -Math.FACTOR, Math.FACTOR)));
-            return Math.Rad2Deg(radians);
+            return radians;
         }
-        //*/
 
         public static Vector3 Lerp(Vector3 from, Vector3 to, Number t)
         {
             t = Math.Clamp(t, Number.zero, Number.one);
             Vector3 vec = from * (Number.one - t) + to * t;
             return vec;
+        }
+
+        public static Vector3 RotateTowards(Vector3 current, Vector3 target, Number maxRadiansDelta, Number maxMagnitudeDelta)
+        {
+            Number magCurrent = current.magnitude;
+            Number magTarget = target.magnitude;
+            Vector3 dirCurrent = current.normalized;
+            Vector3 dirTarget = target.normalized;
+            Vector3 dirNew;
+            //Logger.Log(string.Format("{0} {1}", norCurrent, norTarget));
+            if (dirCurrent == dirTarget)
+            {
+                dirNew = dirTarget;
+            }
+            else
+            {
+                Vector3 rotationAxis = Vector3.CrossAndNormalize(dirCurrent, dirTarget);
+                Number deg = Vector3.Angle(dirCurrent, dirTarget);
+                if (rotationAxis == Vector3.zero)   //current is parallel with target
+                {
+                    if (dirCurrent == Vector3.up)
+                        rotationAxis = Vector3.left;
+                    else if (dirTarget == Vector3.up)
+                        rotationAxis = Vector3.right;
+                    else
+                    {
+                        int xx = dirCurrent.x.raw * dirCurrent.x.raw;   // 2 POF
+                        int zz = dirCurrent.z.raw * dirCurrent.z.raw;   // 2 POF
+                        Number length_hori = Number.Raw(Math.Sqrt(xx + zz));    // 1 POF
+                        Number newx = -dirCurrent.x * dirCurrent.y / length_hori;
+                        Number newy = length_hori;
+                        Number newz = -dirCurrent.z * dirCurrent.y / length_hori;
+                        rotationAxis = new Vector3(newx, newy, newz);
+                    }
+                }
+                Number maxDeg = Math.Rad2Deg(maxRadiansDelta);
+                deg = Math.Min(deg, maxDeg);
+                dirNew = Quaternion.AngleAxis(deg, rotationAxis) * dirCurrent;
+            }
+            Number magDelta = magTarget - magCurrent;
+            magDelta = Math.Sign(magDelta) * Math.Min(Math.Abs(magDelta), maxMagnitudeDelta);
+            return dirNew * (magCurrent + magDelta);
         }
 
         public override string ToString()
@@ -248,6 +308,24 @@
             if (!int.TryParse(tokens[2], out z))
                 throw new System.FormatException("The element 3 is not a integer.");
             return new Vector3(Number.Raw(x), Number.Raw(y), Number.Raw(z));
+        }
+
+        public bool Equals(Vector3 other)
+        {
+            return x.Equals(other.x) && y.Equals(other.y) && z.Equals(other.z);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() == this.GetType())
+                return Equals((Vector3)obj);
+            else
+                return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode();
         }
     }
 }

@@ -121,7 +121,10 @@ namespace IM
         }
         public override string ToString()
         {
-            return string.Format("{0}.{1:D3}", raw / Math.FACTOR, Math.Abs(raw % Math.FACTOR));
+            return string.Format("{0}{1}.{2:D3}", 
+                (Math.Sign(raw) == -1 ? "-" : ""),
+                Math.Abs(raw / Math.FACTOR),
+                Math.Abs(raw % Math.FACTOR));
         }
 
         public override bool Equals(object obj)

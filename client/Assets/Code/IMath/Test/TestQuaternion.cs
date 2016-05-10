@@ -5,7 +5,7 @@ namespace IM.Test
 {
     public class TestQuaternion : UnitTest
     {
-        public override string name { get { return "Quaternion"; } }
+        public override string unitName { get { return "Quaternion"; } }
 
         public override void PrepareSteps()
         {
@@ -44,7 +44,7 @@ namespace IM.Test
             var tester = Utils.GenerateTester("AngleAxis", 
                 (Number angle, Vector3 axis) => Quaternion.AngleAxis(angle, axis.normalized),
                 (float angle, UE.Vector3 axis) => UE.Quaternion.AngleAxis(angle, axis.normalized),
-                Math.MIN_LENGTH, Math.MAX_LENGTH, Math.MIN_LENGTH, Math.MAX_LENGTH, DevMode.Absolute, new Number(0, 2));
+                -Math.TWO_PI, Math.TWO_PI, Math.MIN_LENGTH, Math.MAX_LENGTH, DevMode.Absolute, new Number(0, 002));
             if (longTime)
                 return Utils.TestSequence(tester);
             else
@@ -67,6 +67,9 @@ namespace IM.Test
                     return v;
                 },
                 Math.MIN_LENGTH, Math.MAX_LENGTH, DevMode.Absolute, new Number(0, 6));
+
+            if (!tester.test(Vector3.zero, new Vector3(-Number.one, -Number.one, -Number.one)))
+                return false;
             if (longTime)
                 return Utils.TestSequence(tester);
             else

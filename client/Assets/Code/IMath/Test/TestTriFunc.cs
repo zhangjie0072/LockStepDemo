@@ -5,7 +5,7 @@ namespace IM.Test
     public class TestTriFunc : UnitTest
     {
 
-        public override string name { get { return "Trigonometric functions"; } }
+        public override string unitName { get { return "Trigonometric functions"; } }
 
         public override void PrepareSteps()
         {
