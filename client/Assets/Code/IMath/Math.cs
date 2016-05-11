@@ -58,10 +58,10 @@ namespace IM
 
         public static Number Rad2Deg(Number radians)
         {
-            //const long X = (long)(57.295779513082320876798154814105 * SQR_FACTOR * SQR_FACTOR);
-            //return (int)(radians * X / SQR_FACTOR / SQR_FACTOR / FACTOR);
-            const long X = (long)(57.296 * FACTOR);
-            return Number.Raw((int)(Math.RndDiv(radians.raw * X, FACTOR)));
+            const long X = (long)(57.295779513082320876798154814105 * SQR_FACTOR * SQR_FACTOR);
+            return Number.Raw((int)(radians.raw * X / SQR_FACTOR / SQR_FACTOR));
+            //const long X = (long)(57.296 * FACTOR);
+            //return Number.Raw((int)(Math.RndDiv(radians.raw * X, FACTOR)));
         }
 
         public static Number Min(Number x, Number y)

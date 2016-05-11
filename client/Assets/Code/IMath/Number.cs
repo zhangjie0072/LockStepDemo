@@ -8,6 +8,9 @@ namespace IM
         public static Number min = Number.Raw(int.MinValue);
         public static Number zero = new Number(0);
         public static Number one = new Number(1);
+        public static Number two = new Number(2);
+        public static Number half = new Number(0, 500);
+        public static Number deviation = Number.one;
 
         private int _raw;
         public int raw { get { return _raw; } private set { _raw = value; } }
@@ -119,6 +122,15 @@ namespace IM
         {
             return raw.Equals(other.raw);
         }
+        public override bool Equals(object obj)
+        {
+            return raw.Equals(obj);
+        }
+        public static bool Approximately(Number lhs, Number rhs)
+        {
+            return Math.Abs(lhs - rhs) <= deviation;
+        }
+
         public override string ToString()
         {
             return string.Format("{0}{1}.{2:D3}", 
@@ -126,12 +138,6 @@ namespace IM
                 Math.Abs(raw / Math.FACTOR),
                 Math.Abs(raw % Math.FACTOR));
         }
-
-        public override bool Equals(object obj)
-        {
-            return raw.Equals(obj);
-        }
-
         public override int GetHashCode()
         {
             return raw.GetHashCode();

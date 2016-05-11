@@ -1,4 +1,5 @@
 ﻿using System;
+using UE = UnityEngine;
 
 namespace IM
 {
@@ -77,6 +78,11 @@ namespace IM
         public static Vector3 operator - (Vector3 lhs, Vector3 rhs)
         {
             return new Vector3(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
+        }
+
+        public static Vector3 operator - (Vector3 lhs)
+        {
+            return new Vector3(-lhs.x, -lhs.y, -lhs.z);
         }
 
         public static Vector3 operator * (Vector3 lhs, Vector3 rhs)
@@ -234,7 +240,8 @@ namespace IM
 
             lhs.Normalize();
             rhs.Normalize();
-            Number radians = Math.Acos(Number.Raw(Math.Clamp(Math.RndDiv(Dot(lhs, rhs), Math.FACTOR), -Math.FACTOR, Math.FACTOR)));
+            //Number radians = Math.Acos(Number.Raw(Math.Clamp(Math.RndDiv(Dot(lhs, rhs), Math.FACTOR), -Math.FACTOR, Math.FACTOR)));
+            Number radians = Math.Acos(Number.Raw(Math.Clamp(Dot(lhs, rhs) / Math.FACTOR, -Math.FACTOR, Math.FACTOR)));
             return radians;
         }
 
@@ -245,23 +252,29 @@ namespace IM
             return vec;
         }
 
+        /*未能通过充分测试，仅限水平面向量的旋转，非水平面旋转无法保证与Unity结果一致
+        水平面向量旋转的情况下，如果两个向量绝对平行反向，则与Unity结果一致，如果接近平行反向，则可能与Unity结果不同*/
         public static Vector3 RotateTowards(Vector3 current, Vector3 target, Number maxRadiansDelta, Number maxMagnitudeDelta)
         {
             Number magCurrent = current.magnitude;
             Number magTarget = target.magnitude;
             Vector3 dirCurrent = current.normalized;
             Vector3 dirTarget = target.normalized;
+            Number deg = Vector3.Angle(dirCurrent, dirTarget);
+            //float udeg = UE.Vector3.Angle((UE.Vector3)dirCurrent, (UE.Vector3)dirTarget);
             Vector3 dirNew;
-            //Logger.Log(string.Format("{0} {1}", norCurrent, norTarget));
-            if (dirCurrent == dirTarget)
+            if (dirCurrent == dirTarget || Number.Approximately(deg, Number.zero))
             {
                 dirNew = dirTarget;
             }
             else
             {
                 Vector3 rotationAxis = Vector3.CrossAndNormalize(dirCurrent, dirTarget);
-                Number deg = Vector3.Angle(dirCurrent, dirTarget);
-                if (rotationAxis == Vector3.zero)   //current is parallel with target
+                /*
+                UE.Vector3 uecross = UE.Vector3.Cross((UE.Vector3)dirCurrent, (UE.Vector3)dirTarget);
+                Test.Debug.DrawLine("Cross Unity", UE.Vector3.zero, (UE.Vector3)uecross.normalized * 10, UE.Color.red + UE.Color.yellow + UE.Color.blue);
+                //*/
+                if (rotationAxis == Vector3.zero)// || Number.Approximately(deg, new Number(180)))  //current is parallel with target
                 {
                     if (dirCurrent == Vector3.up)
                         rotationAxis = Vector3.left;
@@ -269,18 +282,39 @@ namespace IM
                         rotationAxis = Vector3.right;
                     else
                     {
-                        int xx = dirCurrent.x.raw * dirCurrent.x.raw;   // 2 POF
-                        int zz = dirCurrent.z.raw * dirCurrent.z.raw;   // 2 POF
-                        Number length_hori = Number.Raw(Math.Sqrt(xx + zz));    // 1 POF
-                        Number newx = -dirCurrent.x * dirCurrent.y / length_hori;
-                        Number newy = length_hori;
-                        Number newz = -dirCurrent.z * dirCurrent.y / length_hori;
-                        rotationAxis = new Vector3(newx, newy, newz);
+                        Vector3 currentProj = current;
+                        if (Math.Abs(current.x) < Math.Abs(current.z))
+                        {
+                            currentProj.x = Number.zero;
+                            currentProj.Normalize();
+                            rotationAxis = new Vector3(Number.zero, Math.Abs(currentProj.z), currentProj.y);
+                            if (Math.Sign(current.y) != Math.Sign(current.z))
+                                rotationAxis.z = -rotationAxis.z;
+                            else
+                                rotationAxis.y = -rotationAxis.y;
+                        }
+                        else
+                        {
+                            currentProj.z = Number.zero;
+                            currentProj.Normalize();
+                            rotationAxis = new Vector3(currentProj.y, -Math.Abs(currentProj.x), Number.zero);
+                            if (Math.Sign(current.x) != Math.Sign(current.y))
+                                rotationAxis.x = -rotationAxis.x;
+                            else
+                                rotationAxis.y = -rotationAxis.y;
+                        }
                     }
                 }
+                //Test.Debug.DrawLine("Rotation Axis", UE.Vector3.zero, (UE.Vector3)rotationAxis * 10, UE.Color.magenta);
                 Number maxDeg = Math.Rad2Deg(maxRadiansDelta);
                 deg = Math.Min(deg, maxDeg);
-                dirNew = Quaternion.AngleAxis(deg, rotationAxis) * dirCurrent;
+                Quaternion quat = Quaternion.AngleAxis(deg, rotationAxis);
+                dirNew = quat * dirCurrent;
+
+                /*
+                UE.Quaternion quatue = UE.Quaternion.AngleAxis((float)deg, (UE.Vector3)rotationAxis);
+                UE.Vector3 vec = quatue * (UE.Vector3)dirCurrent;
+                */
             }
             Number magDelta = magTarget - magCurrent;
             magDelta = Math.Sign(magDelta) * Math.Min(Math.Abs(magDelta), maxMagnitudeDelta);

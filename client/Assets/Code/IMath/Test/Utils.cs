@@ -231,6 +231,16 @@ namespace IM.Test
                 {
                     Vector3 result = testFunc(x, y, z, w);
                     UE.Vector3 refResult = refFunc((UE.Vector3)x, (UE.Vector3)y, (float)z, (float)w);
+                    /*// debug draw vector
+                    Debug.DrawLine("Input1", (UE.Vector3.zero), (UE.Vector3)x, UE.Color.yellow);
+                    Debug.DrawLine("Input2", (UE.Vector3.zero), (UE.Vector3)y, UE.Color.cyan);
+                    Debug.DrawLine("Result", (UE.Vector3.zero), (UE.Vector3)result, UE.Color.grey);
+                    Debug.DrawLine("RefResult", (UE.Vector3.zero), (UE.Vector3)refResult, UE.Color.black);
+                    UE.Vector3 refCross = UE.Vector3.Cross(((UE.Vector3)x).normalized, refResult.normalized).normalized;
+                    Debug.DrawLine("Ref Rotation Axis", UE.Vector3.zero, refCross * 10, UE.Color.red + UE.Color.blue / 2);
+                    float angle = UE.Vector3.Angle((UE.Vector3)result, refResult);
+                    Logger.Log(string.Format("Input1:{0} Input2:{1} RefCross:{2} Angle:{3}", x, y, refCross, angle));
+                    //*/
                     return CheckResult(name, x, y, z, w, (UE.Vector3)result, refResult, minValue1, maxValue1, devMode, (float)maxDev);
                 }
                 catch (Exception ex)
@@ -702,6 +712,9 @@ namespace IM.Test
                 Number z2 = Number.Raw(UE.Random.Range(tester.minValue2.z.raw, tester.maxValue2.z.raw));
                 Number n1 = Number.Raw(UE.Random.Range(tester.minValue3.raw, tester.maxValue3.raw));
                 Number n2 = Number.Raw(UE.Random.Range(tester.minValue4.raw, tester.maxValue4.raw));
+                //目前仅用于Vector3.RotateTowards测试，仅测试水平面向量旋转
+                y1 = Number.zero;
+                y2 = Number.zero;
                 if (!tester.test(new Vector3(x1, y1, z1), new Vector3(x2, y2, z2), n1, n2))
                     return false;
             }
