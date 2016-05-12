@@ -46,7 +46,7 @@ public class MsgHandler
 	{
 	}
 
-    public void HandleMsg(Pack pack)
+    public virtual void HandleMsg(Pack pack)
     {
 		MsgID msgID = (MsgID)pack.MessageID;
 		if (!m_noLogMsg.Contains(msgID))

@@ -57,7 +57,7 @@ public class InputManager : Singleton<InputManager>
 
         if (curCmd != cmd || curDir != dir)
         {
-            Logger.Log("SendInput " + dir + " " + cmd);
+            //Logger.Log("SendInput " + dir + " " + cmd);
             GameMsgSender.SendInput(dir, cmd);
         }
         curCmd = cmd;
