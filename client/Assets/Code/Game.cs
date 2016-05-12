@@ -5,35 +5,28 @@ using IM;
 public class PlayerInfo
 {
     public uint ID;
-    public Vector3 position;
-    public Vector3 forward;
-    public Vector3 force;
-    public Vector3 velocity;
+    public MoveController moveCtrl;
     public uint state;
 }
 
 public class Game : Singleton<Game>
 {
-    static List<Vector3> positions = new List<Vector3>();
-    static Number PLAYER_MAX_SPEED = new Number(3);
-    static Number PLAYER_ACC_SPEED = new Number(3);
-    static Number PLAYER_TURN_SPEED = Math.Deg2Rad(new Number(360));
-    static Number ANGLE_PER_DIR = new Number(360) / new Number(InputManager.DIR_NUM);
+    static List<Vector3> initialPositions = new List<Vector3>();
     public Dictionary<uint, PlayerInfo> playerInfos { get; private set; }
     public int CurFrame { get; private set; }
 
     public void Initialize(List<uint> players)
     {
-        positions.Add(Vector3.left);
-        positions.Add(Vector3.right);
+        initialPositions.Add(Vector3.left);
+        initialPositions.Add(Vector3.right);
 
         playerInfos = new Dictionary<uint, PlayerInfo>();
         for (int i = 0; i < players.Count; ++i)
         {
             PlayerInfo info = new PlayerInfo();
             info.ID = players[i];
-            info.position = positions[i];
-            info.forward = Vector3.forward;
+            info.moveCtrl = new MoveController();
+            info.moveCtrl.position = initialPositions[i];
             playerInfos.Add(info.ID, info);
         }
     }
@@ -60,15 +53,7 @@ public class Game : Singleton<Game>
 
         //Logger.Log("ProcessPlayerInput " + info.ID + " " + dir + " " + cmd);
 
-        if (dir != Direction.None && dir != Direction.Null)
-        {
-            int d = (int)dir - (int)Direction.Forward;
-            Number angle = ANGLE_PER_DIR * new Number(d);
-            Vector3 direction = Quaternion.AngleAxis(angle, Vector3.up) * Vector3.forward;
-            info.force = direction;
-        }
-        else
-            info.force = Vector3.zero;
+        info.moveCtrl.dir = dir;
 
         switch (cmd)
         {
@@ -94,29 +79,7 @@ public class Game : Singleton<Game>
         foreach (var pair in playerInfos)
         {
             PlayerInfo info = pair.Value;
-            info.position = info.position + info.velocity * dt;
-
-            Number speed = info.velocity.magnitude;
-            if (info.force != Vector3.zero)
-            {
-                info.forward = Vector3.RotateTowards(info.forward, info.force, PLAYER_TURN_SPEED * dt, Number.zero);
-                //Logger.Log(string.Format("Force:{0} Rotated dir:{1}", info.force, info.forward));
-            }
-            if (info.force != Vector3.zero)
-            {
-                speed += PLAYER_ACC_SPEED * dt;
-                if (speed > PLAYER_MAX_SPEED)
-                    speed = PLAYER_MAX_SPEED;
-                info.velocity = info.force.normalized * speed;
-            }
-            else
-            {
-                speed -= PLAYER_ACC_SPEED * dt;
-                if (speed < Number.zero)
-                    speed = Number.zero;
-                info.velocity = info.velocity.normalized * speed;
-            }
-            //Logger.Log(string.Format("Velocity:{0} {1}", info.velocity, info.velocity.magnitude));
+            info.moveCtrl.Update(dt);
         }
 
         ++CurFrame;
