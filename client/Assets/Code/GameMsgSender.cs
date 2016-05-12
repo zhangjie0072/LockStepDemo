@@ -45,7 +45,7 @@ public static class GameMsgSender
             PlayerKeyState playerData = new PlayerKeyState();
             playerData.acc_id = info.ID;
             playerData.position = GameUtils.Convert(info.position);
-            playerData.velocity = GameUtils.Convert(info.velocity);
+            playerData.velocity = info.velocity.raw;
             playerData.state = info.state;
             frameData.datas.Add(playerData);
         }

@@ -998,6 +998,9 @@ namespace fogs.proto.msg
       [global::ProtoBuf.ProtoEnum(Name=@"CheckFrameID", Value=9570)]
       CheckFrameID = 9570,
             
+      [global::ProtoBuf.ProtoEnum(Name=@"NotifyUnsyncID", Value=9571)]
+      NotifyUnsyncID = 9571,
+            
       [global::ProtoBuf.ProtoEnum(Name=@"GMCommondExcuID", Value=12288)]
       GMCommondExcuID = 12288,
             

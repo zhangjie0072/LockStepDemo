@@ -1,27 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using fogs.proto.msg;
-using UnityEngine;
+using IM;
 
 public class PlayerInfo
 {
     public uint ID;
     public Vector3 position;
-    public Vector3 velocity;
+    public Vector3 forward;
+    public Vector3 force;
+    public Number velocity;
     public uint state;
 }
 
 public class Game : Singleton<Game>
 {
     static List<Vector3> positions = new List<Vector3>();
-    const float PLAYER_SPEED = 10f;
+    static Number PLAYER_MAX_SPEED = new Number(3);
+    static Number PLAYER_ACC_SPEED = new Number(3);
+    static Number PLAYER_TURN_SPEED = Math.Deg2Rad(new Number(360));
     public Dictionary<uint, PlayerInfo> playerInfos { get; private set; }
     public int CurFrame { get; private set; }
 
     public void Initialize(List<uint> players)
     {
-        positions.Add(new Vector3() { x = -1f, y = 0f, z = 0f });
-        positions.Add(new Vector3() { x = 1f, y = 0f, z = 0f });
+        positions.Add(Vector3.left);
+        positions.Add(Vector3.right);
 
         playerInfos = new Dictionary<uint, PlayerInfo>();
         for (int i = 0; i < players.Count; ++i)
@@ -29,6 +32,7 @@ public class Game : Singleton<Game>
             PlayerInfo info = new PlayerInfo();
             info.ID = players[i];
             info.position = positions[i];
+            info.forward = Vector3.forward;
             playerInfos.Add(info.ID, info);
         }
     }
@@ -57,40 +61,13 @@ public class Game : Singleton<Game>
 
         if (dir != Direction.None && dir != Direction.Null)
         {
-            float angle = 0f;
-            switch (dir)
-            {
-                case Direction.Forward:
-                    angle = 0f;
-                    break;
-                case Direction.Back:
-                    angle = 180f;
-                    break;
-                case Direction.Left:
-                    angle = 270f;
-                    break;
-                case Direction.Right:
-                    angle = 90f;
-                    break;
-                case Direction.ForwardLeft:
-                    angle = 315f;
-                    break;
-                case Direction.ForwardRight:
-                    angle = 45f;
-                    break;
-                case Direction.BackLeft:
-                    angle = 225f;
-                    break;
-                case Direction.BackRight:
-                    angle = 135f;
-                    break;
-            }
-
+            int d = (int)dir - (int)Direction.Forward;
+            Number angle = new Number(InputManager.ANGLE_PER_DIR * d);
             Vector3 direction = Quaternion.AngleAxis(angle, Vector3.up) * Vector3.forward;
-            info.velocity = direction * PLAYER_SPEED;
+            info.force = direction;
         }
         else
-            info.velocity = Vector3.zero;
+            info.force = Vector3.zero;
 
         switch (cmd)
         {
@@ -109,12 +86,32 @@ public class Game : Singleton<Game>
         }
     }
 
-    public void Update(float deltaTime)
+    // deltaTime in milliseconds
+    public void Update(int deltaTime)
     {
+        Number dt = new Number(0, deltaTime);
         foreach (var pair in playerInfos)
         {
             PlayerInfo info = pair.Value;
-            info.position = info.position + info.velocity * deltaTime;
+            info.position = info.position + info.forward * info.velocity * dt;
+
+            if (info.force != Vector3.zero)
+            {
+                info.forward = Vector3.RotateTowards(info.forward, info.force, PLAYER_TURN_SPEED * dt, Number.zero);
+                Logger.Log(string.Format("Force:{0} Rotated dir:{1}", info.force, info.forward));
+            }
+            if (info.force != Vector3.zero)
+            {
+                info.velocity += PLAYER_ACC_SPEED * dt;
+                if (info.velocity > PLAYER_MAX_SPEED)
+                    info.velocity = PLAYER_MAX_SPEED;
+            }
+            else
+            {
+                info.velocity -= PLAYER_ACC_SPEED * dt;
+                if (info.velocity < Number.zero)
+                    info.velocity = Number.zero;
+            }
         }
 
         ++CurFrame;

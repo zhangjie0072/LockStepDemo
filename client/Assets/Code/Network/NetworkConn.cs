@@ -712,9 +712,6 @@ public class NetworkConn
 public class VirtualNetworkConn
     : NetworkConn
 {
-	private		int	m_curBufferPos = 0; 
-
-
     public VirtualNetworkConn(MsgHandler msgHandler)
         : base(msgHandler, "virtual", Type.eVirtualServer, 0)
     {
@@ -760,7 +757,6 @@ public class VirtualNetworkConn
 			}
 			catch (Exception exp)
 			{
-				m_curBufferPos = 0;
 				Logger.LogError("network conn exception: " + exp.Message);
 				stream.Seek(0, SeekOrigin.Begin);
 				stream.SetLength(0);

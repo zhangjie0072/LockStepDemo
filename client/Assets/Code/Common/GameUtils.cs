@@ -36,12 +36,12 @@ public class GameUtils{
 		return new Vector3( (float)val.x, (float)val.y, (float)val.z );
 	}
 
-	static public SVector3 Convert(Vector3 val)
+	static public SVector3 Convert(IM.Vector3 val)
 	{
 		SVector3 ret = new SVector3();
-		ret.x = val.x;
-		ret.y = val.y;
-		ret.z = val.z;
+		ret.x = val.x.raw;
+		ret.y = val.y.raw;
+		ret.z = val.z.raw;
 		return ret;
 	}
 
@@ -370,7 +370,6 @@ public class GameUtils{
 			}
 			return true;
 		}
-		return false;
 	}
 
 	public static Transform CombineSkin(Transform root)

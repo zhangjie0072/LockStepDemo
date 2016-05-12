@@ -15,8 +15,6 @@ public class NetworkProfiler
 	private	uint			m_msgId = 0;
 	private double			m_curTime;
 
-	private uint			m_cnt = 0;
-	private double			m_totalLatency;
 	private bool			m_init = false;
 
 	public  long			m_dataUsage{get; private set;}

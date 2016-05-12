@@ -6,14 +6,23 @@ public enum Direction
 {
     Null = 0,
     Forward = 1,
-    ForwardRight = 2,
-    Right = 3,
-    BackRight = 4,
-    Back = 5,
-    BackLeft = 6,
-    Left = 7,
-    ForwardLeft = 8,
-    None = 9,
+    ForwardR,
+    ForwardRight,
+    FRight,
+    Right,
+    BRight,
+    BackRight,
+    BackR,
+    Back,
+    BackL,
+    BackLeft,
+    BLeft,
+    Left,
+    FLeft,
+    ForwardLeft,
+    ForwardL,
+    None,
+    Max,
 }
 
 
@@ -29,31 +38,14 @@ public class InputManager : Singleton<InputManager>
 {
     Direction curDir = Direction.None;
     Command curCmd = Command.None;
+    public const int DIR_NUM = (int)Direction.Max - 2;
+    public const int ANGLE_PER_DIR = 360 / DIR_NUM;
 
     public void ReadInput()
     {
-        Direction dir = Direction.None;
-        bool forward = Input.GetKey(KeyCode.W);
-        bool left = Input.GetKey(KeyCode.A);
-        bool back = Input.GetKey(KeyCode.S);
-        bool right = Input.GetKey(KeyCode.D);
-
-        if (forward && left)
-            dir = Direction.ForwardLeft;
-        else if (forward && right)
-            dir = Direction.ForwardRight;
-        else if (back && left)
-            dir = Direction.BackLeft;
-        else if (back && right)
-            dir = Direction.BackRight;
-        else if (forward)
-            dir = Direction.Forward;
-        else if (back)
-            dir = Direction.Back;
-        else if (left)
-            dir = Direction.Left;
-        else if (right)
-            dir = Direction.Right;
+        float hori = Input.GetAxis("Horizontal");
+        float vert = Input.GetAxis("Vertical");
+        Direction dir = ConvertToDirection(hori, vert);
 
         Command cmd = Command.None;
         if (Input.GetKey(KeyCode.J))
@@ -70,5 +62,16 @@ public class InputManager : Singleton<InputManager>
         }
         curCmd = cmd;
         curDir = dir;
+    }
+
+    static Direction ConvertToDirection(float hori, float vert)
+    {
+        if (Mathf.Approximately(hori, 0f) && Mathf.Approximately(vert, 0f))
+            return Direction.None;
+        Vector3 vec = new Vector3(hori, 0f, vert);
+        vec.Normalize();
+        float horiAngle = Quaternion.FromToRotation(Vector3.forward, vec).eulerAngles.y;
+        int dir = (int)(horiAngle / ANGLE_PER_DIR);
+        return (Direction)(dir + 1);
     }
 }

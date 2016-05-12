@@ -452,6 +452,7 @@ enum MsgID
 	ClientInputID 					= 0x2560;
 	FrameInfoID 					= 0x2561;
 	CheckFrameID					= 0x2562;
+    NotifyUnsyncID                  = 0x2563;
 	
 	//--------------脚本接口消息定义
 	//

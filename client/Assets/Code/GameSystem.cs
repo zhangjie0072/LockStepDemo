@@ -8,22 +8,21 @@ public class GameSystem : MonoBehaviour
     public bool Pause;
     public uint AccountID;
 
-    const float TURN_LENGTH = 0.1f;
+    const int TURN_LENGTH = 100;
     const int GAME_UPDATE_PER_TURN = 5;
-    const float GAME_UPDATE_LENGTH = TURN_LENGTH / GAME_UPDATE_PER_TURN;
+    const int GAME_UPDATE_LENGTH = TURN_LENGTH / GAME_UPDATE_PER_TURN;
     const int PURSUE_GAME_UPDATE_NUM = GAME_UPDATE_PER_TURN * 20;
-    const float PURSUE_TIME_LENGTH = PURSUE_GAME_UPDATE_NUM * GAME_UPDATE_LENGTH;
+    const int PURSUE_TIME_LENGTH = PURSUE_GAME_UPDATE_NUM * GAME_UPDATE_LENGTH;
     int pendingGameUpdateNum = 0;
     float gameUpdateLengthLimit = 0f;
     float exactGameUpdateLength = GAME_UPDATE_LENGTH;
     float acumulativeTime = 0f;
-    int gameUpdateSpeedUpLevel = 1;
     float acumulativeTimeServer = 0f;
     int gameUpdateIndexInTurnServer = 0;
 
     void Awake()
     {
-        gameUpdateLengthLimit = Time.fixedDeltaTime;
+        gameUpdateLengthLimit = Time.fixedDeltaTime * 1000;
         Instance = this;
         TurnManager.Instance.onNewTurn += OnNewTurn;
         MotionSampleManager.Instance.LoadFromXml();
@@ -44,14 +43,14 @@ public class GameSystem : MonoBehaviour
 
     void FixedUpdate()
     {
-        acumulativeTimeServer += Time.fixedDeltaTime;
+        acumulativeTimeServer += Time.fixedDeltaTime * 1000;
         if (acumulativeTimeServer >= GAME_UPDATE_LENGTH)
         {
             acumulativeTimeServer -= GAME_UPDATE_LENGTH;
             ++gameUpdateIndexInTurnServer;
         }
 
-        acumulativeTime += Time.fixedDeltaTime;
+        acumulativeTime += Time.fixedDeltaTime * 1000;
         if (acumulativeTime >= exactGameUpdateLength)
         {
             acumulativeTime -= exactGameUpdateLength;

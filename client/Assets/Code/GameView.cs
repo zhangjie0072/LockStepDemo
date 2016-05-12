@@ -17,6 +17,7 @@ public class GameView : Singleton<GameView>
             foreach (var info in playerInfos)
             {
                 GameObject go = GameObject.Instantiate(prefab) as GameObject;
+                go.name = "Player_" + info.Value.ID;
                 SetModelByInfo(go, info.Value);
                 playerModels.Add(info.Key, go);
             }
@@ -25,10 +26,10 @@ public class GameView : Singleton<GameView>
 
     void SetModelByInfo(GameObject go, PlayerInfo info)
     {
-        //go.transform.position = info.position;
-        float velocity = info.velocity.magnitude;
+        go.transform.position = (Vector3)info.position;
+        float velocity = (float)info.velocity;
         if (!Mathf.Approximately(velocity, 0f))
-            go.transform.forward = info.velocity;
+            go.transform.forward = (Vector3)info.forward;
         Animator animator = go.GetComponent<Animator>();
         if (animator != null)
         {

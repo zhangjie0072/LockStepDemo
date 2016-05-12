@@ -82,23 +82,23 @@ namespace fogs.proto.msg
   {
     public SVector3() {}
     
-    private float _x;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"x", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
-    public float x
+    private int _x;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"x", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int x
     {
       get { return _x; }
       set { _x = value; }
     }
-    private float _y;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"y", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
-    public float y
+    private int _y;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"y", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int y
     {
       get { return _y; }
       set { _y = value; }
     }
-    private float _z;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"z", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
-    public float z
+    private int _z;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"z", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int z
     {
       get { return _z; }
       set { _z = value; }
@@ -186,15 +186,22 @@ namespace fogs.proto.msg
       get { return _position; }
       set { _position = value; }
     }
-    private fogs.proto.msg.SVector3 _velocity;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"velocity", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public fogs.proto.msg.SVector3 velocity
+    private int _velocity;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"velocity", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int velocity
     {
       get { return _velocity; }
       set { _velocity = value; }
     }
+    private int _hori_angle;
+    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"hori_angle", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int hori_angle
+    {
+      get { return _hori_angle; }
+      set { _hori_angle = value; }
+    }
     private uint _state;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"state", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"state", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     public uint state
     {
       get { return _state; }
