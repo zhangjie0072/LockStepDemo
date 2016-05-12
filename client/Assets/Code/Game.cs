@@ -8,7 +8,7 @@ public class PlayerInfo
     public Vector3 position;
     public Vector3 forward;
     public Vector3 force;
-    public Number velocity;
+    public Vector3 velocity;
     public uint state;
 }
 
@@ -18,6 +18,7 @@ public class Game : Singleton<Game>
     static Number PLAYER_MAX_SPEED = new Number(3);
     static Number PLAYER_ACC_SPEED = new Number(3);
     static Number PLAYER_TURN_SPEED = Math.Deg2Rad(new Number(360));
+    static Number ANGLE_PER_DIR = new Number(360) / new Number(InputManager.DIR_NUM);
     public Dictionary<uint, PlayerInfo> playerInfos { get; private set; }
     public int CurFrame { get; private set; }
 
@@ -62,7 +63,7 @@ public class Game : Singleton<Game>
         if (dir != Direction.None && dir != Direction.Null)
         {
             int d = (int)dir - (int)Direction.Forward;
-            Number angle = new Number(InputManager.ANGLE_PER_DIR * d);
+            Number angle = ANGLE_PER_DIR * new Number(d);
             Vector3 direction = Quaternion.AngleAxis(angle, Vector3.up) * Vector3.forward;
             info.force = direction;
         }
@@ -93,25 +94,29 @@ public class Game : Singleton<Game>
         foreach (var pair in playerInfos)
         {
             PlayerInfo info = pair.Value;
-            info.position = info.position + info.forward * info.velocity * dt;
+            info.position = info.position + info.velocity * dt;
 
+            Number speed = info.velocity.magnitude;
             if (info.force != Vector3.zero)
             {
                 info.forward = Vector3.RotateTowards(info.forward, info.force, PLAYER_TURN_SPEED * dt, Number.zero);
-                Logger.Log(string.Format("Force:{0} Rotated dir:{1}", info.force, info.forward));
+                //Logger.Log(string.Format("Force:{0} Rotated dir:{1}", info.force, info.forward));
             }
             if (info.force != Vector3.zero)
             {
-                info.velocity += PLAYER_ACC_SPEED * dt;
-                if (info.velocity > PLAYER_MAX_SPEED)
-                    info.velocity = PLAYER_MAX_SPEED;
+                speed += PLAYER_ACC_SPEED * dt;
+                if (speed > PLAYER_MAX_SPEED)
+                    speed = PLAYER_MAX_SPEED;
+                info.velocity = info.force.normalized * speed;
             }
             else
             {
-                info.velocity -= PLAYER_ACC_SPEED * dt;
-                if (info.velocity < Number.zero)
-                    info.velocity = Number.zero;
+                speed -= PLAYER_ACC_SPEED * dt;
+                if (speed < Number.zero)
+                    speed = Number.zero;
+                info.velocity = info.velocity.normalized * speed;
             }
+            //Logger.Log(string.Format("Velocity:{0} {1}", info.velocity, info.velocity.magnitude));
         }
 
         ++CurFrame;

@@ -39,7 +39,7 @@ public class InputManager : Singleton<InputManager>
     Direction curDir = Direction.None;
     Command curCmd = Command.None;
     public const int DIR_NUM = (int)Direction.Max - 2;
-    public const int ANGLE_PER_DIR = 360 / DIR_NUM;
+    public const float ANGLE_PER_DIR = 360 / DIR_NUM;
 
     public void ReadInput()
     {

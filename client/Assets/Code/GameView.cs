@@ -27,7 +27,7 @@ public class GameView : Singleton<GameView>
     void SetModelByInfo(GameObject go, PlayerInfo info)
     {
         go.transform.position = (Vector3)info.position;
-        float velocity = (float)info.velocity;
+        float velocity = (float)info.velocity.magnitude;
         if (!Mathf.Approximately(velocity, 0f))
             go.transform.forward = (Vector3)info.forward;
         Animator animator = go.GetComponent<Animator>();
