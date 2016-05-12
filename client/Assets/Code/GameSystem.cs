@@ -37,6 +37,7 @@ public class GameSystem : MonoBehaviour
         else
             Time.timeScale = 1;
 
+        GameView.Instance.Update();
         NetworkManager.Instance.Update();
         InputManager.Instance.ReadInput();
     }
@@ -50,6 +51,13 @@ public class GameSystem : MonoBehaviour
             ++gameUpdateIndexInTurnServer;
         }
 
+        float turnInterval = TurnManager.Instance.averageTurnInterval;
+        if (turnInterval > ((float)TURN_LENGTH / 1000 + 0.2f))
+        {
+            float factor = turnInterval / ((float)TURN_LENGTH / 1000);
+            //Logger.Log("Scale exactGameUpdateLength: " + factor);
+            exactGameUpdateLength = exactGameUpdateLength * factor;
+        }
         acumulativeTime += Time.fixedDeltaTime * 1000;
         if (acumulativeTime >= exactGameUpdateLength)
         {
@@ -76,7 +84,6 @@ public class GameSystem : MonoBehaviour
 
                 --pendingGameUpdateNum;
             }
-            GameView.Instance.Update();
         }
 
         NetworkManager.Instance.FixedUpdate(Time.fixedDeltaTime);

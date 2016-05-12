@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using fogs.proto.msg;
+using UnityEngine;
 
 public class TurnManager : Singleton<TurnManager>
 {
@@ -11,9 +12,12 @@ public class TurnManager : Singleton<TurnManager>
 
     Queue<FrameInfo> turnQ = new Queue<FrameInfo>();
 
+    float[] turnRecvTime = new float[6];
+    public float averageTurnInterval { get; private set; }
+
     public void NewTurn(FrameInfo info)
     {
-        //Logger.Log("Receive new turn: " + info.frameNum + " " + info.time);
+        //Logger.Log("Receive new turn: " + info.frameNum + " " + Time.time);
         //foreach (ClientInput input in info.info)
         //{
         //    if (input.dir != 0)
@@ -25,6 +29,7 @@ public class TurnManager : Singleton<TurnManager>
         turnQ.Enqueue(info);
         if (onNewTurn != null)
             onNewTurn(info);
+        CalcAverageTurnInterval(Time.time);
     }
 
     public FrameInfo NextTurn()
@@ -36,5 +41,26 @@ public class TurnManager : Singleton<TurnManager>
             return turn;
         }
         return null;
+    }
+
+    void CalcAverageTurnInterval(float time)
+    {
+        float total = 0f;
+        int count = 0;
+        float recvTime = time;
+        for (int i = turnRecvTime.Length - 1; i >= 0; --i)
+        {
+            float curRecvTime = turnRecvTime[i];
+            turnRecvTime[i] = recvTime;
+            if (Mathf.Approximately(curRecvTime, 0f))
+                break;
+            float interval = recvTime - curRecvTime;
+            recvTime = curRecvTime;
+            total += interval;
+            ++count;
+        }
+        if (count > 0)
+            averageTurnInterval = total / count;
+        //Logger.Log("AverageTurnInterval:" + averageTurnInterval);
     }
 }

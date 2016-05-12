@@ -13,11 +13,11 @@ public class GameMsgHandler
         public float recvTime;
     }
 
-    const float MAX_SIM_LATENCY = 0.9f;
-    const float MIN_SIM_LATENCY = 0.5F;
+    const float MAX_SIM_LATENCY = 0.6f;
+    const float MIN_SIM_LATENCY = 0.3f;
 
     float curSimLatency;
-    bool enableSimLatency = false;
+    bool enableSimLatency = true;
     Queue<PackInfo> _msgCache = new Queue<PackInfo>();
 
 	public GameMsgHandler()
@@ -46,6 +46,9 @@ public class GameMsgHandler
 
     public override void Update()
     {
+        if (Input.GetKeyDown(KeyCode.N))
+            enableSimLatency = !enableSimLatency;
+
         while (_msgCache.Count > 0)
         {
             PackInfo info = _msgCache.Peek();
@@ -59,6 +62,8 @@ public class GameMsgHandler
 
         if (enableSimLatency)
             curSimLatency = Random.Range(MIN_SIM_LATENCY, MAX_SIM_LATENCY);
+        else
+            curSimLatency = 0f;
     }
 
     void HandleEnterPlatResp(Pack pack)
