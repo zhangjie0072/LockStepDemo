@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameView : Singleton<GameView>
 {
+    const float MIN_TOWARDS_VELOCITY = 1f;
+
     public Dictionary<uint, GameObject> playerModels { get; private set; }
 
     public void Initialize()
@@ -28,7 +30,8 @@ public class GameView : Singleton<GameView>
     {
         Vector3 newPosition = (Vector3)info.moveCtrl.position;
         float velocity = ((Vector3)info.moveCtrl.velocity).magnitude;
-        float towardsVelocity = Mathf.Clamp(velocity, 1, float.MaxValue);
+        float towardsVelocity = Mathf.Clamp(velocity, MIN_TOWARDS_VELOCITY, float.MaxValue);
+        //平滑移动
         go.transform.position = Vector3.MoveTowards(go.transform.position, newPosition, towardsVelocity * Time.deltaTime);
         if (!Mathf.Approximately(velocity, 0f))
             go.transform.forward = (Vector3)info.moveCtrl.forward;

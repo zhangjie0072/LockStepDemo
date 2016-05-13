@@ -43,6 +43,7 @@ public class TurnManager : Singleton<TurnManager>
         return null;
     }
 
+    //计算前几帧的平均帧间隔时间
     void CalcAverageTurnInterval(float time)
     {
         float total = 0f;
