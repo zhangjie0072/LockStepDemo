@@ -1,0 +1,12 @@
+package fogs.proto.msg;
+import "Base.proto";
+//---------比赛匹配 2
+
+
+//参赛信息
+message FirstWinInfo
+{
+	optional uint32 last_time				= 1; //上一次首胜时间
+	repeated KeyValueData awards				= 2; //首胜奖励
+}
+

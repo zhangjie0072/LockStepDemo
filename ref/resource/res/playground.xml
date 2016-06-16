@@ -1,0 +1,14 @@
+<PlaygroundSetting>
+	<HalfSize x="8.51" y="12.13"/>
+	<Center x="0.0" y="0.0" z="2.03" />
+	
+	<Pt3Radius x="7.9"/>
+	<Pt3Center x="0.0" y="10.945"/>
+	<Pt3BaseLine x="7.011"/>
+	
+	<Pt2PointRadius x="1.957"/>
+	
+	<FreeThrowLane x="1.9" />
+	<LineWidth x="0.128"/>
+	
+</PlaygroundSetting>

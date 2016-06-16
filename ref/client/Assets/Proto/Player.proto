@@ -1,0 +1,584 @@
+package fogs.proto.msg;
+import "Base.proto";
+import "Goods.proto";
+import "Skill.proto";
+import "Tattoo.proto";
+import "Career.proto";
+import "Store.proto";
+import "Task.proto";
+import "Mail.proto";
+import "Practice.proto";
+//import "Training.proto";
+import "Fashion.proto";
+import "Guide.proto";
+import "Exercise.proto";
+import "Equipment.proto";
+import "Tour.proto";
+import "NewComer.proto";
+import "Activity.proto";
+import "Badge.proto";
+import "QualifyingNewer.proto";
+import "ActivityEx.proto";
+
+//---------玩家属性及相关操作模块相关
+
+//竞技属性
+message FightAttr
+{
+	optional uint32 shoot_near			= 1; //投篮-篮下
+	optional uint32 shoot_middle		= 2; //投篮-中投
+	optional uint32 shoot_far			= 3; //投篮-三分
+	optional uint32 dunk_near			= 4; //扣篮-篮下
+	optional uint32 dunk_middle			= 5; //扣篮-中距离
+	optional uint32 layup_near			= 6; //上篮-篮下
+	optional uint32 layup_middle		= 7; //上篮-中距离
+
+	optional uint32 anti_shoot_near		= 8; //抗干扰-投篮-篮下
+	optional uint32 anti_shoot_middle	= 9; //抗干扰-投篮-中投
+	optional uint32 anti_shoot_far		= 10; //抗干扰-投篮-三分
+	optional uint32 anti_dunk_near		= 11; //抗干扰-扣篮-篮下
+	optional uint32 anti_dunk_middle	= 12; //抗干扰-扣篮-中距离
+	optional uint32 anti_layup_near		= 13; //抗干扰-上篮-篮下
+	optional uint32 anti_layup_middle	= 14; //抗干扰-上篮-中距离
+
+	optional uint32 pass				= 15; //传球
+	optional uint32 control				= 16; //控球
+	optional uint32 block				= 17; //盖帽
+	optional uint32 steal				= 18; //抢断
+	optional uint32 disturb				= 19; //干扰
+	optional uint32 rebound				= 20; //篮板
+	optional uint32 speed				= 21; //跑动速度
+	optional uint32 strength			= 22; //身体强度
+	optional uint32 ph					= 23; //体力
+	optional uint32 special_move_speed	= 24; //位移距离
+}
+
+//球员信息
+message RoleInfo
+{
+	optional uint32 id							= 1; //角色ID
+	optional uint32 level						= 2; //等级
+	optional uint32 exp							= 3; //经验
+	optional uint32 quality						= 4; //品质
+	optional uint32 star						= 5; //星等
+	repeated SkillSlotProto skill_slot_info		= 6; //技能槽位信息
+	repeated ExerciseInfo exercise				= 7; //训练项信息
+	repeated FashionSlotProto fashion_slot_info	= 8; //时装信息
+	optional uint32 index 						= 9;  // PVP 房间内角色ID
+	optional uint32 fight_power					= 10; //战斗力
+	optional uint32 acc_id						= 11; //所属账号ID，主要用于PVP
+	optional MatchRoleData challenge_data		= 12; //挑战赛数据
+	optional MatchRoleData ladder_data			= 13; //天梯赛数据
+	optional MatchRoleData regular_data 		= 14; //常规赛数据
+	optional MatchRoleData qualifying_data 		= 15; //排位赛数据	
+	optional uint32 badge_book_id				= 16; //装备的涂鸦墙信息
+
+	//optional uint32 bias						= ; //偏好
+	//optional uint32 position					= ; //职业
+	//optional uint32 talent					= ; //天资
+	//optional uint32 identity					= ; //球员身份
+	//repeated TattooSlotProto tattoo_slot_info	= ; //纹身信息
+	//repeated TrainingInfo training			= ; //训练信息
+}
+
+message SkillUsageData
+{
+	required uint32 skill_id					= 1;//技能ID
+	required uint32 usage						= 2;//使用次数
+	required uint32 success						= 3;//成功次数
+}
+
+//PVP 比赛信息
+message MatchRoleData
+{
+	optional uint32 near_shoot					= 1; //近距投篮次数
+	optional uint32 near_open_shoot				= 2; //近距空位投篮次数
+	optional uint32 near_score					= 3; //近距得分
+	optional uint32 mid_shoot					= 4; //中距投篮次数
+	optional uint32 mid_open_shoot				= 5; //中距空位投篮次数
+	optional uint32 mid_score					= 6; //中距得分
+	optional uint32 far_shoot					= 7; //远距投篮次数
+	optional uint32 far_open_shoot				= 8; //远距空位投篮次数
+	optional uint32 far_score					= 9; //远距得分
+	optional uint32 layup_near_shoot			= 10;//篮下上篮次数
+	optional uint32 layup_near_open_shoot		= 11;//篮下空位上篮次数
+	optional uint32 layup_near_score			= 12;//篮下上篮得分
+	optional uint32 layup_mid_shoot				= 13;//中距上篮次数
+	optional uint32 layup_mid_open_shoot		= 14;//中距空位上篮次数
+	optional uint32 layup_mid_score				= 15;//中距上篮得分
+	optional uint32 dunk_near_shoot				= 16;//篮下扣篮次数
+	optional uint32 dunk_near_open_shoot		= 17;//篮下空位扣篮次数
+	optional uint32 dunk_near_score				= 18;//篮下扣篮得分
+	optional uint32 dunk_mid_shoot				= 19;//中距扣篮次数
+	optional uint32 dunk_mid_open_shoot			= 20;//中距空位扣篮次数
+	optional uint32 dunk_mid_score				= 21;//中距扣篮得分
+	optional uint32 block_times					= 22;//盖帽次数
+	optional uint32 valid_block_times			= 23;//有效盖帽次数
+	optional uint32 success_block_times			= 24;//成功盖帽次数
+	optional uint32 body_throw_catch_times		= 25;//扑球次数
+	optional uint32 valid_body_throw_catch_times	= 26;//有效扑球次数
+	optional uint32 success_body_throw_catch_times	= 27;//扑球成功次数
+	optional uint32 rebound_times				= 28;//篮板次数
+	optional uint32	valid_rebound_times			= 29;//有效篮板次数
+	optional uint32 success_rebound_times		= 30;//篮板成功次数
+	optional uint32 steal_times					= 31;//抢断次数
+	optional uint32 valid_steal_times			= 32;//有效抢断次数
+	optional uint32 success_steal_times			= 33;//成功抢断次数
+	optional uint32 secondary_attack			= 34;//組攻次数
+	optional uint32 floor_ball					= 35;//地板球
+	optional uint32 cross_times					= 36;//突破次数
+	optional uint32 success_cross_times			= 37;//成功 突破次数
+	optional uint32 interception				= 38;//截球次数
+	optional uint32 win_times					= 39;//胜利次数
+	optional uint32 race_times					= 40;//比赛次数
+	optional uint32 score_king					= 41;//得分王
+	optional uint32 rebound_king				= 42;//篮板王
+	optional uint32 block_king					= 43;//盖帽王
+	optional uint32 assist_king					= 44;//助攻王
+	optional uint32 steal_king					= 45;//抢断王
+	optional uint32 index						= 46;//index
+	optional uint32 role_id						= 47;//球员ID
+    repeated SkillUsageData skill_data            = 48;//技能触发数据
+    optional uint32 kill_goal                   = 49; //绝杀
+}
+
+message BattleInfo
+{
+	optional uint32 time	= 1;
+	optional string name	= 2;
+	optional uint32 ranking	= 3;
+	optional uint32 state	= 4;
+}
+
+message giftInfo
+{
+	optional uint32 level				= 1;
+}
+
+message VipInfo
+{
+	optional uint32 exp					= 1;
+	repeated giftInfo gift				= 2; //VIP礼包
+	repeated uint32 recharge_rec		= 3; //充值记录
+}
+
+//
+message RankTime
+{
+	optional uint32 level_rank_time = 1;
+	optional uint32 wealth_rank_time = 2;
+}
+
+
+//玩家（球队）信息
+message PlayerInfo
+{
+	optional string acc_name					= 1; //账号名
+	optional uint32 acc_id						= 2; //账号ID
+
+	optional string name						= 3; //名称
+	optional uint32 level						= 4; //等级
+	optional uint32 exp							= 5; //经验
+	optional uint32 gold						= 6; //金币
+	optional uint32 diamond_free				= 7; //钻石（赠送）
+	optional uint32 diamond_buy					= 8; //钻石（充值）
+	optional uint32 honor						= 9; //优秀荣誉
+	optional uint32 honor2						= 10; //卓越荣誉
+	optional uint32 prestige					= 11; //初级威望
+	optional uint32 prestige2					= 12; //高级威望
+	optional uint32 reputation					= 13; //声望
+	optional uint32 hp							= 14; //体力
+	optional uint32 valid						= 15; //账号是否有效（0：无效，1：有效）
+	optional uint32 logout_time					= 16; //上次下线时间（os.time()）
+	optional string icon						= 17; //队伍图标
+	optional uint32 captain 					= 18; //队长ID
+
+	optional ExtraInfo extra_info				= 19; //附加信息
+
+	optional RaceInfo race_info					= 20; //
+
+	optional uint32 cur_regular_points			= 21; //常规竞技赛当前比赛积分
+	optional uint32 last_regular_points			= 22; //常规竞技赛上一轮比赛积分
+	optional uint32 regular_winning_streak		= 23; //常规竞技赛连胜次数
+	optional RankTime rank_time					= 24; //排行积分变化的时间
+
+	optional uint32 qualifying_ranking			= 25; //排位赛排名信息
+			
+	optional uint32 cur_tour_id					= 26; //当前巡回赛关卡
+	optional uint32 max_tour_id					= 27; //巡回赛最高记录
+	optional uint32 tour_reset_times			= 28; //巡回赛重置次数
+	optional uint32 tour_fail_times  			= 29; //巡回赛失败次数
+
+	optional PvpPlusInfo pvp_plus				= 30; //1+2VS1+2 
+	
+	optional GuideInfo guide_info				= 31; //游戏指引信息(0.中断 1.完成)
+
+	optional VipInfo vip						= 32; //VIP等级
+	
+	optional NewComerInfo new_comer_info		= 33; //新人签到
+
+	optional ActivityInfo activity_info			= 34; //活跃度
+	
+	optional NewComerTrialInfo new_comer_trial_info = 35; //新人7日活动
+	
+	optional PvpRegularInfo pvp_regular			= 36; //常规赛
+
+	optional QualifyingNewInfo qualifying_new	= 37; //排位赛（新）
+	
+	optional uint32 qualifying_new_score		= 38; //排位赛(新)积分
+
+	optional PvpLadderInfo pvp_ladder			= 39; //天梯赛
+	
+	optional uint32 pvp_ladder_score			= 40; //天梯赛积分
+	
+	optional uint32 pvp_ladder_time				= 41; //天梯赛最近比赛时间
+    
+    optional QualifyingNewerInfo qualifying_newer = 42; //排位赛(新版)
+    optional uint32 qualifying_newer_score      = 43; //排位赛(新版)积分
+    optional uint32 qualifying_newer_time       = 44; //排位赛(新版)最近比赛时间
+	
+	optional uint32 fight_power					= 45; //战斗力
+
+	optional BadgeInfo badge_info				= 46; //涂鸦信息
+	
+	optional uint32 achievement_time			= 47; //成就时间
+	
+	optional uint32 create_step					= 48; //创建步骤
+	optional uint32 create_time					= 49; //创建时间
+	optional uint32 total_time					= 50; //在线时长
+	
+	optional uint32 first_win_time				= 51; //上一次首胜奖励时间
+
+	optional DailyIncome daily_income			= 52; //每日PVP收入信息
+
+}
+
+
+message ChatChannelInfo
+{
+	optional uint32 last_world_chat_time		= 1;
+}
+
+message PvpPlusInfo
+{
+	optional uint32 score				= 1; //积分
+	optional uint32	race_times			= 2; //比赛次数
+	optional uint32 winning_streak		= 3; //连胜次数
+	optional uint32	win_times			= 4; //胜利次数
+	optional uint32	max_winning_streak	= 5; //最大连胜次数
+	optional uint32 kill_goal_times		= 6; //绝杀次数
+}
+
+message PvpRegularInfo
+{
+	optional uint32 score				= 1; //积分
+	optional uint32	race_times			= 2; //比赛次数
+	optional uint32 winning_streak		= 3; //连胜次数
+	optional uint32	win_times			= 4; //胜利次数
+	optional uint32	max_winning_streak	= 5; //最大连胜次数
+	optional uint32 kill_goal_times		= 6; //绝杀次数
+	optional uint32 mvp_times			= 7; //MVP次数
+	optional uint32 score_king			= 8;//得分王
+	optional uint32 rebound_king		= 9;//篮板王
+	optional uint32 block_king			= 10;//盖帽王
+	optional uint32 assist_king			= 11;//助攻王
+	optional uint32 steal_king			= 12;//抢断王
+}
+
+//竞技赛参赛信息
+message RaceInfo
+{
+	optional FightRoleInfo attacker		= 1; //竞技赛参赛球员列表
+	optional uint32 run_times			= 2; //匹配次数
+	optional uint32 reset_times			= 3; //重置匹配次数的次数
+	repeated uint32 apart_list			= 4; //已挑战过的玩家ID列表
+}
+
+
+message LotteryInfo
+{
+	optional uint32 total_times1		= 1; //类型1 总共抽奖次数
+	optional uint32 free_times1			= 2; //类型1 免费抽奖的剩余次数
+	optional uint32 last_time1			= 3; //类型1 免费抽奖最后一次的使用时间
+	optional uint32 total_times2		= 4; //类型2 总共抽奖次数
+	optional uint32 free_times2			= 5; //类型2 免费抽奖的剩余次数
+	optional uint32 last_time2			= 6; //类型2 免费抽奖最后一次的使用时间
+	optional uint32 diamond_multi_times	= 7; //钻石10连抽次数
+}
+
+//排位塞信息
+message QualifyingInfo
+{
+	repeated BattleInfo battle			= 1; //战况信息
+	optional uint32 max_ranking			= 2; //最高排名
+	optional uint32 run_times			= 3; //已经挑战的次数
+	repeated RoleInfo role				= 4; //防守阵容
+	optional uint64 battle_time			= 5; //最近一次挑战时间
+	optional uint32 buy_times			= 6; //已购买次数
+}
+
+//排位赛（新）信息
+message QualifyingNewInfo
+{
+	required uint32 race_times			= 1; //当前赛季总场次
+	required uint32 win_times			= 2; //胜场
+	required uint32 max_winning_streak	= 3; //最高连胜
+	required uint32 max_score			= 4; //最高积分
+	required uint32 score				= 5; //当前积分
+	required uint32 winning_streak		= 7; //连胜次数
+	required uint32 season				= 8; //当前是第X赛季
+	optional uint32 kill_goal_times		= 9;
+	optional uint32 mvp_times			= 10;
+	optional uint32 score_king			= 11;
+	optional uint32 rebound_king		= 12;
+	optional uint32 block_king			= 13;
+	optional uint32 assist_king			= 14;
+	optional uint32 steal_king			= 15;
+	optional uint32 total_race_times	= 16; //参加过的总场次
+	optional uint32 last_race_time		= 17; //上次参加比赛的时间（用于排名）
+    optional uint32 total_win_times     = 18; //总胜利次数
+    repeated uint32 grade_awards        = 19; //段位奖励  0不能领取  1可领取  2已领取
+}
+
+//天梯赛信息
+message PvpLadderInfo
+{
+	required uint32 race_times			= 1; //当前赛季总场次
+	required uint32 win_times			= 2; //胜场
+	required uint32 max_winning_streak	= 3; //最高连胜
+	required uint32 max_score			= 4; //最高积分
+	required uint32 winning_streak		= 5; //连胜次数
+	required uint32 season				= 6; //当前是第X赛季
+	optional uint32 kill_goal_times		= 7;
+	optional uint32 mvp_times			= 8;
+	optional uint32 score_king			= 9;
+	optional uint32 rebound_king		= 10;
+	optional uint32 block_king			= 11;
+	optional uint32 assist_king			= 12;
+	optional uint32 steal_king			= 13;
+	repeated uint32 league_info			= 14; //空表示没打  0 表示输  1表示赢
+	optional uint32 league_end_time		= 15;
+    optional uint32 total_race_times    = 16;//总比赛次数
+    optional uint32 total_win_times     = 17;//总胜利次数
+    required uint32 league_awards_flag  = 18;//联赛奖励标记  0 不能领  1 能领
+}
+
+
+message ExtraInfo
+{
+	repeated RoleInfo captains			= 1; //队长信息列表
+
+	repeated RoleInfo members			= 2; //队员信息列表
+
+	repeated RoleInfo roles				= 3; //球员信息列表
+
+	repeated GoodsList goods			= 4; //物品信息列表
+
+	repeated FightRoleInfo fight_roles	= 5; //出战球员列表
+	
+	repeated ChapterProto chapters		= 6; //生涯章节
+
+	repeated StoreInfo store_info		= 7; //商店信息
+
+	optional uint32 hp_restore_time		= 8; //上一次体力回复时间
+	optional uint32 hp_buy_times		= 9; //体力购买次数
+	optional uint32 gold_buy_times		= 10; //
+
+	optional TaskInfo tasks				= 11; //任务信息
+
+	repeated PracticeInfo practice		= 12; //操作练习数据
+
+	optional uint32 noon_hp				= 13; //中午免费体力领取状态
+	optional uint32 even_hp				= 14; //晚上免费体力领取状态
+
+	optional LotteryInfo lottery		= 15; //抽奖信息
+
+	optional QualifyingInfo qualifying	= 16; //排位赛信息
+	
+	optional BullFight bull_fight		= 17; //斗牛比赛
+	
+	optional ShootInfo shoot			= 18; //投篮赛
+	
+	repeated FightRole squad 			= 19; //阵容
+	
+	repeated EquipInfo equipments		= 20; //装备
+	
+	optional TourInfo tour				= 21; //巡回赛
+	
+	optional uint32 three_times_hp		= 22; //第三次免费体力
+	
+	optional uint32 practice_cd			= 23; //练习赛CD
+
+	repeated PracticePveInfo practice_pve = 24; //练习赛Pve
+
+	optional uint32 practice_pve_cd		= 25; //练习赛CD
+
+	repeated KeyValueData level_award_state = 26; //等级奖励状态,id为等级，value为领取状态，0未领取，1领取
+
+	optional MainActivityInfo activity_info = 27; //活动
+}
+
+message ShootInfo
+{
+	optional uint32 mass_ball_times		= 1;
+	optional uint32 grab_zone_times		= 2;
+	optional uint32 grab_point_times	= 3;
+	repeated uint32 mass_ball_complete	= 4;
+	repeated uint32 grab_zone_complete	= 5;
+	repeated uint32 grab_point_complete	= 6;
+	optional uint32 mass_ball_buy_times	= 7;    //购买比赛次数
+	optional uint32 grab_zone_buy_times	= 8;
+	optional uint32 grab_point_buy_times = 9;
+}
+
+message BullFight
+{
+	optional uint32 times 		= 1; 
+	repeated uint32 complete	= 2;
+	optional uint32 bullfight_buy_times = 3; //斗牛赛已购买次数
+}
+
+//需要展示的角色（球员）信息
+message RoleInfoForOthers
+{
+	optional string name				= 1; //名称
+	optional uint32 level				= 2; //等级
+	optional uint32 quality				= 3; //荣誉
+}
+
+//需要展示的玩家（队伍）信息
+message PlayerInfoForOthers
+{
+	optional string name				= 1; //名称
+	optional uint32 level				= 2; //等级
+	optional uint32 honor				= 3; //荣誉
+	repeated RoleInfoForOthers roles	= 4; //角色信息
+}
+
+message DataInfo
+{
+	enum DataType
+	{
+		DIAMOND_FREE			= 1; //钻石（赠送）
+		GOLD					= 2; //金币
+		HONOR					= 3; //荣誉
+		HP						= 4; //体力
+		EXP						= 5; //经验
+		LEVEL					= 6; //等级
+		CAPTAIN 				= 7; //队长ID
+		NAME					= 8; //名称
+		ICON					= 9; //头像
+		VALID					= 10; //账号有效性
+		LOGOUT_TIME				= 11; //上次下线时间
+		VIP						= 12; //VIP
+		GOODS					= 13; //物品
+		PRESTIGE				= 14; //威望
+		DIAMOND_BUY				= 15; //钻石（购买）
+		HONOR2					= 16; //
+		PRESTIGE2				= 17; //
+		REPUTATION				= 18; //声望
+	}
+	enum ValueType
+	{
+		VT_INT32		= 1; //整形
+		VT_STRING		= 2; //字符串
+	}
+	
+	required uint32 name			= 1; //更新数据名称
+	required ValueType value_type	= 2; //数据类型
+	optional int32 value_int		= 3; //数值，当value_type==VT_INT32时，该值有效
+	optional string value_str		= 4; //数值，当value_type==VT_STRING时，该值有效
+}
+
+message UpdateRoleData
+{
+	optional uint32 role_id			= 1;
+	repeated DataInfo data_list		= 2;
+}
+
+//更新属性
+message UpdatePlayerData
+{
+	repeated DataInfo player_data			= 1;
+	repeated UpdateRoleData role_data		= 2;
+}
+
+ //VIP操作类型
+enum vipOperType
+{
+	BUY_HP = 1;
+	BUY_GOLD = 2;
+	BUY_GIFT = 3;
+}
+
+//VIP相关操作
+message PlayerVipOperation
+{
+	required vipOperType type		= 1;// 操作类型
+	required uint32 vipLev			= 2;// 购买礼包对应的VIP等级
+}
+
+//VIP操作回复
+message PlayerVipOperationResp
+{
+	required vipOperType type 		= 1;
+	optional uint32 times			= 2;
+	optional uint32 result			= 3; //操作结果
+}
+
+message UpdateVipInfo
+{
+	optional VipInfo info			= 1; // VIP信息
+}
+
+//领取免费体力
+message GetFreeHpReq
+{
+	optional uint32 acc_id			= 1;
+}
+
+message GetFreeHpResp
+{
+	required uint32 result			= 1;
+	optional uint32 noon_hp			= 2;
+	optional uint32 even_hp			= 3;
+	optional uint32 three_times_hp	= 4;
+}
+
+//变更阵容
+message ChangeFightRole
+{
+	repeated FightRole info			= 1; //阵容信息
+}
+
+//变更阵容回复
+message ChangeFightRoleResp
+{
+	optional uint32 result			= 1; //
+	repeated FightRole info			= 2; //阵容信息
+}
+
+//更新阵容数据
+message UpdateFightRole
+{
+	repeated FightRole info			= 1; //阵容信息
+}
+
+//图鉴
+message UpdateRoleMapAddAttr
+{
+	repeated KeyValueData info		= 1;
+} 
+
+//每日收入
+message DailyIncome
+{
+	repeated KeyValueData info		= 1;
+}
+
+
+
+
+
+
+

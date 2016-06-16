@@ -1,0 +1,89 @@
+package fogs.proto.msg;
+import "Base.proto";
+
+
+//---------邮件模块相关
+
+//邮件类型
+enum MailType
+{
+	SYSTEM				= 1; //系统邮件
+	OTHER				= 2; //其它
+}
+
+//邮件状态
+enum MailState
+{
+	UNREAD				= 1; //未读取
+	READ_NOT_GET		= 2; //读取并且未领取附件
+	READ_GET			= 3; //读取并且已领取附件
+	READ_WITHOUT		= 4; //读取，无附件
+}
+
+message Attchment
+{
+	repeated KeyValueData attachment		= 1; // 附件
+}
+
+//邮件数据结构
+message MailInfo
+{
+	required uint64 uuid			= 1; //唯一ID
+	required uint32 id				= 2; // 邮件ID
+	required uint32 acc_id				= 3;
+	optional uint32 type				= 4; // 邮件类型
+	optional uint32 state				= 5; // 邮件状态
+	optional string sender				= 6; // 发送者的AccountID
+	optional uint32 send_time				= 7; // 发送时间
+	//repeated string receiver				= 8; // 接收者
+	optional uint32 timeliness				= 9; // 邮件时效（单位：分钟）
+	optional string title				= 10; // 邮件标题
+	optional string content				= 11; // 邮件内容
+	optional Attchment attachment		= 12; // 附件
+	optional uint32 get_delete				= 13; // 领取附件后是否删除（1：是，0,：否）
+}
+
+//打开邮件界面
+message OpenMailSys
+{
+}
+
+//邮件信息通知
+message MailInfoNotify
+{
+	optional uint32 result				= 1; //
+	repeated MailInfo mail_list			= 2; //邮件列表
+	optional uint32 isInit				= 3; //是否初始化标示（1：是，0：否）
+}
+
+//新邮件通知
+message NewMailNotify
+{
+	optional MailInfo mail			= 1; //新邮件
+}
+
+//阅读邮件
+message ReadMail
+{
+	optional uint64 mail_id				= 1; //邮件ID
+}
+
+//阅读邮件回复
+message ReadMailResp
+{
+	optional uint32 result				= 1; //
+	optional uint64 mail_id				= 2; //邮件ID
+}
+
+//领取附件
+message GetAttachment
+{
+	optional uint64 mail_id				= 1; //邮件ID
+}
+
+//领取附件回复
+message GetAttachmentResp
+{
+	optional uint32 result				= 1; //
+	optional uint64 mail_id				= 2; //邮件ID
+}

@@ -1,0 +1,208 @@
+package fogs.proto.msg;
+
+
+
+message loginAndlogoutLogInfo
+{
+	optional string name			= 1; 
+	optional uint32 op_type			= 2;
+	optional string level			= 3;
+	optional uint32 acc_id			= 4;
+	optional uint32 create_time		= 5;
+	optional uint32 online_time		= 6;
+	
+}
+
+//登陆登出记录
+message LoginAndlogoutLog
+{
+	optional string table				= 1; //对应表名
+	optional uint32	per_day				= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id				= 3;
+	optional loginAndlogoutLogInfo info	= 4;
+}
+
+
+message onlineUserCountLogInfo
+{
+	optional uint32 player_count			= 1;//玩家人数
+}
+
+//在线人数统计
+message OnlineUserCountLog
+{
+	optional string table					= 1; //对应表名
+	optional uint32	per_day					= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id					= 3;
+	optional onlineUserCountLogInfo info	= 4;
+}
+
+message createCharacterLogInfo
+{
+	optional uint32 acc_id					= 1;
+	optional string name					= 2;
+	optional uint32 captainID				= 3;
+}
+
+//创建角色表
+message CreateCharacterLog
+{
+	optional string table					= 1; //对应表名
+	optional uint32	per_day					= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id					= 3;
+	optional createCharacterLogInfo info	= 4;
+}
+
+message goodsProduceAndConsumeLogInfo
+{
+	optional uint32 acc_id					= 1; //玩家ID
+	optional string name					= 2; //玩家名字
+	optional uint32 op_type					= 3; //产or耗  1： 消耗  2：产出
+	optional string goods					= 4; //物品
+	optional string src						= 5; //消耗或产出途径
+}
+
+//物品产耗记录
+message GoodsProduceAndConsumeLog
+{
+	optional string table						= 1; //对应表名
+	optional uint32	per_day						= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id						= 3;
+	optional goodsProduceAndConsumeLogInfo info	= 4;
+}
+
+message joinActivityLogInfo
+{
+	optional uint32 acc_id					= 1; // 玩家ID
+	optional string name					= 2; // 玩家名字
+	optional uint32 activity_id				= 3; // 活动ID   
+}
+
+//参加活动记录
+message JoinActivityLog
+{
+	optional string table					= 1; //对应表名
+	optional uint32	per_day					= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id					= 3;
+	optional joinActivityLogInfo info		= 4;
+}
+
+message rechargeAndExpenseLogInfo
+{
+	optional uint32 acc_id					= 1; //玩家ID 
+	optional string name					= 2; //玩家名字
+	optional uint32 op_type					= 3; //操作类型
+	optional uint32 way						= 4; //对应途径
+	optional uint32 diamond					= 5; //钻石数
+	optional uint32 remain_diamond			= 6; //剩余钻石数
+}
+
+//充值消费记录
+message RechargeAndExpenseLog
+{
+	optional string table						= 1; //对应表名
+	optional uint32	per_day						= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id						= 3;
+	optional rechargeAndExpenseLogInfo info		= 4; 
+}
+
+message matchRecordInfo
+{
+	optional uint32 acc_id						= 1; //玩家ID
+	optional string other_name					= 2; //玩家名字
+	optional string score						= 3; //比分
+	optional uint32 result						= 4; //结果
+	optional uint32 sessionID					= 5; //比赛ID
+}
+
+//比赛记录
+message MatchRecordLog
+{	
+	optional string table						= 1; //对应表名
+	optional uint32	per_day						= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id						= 3;
+	optional matchRecordInfo info				= 4; 
+}
+
+message CareerPassOnlineTime
+{
+	optional string table						= 1; //对应表名
+	optional uint32	per_day						= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id						= 3;
+	optional CareerPassInfo info				= 4;
+}
+
+message CareerPassInfo
+{
+	optional uint32 acc_id						= 1; //账号ID
+	optional string name						= 2; //角色名字
+	optional uint32 level						= 3; //角色等级
+	optional uint32 time						= 4; //在线时长
+	optional uint32 chapter_id					= 5; //章节ID
+	optional uint32 section_id					= 6; //关卡ID
+}
+
+message RechargeInfo
+{
+	required uint32 acc_id						= 1;//账号ID
+	required string order_id					= 2;//订单号
+	required uint32 prop_id						= 3;//商品ID
+	required uint32 recharge_price				= 4;//订单金额
+	required uint32 actual_price				= 5;//实际金额
+}
+
+//充值记录
+message RechargeLog
+{
+	optional string table						= 1;//对应表名
+	optional uint32 per_day						= 2;
+	optional uint32 acc_id						= 3;
+	optional RechargeInfo info					= 4;
+}
+
+//公告记录
+message NoticeLog
+{
+	optional string table						= 1;//对应表名
+	optional uint32 per_day						= 2;
+	optional NoticeInfo info					= 3;
+}
+
+message NoticeInfo
+{
+	optional uint32 id				= 1; //公告ID
+	optional uint32 target			= 2; //公告对象
+	optional string content			= 3; //公告内容
+}
+
+//聊天记录
+message ChatLog
+{
+	optional string table						= 1;//对应表名
+	optional uint32 per_day						= 2;
+	optional uint32 acc_id						= 3;
+	optional ChatInfo info						= 4;
+}
+
+message ChatInfo
+{
+	optional uint32 acc_id						= 1;
+	optional uint32 type						= 2;
+	optional string target_name					= 3;
+	optional string content						= 4;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

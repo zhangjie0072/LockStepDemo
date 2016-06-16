@@ -1,0 +1,454 @@
+<Data Count="14">
+  <Line>
+    <switch>#</switch>
+    <id>指引ID</id>
+    <type>职业类型</type>
+    <diffcult>难度</diffcult>
+    <title>指引名称</title>
+    <intro>指引说明</intro>
+    <tips>指引内提示</tips>
+    <num_practice>练习次数</num_practice>
+    <num_award>达成奖励练习次数</num_award>
+    <self>控制NPCid</self>
+    <npc>对方NPCid</npc>
+    <scene>调用场景</scene>
+    <achieved_mic>成功音效</achieved_mic>
+    <fail_mic>失败音效</fail_mic>
+    <award_id1>奖励物品ID</award_id1>
+    <award_value1>奖励物品数量</award_value1>
+    <award_id2>奖励物品ID</award_id2>
+    <award_value2>奖励物品数量</award_value2>
+    <award_id3>奖励物品ID</award_id3>
+    <award_value3>奖励物品数量</award_value3>
+    <is_activity>是否是活动</is_activity>
+  </Line>
+  <Line>
+    <switch>#</switch>
+    <id>10001</id>
+    <type>0</type>
+    <diffcult>0</diffcult>
+    <title>角色移动</title>
+    <intro>学习基本的角色移动操作。</intro>
+    <tips>按住屏幕中的[b][FF0000]摇杆[-][/b]滑动进行角色移动，跑动至篮球位置会自动将球拾起。&amp;
+做的很好，下面我们再来练习一下带球移动，请带球移动到光圈位置。&amp;
+做的漂亮！&amp;
+将角色移动到球的位置将球拾起。&amp;
+移动并将球拾起&amp;
+带球移动到这里</tips>
+    <num_practice>0</num_practice>
+    <num_award>0</num_award>
+    <self>30000</self>
+    <npc>
+    </npc>
+    <scene>20601</scene>
+    <achieved_mic>Misc/smile_01</achieved_mic>
+    <fail_mic>Misc/warning_01</fail_mic>
+    <award_id1>2</award_id1>
+    <award_value1>10</award_value1>
+    <award_id2>
+    </award_id2>
+    <award_value2>
+    </award_value2>
+    <award_id3>
+    </award_id3>
+    <award_value3>
+    </award_value3>
+    <is_activity>0</is_activity>
+  </Line>
+  <Line>
+    <switch>#</switch>
+    <id>10002</id>
+    <type>0</type>
+    <diffcult>0</diffcult>
+    <title>比赛规则</title>
+    <intro>学习基本的比赛规则。</intro>
+    <tips>现在来了解一下比赛规则吧。&amp;
+比赛时间为0时，本场比赛结束。得分多的一方为获胜者。&amp;
+主队的分数显示在左侧，客队的分数显示在右侧。&amp;
+球场中闪烁的区域在三分线内，这个区域内进攻得分为2分。&amp;
+在3分线外投篮得分为3分。&amp;
+进攻的一方必须在[b][FF0000]24秒[-][/b]内完成进攻，如果超出时间仍没有得分或者触碰篮筐，攻守双方交换并重新开球。&amp;
+比分两侧有14秒进攻限定的倒计时。&amp;
+当进攻限定的倒计时为0时，会强制转换攻防双方的球权。&amp;
+当球权变更必须[FF0000][b]运球或传球到3分线外[/b][-]之后，才能重新组织进攻。&amp;
+关于比赛的介绍告一段落。希望全民街球能带给您更多的快乐。</tips>
+    <num_practice>0</num_practice>
+    <num_award>0</num_award>
+    <self>30001</self>
+    <npc>30002</npc>
+    <scene>20901</scene>
+    <achieved_mic>Misc/smile_01</achieved_mic>
+    <fail_mic>Misc/warning_01</fail_mic>
+    <award_id1>2</award_id1>
+    <award_value1>10</award_value1>
+    <award_id2>
+    </award_id2>
+    <award_value2>
+    </award_value2>
+    <award_id3>
+    </award_id3>
+    <award_value3>
+    </award_value3>
+    <is_activity>0</is_activity>
+  </Line>
+  <Line>
+    <switch>#</switch>
+    <id>10003</id>
+    <type>0</type>
+    <diffcult>0</diffcult>
+    <title>传球训练</title>
+    <intro>学习基本的传球操作，并进行练习。</intro>
+    <tips>在比赛中，传球给队友往往能促成更有效的进攻。下面我们来练习如何进行传球吧！&amp;
+控制[b][FF0000]摇杆[-][/b]操控角色按[b][FF0000]传球键[-][/b]将球传给队友。&amp;
+自己处于有利位置时，也可以呼唤队友传球。在没有持球时，点击[FF0000][b]要球[/b][-]按钮即可呼唤队友传球。&amp;
+点击[FF0000][b]要球[/b][-]向队友要球。&amp;
+做的漂亮！&amp;
+下面我们再巩固练习一下吧！</tips>
+    <num_practice>5</num_practice>
+    <num_award>2</num_award>
+    <self>30003</self>
+    <npc>30004</npc>
+    <scene>20501</scene>
+    <achieved_mic>Misc/smile_01</achieved_mic>
+    <fail_mic>Misc/warning_01</fail_mic>
+    <award_id1>2</award_id1>
+    <award_value1>10</award_value1>
+    <award_id2>
+    </award_id2>
+    <award_value2>
+    </award_value2>
+    <award_id3>
+    </award_id3>
+    <award_value3>
+    </award_value3>
+    <is_activity>0</is_activity>
+  </Line>
+  <Line>
+    <switch>#</switch>
+    <id>10001</id>
+    <type>0</type>
+    <diffcult>0</diffcult>
+    <title>基础练习赛</title>
+    <intro>学习基本操作和比赛规则。</intro>
+    <tips>
+    </tips>
+    <num_practice>0</num_practice>
+    <num_award>0</num_award>
+    <self>
+    </self>
+    <npc>
+    </npc>
+    <scene>20901</scene>
+    <achieved_mic>Misc/smile_01</achieved_mic>
+    <fail_mic>Misc/warning_01</fail_mic>
+    <award_id1>2</award_id1>
+    <award_value1>10</award_value1>
+    <award_id2>
+    </award_id2>
+    <award_value2>
+    </award_value2>
+    <award_id3>
+    </award_id3>
+    <award_value3>
+    </award_value3>
+    <is_activity>0</is_activity>
+  </Line>
+  <Line>
+    <switch>#</switch>
+    <id>10004</id>
+    <type>0</type>
+    <diffcult>2</diffcult>
+    <title>投篮</title>
+    <intro>学习基本的投篮操作，并进行练习。</intro>
+    <tips>投篮是得分的基本手段，下面我们来了解一下如何进行投篮吧!&amp;
+[b][FF0000]长按投篮键[-][/b]即可投篮，在出手时机槽为[FF0000][b]黄色和绿色[/b][-]时，命中将会提高。&amp;
+真可惜，我们再来尝试一次，务必在出手时机槽为[FF0000][b]黄色和绿色[/b][-]时松开投篮键。&amp;
+做的漂亮！下面我们再巩固练习一下吧！</tips>
+    <num_practice>5</num_practice>
+    <num_award>2</num_award>
+    <self>30005</self>
+    <npc>30006</npc>
+    <scene>20901</scene>
+    <achieved_mic>Misc/smile_01</achieved_mic>
+    <fail_mic>Misc/warning_01</fail_mic>
+    <award_id1>2</award_id1>
+    <award_value1>10</award_value1>
+    <award_id2>
+    </award_id2>
+    <award_value2>
+    </award_value2>
+    <award_id3>
+    </award_id3>
+    <award_value3>
+    </award_value3>
+    <is_activity>1</is_activity>
+  </Line>
+  <Line>
+    <switch>#</switch>
+    <id>10005</id>
+    <type>0</type>
+    <diffcult>0</diffcult>
+    <title>突破</title>
+    <intro>学习如何突破过人，并进行练习。</intro>
+    <tips>
+    </tips>
+    <num_practice>0</num_practice>
+    <num_award>0</num_award>
+    <self>30008</self>
+    <npc>30005</npc>
+    <scene>20401</scene>
+    <achieved_mic>Misc/smile_01</achieved_mic>
+    <fail_mic>Misc/warning_01</fail_mic>
+    <award_id1>2</award_id1>
+    <award_value1>10</award_value1>
+    <award_id2>
+    </award_id2>
+    <award_value2>
+    </award_value2>
+    <award_id3>
+    </award_id3>
+    <award_value3>
+    </award_value3>
+    <is_activity>0</is_activity>
+  </Line>
+  <Line>
+    <switch>#</switch>
+    <id>10006</id>
+    <type>0</type>
+    <diffcult>0</diffcult>
+    <title>盯防</title>
+    <intro>学习基本的防守技巧，并进行练习。</intro>
+    <tips>
+    </tips>
+    <num_practice>0</num_practice>
+    <num_award>0</num_award>
+    <self>30008</self>
+    <npc>30009</npc>
+    <scene>20701</scene>
+    <achieved_mic>Misc/smile_01</achieved_mic>
+    <fail_mic>Misc/warning_01</fail_mic>
+    <award_id1>2</award_id1>
+    <award_value1>10</award_value1>
+    <award_id2>
+    </award_id2>
+    <award_value2>
+    </award_value2>
+    <award_id3>
+    </award_id3>
+    <award_value3>
+    </award_value3>
+    <is_activity>0</is_activity>
+  </Line>
+  <Line>
+    <switch>#</switch>
+    <id>10007</id>
+    <type>0</type>
+    <diffcult>0</diffcult>
+    <title>抢断</title>
+    <intro>学习防守中抢断的技巧，并进行练习。</intro>
+    <tips>
+    </tips>
+    <num_practice>0</num_practice>
+    <num_award>0</num_award>
+    <self>30010</self>
+    <npc>30011</npc>
+    <scene>20501</scene>
+    <achieved_mic>Misc/smile_01</achieved_mic>
+    <fail_mic>Misc/warning_01</fail_mic>
+    <award_id1>2</award_id1>
+    <award_value1>10</award_value1>
+    <award_id2>
+    </award_id2>
+    <award_value2>
+    </award_value2>
+    <award_id3>
+    </award_id3>
+    <award_value3>
+    </award_value3>
+    <is_activity>0</is_activity>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>10008</id>
+    <type>0</type>
+    <diffcult>3</diffcult>
+    <title>上篮/灌篮</title>
+    <intro>学习进攻中上篮和扣篮的技巧，并进行练习。</intro>
+    <tips>[FF0000][b]上篮和扣篮[/b][-]是命中率较高的得分手段，但[FF0000][b]距离篮筐较远[/b][-]，且[FF0000][b]面前有防守球员[/b][-]时是无法发动的，只能进行投篮哦！&amp;
+在[FF0000][b]篮筐附近[/b][-]区域，按[FF0000][b]方向键+投篮键[/b][-]会随机触发[FF0000][b]上篮或者扣篮[/b][-]。&amp;
+做的漂亮！下面我们再巩固练习一下吧！</tips>
+    <num_practice>5</num_practice>
+    <num_award>2</num_award>
+    <self>30005</self>
+    <npc>30012</npc>
+    <scene>20901</scene>
+    <achieved_mic>Misc/smile_01</achieved_mic>
+    <fail_mic>Misc/warning_01</fail_mic>
+    <award_id1>2</award_id1>
+    <award_value1>10</award_value1>
+    <award_id2>
+    </award_id2>
+    <award_value2>
+    </award_value2>
+    <award_id3>
+    </award_id3>
+    <award_value3>
+    </award_value3>
+    <is_activity>1</is_activity>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>10009</id>
+    <type>0</type>
+    <diffcult>3</diffcult>
+    <title>盖帽</title>
+    <intro>学习如何防守进攻动作的技巧，并进行练习。</intro>
+    <tips>盖帽是最有效的防守方式，在对方上篮时，找准时间出手将其拦下。&amp;
+找准时机和位置，按[b][FF0000]盖帽键[-][/b]将对手的投篮防住。另外留意不要被假动作欺骗。&amp;
+做的漂亮！下面我们再巩固练习一下吧！</tips>
+    <num_practice>5</num_practice>
+    <num_award>2</num_award>
+    <self>30013</self>
+    <npc>30014</npc>
+    <scene>20901</scene>
+    <achieved_mic>Misc/smile_01</achieved_mic>
+    <fail_mic>Misc/warning_01</fail_mic>
+    <award_id1>2</award_id1>
+    <award_value1>10</award_value1>
+    <award_id2>
+    </award_id2>
+    <award_value2>
+    </award_value2>
+    <award_id3>
+    </award_id3>
+    <award_value3>
+    </award_value3>
+    <is_activity>1</is_activity>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>10010</id>
+    <type>0</type>
+    <diffcult>3</diffcult>
+    <title>篮板</title>
+    <intro>学习抢篮板的技巧，并进行练习。</intro>
+    <tips>篮下争抢篮板球是控制球权的重要方式，能够支配篮板的一方，往往就能支配整场比赛。&amp;
+抢占内线有利位置，预判球的落点后按[b][FF0000]篮板按钮[-][/b]跳起争抢。&amp;
+做的漂亮！下面我们再巩固练习一下吧！</tips>
+    <num_practice>5</num_practice>
+    <num_award>2</num_award>
+    <self>30015</self>
+    <npc>30016</npc>
+    <scene>20901</scene>
+    <achieved_mic>Misc/smile_01</achieved_mic>
+    <fail_mic>Misc/warning_01</fail_mic>
+    <award_id1>2</award_id1>
+    <award_value1>10</award_value1>
+    <award_id2>
+    </award_id2>
+    <award_value2>
+    </award_value2>
+    <award_id3>
+    </award_id3>
+    <award_value3>
+    </award_value3>
+    <is_activity>1</is_activity>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>20001</id>
+    <type>1</type>
+    <diffcult>0</diffcult>
+    <title>基础操作指引</title>
+    <intro>
+    </intro>
+    <tips>AskPickBall:Hi!麻烦帮忙捡下球传给我可以吗？&amp;
+AnswerPickBall:没问题！&amp;
+TipPickUp:滑动[FF0000]左下角[-]的摇杆按钮跑到场地中[FF0000]球的位置[-]将球捡起来吧。&amp;
+BallTipPickUp:移动并将球拾起&amp;
+TipPass:按[FF0000]传球键[-]进行传球。&amp;
+RoleTipSwitchOnCatch:持球的球员将会变为操作球员。&amp;
+LookMeShoot:看我投篮&amp;
+TipShootTutor:[FF0000]长按[-]投篮键后[FF0000]松开[-]即可投篮，马上试试吧。&amp;
+TipShootRetutor:按住投篮键时间[FF0000]过短[-]
+请[FF0000]长按[-]投篮键再[FF0000]松开[-]&amp;
+NiceShoot:漂亮的投篮 ！&amp;
+ShowMe:看你刚刚传球的技巧也不像新手，来露一手。&amp;
+ShowMeYourAttack:来吧，让我看看你的进攻方式。&amp;
+TipDunkTutor:在[FF0000]篮筐附近[-]区域，按[FF0000]方向键+投篮键[-]会随机触发[FF0000]上篮或者扣篮[-]。&amp;
+RoleTipDunkTutor:请在提示区域内上篮&amp;
+TipDunkRetutor:在[FF0000]提示区域内按方向键+投篮键[-]，我们再试一次。&amp;
+DialogInvite1:没想到你深藏不露啊。&amp;
+DialogInvite2:随便玩玩而已，这点伎俩不算什么。&amp;
+DialogInvite3:兄弟有没有兴趣来我的球队？&amp;
+DialogInvite4:再来一球，如果你能防下我，我就答应你的请求。&amp;
+DialogInvite5:放马过来！&amp;
+TipDefenseTutor:[FF0000]长按[-]盯防键将会[FF0000]自动盯防[-]防守目标。&amp;
+RoleTipDefense:请防守我到篮下。&amp;
+DialogRedefense:不要松懈，[FF0000]防守我到篮下[-]才能松开盯防键。&amp;
+TipBlockTutor:找准时机和位置，按盖帽键将对手的投篮防住。&amp;
+DialogJoin1:看来我们能一起征战街球联盟赛了。&amp;
+DialogJoin2:但是组建球队的话我们还差了一个人。&amp;
+DialogJoin3:我在前面那条街的酒吧等你，到时候给你介绍一个给力的小伙伴。&amp;
+DialogJoin4:等我收拾一下就去找你！</tips>
+    <num_practice>0</num_practice>
+    <num_award>0</num_award>
+    <self>30015</self>
+    <npc>30352</npc>
+    <scene>21001</scene>
+    <achieved_mic>Misc/smile_02</achieved_mic>
+    <fail_mic>Misc/warning_02</fail_mic>
+    <award_id1>2</award_id1>
+    <award_value1>10</award_value1>
+    <award_id2>
+    </award_id2>
+    <award_value2>
+    </award_value2>
+    <award_id3>
+    </award_id3>
+    <award_value3>
+    </award_value3>
+    <is_activity>0</is_activity>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>20002</id>
+    <type>1</type>
+    <diffcult>0</diffcult>
+    <title>技能操作指引</title>
+    <intro>
+    </intro>
+    <tips>Intro:我们获得的技能为[FF0000]战斧扣篮[-]，让我来教教你如何使用这个技能吧！&amp;
+Tutor:在中距离区域使用[FF0000]方向键+投篮键[-]。有几率触发战斧扣篮。快去试试吧。&amp;
+AreaTip:请在绿色提示区域内扣篮&amp;
+Retutor:在绿色提示区域内按[FF0000]方向键+投篮键[-]，我们再试一次。&amp;
+Praise:非常帅气的扣篮，真是太棒了！&amp;
+Retry:再练练&amp;
+Exit:我,大神！&amp;
+Ending:累了的话点击[FF0000]左上角[-]的返回按钮即可退出，就不打扰您练习啦。BYE BYE！&amp;
+ExitButtonTip:点击此处返回大厅</tips>
+    <num_practice>0</num_practice>
+    <num_award>0</num_award>
+    <self>30015</self>
+    <npc>0</npc>
+    <scene>21001</scene>
+    <achieved_mic>Misc/smile_02</achieved_mic>
+    <fail_mic>Misc/warning_02</fail_mic>
+    <award_id1>2</award_id1>
+    <award_value1>10</award_value1>
+    <award_id2>
+    </award_id2>
+    <award_value2>
+    </award_value2>
+    <award_id3>
+    </award_id3>
+    <award_value3>
+    </award_value3>
+    <is_activity>0</is_activity>
+  </Line>
+</Data>

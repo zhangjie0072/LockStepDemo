@@ -1,0 +1,94 @@
+package fogs.proto.msg;
+import "Base.proto";
+
+
+//---------巡回赛模块相关
+message TourInfo
+{
+	repeated uint32 npc 				= 1;
+	required uint32 challenge_times 	= 2;	//挑战次数
+	required uint32 last_challenge_time = 3;	//上次挑战时间
+	optional uint32 buy_times			= 4;    //购买徽记次数
+}
+
+//重置巡回赛请求
+message TourResetReq
+{
+
+}
+
+//重置巡回赛回复
+message TourResetResp
+{
+	required uint32 result				= 1; //操作结果
+	required TourInfo tour_info 		= 2;
+}
+
+//巡回赛开始请求
+message TourStartReq
+{
+	optional FightRoleInfo fight_list		= 1; //球员出战列表
+}
+
+//巡回赛开始回复
+message TourStartResp
+{
+	required uint32 result				= 1; //操作结果
+	optional uint64 session_id			= 2; //会话ID
+	optional uint32 cur_tour_id			= 3; //当前巡回赛关卡
+}
+
+//巡回赛完成请求
+message TourEndReq
+{
+	required uint32 direct_clear		= 1; //是否直接通关（1：是，0：否）
+	optional uint64 session_id			= 2; //会话ID
+	optional uint32 succeed				= 3; //是否成功（1：是，0：否）
+}
+
+//巡回赛完成回复
+message TourEndResp
+{
+	required uint32			result			= 1; //操作结果
+	repeated KeyValueData	awards			= 2; //奖励物品
+	optional uint32 max_tour_id				= 3; //巡回赛最高记录
+	optional uint32 direct_clear			= 4; //是否直接通关（1：是，0：否）
+}
+
+//巡回赛退出请求
+message TourExitReq
+{
+	optional uint64 session_id			= 1; //会话ID
+}
+
+//巡回赛退出回复
+message TourExitResp
+{
+	optional uint32 result				= 1; //操作结果
+}
+
+//更新巡回赛信息
+message UpdateTourInfoReq
+{
+}
+
+message UpdateTourInfoResp
+{
+	required uint32 result = 1;	//操作结果
+	required TourInfo tour_info = 2;	
+}
+
+//购买挑战次数
+message TourBuyChallengeTimesReq
+{
+}
+
+//购买挑战次数回复
+message TourBuyChallengeTimesResp
+{
+	required uint32 result	= 1;
+	required uint32 times	= 2; //挑战次数
+}
+
+
+

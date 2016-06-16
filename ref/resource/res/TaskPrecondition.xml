@@ -1,0 +1,12 @@
+<Data Count="2">
+  <Line>
+    <precondition>等级</precondition>
+    <precondition_type>LEVEL</precondition_type>
+    <precondition_id>1</precondition_id>
+  </Line>
+  <Line>
+    <precondition>任务</precondition>
+    <precondition_type>TASK</precondition_type>
+    <precondition_id>2</precondition_id>
+  </Line>
+</Data>

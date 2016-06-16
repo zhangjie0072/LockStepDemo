@@ -1,0 +1,14 @@
+{
+    "plist": ["iOS/Info.plist"],
+    "Controller": ["iOS/UnityAppController.h","iOS/UnityAppController.mm"],
+    "libs": ["libz.tbd","libstdc++.6.0.9.tbd","libsqlite3.tbd"],
+    "libpaths": [],
+    "frameworks": ["AdSupport.framework","AssetsLibrary.framework","CoreTelephony.framework","AddressBook.framework","MessageUI.framework"],
+    "framepaths": [],
+    "headerpaths": [],                    
+    "files":   [],
+    "folders": [],    
+    "excludes": ["^.*.meta$", "^.*.mdown$", "^.*.pdf$"],
+    "compiler_flags": [],
+    "linker_flags": ["-ObjC","-lz"]
+}

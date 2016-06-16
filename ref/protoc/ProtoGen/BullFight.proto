@@ -1,0 +1,57 @@
+package fogs.proto.msg;
+import "Base.proto";
+
+//开始斗牛比赛
+message StartBullFight
+{
+	optional uint32 diffictly				= 1;
+	optional FightRoleInfo fight_list		= 2; //球员出战列表
+}
+//开始斗牛比赛回复
+message StartBullFightResp
+{
+	optional uint32 result			= 1; //结果（0：OK，其他：failed）
+	optional uint64 session_id		= 2; //本次比赛的会话ID
+}
+
+//结束斗牛比赛
+message EndBullFight
+{
+	optional uint64 session_id		= 1; //比赛会话ID
+	optional uint32 main_role_side	= 2; //玩家所在队伍方
+	optional uint32 score_home		= 3; //主队得分
+	optional uint32 score_away		= 4; //客队比分
+}
+//结束斗牛比赛回复
+message EndBullFightResp
+{
+	optional uint32 result			= 1; //结果
+	repeated KeyValueData	awards	= 2; // 奖励物品
+	optional uint32 times			= 3;
+	repeated MatchRoleInfo info		= 4;
+}
+
+//获得今天的NPC对手
+message GetBullFightNpcReq
+{
+	optional uint32 acc_id		= 1;
+}
+
+message GetBullFightNpcResp
+{
+	optional uint32 result	= 1;
+	repeated uint32 npc	= 2;
+}
+
+//斗牛赛购买挑战次数
+message BuyBullFightTimesReq
+{
+	optional uint32 acc_id			= 1;//玩家帐号
+}
+
+//斗牛赛购买挑战次数回复
+message BuyBullFightTimesResp
+{
+	optional uint32 result			= 1;//返回结果
+	optional uint32 times			= 2;//已挑战次数
+}

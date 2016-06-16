@@ -1,0 +1,115 @@
+package fogs.proto.msg;
+import "DBInfo.proto";
+
+
+//---------服务器配置相关
+
+message ServerInfo
+{
+	optional string ip					= 1;
+	optional int32 port					= 2;
+	optional int32 id					= 3;
+	optional string extern_ip			= 4;
+}
+
+message DBServerCfg
+{
+	optional string ip					= 1;
+	optional int32 port					= 2;
+	optional int32 thread_num			= 3;
+	repeated DBInfo dbs					= 4;
+	optional uint32 account_id			= 5;
+	optional uint32 table_num			= 6;
+	optional uint32 delay_time			= 7; //服务器启动延迟保存数据时间(单位：秒)
+	optional uint32 save_interval		= 8; //数据保存时间间隔
+	optional uint32 save_role_num		= 9; //该次保存时间间隔保存角色数据个数
+	optional uint32 logout_clean_time	= 10; //角色下线后清理内存数据时间延迟
+	optional uint32 id					= 11;
+}
+
+message AccountDBServerCfg
+{
+	required ServerInfo host			= 1;
+	optional uint32 tablenum			= 2;
+}
+
+message LoginServerCfg
+{
+	optional ServerInfo host			= 1;
+	optional ServerInfo account			= 2;
+	repeated ServerInfo copy_accounts	= 3;
+	optional uint32 login_timeout		= 4;
+	optional ResCfg res					= 5;
+}
+
+message ProxyServerCfg
+{
+	optional ServerInfo host			= 1;
+	repeated ServerInfo xconn			= 2;
+}
+
+message ResCfg
+{
+	optional string res_dir				= 1;
+	optional string lua_dir				= 2;
+	repeated string maps				= 3;
+}
+
+message PlatServerCfg
+{
+	optional ServerInfo host			= 1;
+	repeated ServerInfo proxies			= 2;
+	optional ResCfg res					= 3;
+}
+
+message MatchServerCfg
+{
+	optional ServerInfo host			= 1;
+	repeated ServerInfo proxies			= 2;
+	repeated ServerInfo games			= 3;
+	optional ResCfg res					= 4;
+}
+
+message GameServerCfg
+{
+	optional ServerInfo host			= 1;
+	repeated ServerInfo proxies			= 2;
+	optional ResCfg res					= 3;
+}
+
+message GatewayServerCfg
+{
+	optional ServerInfo host			= 1;
+	optional ServerInfo connection		= 2;
+}
+
+message RankServerCfg
+{
+	optional ServerInfo host			= 1;
+	optional uint32 tablenum 			= 2;
+	repeated DBInfo dbs					= 4;
+	optional string lua_dir				= 5;
+	optional ResCfg res					= 6;
+}
+
+message CommonServerCfg
+{
+	optional ServerInfo host			= 1;
+	repeated ServerInfo proxies			= 2;
+	repeated ServerInfo games			= 3;
+	optional ServerInfo rank			= 4;
+	optional ResCfg res					= 5;
+}
+
+message BackgroundCfg
+{
+	optional string ip					= 1;
+	optional int32 port					= 2;
+	repeated DBInfo dbs					= 3;
+}
+
+message LoginGateServerCfg
+{
+	optional ServerInfo host			= 1;
+	repeated ServerInfo Login			= 2;
+}

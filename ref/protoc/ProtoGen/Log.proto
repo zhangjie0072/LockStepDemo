@@ -1,0 +1,412 @@
+package fogs.proto.msg;
+import "Base.proto";
+import "Player.proto";
+
+message loginAndlogoutLogInfo
+{
+	optional string name			= 1; 
+	optional uint32 op_type			= 2;
+	optional string level			= 3;
+	optional uint32 acc_id			= 4;
+	optional uint32 create_time		= 5;
+	optional uint32 online_time		= 6;
+	
+}
+
+//登陆登出记录
+message LoginAndlogoutLog
+{
+	optional string table				= 1; //对应表名
+	optional uint32	per_day				= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id				= 3;
+	optional loginAndlogoutLogInfo info	= 4;
+}
+
+
+message onlineUserCountLogInfo
+{
+	optional uint32 player_count			= 1;//玩家人数
+}
+
+//在线人数统计
+message OnlineUserCountLog
+{
+	optional string table					= 1; //对应表名
+	optional uint32	per_day					= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id					= 3;
+	optional onlineUserCountLogInfo info	= 4;
+}
+
+message createCharacterLogInfo
+{
+	optional uint32 acc_id					= 1;
+	optional string name					= 2;
+	optional uint32 captainID				= 3;
+}
+
+//创建角色表
+message CreateCharacterLog
+{
+	optional string table					= 1; //对应表名
+	optional uint32	per_day					= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id					= 3;
+	optional createCharacterLogInfo info	= 4;
+}
+
+message goodsProduceAndConsumeLogInfo
+{
+	optional uint32 acc_id					= 1; //玩家ID
+	optional string name					= 2; //玩家名字
+	optional uint32 op_type					= 3; //产or耗  1： 消耗  2：产出
+	optional string goods					= 4; //物品
+	optional string src						= 5; //消耗或产出途径
+}
+
+//物品产耗记录
+message GoodsProduceAndConsumeLog
+{
+	optional string table						= 1; //对应表名
+	optional uint32	per_day						= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id						= 3;
+	optional goodsProduceAndConsumeLogInfo info	= 4;
+}
+
+message MatchRoleRecord
+{
+	repeated FightRole role_info			= 5; // 参赛球员
+}
+
+message joinGameLogInfo
+{
+	optional uint32 acc_id					= 1; // 玩家ID
+	optional string name					= 2; // 玩家名字
+	optional uint32 activity_id				= 3; // 活动ID
+	optional uint32 player_flag				= 4; // 玩家标记  1:NPC 2:玩家
+	optional MatchRoleRecord role_info		= 5; // 参赛球员
+	optional uint32 score					= 6; // 比赛积分
+}
+
+//参加活动记录
+message JoinGameLog
+{
+	optional string table					= 1; //对应表名
+	optional uint32	per_day					= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id					= 3;
+	optional joinGameLogInfo info			= 4;
+}
+
+message rechargeAndExpenseLogInfo
+{
+	optional uint32 acc_id					= 1; //玩家ID 
+	optional string name					= 2; //玩家名字
+	optional uint32 op_type					= 3; //操作类型
+	optional uint32 way						= 4; //对应途径
+	optional uint32 diamond					= 5; //钻石数
+	optional uint32 remain_diamond			= 6; //剩余钻石数
+    optional uint32 level                   = 7; //等级
+}
+
+//充值消费记录
+message RechargeAndExpenseLog
+{
+	optional string table						= 1; //对应表名
+	optional uint32	per_day						= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id						= 3;
+	optional rechargeAndExpenseLogInfo info		= 4; 
+}
+
+message matchRecordInfo
+{
+	optional uint32 acc_id						= 1; //玩家ID
+	optional string other_name					= 2; //玩家名字
+	optional string score						= 3; //比分
+	optional uint32 result						= 4; //结果
+	optional uint32 sessionID					= 5; //比赛ID
+}
+
+//比赛记录
+message MatchRecordLog
+{	
+	optional string table						= 1; //对应表名
+	optional uint32	per_day						= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id						= 3;
+	optional matchRecordInfo info				= 4; 
+}
+
+
+//生涯通关记录
+message CareerPassOnlineTime
+{
+	optional string table						= 1; //对应表名
+	optional uint32	per_day						= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id						= 3;
+	optional CareerPassInfo info				= 4;
+}
+
+message CareerPassInfo
+{
+	optional uint32 acc_id						= 1; //账号ID
+	optional string name						= 2; //角色名字
+	optional uint32 level						= 3; //角色等级
+	optional uint32 time						= 4; //在线时长
+	optional uint32 chapter_id					= 5; //章节ID
+	optional uint32 section_id					= 6; //关卡ID
+    optional uint32 star_value                  = 7; //星级
+}
+
+message RechargeInfo
+{
+	required uint32 acc_id						= 1;//账号ID
+	required string order_id					= 2;//订单号
+	required uint32 prop_id						= 3;//商品ID
+	required uint32 recharge_price				= 4;//订单金额
+	required uint32 actual_price				= 5;//实际金额
+}
+
+//充值记录
+message RechargeLog
+{
+	optional string table						= 1;//对应表名
+	optional uint32 per_day						= 2;
+	optional uint32 acc_id						= 3;
+	optional RechargeInfo info					= 4;
+}
+
+//公告记录
+message NoticeLog
+{
+	optional string table						= 1;//对应表名
+	optional uint32 per_day						= 2;
+	optional NoticeInfo info					= 3;
+}
+
+message NoticeInfo
+{
+	optional uint32 id				= 1; //公告ID
+	optional uint32 target			= 2; //公告对象
+	optional string content			= 3; //公告内容
+}
+
+//聊天记录
+message ChatLog
+{
+	optional string table						= 1;//对应表名
+	optional uint32 per_day						= 2;
+	optional uint32 acc_id						= 3;
+	optional ChatInfo info						= 4;
+}
+
+message ChatInfo
+{
+	optional uint32 acc_id						= 1;
+	optional uint32 type						= 2;
+	optional string target_name					= 3;
+	optional string content						= 4;
+}
+
+//匹配和取消匹配记录
+message MatchingLog
+{
+	optional string table						= 1;//对应表名
+	optional uint32 per_day						= 2;
+	optional uint32 acc_id						= 3;
+	optional MatchingInfo info					= 4;
+}
+
+message MatchingInfo
+{
+	optional uint32 acc_id						= 1;
+	optional uint32 match_type					= 2;
+	optional uint32 op_type						= 3; //1:匹配  2:取消匹配
+	optional uint32 score						= 4; //比赛积分
+}
+
+//匹配花费时间
+message MatchingTimeLog
+{
+	optional string table						= 1;//对应表名
+	optional uint32 per_day						= 2;
+	optional uint32 acc_id						= 3;
+	optional MatchingTimeInfo info				= 4;
+}
+
+message MatchingTimeInfo
+{
+	optional uint32 acc_id						= 1;
+	optional uint32 match_type					= 2;
+	optional uint32 time						= 3;
+	optional uint32 score						= 4; //比赛积分
+    optional uint32 flag                        = 5; //flag:0 为正常匹配到人  flag:1 是取消匹配或离线
+}
+//第一场战斗指引子模块日志记录
+message FirstFightGuideModuleLog
+{
+	optional string table						= 1;//对应表名
+	optional uint32	per_day						= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id						= 3;
+	optional FirstFightGuideModuleInfo info		= 4;//子模块对应ID
+}
+
+//第一场战斗指引子模块日志内容
+message FirstFightGuideModuleInfo
+{
+	optional uint32 acc_id						= 1;
+	optional uint32 sub_id						= 2;//子模块对应ID
+}
+
+message MatchData
+{
+	repeated MatchRoleData role_data	= 1;
+}
+
+message DBGameData
+{
+	optional MatchData match_data		= 1;
+	optional uint32 acc_id				= 2;
+	optional uint32 match_type			= 3;
+	optional uint32 race_result			= 4; //比赛结果  win or lose
+	optional uint32 kill_goal			= 5; //是否绝杀
+	optional uint64 game_id				= 6; //比赛ID
+	optional uint32 score				= 7; //目前积分
+	optional uint32 exit_type			= 8; //退出类型  1:正常结束  其他:异常
+}
+
+//PVP比赛数据
+message GameDataLog
+{
+	optional string table			= 1;//对应表名
+	optional uint32 per_day			= 2;
+	optional uint32 acc_id			= 3;
+	optional DBGameData info		= 4;
+}
+//排行榜日志
+message RankLog
+{
+	optional string table						= 1;//对应表名
+	optional uint32 per_day						= 2;
+	optional uint32 acc_id						= 3;
+	optional RankLogInfo info					= 4;//排行榜信息
+}
+
+//排行榜日志信息
+message RankLogInfo
+{
+	optional uint32 type						= 1;
+	optional RankLogAllData data				= 2;//
+}
+
+message RankLogAllData
+{
+	repeated RankLogData data					= 1;
+}
+
+//排行榜日志信息
+message RankLogData
+{
+	optional uint32 acc_id						= 1;//
+	optional uint32 ranking						= 2;//排名
+    optional string name                        = 3;//名字
+}
+
+//社交日志
+message SocialContactLog
+{
+	optional string table						= 1;//对应表名
+	optional uint32 per_day						= 2;
+	optional uint32 acc_id						= 3;
+	optional SocialContactLogInfo info				= 4;//排行榜信息
+}
+
+//社交日志信息
+message SocialContactLogInfo
+{
+	optional uint32 type						= 1; //社交类型
+	optional uint32 behavior					= 2; //社交行为
+	optional uint32 acc_from					= 3; //发起方的AccountID
+	optional uint32 acc_to						= 4; //接收方的AccountID
+	optional string results						= 5; //结果
+}
+
+//参加活动记录
+message JoinActivityLog
+{
+	optional string table						= 1; //对应表名
+	optional uint32	per_day						= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id						= 3;
+	optional ActivityLogInfo info				= 4;
+}
+
+//活动日志信息
+message ActivityLogInfo
+{
+	optional uint32	acc_id						= 1; //执行该活动的AccountID
+	optional uint32 type						= 2; //活动类型
+	optional uint32 args						= 3; //活动参数1
+}
+
+//任务日志记录
+message TaskLog
+{
+	optional string table						= 1; //对应表名
+	optional uint32	per_day						= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id						= 3;
+	optional TaskLogInfo info					= 4;
+}
+
+//任务日志信息
+message TaskLogInfo
+{
+	optional uint32	acc_id						= 1; //执行该活动的AccountID
+	optional uint32 type						= 2; //任务类型
+	optional uint32 task_id						= 3; //任务参数1
+	optional uint32 action						= 4; //
+}
+
+//活跃度日志记录
+message LivenessLog
+{
+	optional string table						= 1; //对应表名
+	optional uint32	per_day						= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id						= 3;
+	optional LivenessLogInfo info				= 4;
+}
+
+message LivenessLogInfo
+{
+	optional uint32	acc_id						= 1; //
+	optional uint32 num							= 2; //活跃度
+}
+
+//技能佩戴日志记录
+message EquipSkillLog
+{
+	optional string table						= 1; //对应表名
+	optional uint32	per_day						= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id						= 3;
+	optional EquipSkillLogInfo info				= 4;
+}
+
+message EquipSkillLogInfo
+{
+	optional uint32	acc_id						= 1; //
+	optional uint32 skill_id					= 2; //
+	optional uint32 skill_level					= 3; //
+    optional uint32 slot_id				    	= 4; //
+    optional uint32 op_type				    	= 5; //
+}
+
+//第一次抽奖日志记录
+message FirstLotteryLog
+{
+	optional string table						= 1; //对应表名
+	optional uint32	per_day						= 2; //一天一表   0:否  1:是
+	optional uint32 acc_id						= 3;
+	optional FirstLotteryLogInfo info			= 4;
+}
+
+message FirstLotteryLogInfo
+{
+	optional uint32	acc_id						= 1; //
+	optional uint32 type						= 2; // 区分钻石和金币
+
+}

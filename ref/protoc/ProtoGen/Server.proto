@@ -1,0 +1,55 @@
+package fogs.proto.msg;
+
+
+//---------服务器相关
+
+message HandshakeRequest
+{
+	required uint32 server_id		= 1;
+	optional string ip				= 2;
+	optional uint32 port			= 3;
+	optional string extern_ip		= 4;
+}
+
+message HandshakeResponse
+{
+	optional uint32 server_id		= 1;
+	optional uint32 boot_time		= 2;
+	optional uint32 result			= 3;
+}
+
+message ReloadLuaFile
+{
+	repeated string lua_file		= 1;
+}
+
+//PlatS向LoginS发送玩家负载信息
+//GameS向MatchS发送游戏负载信息
+message ReportServerLoad
+{
+	required uint32 server_id		= 1; //PlatS/GameS ID
+	required string gateway_ip		= 2; //Client需要连接的Gateway ip
+	required uint32 gateway_port	= 3; //Client需要连接的Gateway port
+	required uint32 load_info		= 4; //玩家负载/游戏负载
+}
+
+message ServerDiscontinueInfo
+{
+	required uint32 server_type		= 1;
+	required uint32 server_index	= 2;
+}
+
+message Heartbeat
+{
+	required double server_time		= 1;
+}
+
+message OnNewDayCome
+{
+	
+}
+
+message NoticeToClient
+{
+	required string content		= 1;
+}

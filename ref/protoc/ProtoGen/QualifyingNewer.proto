@@ -1,0 +1,76 @@
+package fogs.proto.msg;
+import "Base.proto";
+
+//新版排位赛信息
+message QualifyingNewerInfo
+{
+	required uint32 race_times			= 1; //当前赛季总场次
+	required uint32 win_times			= 2; //胜场
+	required uint32 max_winning_streak	= 3; //最高连胜
+	required uint32 max_score			= 4; //最高积分
+	required uint32 winning_streak		= 5; //连胜次数
+	required uint32 season				= 6; //当前是第X赛季
+	optional uint32 kill_goal_times		= 7;
+	optional uint32 mvp_times			= 8;
+	optional uint32 score_king			= 9;
+	optional uint32 rebound_king		= 10;
+	optional uint32 block_king			= 11;
+	optional uint32 assist_king			= 12;
+	optional uint32 steal_king			= 13;
+	repeated uint32 league_info			= 14; //空表示没打  0 表示输  1表示赢
+	optional uint32 league_end_time		= 15;
+    optional uint32 total_race_times    = 16;//总比赛次数
+    optional uint32 total_win_times     = 17;//总胜利次数
+    required uint32 league_awards_flag  = 18;//联赛奖励标记  0 不能领  1 能领
+    optional uint32 grade_awards        = 19;//段位奖励
+    optional uint32 grade_awards_flag   = 20;//段位奖励标记 0 不能领 1 能领
+    optional uint32 last_race_time		= 21; //上次参加比赛的时间（用于排名）
+    optional uint32 ranking             = 22;
+    optional uint32 combo_win           = 23;//连续胜利次数(用于增加额外积分，加完就清)
+    optional uint32 losing_streak       = 24;//连败
+}
+
+//领取排位赛段位奖励
+message GetQualifyingNewerGradesAwardsReq
+{
+    
+}
+
+//领取排位赛段位奖励回复
+message GetQualifyingNewerGradesAwardsResp
+{
+    required uint32 result                  = 1;
+    repeated KeyValueData awards            = 2; //奖励物品
+    required uint32 grade_awards            = 3;
+    required uint32 grade_awards_flag       = 4;
+}
+
+//进入新排位赛回复
+message QualifyingNewerMatchResp
+{
+	optional uint64 session_id			= 1; //匹配回话ID
+}
+
+//领取排位赛战绩奖励
+message GetQualifyingNewerLeagueAwardsReq
+{
+}
+
+//领取排位赛战绩奖励回复
+message GetQualifyingNewerLeagueAwardsResp
+{
+	optional uint32 result					= 1;
+	repeated KeyValueData awards            = 2; //奖励物品
+}
+
+//通知新排位赛战绩重置
+message NotifyQualifyingNewerLeagueReset
+{
+}
+
+//新赛季刷新
+message RefreshQualifyingNewerInfo
+{
+    optional QualifyingNewerInfo info           = 1;
+    optional uint32 qualifying_newer_score      = 2; //排位赛(新版)积分
+}

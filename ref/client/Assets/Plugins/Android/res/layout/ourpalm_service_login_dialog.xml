@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="264dp"
+    android:layout_height="120dp"
+    android:layout_gravity="center_horizontal|center_vertical"
+    android:background="@drawable/ourpalm_service_remind_bg"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/ourpalm_service_no_login_message"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/ourpalm_service_login_btn"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/ourpalm_fb_submit_btn"
+        android:gravity="center"
+        android:text="@string/ourpalm_service_evaluate_submit"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+
+</LinearLayout>

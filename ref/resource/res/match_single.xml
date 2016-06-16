@@ -1,0 +1,17 @@
+<MatchSetting type="3"> <!--1:practice 2:ready 3:1on1 4:3on3 -->
+	<Scene>10006</Scene>
+	<Team>
+		<Home>
+			<NPC pos="1" id="20004"/>
+		</Home>
+		<Away>
+			<MainRole pos="1" id="20002"/>
+		</Away>
+	</Team>
+	<Time x="180"/>
+	
+	<BgSound>
+		<Track src="bg/shequ" interval="1" loop="0"/>
+	</BgSound>
+	
+</MatchSetting>

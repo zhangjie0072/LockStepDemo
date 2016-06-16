@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="270dp"
+    android:layout_height="240dp"
+    android:layout_gravity="center_horizontal|center_vertical"
+    android:background="@drawable/ourpalm_dialog_bg"
+    android:gravity="center" >
+
+    <RelativeLayout
+        android:id="@+id/ourpalm_pulllist_title"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/ourpalm_login_title_bg_press" >
+
+        <TextView
+            android:id="@+id/ourpalm_pulllist_title_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="@string/ourpalm_dialog_pulllist_title"
+            android:textColor="@android:color/white"
+            android:textSize="22sp" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="fill_parent"
+            android:layout_alignBottom="@+id/ourpalm_pulllist_title_textView"
+            android:layout_alignTop="@+id/ourpalm_pulllist_title_textView"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toLeftOf="@+id/ourpalm_pulllist_title_textView"
+            android:background="@color/ourpalm_color_white" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/ourpalm_pulllistview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/ourpalm_pulllist_cancel"
+        android:layout_below="@+id/ourpalm_pulllist_title"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:divider="@color/ourpalm_color_black"
+        android:dividerHeight="1dp"
+        android:fadingEdge="none"
+        android:listSelector="#00000000" >
+    </ListView>
+
+    <Button
+        android:id="@+id/ourpalm_pulllist_cancel"
+        android:layout_width="220dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/ourpalm_button_gray_background"
+        android:text="@string/ourpalm_dialog_cancel"
+        android:textColor="@color/ourpalm_color_white"
+        android:textSize="20sp" />
+
+</RelativeLayout>

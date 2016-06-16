@@ -1,0 +1,141 @@
+package fogs.proto.msg;
+import "Base.proto";
+import "Player.proto";
+import "Equipment.proto";
+
+//刷新对手请求
+message FlushRivalReq
+{
+	optional uint32 acc_id		= 1;
+}
+
+
+//对手信息
+message RivalInfo
+{
+	optional string name				= 1; //名字
+	optional uint32 vip_lev				= 2; //VIP等级
+	optional uint32 ranking				= 3; //排行
+	optional uint32 show_id				= 4; //展示ID
+	//repeated RoleSimpleInfo simple_info	= 5; //角色简略信息  用于挑战列表显示 and 比赛对手 是机器人 
+	repeated RoleInfo role_info			= 6; //角色详细信息  用于对手（玩家）开始比赛后
+	optional CharacterType player_type	= 7[default=ROBOT]; //
+	optional uint32 level				= 8;
+	optional uint32 acc_id				= 9;
+	repeated EquipInfo equipments		= 10; //装备
+	repeated FightRole squad 			= 11; //阵容
+	optional uint32 fight_power			= 12; //战斗力
+}
+
+//刷新对手回复
+message FlushRivalResp
+{
+	required uint32 result	= 1;
+	repeated RivalInfo info	= 2;
+}
+
+//设置防守阵容
+message SetDefendReq
+{
+	optional FightRoleInfo fight_list		= 2; //球员出战列表
+}
+
+message SetDefendResp
+{
+	required uint32 result 			= 1;
+	optional FightRoleInfo fight_list		= 2; //球员出战列表
+}
+
+//重置挑战CD
+message ResetBattleCDReq
+{	
+}
+
+//重置挑战CD回复
+message ResetBattleCDResp
+{
+	required uint32 result	= 1;
+}
+
+//战况
+message GetBattleNews
+{
+	optional uint32 acc_id		= 1;
+}
+
+//战况回复
+message GetBattleNewsResp
+{
+	repeated BattleInfo info	= 1;
+	optional uint32	result		= 2;
+}
+
+
+//进入排位赛信息
+message QualifyingMatchReq
+{
+	required MatchType type 			= 1[default=MT_NONE]; //
+	optional FightRoleInfo fight_list		= 2; //球员出战列表
+	optional uint32 rival_ranking		= 3; //挑战对手排名
+	optional string name				= 4; //调对对手名字
+}
+
+//进入排位赛回复
+message QualifyingMatchResp
+{
+	optional uint64 session_id			= 1; //匹配回话ID
+	optional FightRoleInfo fight_list		= 2; //球员出战列表
+	optional RivalInfo rival_info		= 3; //对手球员出战列表
+}
+
+
+//进入新排位赛回复
+message NewQualifyingMatchResp
+{
+	optional uint64 session_id			= 1; //匹配回话ID
+}
+
+//退出排位赛
+message QualifyingEndReq
+{
+	required MatchType type 			= 1[default=MT_NONE]; //
+	optional uint64 session_id			= 2; //匹配会话ID
+	optional uint32 main_role_side		= 3; //玩家所在队伍方
+	optional uint32 score_home			= 4; //主队得分
+	optional uint32 score_away			= 5; //客队比分
+}
+
+//退出排位赛回复
+message QualifyingEndResp
+{
+	required uint32 result				= 1; //比赛结果
+	optional MatchType type 			= 2[default=MT_NONE]; //比赛类型
+	optional uint32 cur_ranking			= 3; //当前排名
+	optional uint32 max_ranking			= 4; //最高排名
+	optional uint32 run_times			= 5; //已挑战次数
+	optional uint64 battle_time			= 6; //挑战时间
+	repeated KeyValueData awards		= 7; //奖励
+}
+
+//排名变化通知
+message QualifyingRankingNotify
+{
+	required uint32 cur_ranking			= 1; // 当前排名
+}
+
+//购买排位赛挑战次数
+message QualifyingBuyTimesReq
+{
+}
+
+message QualifyingBuyTimesResp
+{
+	required uint32 result		= 1;
+	required uint32 times		= 2;//已购买次数
+}
+
+//战斗力变化通知
+message FightPowerChange
+{
+	required uint32 fight_power	= 1; //战斗力
+}

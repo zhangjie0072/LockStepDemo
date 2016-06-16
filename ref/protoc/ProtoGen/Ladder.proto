@@ -1,0 +1,26 @@
+package fogs.proto.msg;
+import "Base.proto";
+
+//广播天梯赛联赛重置
+message NotifyLadderLeagueReset
+{
+}
+
+//请求领取联赛奖励
+message GetLadderLeagueAwardsReq
+{
+
+}
+
+//请求领取联赛奖励回复
+message GetLadderLeagueAwardsResp
+{
+    required uint32 result                  = 1;
+    repeated KeyValueData awards            = 2; //奖励物品
+}
+
+
+message LadderMatchResp
+{
+    required uint64 session_id = 1;
+}

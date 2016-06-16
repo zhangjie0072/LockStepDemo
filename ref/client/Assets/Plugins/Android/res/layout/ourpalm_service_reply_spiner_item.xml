@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical"  >
+    
+    <LinearLayout
+        android:id="@+id/ourpalm_service_reply_user_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="35dp"
+        android:orientation="horizontal" >
+        
+		<RelativeLayout
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:layout_weight="1.5"
+		    android:layout_gravity="center"
+		    android:orientation="vertical" >
+		    		    
+		    <ImageView
+		        android:id="@+id/ourpalm_service_reply_user_icon"
+		        android:layout_width="30dp"
+		        android:layout_height="30dp"
+		        android:layout_marginTop="5dp"
+        		android:layout_marginLeft="20dp"
+		        android:scaleType="fitCenter"
+		        android:layout_gravity="center"
+		        android:gravity="center"
+		        android:src="@drawable/ourpalm_fb_guser_icon"
+		        />
+		    <TextView
+		        android:id="@+id/ourpalm_service_reply_user_name"
+		        android:layout_width="wrap_content"
+		        android:layout_height="50dp"
+        		android:layout_marginLeft="12dp"
+		        android:gravity="center"
+                android:layout_gravity="center"
+		        android:layout_below="@+id/ourpalm_service_reply_user_icon"
+		        android:textColor="@color/ourpalm_service_question_input_bg"
+		        android:textSize="12sp"  />
+		</RelativeLayout> 
+		
+		<LinearLayout
+		    android:id="@+id/ourpalm_service_reply_ueser_content_layout"
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:layout_weight="6"
+		    android:layout_gravity="center"
+		    android:layout_marginLeft="10dp"
+		    android:orientation="vertical" 
+		    android:background="@drawable/ourpalm_fb_guser_bg">
+		    
+			<TextView
+			    android:id="@+id/ourpalm_service_reply_user_content"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_marginTop="5dp"
+			    android:layout_marginLeft="20dp"
+			    android:layout_marginRight="10dp"
+			    android:autoLink="web"
+		        android:textColor="@android:color/white"
+		        android:textSize="14sp"	/>
+			
+			<ImageView 
+			    android:id="@+id/ourpalm_service_reply_user_image1"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+			    android:layout_marginTop="5dp"
+		        android:gravity="center"
+		        android:scaleType="fitCenter"
+		        android:visibility="gone" />
+			
+			<ImageView 
+			    android:id="@+id/ourpalm_service_reply_user_image2"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+			    android:layout_marginTop="5dp"
+		        android:gravity="center"
+		        android:scaleType="fitCenter"
+		        android:visibility="gone" />
+						
+			<TextView
+			    android:id="@+id/ourpalm_service_reply_user_time"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_marginTop="10dp"
+			    android:layout_marginLeft="20dp"
+			    android:layout_marginBottom="5dp"
+		        android:textColor="@color/ourpalm_service_question_input_bg"
+		        android:textSize="12sp"	/>    
+			
+		</LinearLayout>
+   
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/ourpalm_service_reply_service_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="15dp"
+        android:orientation="horizontal" >
+		
+		<LinearLayout
+		    android:id="@+id/ourpalm_service_replay_gservice_content_layout"
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:layout_weight="5"
+		    android:background="@drawable/ourpalm_fb_gservice_bg"
+		    android:orientation="vertical" >
+			<TextView
+			    android:id="@+id/ourpalm_service_reply_gservice_content"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+		        android:layout_gravity="left"
+		        android:gravity="left"
+			    android:layout_marginRight="10dp"
+			    android:layout_marginLeft="20dp"
+			    android:layout_marginTop="5dp"
+			    android:autoLink="web"
+		        android:textColor="@android:color/white"
+		        android:textSize="14sp"	    
+			    />
+			
+			<ImageView 
+			    android:id="@+id/ourpalm_service_reply_gservice_image1"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+		        android:layout_gravity="left"
+		        android:gravity="left"
+			    android:layout_marginRight="10dp"
+			    android:layout_marginLeft="20dp"
+			    android:layout_marginTop="5dp"
+		        android:scaleType="fitCenter"
+		        android:visibility="gone" />
+			
+			<ImageView 
+			    android:id="@+id/ourpalm_service_reply_gservice_image2"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+		        android:layout_gravity="left"
+		        android:gravity="left"
+			    android:layout_marginRight="10dp"
+			    android:layout_marginLeft="20dp"
+			    android:layout_marginTop="5dp"
+		        android:scaleType="fitCenter"
+		        android:visibility="gone" />
+						
+			<TextView
+			    android:id="@+id/ourpalm_service_reply_gservice_time"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+		        android:layout_gravity="right"
+		        android:gravity="right"
+			    android:layout_marginTop="10dp"
+			    android:layout_marginRight="20dp"
+			    android:layout_marginBottom="5dp"
+		        android:textColor="@color/ourpalm_service_question_input_bg"
+		        android:textSize="12sp"	/>		    
+		    				
+		</LinearLayout>
+		
+		<RelativeLayout		    
+		    android:id="@+id/ourpalm_service_replay_gservice_icon_layout"
+		    android:layout_width="0dp"
+		    android:layout_height="match_parent"
+		    android:layout_weight="1.1"
+		    android:layout_gravity="center"
+		    android:gravity="center"
+		    android:orientation="vertical" >
+		    <ImageView
+		        android:id="@+id/ourpalm_service_reply_gservice_icon"
+		        android:layout_width="30dp"
+		        android:layout_height="30dp"
+		        android:layout_marginLeft="10dp"
+ 		        android:scaleType="fitCenter"
+		        android:layout_gravity="center"
+		        android:gravity="center"
+		        android:src="@drawable/ourpalm_fb_gservice_icon"
+		        />
+		    <TextView
+		        android:id="@+id/ourpalm_service_reply_gservice_name"
+		        android:layout_width="wrap_content"
+		        android:layout_height="40dp"
+		        android:layout_gravity="center"
+		        android:gravity="center"
+		        android:layout_below="@+id/ourpalm_service_reply_gservice_icon"
+		        android:textColor="@color/ourpalm_service_question_input_bg"
+		        android:textSize="12sp"	/>		    
+		</RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

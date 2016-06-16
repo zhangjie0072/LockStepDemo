@@ -1,0 +1,291 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- account -->
+    <string name="ourpalm_dialog_account_string">Account</string>
+    <string name="ourpalm_dialog_account_hint_string">Please enter account</string>
+    <!-- <string name="ourpalm_dialog_registaccount_hint_string">Number/Alphabet/Symbol, not support chinese</string> -->
+    <!-- <string name="ourpalm_dialog_account_hint_string">6&#8211;20digits,number/alphabet/underscore</string> -->
+    <string name="ourpalm_dialog_registaccount_hint_string">More than 6 digits of number, alphabets and "_"</string>
+    <string name="ourpalm_dialog_pwd_string">Password</string>
+    <!-- <string name="ourpalm_dialog_pwd_hint_string">More than 6 digits, number/alphabet/symbol</string> -->
+    <string name="ourpalm_dialog_pwd_hint_string">More than 6 digits of number, alphabet</string>
+    <string name="ourpalm_dialog_pwd_login_hint_string">Please enter password</string>
+    <string name="ourpalm_dialog_btn_login_string">Login now</string>
+    <string name="ourpalm_dialog_btn_regist_string">Register now</string>
+    <string name="ourpalm_dialog_findpwd">Find password</string>
+    <string name="ourpalm_dialog_confirmpwd_string">Confirm password：</string>
+    <string name="ourpalm_dialog_confirmpwd_hint_string">Re-enter Password</string>
+    <string name="ourpalm_dialog_btn_registquick_string">Guest Login</string>
+    <string name="ourpalm_dialog_cancel">Cancel</string>
+    <string name="ourpalm_dialog_confirm">Confirm</string>
+    <string name="ourpalm_dialog_open">Start</string>
+    <string name="ourpalm_dialog_never_toast">Never ask to update version</string>
+    <string name="ourpalm_binging_phonenum">Phone Number</string>
+    <string name="ourpalm_binging_email">Email</string>
+    <string name="ourpalm_binging_phonenum_hint">Please enter phone number</string>
+    <string name="ourpalm_binging_email_hint">Please enter email</string>
+    <string name="ourpalm_binging_phone_verify">Verify Code</string>
+    <string name="ourpalm_binging_phone_verify_hint">Enter 6 digits verify code</string>
+    <string name="ourpalm_binging_skip">Later</string>
+    <string name="ourpalm_binging_bind">Binding now</string>
+    <string name="ourpalm_binging_tip">Binding phone to increase user\'s secure and easier to find back password</string>
+    <string name="ourpalm_binging_email_tip">Strongly recommend: Binding email to increase user\'s secure and easier to find back password</string>
+    <string name="ourpalm_dialog_login_btn">Login Account</string>
+    <string name="ourpalm_dialog_loading_tip_tourist">Guest</string>
+    <string name="ourpalm_tip_not_go_tourist">Guest can\'t enter user center</string>
+    <string name="ourpalm_tip_not_go_facebook">This function only available for platform Member</string>
+
+    <!-- account net -->
+    <string name="ourpalm_net_login_fail">User login failed</string>
+    <string name="ourpalm_net_login_loading">Login。。。</string>
+    <string name="ourpalm_net_logincheck_loading">Login Verifying...</string>
+    <string name="ourpalm_net_login_success">User login successful</string>
+    <string name="ourpalm_net_Regist_fail">User register failed</string>
+    <string name="ourpalm_net_Regist_loading">Registering...</string>
+    <string name="ourpalm_net_Regist_success">User register successful</string>
+    <string name="ourpalm_net_RegistQuick_success">Guest login successful</string>
+    <string name="ourpalm_net_RegistQuick_fail">Guest Login Failed</string>
+    <string name="ourpalm_net_RegistQuick_loading">Guest Login...</string>
+    <string name="ourpalm_net_logincheck_fail">Login Verify failed</string>
+    <string name="ourpalm_net_usercenterurl_error">User center URL is empty</string>
+    <string name="ourpalm_net_bindgameinfo_error">Account binding failed</string>
+
+    <!-- tip -->
+    <string name="ourpalm_tip_loading">Loading...</string>
+    <string name="ourpalm_tip_paying">Paying...</string>
+    <string name="ourpalm_tip_pay_prepareing">Payment in progress...</string>
+    <string name="ourpalm_tip_title">Friendly remind:\r\n\r\n</string>
+    <string name="ourpalm_tip_callbackerror">Callback port not yet register</string>
+    <string name="ourpalm_tip_pbiderror">Item ID or Name is empty</string>
+    <string name="ourpalm_tip_useriderror">User not register yet</string>
+    <string name="ourpalm_tip_setgameinfoerror">Character info haven create in game</string>
+    <string name="ourpalm_tip_payurlerror">Calculate center\'s address error</string>
+    <string name="ourpalm_tip_accounturlerror">User center address error</string>
+    <string name="ourpalm_tip_paramserror">Parameter error</string>
+    <string name="ourpalm_tip_getcharginfoerror">Receive payment agreement failed, error code:</string>
+    <string name="ourpalm_tip_prasecharginfoerror">analysis payment agreement failed</string>
+    <string name="ourpalm_tip_getpblisterror">Receive item list failed</string>
+    <string name="ourpalm_tip_initneterror">Network initialize failed</string>
+    <string name="ourpalm_tip_initneturlerror">initialize address haven receive</string>
+    <string name="ourpalm_tip_login_formaterror">account/password format error</string>
+    <string name="ourpalm_tip_findpwd_account_error">You haven enter the account to find password</string>
+    <string name="ourpalm_binging_input_phonenum_null">Phone number is empty, please enter phone number</string>
+    <string name="ourpalm_binging_phonenum_error">Phone number format incorrect, please re-enter!</string>
+    <string name="ourpalm_binging_phonenum_null">Phone number can\'t be empty!</string>
+    <string name="ourpalm_binging_email_null">Email can\'t be empty</string>
+    <string name="ourpalm_binging_email_error">Email format error</string>
+    <string name="ourpalm_binging_verify_null">Verify code can\'t be empty!</string>
+    <string name="ourpalm_binging_verify_error">Verify code incorrect</string>
+    <string name="ourpalm_tip_regist_account_error">Account can\'t be empty!</string>
+    <string name="ourpalm_tip_regist_pwd_error">Password can\'t be empty!</string>
+    <string name="ourpalm_tip_account_notchinese_error">Account or password can\'t include chinese</string>
+    <string name="ourpalm_tip_gameinfologin_noset">Game info port haven set after character login successful</string>
+    <string name="ourpalm_tip_setlog_true">Log output opened, please close when publish!</string>
+    <string name="ourpalm_tip_pay_box">Payment testing opened, please close when publish!</string>
+    <string name="ourpalm_tip_unknownerror">Unknown error</string>
+    <string name="ourpalm_tip_cfgerror">ourpalm.cfg can\'t find or read error</string>
+    <string name="ourpalm_tip_opennetwork">Network needed for make payment, please check your network status!</string>
+    <string name="ourpalm_tip_opennetwork_ex">Network needed for this function, please check your network status!</string>
+    <string name="ourpalm_tip_exitgame">Quit game</string>
+    <string name="ourpalm_tip_backgame">Resume game</string>
+
+    <!-- new User agreement Tip -->
+    <string name="ourpalm_regist_tip_null_username">Account can\'t be empty</string>
+    <string name="ourpalm_regist_tip_username_error">Account less than 6 digits, please re-entry!</string>
+    <string name="ourpalm_regist_tip_username_spaces">Space in account, please re-entry</string>
+    <string name="ourpalm_regist_tip_username_emailerror">Email format error, please re-entry</string>
+    <string name="ourpalm_regist_tip_username_formaterror">Account only can name with number, alphabet and "_" </string>
+    <string name="ourpalm_regist_tip_null_pwd">Password can\'t be empty!</string>
+    <string name="ourpalm_regist_tip_pwd_error">Password lesser than 6 digits, please re-entry!</string>
+    <string name="ourpalm_regist_tip_pwd_spaces">Space in password, please re-entry</string>
+    <string name="ourpalm_regist_tip_pwd_formaterror">Password only can use with number, alphabet!</string>
+    <string name="ourpalm_regist_tip_username_null_email">Please enter email address</string>
+    <string name="ourpalm_regist_tip_confirmpwd_error_null">Haven enter confirm password</string>
+    <string name="ourpalm_regist_tip_confirmpwd_error">Both password are different</string>
+    <string name="ourpalm_regist_tip_pwd_allnum">Password must use number and alphabet</string>
+    <string name="ourpalm_regist_tip_pwd_allenglish">Password must use number and alphabet</string>
+
+    <!-- http web error -->
+    <string name="ourpalm_http_error_url">URL is empty</string>
+    <string name="ourpalm_http_error_unsupportedencoding">coding error</string>
+    <string name="ourpalm_http_error_unknownhost">Unknown server error</string>
+    <string name="ourpalm_http_error_io">I/O error</string>
+    <string name="ourpalm_http_error_timeout">Connection overtime error</string>
+    <string name="ourpalm_http_error_other">Other error</string>
+    <string name="ourpalm_http_error_unknowerror">Unknown abnormal</string>
+    <string name="ourpalm_http_error_nodata">haven receive data</string>
+    <string name="ourpalm_exit_title">Warmly reminder</string>
+    <string name="ourpalm_exit_msg">Confirm to quit game? See you again!</string>
+
+    <!-- Update -->
+    <string name="ourpalm_dialog_update_title">New version detected</string>
+    <string name="ourpalm_update_now">Update now</string>
+    <string name="ourpalm_update_later">Update later</string>
+    <string name="ourpalm_update_exit">Quit game</string>
+    <string name="ourpalm_update_version_size">Version：%1$s，Size：%2$s</string>
+    <string name="ourpalm_update_tip_newworktype">Your network is 2G/3G/4G, confirm download?</string>
+
+    <!-- Offical website Login -->
+    <string name="ourpalm_regist_individual_msg">You are using quick login now, haven register and binding, register an account now?</string>
+    <string name="ourpalm_dialog_login_title">Login game</string>
+    <string name="ourpalm_dialog_login_rememberpwd">Remember password</string>
+    <string name="ourpalm_dialog_login_findpwd">Find password</string>
+    <string name="ourpalm_dialog_login_quickgame">Guest login</string>
+    <string name="ourpalm_dialog_login_loginnow">Account login</string>
+    <string name="ourpalm_dialog_login_up_error">Please enter account and password</string>
+    <string name="ourpalm_dialog_login_login_fail">User login failed</string>
+    <string name="ourpalm_dialog_regist_title">Register account</string>
+    <string name="ourpalm_dialog_bind_title">Bind account</string>
+    <string name="ourpalm_dialog_bind_title_ex">Binding with safer official account</string>
+    <string name="ourpalm_dialog_regist_showpwd">Display password</string>
+    <string name="ourpalm_dialog_regist_agree">I have read and agreed </string>
+    <string name="ourpalm_dialog_regist_agreement">User Registration agreement </string>
+    <string name="ourpalm_dialog_regist_readagreement">Please read user registration agreement and tick to agree</string>
+    <string name="ourpalm_dialog_regist_button">Rgister</string>
+    <string name="ourpalm_dialog_regist_title_1">Register account</string>
+    <string name="ourpalm_dialog_regist_button_1">Register now</string>
+    <string name="ourpalm_dialog_regist_later">Later</string>
+    <string name="ourpalm_dialog_regist_error">Account Register failed</string>
+    <string name="ourpalm_dialog_regist_error_1">Account register failed, logic error</string>
+    <string name="ourpalm_dialog_pulllist_title">Choose login account</string>
+    <string name="ourpalm_dialog_binding_sendcode">Receive verify code</string>
+    <string name="ourpalm_dialog_binding_later">Later</string>
+    <string name="ourpalm_dialog_binding_now">Binding now</string>
+    <string name="ourpalm_dialog_binding_now_regist">Register and bind</string>
+    <string name="ourpalm_dialog_binding_sendcodeerror">Receive verify code failed</string>
+    <string name="ourpalm_dialog_binding_binderror">Binding Phone failed</string>
+    <string name="ourpalm_dialog_binding_binding">Binding with phone number...</string>
+    <string name="ourpalm_dialog_binding_sendcodeing">Receiving verify code...</string>
+    <string name="ourpalm_dialog_binding_binderror_1">Verify code or password error</string>
+    <string name="ourpalm_dialog_binding_email">Binding...</string>
+    <string name="ourpalm_loginsuccess_tip_tourist">Dear Guest</string>
+    <string name="ourpalm_loginsuccess_tip">%s, welcome to game</string>
+    <string name="ourpalm_logingading_tip">Trying to login...</string>
+    <string name="ourpalm_account_name_tip">Account: </string>
+    <string name="ourpalm_account_swittch_name_tip">Change account</string>
+    <string name="ourpalm_account_waitphonenum">Please retry after %2d sec </string>
+    <string name="ourplam_change_password_success">Password modified successful</string>
+
+    <!-- 官网支付 -->
+    <string name="ourpalm_tip_gw_payurlerror">Official website payment page address error</string>
+    <string name="ourpalm_tip_gw_chargtype_disable">Not supporting current payment method</string>
+    <string name="ourpalm_tip_gw_chargfail">Payment failed</string>
+    <string name="ourpalm_tip_gw_chargsuccess">Payment successful</string>
+    <string name="ourpalm_tip_lenovo_chargefail">Payment failed, please turn on network to make payment again</string>
+
+    <!-- 用户中心错误提Display Message示语 -->
+    <string name="ourpalm_ucenter_1000">Operating successful</string>
+    <string name="ourpalm_ucenter_1115">New password can\'t be empty</string>
+    <string name="ourpalm_ucenter_1118">Password modify failed, new password same with old password</string>
+    <string name="ourpalm_ucenter_1144">Password modify can\'t more than current day time limit</string>
+    <string name="ourpalm_ucenter_1134">Account does not exist</string>
+    <string name="ourpalm_ucenter_1143">The time of find password more than current day time limit</string>
+    <string name="ourpalm_ucenter_1136">The account haven bind to phone</string>
+    <string name="ourpalm_ucenter_1126">Account had been binded</string>
+    <string name="ourpalm_ucenter_1117">token overdued, please relogin</string>
+    <string name="ourpalm_ucenter_1106">Account has already exist</string>
+    <string name="ourpalm_ucenter_1102">Wrong password</string>
+    <string name="ourpalm_ucenter_1101">Account does not exist</string>
+    <string name="ourpalm_ucenter_1127">This number is bind with other account already!</string>
+    <string name="ourpalm_ucenter_1132">Account is banned!</string>
+    <string name="ourpalm_ucenter_1133">MAC is banned</string>
+    <string name="ourpalm_ucenter_1128">Phone number incorrect</string>
+    <string name="ourpalm_ucenter_1129">Verify code incorrect, please re-entry!</string>
+    <string name="ourpalm_ucenter_1135">This account is binded with phone already</string>
+    <string name="ourpalm_ucenter_1162">Current phone number has been registered</string>
+    <string name="ourpalm_ucenter_1006">Unable to receive the device info of quick login, quick login failed!</string>
+    <string name="ourpalm_ucenter_1178">close beta user has reached the max, close register temporary. Thanks for support!</string>
+    <string name="ourpalm_ucenter_2308">This email is exist!</string>
+
+    <!-- 排行榜 -->
+    <string name="ourpalm_rankList_title">News</string>
+    <string name="ourpalm_rankList_button">more details</string>
+
+    <!-- 支付提示 -->
+    <string name="ourpalm_pay_success">Payment successful</string>
+    <string name="ourpalm_order_success">Order done</string>
+    <string name="ourpalm_pay_fail">Payment failed</string>
+    <string name="ourpalm_pay_cancel">Cancel Payment</string>
+    <string name="ourpalm_pay_fail_token_360">Payment failed, token overdued, please relogin and make purchase again!</string>
+    <string name="ourpalm_wx_login_fail_tencent">Login status inactive, refreshing, please wait!</string>
+    <string name="ourpalm_wx_refresh_ok_tencent">Login status is done refresh, please make payment again!</string>
+    <string name="ourpalm_not_install_qq">Haven install QQ or version outdated, please update!</string>
+    <string name="ourpalm_not_install_weixin">Haven install wechat or version outdated, please update!</string>
+    <string name="ourpalm_pay_success_prompt_tencent">Payment verifying...\n please do not turn off the game or might causing payment error</string>
+    <string name="ourpalm_unbalance_tencent">Payment in progress, still need to wait: %s sex \n please do not turn off the game or might causing payment error</string>
+    <string name="ourpalm_dialog_continue_tencent">Confirm</string>
+    <string name="ourpalm_pay_success_tencent">Deducted successful</string>
+
+    <!-- 手机号注册页面 -->
+    <string name="ourpalm_dialog_regist_phone_tip">Use phone number to register able to find more friends</string>
+    <string name="ourpalm_dialog_regist_phone_hint">Enter register phone number</string>
+    <string name="ourpalm_dialog_regist_phone_verify">Verify identity</string>
+    <string name="ourpalm_dialog_regist_phone_verifying">Verifying, please wait...</string>
+    <string name="ourpalm_dialog_getverifycode_toast_ok">Verify code has sent to your phone, please check</string>
+    <string name="ourpalm_dialog_ourpalmlogin_title">Account login</string>
+    <string name="ourpalm_dialog_ourpalmregist_title">Account register</string>
+    <string name="ourpalm_dialog_quick_regist_btn">Quick register</string>
+
+    <!-- push -->
+    <string name="ourpalm_dialog_pushserver_Confirmation_tip">Confirm</string>
+    <string name="ourpalm_dialog_pushserver_download_tip">You are using moving network, download now?</string>
+
+    <!-- service question -->
+    <string name="ourpalm_service_question_title">I want to ask</string>
+    <string name="ourpalm_service_question_type">Question type</string>
+    <string name="ourpalm_service_question_type_hint">reload problem</string>
+    <string name="ourpalm_service_question_describe">Description</string>
+    <string name="ourpalm_service_question_describe_hint">Please enter more than 10 words</string>
+    <string name="ourpalm_service_question_phone">Phone number</string>
+    <string name="ourpalm_service_question_phone_hint">Please enter 11 digits phone number, easier our CS to contact you</string>
+    <string name="ourpalm_service_question_screenshot">Problem screenshot(max with 2pieces, size less than 5m)</string>
+    <string name="ourpalm_service_question_upimage">Upload screenshot</string>
+    <string name="ourpalm_service_question_email">邮箱地址</string>
+    <string name="ourpalm_service_question_email_hint">请输入邮箱地址，方便客服联系您</string>
+    <string name="ourpalm_service_question_submit">Submit problem</string>
+    <string name="ourpalm_service_question_submit_msg">Thanks for your report, we will reply you in ASAP! \n You can check the reply status in "my problem"</string>
+    <string name="ourpalm_service_question_submit_ok">I know it</string>
+    <string name="ourpalm_tip_service_upimage_error"> Max only able to upload 2 pictures</string>
+    <string name="ourpalm_tip_getquestionlisterror">Failed to receive user problem type list</string>
+    <string name="ourpalm_tip_question_describe_formaterror">Description lesser than 10 words</string>
+    <string name="ourpalm_tip_question_phone_formaterror">Please enter 1 digits phone number</string>
+    <string name="ourpalm_service_update_image_1">Pic1.png</string>
+    <string name="ourpalm_service_update_image_2">Pic2.png</string>
+    <string name="ourpalm_service_no_login_message">You haven login, please try again after login!</string>
+    <string name="ourpalm_service_update_error_message">Picture upload error, please choose local picture to upload</string>
+    <string name="ourpalm_service_netlink_error_message">System error, please try again later! (%s)</string>
+
+    <!-- service question reply -->
+    <string name="ourpalm_service_reply_title">Reply question</string>
+    <string name="ourpalm_service_reply_hint">Did we solve your question</string>
+    <string name="ourpalm_service_reply_yes">Yes, close case</string>
+    <string name="ourpalm_service_reply_no">No, more question</string>
+    <string name="ourpalm_service_add_question">More question</string>
+    <string name="ourpalm_service_add_describe">Add description</string>
+    <string name="ourpalm_service_add_screenshot">Add screenshot(max 2 pieces, size less than 5m) </string>
+    <string name="ourpalm_service_add_formaterror">Please add description or screenshot</string>
+    <string name="ourpalm_service_add_submit">Confirm Add to</string>
+    <string name="ourpalm_service_evaluate_title">Customer Rate </string>
+    <string name="ourpalm_service_evaluate_describe">Do you satisfy to our services?</string>
+    <string name="ourpalm_service_evaluate_level_5">extremely sastisfied</string>
+    <string name="ourpalm_service_evaluate_level_4">Very sastified</string>
+    <string name="ourpalm_service_evaluate_level_3">sastified</string>
+    <string name="ourpalm_service_evaluate_level_2">normal</string>
+    <string name="ourpalm_service_evaluate_level_1">not sastified</string>
+    <string name="ourpalm_service_evaluate_submit">Confirm</string>
+
+    <!-- 礼包码功能错误Tips  -->
+    <string name="ourpalm_libao_21185">Gift code can\'t be empty!</string>
+    <string name="ourpalm_libao_21187">Inactive gift code , please re-entry!</string>
+    <string name="ourpalm_libao_21188">Gift code has overdued!</string>
+    <string name="ourpalm_libao_21189">Inactive gift code , please re-entry!</string>
+    <string name="ourpalm_libao_21190">This gift code has been used already!</string>
+    <string name="ourpalm_libao_21191">You has exchanged this gift code already!</string>
+    <string name="ourpalm_libao_21192">You has exchanged this gift code already!</string>
+    <string name="ourpalm_libao_21193">Inactive gift code, please re-entry!</string>
+    <string name="ourpalm_libao_21194">This gift code can\'t be use!</string>
+    <string name="ourpalm_libao_21200">This gift code can\'t be use!</string>
+    <string name="ourpalm_libao_23157">Gift code can\'t be exchange yet, please wait!</string>
+
+</resources>

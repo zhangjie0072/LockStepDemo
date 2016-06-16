@@ -1,0 +1,16 @@
+<Data Count="2">
+  <Line>
+    <switch>
+    </switch>
+    <role_id>1203</role_id>
+    <original_action>spasticityR</original_action>
+    <special_action>spasticityRLean</special_action>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <role_id>1203</role_id>
+    <original_action>spasticityL</original_action>
+    <special_action>spasticityLLean</special_action>
+  </Line>
+</Data>

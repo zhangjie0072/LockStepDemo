@@ -1,0 +1,162 @@
+package fogs.proto.msg;
+import "Base.proto";
+
+//---------生涯模式相关
+
+message SectionProto
+{
+	optional uint32 id = 1;
+	optional uint32 is_complete = 2;
+	optional uint32 challenge_times = 3;
+	optional uint32 buy_times = 4;
+	optional uint32 medal_rank = 5;
+	optional uint32 get_role		= 6; //是否获得球员
+	optional uint32 is_activate = 7; //是否播放动画
+}
+
+message ChapterProto
+{
+	optional uint32 id = 1;
+	optional uint32 is_complete = 2;
+	optional uint32 is_bronze_awarded = 3;
+	optional uint32 is_silver_awarded = 4;
+	optional uint32 is_gold_awarded = 5;
+	optional uint32 star_num = 6;
+
+	repeated SectionProto sections = 8;
+}
+
+//星级条件
+message StarConditionProto
+{
+	optional uint32 score_more_than		= 1; //己方比分大于对方的分值
+	optional uint32 score_near		= 2; //己方内线得分
+	optional uint32 score_middle		= 3; //己方中投得分
+	optional uint32 score_shoot_far		= 4; //己方三分球得分
+	optional uint32 score_total		= 5; //己方总得分
+	optional uint32 rebound		= 6; //己方篮板个数
+	optional uint32 block		= 7; //己方盖帽个数
+	optional uint32 assist		= 8; //己方助攻个数
+	optional uint32 steal		= 9; //已方抢断个数
+	optional uint32 skill_use		= 10; //使用花式技能次数
+	optional uint32 win		= 11; //获胜
+	optional uint32 opposite_score_near		= 12; //对方内线得分
+	optional uint32 opposite_score_middle		= 13; //对方中投得分
+	optional uint32 opposite_score_shoot_far		= 14; //对方三分球得分
+}
+
+
+//关卡开始比赛请求
+message StartSectionMatch
+{
+	optional uint32 chapter_id		= 1; //章节ID
+	optional uint32 section_id		= 2; //关卡ID
+	optional FightRoleInfo fight_list		= 3; //球员出战列表
+}
+
+//关卡开始比赛回复
+message StartSectionMatchResp
+{
+	optional uint32 result			= 1; //结果（0：OK，其他：failed）
+	optional uint64 session_id		= 2; //本次比赛的会话ID
+}
+
+//角色的比赛数据
+message RoleMatchData
+{
+	optional uint32 role_id			= 1; //角色ID
+	//optional uint32 score_more_than		= 1; //己方比分大于对方的分值%s%分
+	optional uint32 score_near		= 2; //内线得分
+	optional uint32 score_middle		= 3; //中投得分
+	optional uint32 score_far		= 4; //三分球得分
+	optional uint32 score_total		= 5; //己方总得分
+	optional uint32 rebound		= 6; //篮板个数
+	optional uint32 block		= 7; //盖帽个数
+	optional uint32 assist		= 8; //助攻
+	optional uint32 steal		= 9; //抢断
+	optional uint32 skill_use		= 10; //使用花式技能次数
+}
+
+//关卡结束比赛请求
+message EndSectionMatch
+{
+	optional uint64 session_id		= 1; //比赛会话ID
+	optional uint32 main_role_side	= 2; //玩家所在队伍方
+	optional uint32 score_home		= 3; //主队得分
+	optional uint32 score_away		= 4; //客队比分
+	repeated RoleMatchData role_data		= 5; //比赛数据
+	optional uint32 opposite_score_near		= 12; //对方内线得分
+	optional uint32 opposite_score_middle		= 13; //对方中投得分
+	optional uint32 opposite_score_shoot_far		= 14; //对方三分球得分
+
+}
+
+//关卡结束比赛回复
+message EndSectionMatchResp
+{
+	optional uint32 result			= 1; //结果
+	optional uint32 star_value			= 2; //比赛星级值
+	repeated ChapterProto chapters		= 3; //生涯章节信息
+	repeated MatchRoleInfo 	 info		= 4; //球员信息
+	repeated KeyValueData	awards		= 5; //奖励物品
+}
+
+//关卡扫荡请求
+message SweepSection
+{
+	optional uint32 chapter_id		= 1; //章节ID
+	optional uint32 section_id		= 2; //关卡ID
+	optional uint32 times 			= 3; //扫荡次数
+}
+
+//关卡扫荡回复
+message SweepSectionResp
+{
+	optional uint32 result			= 1; //结果
+	optional uint32 times 			= 2; //扫荡次数
+	repeated ChapterProto chapters		= 3; //生涯章节信息
+	repeated AwardsTbl awards		= 4; // 奖励物品
+}
+
+message AwardsTbl
+{
+	repeated KeyValueData	awards		= 1; // 
+	optional uint32 	result			= 2;
+}
+
+//领取章节星级奖励
+message GetChapterStarAward
+{
+	optional uint32 chapter_id		= 1; //
+	optional uint32 award_type		= 2; //
+}
+
+//领取章节星级奖励回复
+message GetChapterStarAwardResp
+{
+	optional uint32 result			= 1; //
+	optional uint32 award_type		= 2; //
+}
+
+//重置挑战次数
+message ResetSectionChallengeTimes
+{
+	optional uint32 acc_id			= 1;//玩家帐号
+	optional uint32 chapter_id 		= 2;//章节ID
+	optional uint32 section_id		= 3;//关卡ID
+}
+
+//重置挑战次数回复
+message ResetSectionChallengeTimesResp
+{
+	optional uint32 result			= 1;//返回结果
+	optional uint32 chapter_id 		= 2;//章节ID
+	optional uint32 section_id		= 3;//关卡ID
+	optional uint32 times			= 4;//挑战次数
+}
+
+//添加新的章节对象
+message AddNewChapter
+{
+	optional ChapterProto chapter 	= 1; //
+}

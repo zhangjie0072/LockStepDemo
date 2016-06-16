@@ -1,0 +1,9 @@
+package fogs.proto.msg;
+import "Base.proto";
+
+
+
+message RegularMatchResp
+{
+    required uint64 session_id = 1;
+}

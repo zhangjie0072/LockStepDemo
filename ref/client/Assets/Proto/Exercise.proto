@@ -1,0 +1,21 @@
+package fogs.proto.msg;
+
+
+//---------训练项模块相关
+
+
+
+//训练项状态
+enum ExerciseState
+{
+	ES_IDLE			= 1; //空闲
+	ES_COOLING		= 2; //冷却中
+}
+
+//训练项信息
+message ExerciseInfo
+{
+	optional uint32 id 				= 1; //ID
+	optional uint32 star 			= 2; //星等
+	optional uint32 quality			= 3; //品质
+}

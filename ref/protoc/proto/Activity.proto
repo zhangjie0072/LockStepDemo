@@ -1,0 +1,29 @@
+package fogs.proto.msg;
+import "Base.proto";
+
+//活跃度信息
+message ActivityInfo
+{
+	repeated uint32 gift						= 1; // 1:未达到,2:已达到,3:已领取
+	optional uint32 activity					= 2; // 活跃度
+}
+
+//更新活跃度信息
+message UpdateActivityInfo
+{
+	optional ActivityInfo info					= 3;
+}
+
+//领取活跃度奖励
+message GetActivityAwardsReq
+{
+	optional uint32 id							= 1; //领取ID 
+}
+
+//领取活跃度奖励回复
+message GetActivityAwardsResp
+{
+	optional uint32 result						= 1; //领奖结果
+	optional ActivityInfo info					= 2; //
+	repeated KeyValueData awards				= 3; // 奖励物品
+}

@@ -1,0 +1,40 @@
+package fogs.proto.msg;
+import "Base.proto";
+
+
+//---------新手引导相关
+
+//新手引导信息
+message GuideInfo
+{
+	repeated KeyValueData info 		= 1; //
+}
+
+//开始指引模块
+message BeginGuideModuleReq
+{
+	required uint32 module_id	= 1;
+	optional uint32 debug		= 2; //调试开关（0：非调试，1：调试）
+}
+
+//
+message BeginGuideModuleResp
+{
+	required uint32 result		= 1;
+	optional uint32 module_id	= 2;
+	optional uint32 debug		= 3; //调试开关（0：非调试，1：调试）
+}
+
+//完成指引模块
+message EndGuideModuleReq
+{
+	required uint32 module_id	= 1;
+}
+
+//
+message EndGuideModuleResp
+{
+	required uint32 result				= 1;
+	optional uint32 module_id			= 2;
+	repeated KeyValueData	awards		= 3; // 奖励物品
+}

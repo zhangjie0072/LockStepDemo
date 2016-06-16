@@ -1,0 +1,264 @@
+package fogs.proto.msg;
+import "Player.proto";
+import "Mail.proto";
+import "Match.proto";
+import "Friend.proto";
+
+//---------DB操作相关
+
+//数据库操作类型
+enum DBOperType
+{
+	DBT_NONE		= 0; //无操作
+	DBT_NEW			= 1; //插入
+	DBT_QUERY		= 2; //查询
+	DBT_UPDATE		= 3; //更新
+	DBT_DELETE		= 4; //删除
+	DBT_SAVE		= 5; //退出保存
+	DBT_TEMPQUERY	= 6; //
+}
+
+message AccountInfo
+{
+	optional string platform_id			= 1; //平台账号ID
+	optional uint32 acc_id				= 2; //账号ID
+	optional string password			= 3; //密码
+	optional string token 				= 4;
+	optional PlayerSimple player_info	= 5;
+	optional uint32 state				= 6;
+	optional uint32 is_gm				= 7;
+	optional uint32 manager				= 8;
+	optional uint32 silent_duration		= 9;
+	optional uint32 silent_start_time	= 10;
+	optional uint32 freeze_duration		= 11;
+	optional uint32 freeze_start_time	= 12;
+}
+
+message PlayerSimple
+{
+	repeated PlayerSimpleInfo info	= 1;
+}
+
+message PlayerSimpleInfo
+{
+	optional uint32 server_id		= 1;
+	optional string name			= 2;
+	optional uint32 level			= 3;
+}
+
+//账号信息查询
+message AccountQuery
+{
+	required DBOperType type		= 1;
+	optional uint64 session			= 2;
+	required AccountInfo acc_info	= 3;
+}
+
+//账号信息查询回复
+message AccountQueryResp
+{
+	required uint32 result			= 1; //（0：成功，其他：失败）
+	required DBOperType type		= 2;
+	optional uint64 session			= 3;
+	optional AccountInfo acc_info	= 4;
+	optional uint32 freshman		= 5; //是否为新玩家（0：否，1：是）
+}
+
+
+
+message NameInfo
+{
+	required string name			= 1;
+	required uint32 acc_id			= 2;
+	required uint32 char_id			= 3;
+	required uint32 bias			= 4;
+}
+
+//队伍名称查询
+message NameQuery
+{
+	required DBOperType type		= 1;
+	optional NameInfo name_info		= 2;
+}
+
+//
+message NameQueryResp
+{
+	required DBOperType type		= 1;
+	optional uint32 result			= 2; //（0：成功，其他：失败）
+	optional NameInfo name_info		= 3;
+}
+
+//玩家数据查询
+message PlayerQuery
+{
+	required DBOperType type		= 1;
+	required uint32 acc_id			= 2;
+	optional string cdkey			= 3;
+	optional PlayerInfo info		= 4;
+}
+
+//玩家数据查询回复
+message PlayerQueryResp
+{
+	required uint32 result			= 1;
+	required DBOperType type		= 2;
+	optional string cdkey			= 3;
+	optional uint32 acc_id			= 4;
+	optional PlayerInfo info		= 5;
+}
+
+//查询好友列表
+message FriendQueryReq
+{
+	required DBOperType type			= 1;
+	required uint32 acc_id				= 2;
+	optional FriendQueryListInfo info	= 3;
+}
+
+//好友列表查询回复
+message FriendQueryResp
+{
+	required uint32 result				= 1;
+	required DBOperType type			= 2;
+	optional FriendQueryListInfo info	= 3;
+}
+
+message FriendQueryListInfo
+{
+	optional uint32 acc_id			= 1;
+	optional FriendListInfo friends	= 2;
+}
+
+//查询玩家好友系统相关信息
+message TransferQueryPlayerReq
+{
+	required DBOperType type		= 1;
+	optional uint32 acc_id			= 2;
+	optional string name			= 3;
+	optional uint32 op_acc_id		= 4;
+}
+
+//查询玩家好友系统相关信息回复
+message TransferQueryPlayerResp
+{
+	required uint32 result			= 1;
+	required DBOperType type		= 2;
+	optional UpdatePlayerInfo info	= 3;
+	//optional uint32 op_acc_id		= 4;
+}
+
+
+//实时保存
+message PlayerRealTimeSave
+{
+	required DBOperType type			= 1;
+	optional uint32 acc_id				= 2;
+	required RealTimeData data			= 3;
+}
+
+message RealTimeData
+{
+	optional ExtraInfo extra_info		= 1; 
+	optional VipInfo vip				= 2; //VIP
+	optional uint32 level				= 3;
+	optional uint32 gold				= 4;
+	optional uint32 diamond_free		= 5; //钻石（赠送）
+	optional uint32 diamond_buy			= 6; //钻石（充值）
+	optional uint32 qualifying_ranking	= 7; //排位赛排名信息
+}
+
+//邮件数据查询
+message MailQuery
+{
+	required DBOperType type		= 1; //DB操作类型
+	optional uint32 acc_id			= 2; //AccountID
+	optional uint64 mail_id			= 3; //邮件ID
+	repeated MailInfo mails			= 4; //邮件列表
+}
+
+//邮件数据查询回复
+message MailQueryResp
+{
+	required uint32 result			= 1; //查询结果
+	required DBOperType type		= 2; //DB操作类型
+	optional uint32 acc_id			= 3; //AccountID
+	optional uint64 mail_id			= 4; //邮件ID
+	repeated MailInfo mails			= 5; //邮件列表
+}
+
+message MatchData
+{
+	repeated MatchRoleData role_data	= 1;
+}
+
+message DBGameData
+{
+	optional MatchData match_data		= 1;
+	optional uint32 acc_id				= 2;
+	optional uint32 match_type			= 3;
+	optional uint32 race_result			= 4; //比赛结果  win or lose
+	optional uint32 kill_goal			= 5; //是否绝杀
+	optional uint64 game_id				= 6; //比赛ID
+}
+
+message GameDataQuery
+{
+	required DBOperType type		= 1;
+	optional uint32 acc_id			= 2;
+	optional DBGameData data		= 3;
+}
+
+message SdkPassInfo
+{
+	required string platform_id		= 1;
+}
+
+message SkdPassQuery
+{
+	required DBOperType type		= 1;
+	required SdkPassInfo info		= 2;
+}
+
+message SelectServerInfo
+{
+	required string platform_id		= 1;
+}
+
+message SelectServerQuery
+{
+	required DBOperType type		= 1;
+	required SelectServerInfo info	= 2;
+}
+
+message OrderInfo
+{	
+	required uint32 acc_id			= 1;
+	required uint32 order_id		= 2;
+	required uint32 state			= 3;
+	required uint32 prop_id			= 4;
+	required uint32 recharge_price	= 5;
+	required uint32 actual_price	= 6;
+	optional uint32 recharge_time	= 7;
+}
+
+message RechargeOrderQuery
+{
+	required DBOperType type		= 1;
+	required uint32 acc_id			= 2;
+	optional uint32 session_id		= 3;
+}
+
+message RechargeOrderQueryResp
+{
+	required uint32 result			= 1;
+	required DBOperType type		= 2;
+	repeated OrderInfo info			= 3;
+	required uint32 acc_id			= 4;
+	optional uint32 session_id		= 5;
+}
+
+
+
+
+

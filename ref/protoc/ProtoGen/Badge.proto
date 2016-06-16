@@ -1,0 +1,180 @@
+package fogs.proto.msg;
+import "Base.proto";
+
+//-----------------涂鸦相关的处理-----------
+enum BadgeCG 
+{
+	CG_ALL				= 0; //所有种类
+	CG_RED				= 1; //红色种类
+	CG_BLUE				= 2; //蓝色种类
+	CG_GREEN			= 3; //绿色种类
+	CG_GLODEN			= 4; //金色种类
+}
+
+//涂鸦槽位状态
+enum BadgeSlotStatus 
+{
+	LOCKED					= 1; //锁定状态
+	LOCKED_CANPRE_OPEN			= 2; //锁定状态 可提前开启（同类开放等级需求最纸的,可用金币开启)
+	LOCKED_WILL_OPEN				= 3; //锁定状态 即将开启 （所有槽位开放等级最低的，可用金币开启)
+	UNLOCK					= 4; //解锁状态
+}
+
+//涂鸦槽位信息
+message BadgeSlot
+{
+	optional uint32	id 				= 1; //槽位的ID
+	optional BadgeSlotStatus status		= 2; //槽位的状态
+	optional uint32 badge_id 		= 3; //已经安放好的涂鸦ID
+}
+
+//涂鸦墙信息
+message BadgeBook
+{
+	optional uint32 id 				= 1; //涂鸦册的ID
+	optional string name 				= 2; //涂鸦册的名称
+	optional uint32 been_used			= 3; //是否处于使用中
+	repeated BadgeSlot slot_list 			= 4; //涂鸦槽位列表
+}
+
+//涂鸦信息
+message BadgeInfo
+{
+	repeated BadgeBook badge_book		= 1; //涂鸦墙数据
+}
+
+//涂鸦槽位解锁请求
+message BadgeUnlockSlotReq
+{
+	optional uint32 book_id		= 1; //涂鸦墙ID
+	optional uint32 slot_id			= 2; //涂鸦槽位的ID
+}
+
+//涂鸦槽位解锁回复
+message BadgeUnlockSlotResp
+{
+	optional uint32 result			= 1; //
+	optional uint32 slot_id			= 2; //涂鸦槽位的ID
+}
+
+//涂鸦墙改名请求
+message BadgeBookChangeNameReq
+{
+	optional uint32 book_id 		= 1; //涂鸦墙ID
+	optional string change_name		= 2; //更改的名字
+}
+
+//涂鸦墙改名回复
+message BadgeBookChangeNameResp
+{
+	optional uint32 result			= 1; //
+	optional uint32 book_id		= 2; //
+	optional string change_name		= 3; //
+}
+
+//添加涂鸦墙请求
+message BadgeAddBookReq
+{
+
+}
+
+//添加涂鸦墙回复
+message BadgeAddBookResp
+{
+	optional uint32 result 			= 1; //结果
+	optional BadgeBook book 		= 2; //新的涂鸦墙信息
+}
+
+//装备涂鸦请求
+message BadgeEquipReq
+{
+	optional uint32 badge_id 		= 1; //涂鸦的id
+	optional uint32 book_id		= 2; //当前涂鸦册页的id
+}
+
+//装备涂鸦回复
+message BadgeEquipResp
+{
+	optional uint32 result 			= 1;
+}
+
+//卸下涂鸦请求
+message BadgeUnequipReq
+{
+	optional uint32 slot_id 			= 1; //涂鸦槽位的id
+	optional uint32 book_id		= 2; //涂鸦墙的id
+}
+
+//卸下涂鸦回复
+message BadgeUnequipResp
+{
+	optional uint32 result 			= 1;
+}
+
+//分解涂鸦请求
+message BadgeDecomposeReq
+{
+	optional uint32 badge_id 		= 1; //分解的物品id
+}
+
+//分解涂鸦回复
+message BadgeDecomposeResp
+{
+	optional uint32 result 			= 1; //结果的状态值
+}
+
+//一键分解涂鸦请求
+message BadgeDecomposeByGroupReq
+{
+	repeated uint64 uuids			= 1; //要分解的涂鸦的UUID列表
+}
+
+//一键分解涂鸦回复
+message BadgeDecomposeByGroupResp
+{
+	optional uint32	result			= 1; //结果状态
+}
+
+//制作涂鸦请求
+message BadgeComposeReq
+{
+	optional uint32 dest_id 		= 1; //要合成的id
+}
+
+//制作涂鸦回复
+message BadgeComposeResp
+{
+	optional uint32 result 			= 1;
+}
+
+message BadgeUpdateData
+{
+	optional uint32 book_id 		= 1; //涂鸦册的id
+	optional uint32 slot_id			= 2; //槽位的id
+	required BadgeSlotStatus slot_status	= 3; //槽位的状态
+	optional uint32 badge_id 		= 4; //装备的涂鸦id
+}
+
+message BadgeSlotInfoUpdate
+{
+	repeated BadgeUpdateData datas	= 1; //更新涂鸦墙
+}
+
+//保存玩家使用涂鸦墙的ID
+message BadgeBookUseReq
+{
+	repeated KeyValueData book_use_info		= 1; //涂鸦墙页的使用信息
+}
+
+//槽位涂鸦更换
+message BadgeChangeReq
+{
+	optional uint32 book_id 	= 1; //涂鸦册的id
+	optional uint32 slot_id		= 2; //槽位的id
+	optional uint32 badge_id 	= 3; //更换的涂鸦id
+}
+
+message BadgeChangeResp
+{
+	optional uint32 result 		= 1;//结果状态
+}

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/ourpalm_update_dialog_width"
+    android:layout_height="@dimen/ourpalm_update_dialog_height"
+    android:background="@drawable/ourpalm_dialog_bg"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/update_title"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:background="@color/ourpalm_login_data_line"
+        android:gravity="center"
+        android:text="@string/ourpalm_dialog_update_title"
+        android:textColor="@android:color/white"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp" >
+
+        <TextView
+            android:id="@+id/version_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#707070"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:fadeScrollbars="false"
+        android:scrollbars="vertical" >
+
+        <TextView
+            android:id="@+id/toast_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="15sp" />
+    </ScrollView>
+
+    <CheckBox
+        android:id="@+id/never_toast"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:button="@drawable/ourpalm_checkbox"
+        android:paddingLeft="15dp"
+        android:text="@string/ourpalm_dialog_never_toast"
+        android:textColor="#707070"
+        android:textSize="15sp" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/update_now"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/ourpalm_button_green_background"
+            android:text="@string/ourpalm_update_now"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/update_later"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/ourpalm_button_gray_background"
+            android:text="@string/ourpalm_update_later"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+        <!-- ourpalm_btn_later_bg ourpalm_btn_now_bg -->
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,375 @@
+package fogs.proto.msg;
+
+
+//---------基础数据相关
+
+//球员类型
+enum PlayerType
+{
+	PT_CAPTAIN			= 1; //队长
+	PT_MEMBER			= 2; //队员
+}
+
+//品质类型
+enum QualityType
+{
+	QT_NONE				= 0;
+	QT_D_MINUS			= 1;
+	QT_D				= 2;
+	QT_D_PLUS			= 3;
+	QT_C_MINUS			= 4;
+	QT_C				= 5;
+	QT_C_PLUS			= 6;
+	QT_B_MINUS			= 7;
+	QT_B				= 8;
+	QT_B_PLUS			= 9;
+	QT_A_MINUS			= 10;
+	QT_A				= 11;
+	QT_A_PLUS			= 12;
+	QT_S_MINUS			= 13;
+	QT_S				= 14;
+	QT_S_PLUS			= 15;
+}
+
+//品质等级
+enum QualityGrade
+{
+	QG_NONE				= 0; //NONE
+	QG_WHITE			= 1; //白
+	QG_GREEN			= 2; //绿
+	QG_GREEN_1			= 3; //绿+1
+	QG_BLUE				= 4; //蓝
+	QG_BLUE_1			= 5; //蓝+1
+	QG_BLUE_2			= 6; //蓝+2
+	QG_PURPLE			= 7; //紫
+	QG_PURPLE_1			= 8; //紫+1
+	QG_PURPLE_2			= 9; //紫+2
+	QG_PURPLE_3			= 10; //紫+3
+	QG_GOLD				= 11; //橙
+	QG_GOLD_1			= 12; //橙+1
+	QG_GOLD_2			= 13; //橙+2
+	QG_GOLD_3			= 14; //橙+3
+	QG_GOLD_4			= 15; //橙+4
+}
+
+
+//球员偏向类型
+enum CaptainBias
+{
+	CB_NONE				= 0; //NONE
+	CB_ATTACK			= 1; //进攻类型
+	CB_DEFENCE			= 2; //防御类型
+	CB_BALANCE			= 3; //均衡类型
+}
+
+//性别类别
+enum GenderType
+{
+	GT_COMMON			= 0; //通用
+	GT_MALE				= 1; //男性
+	GT_FEMALE			= 2; //女性
+}
+
+//球员职业类型
+enum PositionType
+{
+	PT_NONE				= 0; //NONE
+	PT_PF				= 1; //大前锋
+	PT_SF				= 2; //小前锋
+	PT_C				= 3; //中锋
+	PT_PG				= 4; //组织后卫
+	PT_SG				= 5; //得分后卫
+	PT_TOTAL			= 6; //全部职业
+}
+
+//星等
+enum StarLevel
+{
+	SL_NONE				= 0; //NONE
+	SL_0				= 1; //
+	SL_1				= 2; //
+	SL_2				= 3; //
+	SL_3				= 4; //
+	SL_4				= 5; //
+	SL_5				= 6; //
+}
+
+//球员出战位置
+enum FightStatus
+{
+	FS_NONE				= 0; //未出战
+	FS_MAIN				= 1; //主战
+	FS_ASSIST1			= 2; //辅助1
+	FS_ASSIST2			= 3; //辅助2
+}
+
+//比赛类型
+enum MatchType
+{
+	MT_NONE			= 0; //NONE
+	MT_PRACTICE		= 1; //操作练习
+	MT_CAREER		= 2; //生涯
+	MT_TOUR			= 3; //街头巡回赛
+	MT_REGULAR		= 4; //荣誉争霸赛
+	MT_QUALIFYING	= 5; //排位赛
+	
+	MT_1V1			= 7; //异步1 VS 1竞技赛
+	MT_1V1_PLUS		= 8; //异步1+2 VS 1+2竞技赛
+	MT_3V3			= 9; //异步3 VS 3竞技赛
+	
+	MT_PVP_1V1		= 10;//同步1 VS 1
+	MT_PVP_1V1_PLUS		= 11;//同步1+2 VS 1+2
+	MT_PVP_3V3		= 12; //同步3 VS 3
+	MT_REGULAR_RACE = 13; //常规赛
+	MT_QUALIFYING_NEW	= 14; //排位赛
+    MT_QUALIFYING_NEWER	= 15; //排位赛（新版）
+	
+	MT_BULLFIGHT		= 20; //斗牛
+	MT_SHOOT		= 21; //投篮
+	MT_PRACTICE_1V1	= 22; //练习赛1V1
+}
+
+//玩法类型
+enum GameMode
+{
+	GM_None				= 0;
+	GM_Practise			= 1;
+	GM_Ready			= 2;
+	GM_1On1				= 3;
+	GM_3On3				= 4;
+	GM_Career1On1		= 5;
+	GM_Career3On3		= 6;
+	GM_AsynPVP3On3		= 7;
+	GM_Practice1On1		= 8; //练习赛1V1
+
+	GM_PVP				= 10;
+	GM_PVP_1V1_PLUS		= 11;
+	GM_PVP_3V3			= 12;
+	GM_PVP_REGULAR		= 13;
+	GM_QUALIFYING		= 14;
+    GM_QUALIFYING_NEWER = 15;
+	
+	GM_ReboundStorm		= 100;
+	GM_BlockStorm		= 101;
+	GM_Ultimate21		= 102;
+	GM_MassBall			= 103;
+	GM_GrabZone			= 104;
+	GM_GrabPoint		= 105;
+	GM_BullFight		= 106;
+}
+
+//结束比赛的类型
+enum ExitMatchType
+{
+	EMT_END			= 1; //正常结束
+	EMT_OPTION		= 2; //主动退出
+	EMT_OFFLINE		= 3; //断线
+	EMT_OFFLINE_END	= 4; //断线  但结果按正常流程走
+	EMT_OTHER		= 5; //其他玩家退出
+	EMT_BLANK		= 6; //比赛未开始 不获得奖励
+	EMT_CHEAT		= 7; //玩家已离线
+	EMT_OFFLINE_WIN = 8; //未掉线方胜利
+	EMT_OFFLINE_LOSE = 9; //掉线方失败
+	EMT_END_WIN		= 10; //比赛结束，显示胜利
+}
+
+
+enum CharacterState
+{
+	eNone	=				0;
+	//基础
+	eStand 	= 				8;
+	eHold	= 				9;
+	eRun 	= 				10;
+	eCrossOver = 			11;
+	eSwitchBall = 			12;
+	eRush = 				13;
+	eRushTurning = 			14;
+
+	//被动
+	eKnocked = 				20;
+	eFallLostBall = 		21;
+	eFallGround = 			22;
+	ePickup = 				23;
+	eCatch = 				24;
+	eIdlePose = 			25;
+	eStolen = 				26;
+	eDefenseCross = 		27;
+	eCrossed = 				28;
+    eDisturb =              29;
+
+	//主动
+	eRequireBall = 			30;
+	eRebound = 				31;
+	ePass = 				32;
+	eLayup	= 				33;
+	ePrepareToShoot = 		34;
+	eShoot = 				35;
+	eDunk = 				36;
+	eGoalPose = 			37;
+	eDefense = 				38;
+	eSteal = 				39;
+	eBlock = 				40;
+	eMoveStep = 			41;
+	eResultPose = 			42;
+	ePickAndRoll = 			43;
+	eBePickAndRoll = 		44;
+	eBodyThrowCatch = 		45;
+	eCutIn =				46;
+	eInterception =			47;
+	eInput =				48;
+	
+	eLayupFailed =			49;
+	
+	//背打
+	eBackToBack =			50;
+	eBackCompete =			51;
+	eBackBlock =			52;
+	eBackToStand =			53;
+	eBackTurnRun =			54;
+	eBackToBackForward =	55;
+	eMax = 					60;
+}
+
+enum AnimType
+{
+	//B_WITHBALL
+	B_TYPE_1	=			1; 
+	B_TYPE_2	=			2; 
+	B_TYPE_3	=			3; 
+	B_TYPE_4	=			4; 
+	B_TYPE_5	=			5; 
+	B_TYPE_6	=			6;
+	B_TYPE_7	=			7;
+	B_TYPE_8	=			8;
+	B_TYPE_9	=			9;
+	B_TYPE_0	=			10;	
+	
+	//N_WITHOUTBALL
+	N_TYPE_1	=			11;  
+	N_TYPE_2	=			12;  
+	N_TYPE_3	=			13; 
+	N_TYPE_4	=			14; 
+	N_TYPE_5	=			15; 
+	N_TYPE_6	=			16;
+	N_TYPE_7	=			17;  
+	N_TYPE_8	=			18;  
+	N_TYPE_9	=			19; 
+	N_TYPE_0	=			20; 
+}
+
+enum Area
+{	
+	eInvalid 		= 0;
+	eFar			= 1;
+	eMiddle			= 2;
+	eNear			= 3;
+	eSpecial		= 4;
+}
+
+enum BallState
+{
+	none			= 0;
+	useBall         = 1;
+	loseBall        = 2;
+	rebound         = 3;
+	useBall_Shoot   = 4;
+	useBall_Pass	= 5;
+}
+
+message SVector3
+{
+	required double	x = 1;
+	required double	y = 2;
+	required double	z = 3;
+}
+
+enum CharacterType
+{
+	ROBOT	= 1;
+	PLAYER	= 2;
+}
+enum TeamType
+{
+	TT_HOME	= 0;
+	TT_AWAY	= 1;
+}
+
+enum GameResult
+{
+	GR_WIN		= 1;
+	GR_FAILURE	= 2;
+	GR_DRAW		= 3;
+}
+
+
+
+//Key-Value数据结构
+message KeyValueData
+{
+	optional uint32 id 			= 1; //Key
+	optional uint32 value 		= 2; //Value
+}
+
+message FightRole
+{
+	optional uint32 role_id				= 1; //出战角色ID
+	optional FightStatus status			= 2; //出战位置
+}
+
+//角色（球员）出战信息
+message FightRoleInfo
+{
+	optional GameMode game_mode			= 1[default=GM_None]; //比赛玩法
+	repeated FightRole fighters			= 2; //
+}
+
+message MatchRoleInfo
+{
+	optional uint32 id		= 1;
+	optional uint32 exp 	= 2;
+}
+
+//签到类型
+enum SignType
+{
+	ST_NORMAL				= 1;
+	ST_APPEND				= 2;
+}
+
+//签到状态
+enum SignState
+{
+	SS_NORMAL = 1;
+	SS_VIP    = 2;
+}
+
+//签到领取奖励类型
+enum SignAwardType
+{ 
+	SAT_DAY	 = 1; // 累计天数奖励
+	SAT_VIP  = 2; // VIP补领奖励
+}
+
+enum ServerState
+{
+	SS_CLOSE	= 1; 
+	SS_IDLE		= 2;
+	SS_BUSY		= 3;
+	SS_FULL		= 4;
+}
+
+enum NewComerTrialAwardsType
+{
+	NCTAT_NORMAL	= 1; //普通奖励
+	NCTAT_TOTAL		= 2; //总奖励
+}
+
+
+enum ShootDiamondTurnCardType
+{
+	SDTCT_EXPENSIVE		= 1; //贵
+	SDTCT_MEDIUM		= 2; //中等
+	SDTCT_CHEAP			= 3; //便宜
+	SDTCT_NONE			= 4; //空
+}

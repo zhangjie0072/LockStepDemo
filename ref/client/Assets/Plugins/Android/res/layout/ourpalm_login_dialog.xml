@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/ourpalm_dialog_bg"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/ourpalm_login_account_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/ourpalm_login_input_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ourpalm_login_input_idimag" />
+
+        <TextView
+            android:id="@+id/ourpalm_login_account"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:text="@string/ourpalm_dialog_account_string"
+            android:textColor="@color/ourpalm_login_input_title"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="13dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="13dp"
+            android:background="@color/ourpalm_login_input_pwd" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical" >
+
+            <EditText
+                android:id="@+id/ourpalm_login_editText"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_toLeftOf="@+id/ourpalm_login_input_pull"
+                android:background="@android:color/transparent"
+                android:hint="@string/ourpalm_dialog_account_hint_string"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@android:color/black"
+                android:textColorHint="@color/ourpalm_login_input_pwd"
+                android:textSize="15sp" >
+                <requestFocus />
+            </EditText>
+
+            <ImageView
+                android:id="@+id/ourpalm_login_input_pull"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:paddingRight="5dp"
+                android:paddingLeft="3dp"
+                android:src="@drawable/ourpalm_login_input_pullimag" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ourpalm_login_pwd_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/ourpalm_login_input_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="5dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ourpalm_login_input_pwdimag" />
+
+        <TextView
+            android:id="@+id/ourpalm_login_pwd"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="5dp"
+            android:gravity="center"
+            android:text="@string/ourpalm_dialog_pwd_string"
+            android:textColor="@color/ourpalm_login_input_title"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="13dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="13dp"
+            android:background="@color/ourpalm_login_input_pwd" />
+
+        <EditText
+            android:id="@+id/ourpalm_login_pwd_editText"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:hint="@string/ourpalm_dialog_pwd_login_hint_string"
+            android:inputType="textPassword"
+            android:maxLength="12"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@android:color/black"
+            android:textColorHint="@color/ourpalm_login_input_pwd"
+            android:textSize="15sp" >
+
+            <requestFocus />
+        </EditText>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="7dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:id="@+id/ourpalm_login_remember_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_gravity="left" >
+
+            <ImageView
+                android:id="@+id/ourpalm_login_remember_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ourpalm_checkbox_on" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/ourpalm_login_remember_box"
+                android:text="@string/ourpalm_dialog_login_rememberpwd"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/ourpalm_login_findpwd_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+             >
+
+            <TextView
+                android:id="@+id/ourpalm_login_findpwd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:text="@string/ourpalm_dialog_login_findpwd"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/ourpalm_login_button_bg_quick"
+                />
+
+            <ImageView
+                android:id="@+id/ourpalm_login_findpwd_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/ourpalm_login_findpwd"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ourpalm_login_findpwd_img" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/ourpalm_login_quick_btn"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_marginRight="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/ourpalm_button_blue_background"
+            android:text="@string/ourpalm_dialog_login_quickgame"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/ourpalm_login_btn"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/ourpalm_login_btn_bg"
+            android:text="@string/ourpalm_dialog_login_loginnow"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+</LinearLayout>

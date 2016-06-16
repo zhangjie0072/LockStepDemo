@@ -1,0 +1,30 @@
+<Data Count="3">
+  <Line>
+    <switch>#</switch>
+    <name>名称</name>
+    <label>内容标题</label>
+    <info>更新内容</info>
+    <is_open>显示开发</is_open>
+    <version>版本号</version>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <name>精英封测</name>
+    <label>各位亲爱的玩家：</label>
+    <info>欢迎您来到炫酷的街球地带，本次为精英封测，在体验过程中，有任何问题或建议请及时联系我们。                                                                                                                                                                                                      [FABE22]官方QQ群:369040543[-]</info>
+    <is_open>1</is_open>
+    <version>1.002</version>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <name>11月11日更新公告</name>
+    <label>欢迎玩家：</label>
+    <info>1.更新条目1更新条目1更新条目1
+2.更新条目2更新条目1更新条目2
+3.更新条目3更新条目1更新条目3</info>
+    <is_open>0</is_open>
+    <version>1.001</version>
+  </Line>
+</Data>

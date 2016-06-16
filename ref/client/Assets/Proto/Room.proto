@@ -1,0 +1,257 @@
+package fogs.proto.msg;
+import "Base.proto";
+import "Player.proto";
+import "Exercise.proto";
+import "Equipment.proto";
+import "Goods.proto";
+import "Fashion.proto";
+import "Badge.proto";
+
+//---------房间模块相关
+
+//房间匹配模式
+enum RoomType
+{
+	RT_ONE			= 1; //单人
+	RT_TWO			= 2; //两人
+	RT_THREE		= 3; //三人
+}
+
+//当前房间的状态
+enum RoomState
+{
+	RS_NONE			= 0; //NONE
+	RS_IDLE			= 1; //房间空闲(尚且有可用的空位)
+	RS_FULL			= 2; //房间满员
+	RS_READY		= 3; //已经就绪，等待房主开始游戏
+	RS_START		= 4; //开始匹配中
+	RS_FREEZE		= 5; //房间冻结，不能执行任何操作(游戏中)
+}
+
+//房间中的操作类型
+enum RoomActionType
+{
+	RAT_CHANGE_POS		= 1; //变换位置
+	RAT_CHANGE_ROOM		= 2; //快速换房
+	RAT_READY			= 3; //准备
+	RAT_CANCEL			= 4; //取消准备
+	RAT_START			= 5; //开始
+	RAT_KICK			= 6; //踢人
+	RAT_INVITE			= 7; //邀请好友
+	RAT_NOTIFY_INVITE	= 8; //通知好友有人邀请
+	RAT_REFUSE_INVITE	= 9; //拒绝邀请
+    RAT_RETURN_ROOM     = 10; //比赛结束返回房间
+}
+
+//玩家在房间中的状态
+enum RoomUserState
+{
+	RUS_NONE 		= 0;
+	RUS_IDLE		= 1;//空闲
+	RUS_WAIT		= 2;//等待
+	RUS_NORMAL		= 3;//正常状态
+    RUS_RETURN      = 4;//返回中
+}
+
+//参赛玩家信息（GameServer到PlatServer请求的玩家信息）
+message PlayerData
+{
+	optional uint32 acc_id							= 1; //AccountID
+	optional string name							= 2; //名称
+	optional uint32 level							= 3; //等级
+	repeated RoleInfo roles							= 4; //出战球员列表
+	optional uint32 is_room_master					= 5; //是否是房主
+	optional uint32 is_room_ready					= 6; //是否已准备开始
+	optional uint32 is_home_field					= 7;
+	repeated EquipInfo equipments					= 8;
+	repeated FightRole squad 						= 9;
+	repeated KeyValueData role_map					= 10; //图鉴
+	optional uint32 winning_streak					= 11; //连胜次数
+	repeated GoodsProto fashion_items				= 12; //时装
+	optional BadgeInfo badge_info					= 13; //涂鸦信息
+    optional uint32 score                           = 14; //比赛积分
+}
+
+//房间信息
+message RoomInfo
+{	
+	required uint32    id			= 1;                  //房间ID
+	required MatchType type         = 2[default=MT_NONE]; //比赛类型
+	optional uint32    master		= 3;                  //房主的AccountID
+	repeated UserInfo  user_info	= 4;                  //房间内成员列表
+	optional RoomState state	    = 5;                  //房间状态
+}
+
+//创建新房间
+message CreateRoomReq
+{
+	required uint32    acc_id			= 1;                  //AccountID
+	required MatchType type	            = 2[default=MT_NONE]; //比赛类型
+	optional uint32    options			= 3;                  //选项（匹配要求）
+	//optional uint32 	score			= 4;
+	optional PlayerData data 			= 5; //参赛玩家信息
+	//optional uint32 scene_id		= 4; //选择的场景ID
+	//optional uint32 plat_id			= 5; //PlatServerID
+	//optional uint32 match_id		= 7; //MatchServerID
+	//optional uint32 room_id			= 8; //RoomID
+}
+
+//创建新房间回复
+message CreateRoomResp
+{
+	required uint32    acc_id			= 1;                  //AccountID
+	required MatchType type	            = 2[default=MT_NONE]; //比赛类型
+	required uint32    result			= 3;                  //创建结果
+	optional RoomInfo  info			    = 4;                  //RoomID
+    
+	//optional uint32 match_id		= 4; //MatchServerID
+	//optional uint32 game_id			= 5; //GameServerID
+	//optional string game_ip			= 6; //GameServer的IP
+	//optional uint32 game_port		= 7; //GameServer的Port
+}
+
+//加入房间
+message JoinRoomReq
+{
+	required uint32    acc_id			= 1;                  //房主ID
+	required MatchType type	            = 2[default=MT_NONE]; //比赛类型
+	optional uint32    plat_id			= 3;                  //PlatServerID
+	optional uint32    room_id			= 4;                  //RoomID
+	//optional uint32    score			= 5;				  //积分
+	optional uint32    options			= 6;                  //选项（匹配要求）
+	optional PlayerData data 			= 7;				 //参赛玩家信息
+
+	//optional uint32 scene_id		= 6; //选择的场景ID
+	//optional uint32 match_id		= 7; //MatchServerID
+}
+
+
+//加入房间回复
+message JoinRoomResp
+{
+	required MatchType type	            = 1[default=MT_NONE]; //比赛类型
+	required uint32    result			= 2;                  //创建结果
+	optional RoomInfo  info			    = 3;
+	
+	optional uint32    match_id		    = 4;                  //MatchServerID
+	optional uint32    game_id			= 5;                  //GameServerID
+	optional string    game_ip			= 6;                  //GameServer的IP
+	optional uint32    game_port		= 7;                  //GameServer的Port
+	optional uint32    room_id			= 8;                  //RoomID
+	
+}
+
+
+//进入房间请求
+message EnterRoomReq
+{
+	required uint32 acc_id			= 1; //AccountID
+	required MatchType type	= 2[default=MT_NONE]; //比赛类型
+}
+
+//进入房间回复
+message EnterRoomResp
+{
+	required uint32 acc_id			= 1; //AccountID
+	required MatchType type	= 2[default=MT_NONE]; //比赛类型
+	required uint32 result			= 3; //创建结果
+}
+
+//退出房间请求
+message ExitRoomReq
+{
+	required uint32    acc_id			= 1;                  //AccountID
+	required MatchType type	            = 2[default=MT_NONE]; //比赛类型
+    
+	optional uint32    room_id			= 3;                  //房间ID
+	optional uint32    game_id			= 4;                  //GameServerID
+}
+
+//退出房间回复
+message ExitRoomResp
+{
+	required uint32    acc_id			= 1;                  //AccountID
+	required MatchType type	            = 2[default=MT_NONE]; //比赛类型
+	required uint32    result			= 3;                  //创建结果
+}
+
+//房间内的操作
+message RoomActionReq
+{
+	optional UserInfo       user_info 				                   = 1; //操作对应玩家的UserInfo
+	required RoomActionType type 		                               = 2; //操作类型
+	required MatchType      match_type                                 = 3  [default=MT_NONE]; // 比赛型类
+	optional uint32         room_id                                    = 4; //                 房间id	 
+}
+
+//房间内的操作回复
+message RoomActionResp
+{
+	optional UserInfo       user_info 				                   = 1; //UserInfo 例如:主动邀请的人的信息
+	required uint32         result 				                       = 2; //操作结果
+	required RoomActionType type 		                               = 3; //操作类型
+	optional uint32         room_id                                    = 4; //         房间id
+	required MatchType      match_type                                 = 5 [default=MT_NONE];//         比赛类型
+}
+
+//
+message UserInfo
+{
+	    optional uint32 acc_id				    = 1; //AccountID
+	    optional string name				    = 2; //名称
+	    optional string icon		            = 3; //头像
+	    optional uint32 plat_id					= 4; //对应服务器
+	    optional RoomUserState state	        = 5; //对应位置状态
+		
+	    optional uint32 level				    = 6; //等级
+	    optional uint32 score				    = 7; //积分
+		optional uint32 role_id					= 8; //选定球员ID
+		optional PlayerData data				= 9;
+	    //optional uint32        role_id 			    = 2; //球员模型ID
+	    //optional uint32        team_side			    = 6; //主/客队
+	    //optional uint32        room_pos			    = 7; //模型在房间内的唯一ID
+}
+
+//通知进入房间内的成员信息
+message NotifyRoomUser
+{
+	repeated UserInfo users				= 1; //房间内的成员信息列表
+    optional uint32 master  		    = 2; //房主的AccountID
+    optional uint32 flag                = 3; //为1时：到非房间状态  0：房间状态
+    required MatchType      match_type  = 4 [default=MT_NONE];//         比赛类型
+}
+
+//通知退出房间的成员信息
+message NotifyRoomUserExit
+{
+	optional UserInfo users				= 1; //退出房间的成员信息
+    optional uint32   master_id         = 2; // 房主acc_id
+}
+
+//请求房间信息
+message RoomInfoReq
+{
+    required MatchType      match_type   = 1 [default=MT_NONE];//         比赛类型
+}
+
+//通知有队友返回房间
+message NotifyUserReturn
+{
+    required uint32 acc_id              = 1;//返回房间的user
+}
+
+//C <--> S
+//向场景中的其他玩家通知自身的信息
+message BroadcastSelfInfo
+{
+	required uint32 			acc_id			= 1; //AccountID
+	required uint32 			char_id			= 2; //球员ID
+	required CharacterState 	eState			= 3;
+	required AnimType      		eStateType      = 4;
+	required uint32				withBall		= 5; //0:false,1:true
+	optional double				actionTime		= 6;
+	optional double				ballTime		= 7;
+	optional SVector3 			pos 			= 8;
+	optional uint32 			dir				= 9;
+	optional double 			rotate 			= 10;
+}

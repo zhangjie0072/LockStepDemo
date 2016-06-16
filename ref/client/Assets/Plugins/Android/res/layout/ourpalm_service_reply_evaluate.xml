@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="280dp"
+    android:layout_gravity="center_horizontal|center_vertical"
+    android:background="@drawable/ourpalm_service_reply_submit_bg"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/ourpalm_service_reply_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp" >
+
+        <ImageView
+            android:id="@+id/ourpalm_service_reply_evaluate_title_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/ourpalm_service_reply_evaluate_title_textview"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ourpalm_fb_evaluate_ministar" />
+
+        <TextView
+            android:id="@+id/ourpalm_service_reply_evaluate_title_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="@string/ourpalm_service_evaluate_title"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/ourpalm_service_evaluate_line_color" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/ourpalm_service_evaluate_describe"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="12dp" >
+
+        <GridView
+            android:id="@+id/ourpalm_service_evaluate_gridview"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_toLeftOf="@+id/ourpalm_service_evaluate_content_text"
+            android:gravity="center"
+            android:horizontalSpacing="3dp"
+            android:numColumns="5"
+            android:stretchMode="columnWidth" />
+
+        <TextView
+            android:id="@+id/ourpalm_service_evaluate_content_text"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:text="@string/ourpalm_service_evaluate_level_5"
+            android:textColor="@color/ourpalm_service_evaluate_text1_color"
+            android:textSize="13sp" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/ourpalm_service_evaluate_submit_btn"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_marginBottom="30dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/ourpalm_fb_submit_btn"
+        android:gravity="center"
+        android:text="@string/ourpalm_service_evaluate_submit"
+        android:textColor="@android:color/white"
+        android:textSize="15sp" />
+
+</LinearLayout>

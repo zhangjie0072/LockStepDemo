@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:background="@android:color/white"
+ >
+
+    <ImageView
+        android:id="@+id/ourpalm_notifi_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="fitXY"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+
+    <TextView
+        android:id="@+id/ourpalm_notifi_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="10dp"
+        android:textSize="15sp"
+        android:text="123"
+        android:layout_toRightOf="@+id/ourpalm_notifi_image"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/ourpalm_notifi_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ourpalm_notifi_title"
+        android:layout_below="@+id/ourpalm_notifi_title"
+        android:textSize="14sp"
+        android:text="123"
+        android:textColor="@android:color/darker_gray" />
+
+</RelativeLayout>

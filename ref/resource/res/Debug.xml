@@ -1,0 +1,6 @@
+<Debug>
+	<EnableAI>true</EnableAI>
+	<EnableDebugMsg>true</EnableDebugMsg>
+	<EnableDefenders>true</EnableDefenders>
+	<EnableTiming>true</EnableTiming>
+</Debug>

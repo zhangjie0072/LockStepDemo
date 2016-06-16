@@ -1,0 +1,23 @@
+package fogs.proto.msg;
+
+message BgSound
+{
+	optional uint32 interval = 1;
+	repeated string trackSrc = 2;
+}
+
+message Audience
+{
+	optional uint32 id = 1;
+	optional uint32 pointId = 2;
+}
+
+message Scene
+{
+	optional uint32 id = 1;
+	optional string resourceId = 2;
+	optional string resourceLoadingTex = 3;
+	optional BgSound bgSound = 4;
+	repeated Audience audiences = 5;
+}
+

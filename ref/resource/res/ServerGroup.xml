@@ -1,0 +1,8 @@
+<Data Count="1">
+  <Line>
+    <switch>
+    </switch>
+    <group_id>1</group_id>
+    <server_list>1:2:3</server_list>
+  </Line>
+</Data>

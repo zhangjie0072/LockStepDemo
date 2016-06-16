@@ -1,0 +1,157 @@
+package fogs.proto.msg;
+import "Role.proto";
+import "Player.proto";
+
+message FriendInfo
+{
+	optional uint32 acc_id		= 1;
+	optional string name		= 2;
+	optional uint32 plat_id		= 3; //对应服务器
+	optional uint32 level		= 4; //等级
+	optional uint32 vip_level	= 5; //VIP 等级
+	optional string icon		= 6; //头像
+	optional uint32 present_flag= 7; //赠送标记 （0:未赠送，1:已赠送）
+	optional uint32 get_flag	= 8; //领取标记  （0:未领取，1:已领取）
+	optional uint32 online		= 9; //（0:不在线 1:在线 2:比赛中）
+	optional uint32 logout_time	= 10; //离线时间
+	optional uint32 shinwakan	= 11; //友好度
+}
+
+
+message FriendListInfo
+{
+	repeated FriendInfo friends			= 1;   //好友列表
+	repeated FriendInfo apply_list		= 2;   //申请列表
+	repeated FriendInfo black_list		= 3;   //黑名单
+	repeated FriendInfo gift_list		= 4;   //礼物列表
+	optional uint32 present_times		= 5;   //赠送次数
+	optional uint32 get_gift_times		= 6;   //收取礼物次数
+}
+
+//好友信息通知
+message NotifyFriendInfo
+{
+	required FriendListInfo info		= 1;
+}
+
+//好友操作类型
+enum FriendOperationType
+{
+	FOT_PRESEND		= 1; //赠送礼物
+	FOT_ADD			= 2; //添加好友
+	FOT_BLACK		= 3; //添加黑名单
+	FOT_GETAWARDS	= 4; //领取礼物
+	FOT_QUERY		= 5; //获取好友列表
+	FOT_AGREE_APPLY	= 6; //同意好友申请
+	FOT_APPLY		= 7; //好友申请
+	FOT_DEL_FRIEND	= 8; //删除好友
+	FOT_DEL_BLACK	= 9; //删除黑名单
+	FOT_QUERY_BLACK	= 10; //获取黑名单列表
+	FOT_QUERY_APPLY	= 11; //获取申请列表
+	FOT_QUERY_GIFT	= 12; //获取礼物列表
+	FOT_IGNORE_APPLY= 13; //忽略申请
+}
+
+message FriendOperationReq
+{
+	required FriendOperationType type	= 1;
+	repeated FriendInfo friend			= 2;//服务器用
+	optional uint32 all_flag			= 3;//一键赠送/领取:1   否则:0
+	optional FriendInfo op_friend		= 4;//要操作的好友
+}
+
+message FriendOperationResp
+{
+	required FriendOperationType type	= 1;
+	required uint32	result				= 2;
+	repeated FriendInfo friend			= 3;
+	optional FriendInfo op_friend		= 4;
+	optional uint32 present_times		= 5;   //赠送次数
+	optional uint32 get_gift_times		= 6;   //收取礼物次数
+}
+
+
+//查询好友信息
+message QueryFriendInfoReq
+{
+	required FriendInfo friend		= 1;
+}
+
+//查询好友信息回复
+message QueryFriendInfoResp
+{
+	optional uint32 acc_id				= 1;
+	optional string name				= 2;
+	optional uint32 level				= 3;
+	optional uint32 vip_level			= 4;
+	optional string icon				= 5;
+	optional PvpRegularInfo regular		= 6; //常规赛数据
+	repeated RoleMatchResData role_data	= 7; //球员数据
+	optional uint32 result				= 8;
+	optional uint32 role_count			= 9;
+	optional uint32 fashion_count		= 10;
+	optional string guild_name			= 11;
+	optional string team_name			= 12;
+}
+
+message RoleMatchResData
+{
+	required uint32 win_times		= 1;
+	required uint32 race_times		= 2;
+	required uint32 role_id			= 3;
+}
+
+//获取玩家好友系统相关信息
+message UpdatePlayerInfo
+{
+	optional uint32 acc_id				= 1;
+	optional string name				= 2;
+	optional uint32 level				= 3;
+	optional uint32 vip_level			= 4;
+	optional string icon				= 5;
+	optional uint32 plat_id				= 6;
+	repeated RoleMatchResData role_data	= 7;
+	optional PvpRegularInfo regular		= 8;
+	//repeated FriendInfo gift_list		= 9;
+	//repeated FriendInfo apply_list	= 10;
+	optional uint32 flag				= 9; //上线：0   下线：1
+	optional uint32 logout_time			= 10;
+	optional uint32 role_count			= 11;
+	optional uint32 fashion_count		= 12;
+	optional string guild_name			= 13;
+	optional string team_name			= 14;
+	
+}
+
+//中间服务器发送离线信息给玩家
+message NotifyOffLineInfoToPlayer
+{
+	repeated FriendInfo gift_list 	= 1;
+	repeated FriendInfo apply_list 	= 2;
+}
+
+enum SearchFriendType
+{
+	SFT_PRECISE			= 1;  //精确查找
+	SFT_CHANGE			= 2;  //更换推荐池
+}
+
+//搜索好友
+message SearchFriend
+{
+	required SearchFriendType type	= 1;
+	optional uint32 acc_id			= 2;
+	optional string name			= 3;
+}
+
+//搜索回复
+message SearchFriendResp
+{
+	required SearchFriendType type	= 1;
+	repeated FriendInfo	info		= 2;
+	optional uint32 result			= 3;
+}
+
+
+
+

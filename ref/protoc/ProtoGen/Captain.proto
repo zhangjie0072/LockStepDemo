@@ -1,0 +1,37 @@
+package fogs.proto.msg;
+import "Base.proto";
+import "Goods.proto";
+import "Skill.proto";
+
+
+//---------队长操作相关
+
+//购买队长
+message BuyCaptain
+{
+	optional uint32 id 				= 1; //队长ID
+	optional uint32 bias			= 2; //队长偏向
+}
+
+//购买队长回复
+message BuyCaptainResp
+{
+	optional uint32 result			= 1; //结果
+	optional uint32 id 				= 2; //队长ID
+	optional uint32 bias			= 3; //队长偏向
+	repeated SkillSlotProto skill_slot_info	= 4; //技能槽位信息
+	repeated GoodsProto skill_goods = 5; //被动技能物品列表
+}
+
+//切换队长
+message SwitchCaptain
+{
+	optional uint32 id 				= 1; //队长ID
+}
+
+//切换队长回复
+message SwitchCaptainResp
+{
+	optional uint32 result			= 1; //结果
+	optional uint32 id 				= 2; //队长ID
+}

@@ -1,0 +1,100 @@
+package fogs.proto.msg;
+
+
+//---------商店模块相关
+
+enum StoreType
+{
+	ST_BLACK			    = 1; //黑市商店
+	ST_SKILL			    = 2; //技能商店
+	ST_FASHION			    = 3; //服饰商店
+	ST_HONOR			    = 4; //荣誉商店
+	ST_TOUR				    = 5; //巡回赛商店
+	ST_REPUTATION			= 6; //声望商店
+	ST_EXP				= 7; // 经验商店
+	
+	ST_OTHER			= 8; //未使用类型
+    
+}
+
+
+//商品信息
+message StoreGoodsInfo
+{
+	optional uint32 id				= 2; //物品ID
+	optional uint32 num				= 3; //物品数量
+	optional uint32 price			= 4; //购买单价
+	optional uint32 consume_type	= 5; //购买需要消耗的金钱类型
+	optional uint32 sell_out		= 6; //是否已购买（1：已购买，0：未购买）
+}
+
+//商店信息
+message StoreInfo
+{
+	optional uint32 refresh_time				= 2; //物品ID
+	optional uint32 refresh_request				= 3; //物品数量
+	repeated StoreGoodsInfo goods_list			= 4; //商品列表
+}
+
+
+//打开商店消息（C -- > S）
+message OpenStore
+{
+	required StoreType store_id		= 1; //商店ID
+}
+
+//打开商店回复（S -- > C）
+message OpenStoreResp
+{
+	required StoreType store_id					= 1; //商店ID
+	repeated StoreGoodsInfo goods_list			= 2; //商品列表
+	optional uint32 next_refresh_time			= 3; //下次商品刷新剩余时间
+}
+
+//刷新商店商品（C -- > S）
+message RefreshStoreGoods
+{
+	required StoreType store_id		= 1; //商店ID
+}
+
+//商店刷新的操作类型
+enum StoreRefreshType
+{
+	SRT_OPEN			= 1; //打开
+	SRT_SELF_REFRESH	= 2; //手动刷新
+	SRT_SYSTEM_REFRESH	= 3; //系统刷新
+}
+
+//刷新商品回复（S -- > C）
+message RefreshStoreGoodsResp
+{
+	required StoreType store_id				= 1; //商店ID
+	optional uint32 result					= 2; //刷新结果
+	optional StoreRefreshType oper_type		= 3; //操作类型
+	repeated StoreGoodsInfo goods_list		= 4; //商品列表	
+	optional uint32 next_refresh_time		= 5; //下次商品刷新剩余时间
+	optional uint32 refresh_request			= 6; //已刷新次数
+}
+
+//
+message BuyStoreGoodsInfo
+{
+	optional uint32 pos = 1; //购买的商品位置
+	optional uint32 type = 2; // 选择类型.
+	optional uint32 num  = 3; // 购买数量
+}
+
+//购买商品（C -- > S）
+message BuyStoreGoods
+{
+	required StoreType store_id			= 1; //商店ID
+	repeated BuyStoreGoodsInfo info			= 2;  //购买的商品信息.
+}
+
+//购买商品回复（S -- > C）
+message BuyStoreGoodsResp
+{
+	required StoreType store_id			= 1; //商店ID
+	optional uint32 result				= 2; //购买结果
+	repeated BuyStoreGoodsInfo info     		= 3;  //购买的商品信息.
+}

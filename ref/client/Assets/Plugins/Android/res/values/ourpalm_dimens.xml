@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 官网登陆页面参数 -->
+    <dimen name="ourpalm_login_width">450px</dimen>
+    <dimen name="ourpalm_login_height">300px</dimen>
+    <dimen name="ourpalm_login_input_width">410px</dimen>
+    <dimen name="ourpalm_login_input_height">48px</dimen>
+    <dimen name="ourpalm_login_input_size">20px</dimen>
+    <dimen name="ourpalm_login_title_width">450px</dimen>
+    <dimen name="ourpalm_login_title_height">55px</dimen>
+    <dimen name="ourpalm_login_title_size">24px</dimen>
+    <dimen name="ourpalm_login_data_width">450px</dimen>
+    <dimen name="ourpalm_login_data_height">245px</dimen>
+    <dimen name="ourpalm_login_titleline_width">3px</dimen>
+    <dimen name="ourpalm_login_titleline_height">22px</dimen>
+    <dimen name="ourpalm_login_button_width">200px</dimen>
+    <dimen name="ourpalm_login_button_height">52px</dimen>
+    <dimen name="ourpalm_login_button_radius">10px</dimen>
+    <dimen name="ourpalm_login_button_size">24px</dimen>
+    <dimen name="ourpalm_login_prompt_size">16px</dimen>
+
+    <!-- 更新 -->
+    <dimen name="ourpalm_update_dialog_width">310dp</dimen>
+    <dimen name="ourpalm_update_dialog_height">290dp</dimen>
+
+    <color name="ourpalm_login_titleline_grey">#cfc8bb</color>
+    <color name="ourpalm_login_input_bg">#f2f2eb</color>
+    <color name="ourpalm_login_input_bg_line">#e0e1d8</color>
+    <color name="ourpalm_login_input_title">#707070</color>
+    <color name="ourpalm_login_input_account">#000000</color>
+    <color name="ourpalm_login_input_pwd">#bfbfbf</color>
+    <color name="ourpalm_login_button_bg_quick">#02beff</color>
+    <color name="ourpalm_login_button_line_quick">#0ba7de</color>
+    <color name="ourpalm_login_button_bg">#eb6100</color>
+    <color name="ourpalm_login_button_line">#c45902</color>
+    <color name="ourpalm_login_data_line">#02beff</color>
+
+    <!-- dk86 -->
+    <color name="ourpalm_blue_light">#03bfff</color>
+    <color name="ourpalm_blue_deep">#03b0eb</color>
+    <color name="ourpalm_blue_line">#0ba7de</color>
+    <color name="ourpalm_orange_light">#eb6100</color>
+    <color name="ourpalm_orange_deep">#c95300</color>
+    <color name="ourpalm_orange_line">#c45902</color>
+    <color name="ourpalm_green_light">#32b16c</color>
+    <color name="ourpalm_green_deep">#278b55</color>
+    <color name="ourpalm_green_line">#1b9a55</color>
+    <color name="ourpalm_black_line">#2c2c2c</color>
+    <color name="ourpalm_black_light">#434343</color>
+    <color name="ourpalm_black_deep">#2c2c2c</color>
+    <color name="ourpalm_gray_line">#989898</color>
+    <color name="ourpalm_gray_light">#a0a0a0</color>
+    <color name="ourpalm_gray_deep">#989898</color>
+
+    <!-- 标准色 -->
+    <color name="ourpalm_color_white">#ffffff</color>
+    <color name="ourpalm_color_black">#000000</color>
+    <color name="ourpalm_color_reg">#ff0000</color>
+
+    <!-- 快速登陆色值 -->
+    <color name="ourpalm_quicklogin_loading_username">#02beff</color>
+    <color name="ourpalm_quicklogin_loading_bg">#a8a8a8</color>
+    <color name="ourpalm_quicklogin_loading_bg_gradient">#e0e1d8</color>
+
+    <!-- 手机号注册 -->
+    <color name="ourpalm_regist_phone_tip">#0970cb</color>
+    
+    <!-- 我要提问 -->
+    <color name="ourpalm_service_question_input_bg">#ededed</color>
+    <color name="ourpalm_service_question_bg_line">#8a8787</color>
+    <color name="ourpalm_service_question_input_hint">#9f9f9f</color>
+    <color name="ourpalm_service_question_spiner_item">#bfbfbf</color>
+    <color name="ourpalm_service_question_spiner_line">#202121</color>
+    
+    <!-- 问题答复 -->
+    <color name="ourpalm_service_repaly_time_color">#e0e0e0</color>
+    <color name="ourpalm_service_repaly_hint_color">#afafaf</color>
+    <color name="ourpalm_service_evaluate_bg_color">#313131</color>
+    <color name="ourpalm_service_evaluate_line_color">#434343</color>
+    <color name="ourpalm_service_evaluate_text1_color">#ffcc00</color>
+    <color name="ourpalm_service_evaluate_text2_color">#959595</color>
+    <color name="ourpalm_service_transparent">#00000000</color>
+</resources>

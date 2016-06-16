@@ -1,0 +1,16 @@
+package fogs.proto.msg;
+import "Base.proto";
+
+//领取排位赛段位奖励
+message GetTourNewGradesAwardsReq
+{
+    required uint32 grade                   = 1; //要领取的段位
+}
+
+//领取排位赛段位奖励回复
+message GetTourNewGradesAwardsResp
+{
+    required uint32 result                  = 1;
+    repeated KeyValueData awards            = 2; //奖励物品
+    repeated uint32 grade_awards            = 3;
+}

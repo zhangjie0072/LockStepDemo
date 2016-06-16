@@ -1,0 +1,63 @@
+package fogs.proto.msg;
+import "Base.proto";
+
+enum ChatChannelType
+{
+	CCT_WORLD  = 1;
+	CCT_SYSTEM = 2;
+	CCT_LEAGUE = 3;
+	CCT_TEAM   = 4;
+}
+
+message ChatReq
+{
+	required uint32 type			= 1;// 频道类型
+	optional string content			= 2;// 内容
+	optional string target_name		= 3;// 私聊时对象名字
+}
+
+message ChatResp
+{
+	optional uint32 result			= 1;//发送结果
+}
+
+message ChatContent
+{
+	optional string content			= 2;// 内容
+	optional string ogri_name		= 3;// 来源名字
+	optional uint32 acc_id			= 4;// 来源acc_id
+}
+
+message ChatBroadcast
+{
+	required uint32 type			= 1;
+	optional uint32 pos				= 2;
+	optional ChatContent	info	= 3;
+}
+
+message QueryPlayerInfoReq
+{
+	optional uint32 acc_id			= 1;//请求玩家ACCID
+}
+
+message QueryPlayerInfoResp
+{
+	optional uint32 id				= 1; //ID  尚未知
+	optional string name			= 2; //名字
+	optional uint32 level			= 3; //等级
+	repeated FightRole squad 		= 4;
+	optional uint32 plat_id			= 5;
+	optional string icon			= 6;
+}
+
+//请求最近的聊天内容
+message ChatLatestInfoReq
+{
+	optional uint32 type			= 1;//频道类型
+}
+
+message ChatLatestInfoResp
+{
+	optional uint32 type			= 1;//频道类型
+	repeated ChatContent info		= 2;
+}

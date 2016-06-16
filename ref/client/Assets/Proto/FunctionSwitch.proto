@@ -1,0 +1,20 @@
+package fogs.proto.msg;
+
+//功能状态
+message FunctionSwitch
+{
+	optional string id = 1;
+	optional uint32 opened = 2;
+}
+
+//功能状态列表
+message FunctionSwitchList
+{
+	repeated FunctionSwitch switches = 1;
+}
+
+//功能关闭
+message FunctionClosed
+{
+	optional string id = 1;
+}

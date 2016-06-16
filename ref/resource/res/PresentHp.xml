@@ -1,0 +1,25 @@
+<Data Count="4">
+  <Line>
+    <switch>#</switch>
+    <time>赠送时间段</time>
+    <hp>可领体力数量</hp>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <time>12:00&amp;14:00</time>
+    <hp>60</hp>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <time>18:00&amp;20:00</time>
+    <hp>60</hp>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <time>21:00&amp;23:00</time>
+    <hp>60</hp>
+  </Line>
+</Data>

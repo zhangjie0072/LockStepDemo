@@ -1,0 +1,243 @@
+package fogs.proto.msg;
+import "Base.proto";
+
+//---------任务模块相关
+
+enum TaskType
+{
+    FESTIVAL = 1;//活动
+    MAIN = 2;//主线任务
+    DAILY = 3;//日常任务
+    SIGN = 4;//签到任务
+    LEVEL = 6;//成长任务
+    NEW_COMER = 7; //新秀任务
+}
+
+//主线任务达成条件
+message TaskConditionMain
+{
+	optional uint32 gold_reach		= 1; //金币总量达到
+	optional uint32 honor_reach		= 2; //荣誉总量达到
+	optional uint32 diamond_earned_reach		= 3; //游戏中获得的钻石总量达到
+	optional uint32 regular_winning_streak		= 4; //荣誉争霸赛中获得X连胜
+	optional uint32 complete_section		= 5; //通关生涯模式X关卡
+	optional uint32 team_level_reach		= 6; //队伍等级达到X级
+	optional uint32 role_num_reach		= 7; //球员数量达到
+	optional uint32 role_level_reach		= 8; //球员的等级达到
+	optional uint32 role_star_reach		= 9; //球员的星等达到
+	optional uint32 role_quality_reach		= 10; //球员的品质达到
+	optional uint32 role_talent_reach		= 11; //球员的天资达到
+	optional uint32 role_exercise_reach		= 12; //球员的任意训练项达到
+	optional uint32 freestyle_level_reach		= 13; //花式技能升级到X级
+	optional uint32 skill_level_reach		= 14; //技能升级到X级
+	optional uint32 role_opened_skill_slot_reach		= 15; //开启技能槽X个
+	optional uint32 regular_win_times_reach		= 16; //荣誉争霸赛中胜利总次数达到
+	optional uint32 captain_num_reach		= 17; //队长数量达到
+	optional uint32 tattoo_num_reach		= 18; //纹身数量达到
+	optional uint32 tattoo_level_reach		= 19; //纹身的等级达到
+	optional uint32 decompose_tattoo_num_reach		= 20; //分解的纹身数量达到
+	optional uint32 training_ph_levle_reach		= 21; //体能训练项目达到X级
+	optional uint32 training_strength_levle_reach		= 22; //力量训练项目达到X级
+	optional uint32 training_dunk_levle_reach		= 23; //扣篮训练项目达到X级
+	optional uint32 training_layup_levle_reach		= 24; //上篮训练项目达到X级
+	optional uint32 training_shoot_levle_reach		= 25; //投篮训练项目达到X级
+	optional uint32 training_defense_levle_reach		= 26; //防守训练项目达到X级
+	optional uint32 training_skill_levle_reach		= 27; //技巧训练项目达到X级
+	optional uint32 training_vigour_levle_reach		= 28; //气势训练项目达到X级
+	optional uint32 qualifying_rank_reach		= 29; //排位赛排名进入X名
+	optional uint32 qualifying_win_times		= 30; //累计获得排位赛胜利X次
+	optional uint32 base_practice_race			= 31; //完成基础训练塞X次
+	optional uint32 shoot_practice_race			= 32; //完成投篮训练X次
+	optional uint32 layup_dunk_practice_race	= 33; //完成上篮、灌篮训练X次
+	optional uint32 rebound_practice_race		= 34; //完成篮板训练X次
+	optional uint32 block_practice_race			= 35; //完成盖帽训练X次
+	optional uint32 regular_win_times 			= 36; //常规赛胜利次数
+	optional uint32 regular_get_score 			= 37; //常规赛获得积分
+	//optional uint32 qualifying_new_reach 		= 38; //排位赛达到段位
+	//optional uint32 qualifying_new_win_times 	= 39; //排位赛胜利次数
+	//optional uint32 qualifying_new_winningstreak= 40; //排位赛连胜次数
+	//optional uint32 qualifying_new_score 		= 41; //排位赛获得分
+	optional uint32 ladder_reach 				= 42; //天梯赛达到段位
+	optional uint32 ladder_win_times 			= 43; //天梯赛胜利次数
+	optional uint32 ladder_get_score 			= 44; //天梯赛获得积分
+	optional uint32 ladder_get_mvp_times 		= 45; //天梯赛获得MVP次数
+	optional uint32 with_friend_battle 			= 46; //和好友共同战斗次数
+	optional uint32 online_battle_reach	 		= 47; //联网战斗次数
+	optional uint32 online_battle_get_score 	= 48; //联网对战获得X分
+	optional uint32 full_star_complete_section 	= 49; //三星通关生涯模式X关卡
+	optional uint32 badge_number_reach 			= 50; //拥有涂鸦数量
+	optional uint32 badge_level_number_reach 	= 51; //拥有x级涂鸦
+	optional uint32 with_friend_qualifying_newer_times 	= 52; //组队完成新排位赛次数
+	optional uint32 qualifying_newer_reach 		= 53; //排位赛达到X段位
+	optional uint32 qualifying_newer_win_times 	= 54; //新排位赛胜利次数
+	optional uint32 qualifying_newer_get_sorce = 55; //排位赛获得积分
+	optional uint32 qualifying_newer_mvp_times 	= 56; //新排位赛MVP次数
+	optional uint32 qualifying_new_reach_mvp_times 	= 57; //巡回赛达到全明星段位次数
+	optional uint32 qualifying_new_win_times 	= 58; //巡回赛胜利次数
+	optional uint32 skill_reach 				= 59; //技能数量达到
+	optional uint32 qualifying_new_reach 		= 60; //巡回赛达到X段
+	optional uint32 online_battle_win_times 	= 61; //联网对战胜利次数
+	optional uint32 qualifying_new_score 		= 62; //巡回赛获得分
+
+}
+
+//日常任务达成条件
+message TaskConditionDaily
+{
+	optional uint32 buy_gold_times		= 1; //购买金币X次
+	optional uint32 buy_hp_times		= 2; //购买体力X次
+	optional uint32 regular_race_times		= 3; //参加常规竞技赛X次
+	optional uint32 regular_race_win_times		= 4; //在常规竞技赛中胜利X次
+	optional uint32 x_skill_level_up		= 5; //提升一次技能等级
+	optional uint32 complete_section_times		= 6; //在生涯模式中战胜任意关卡X次
+	optional uint32 complete_boss_section_times		= 7; //在生涯模式中战胜任意精英关卡X次
+	optional uint32 do_training_times		= 8; //进行X次队长训练
+	optional uint32 x_tattoo_level_up		= 9; //进行X次纹身升级
+	optional uint32 tour_times		= 10; //进行街头巡回赛X次
+	optional uint32 qualifying_times		= 11; //进行排位赛X次
+	optional uint32 qualifying_win_times		= 12; //进行排位赛胜利X次
+	optional uint32 new_games_times		= 13; //进行投篮比赛X次
+	optional uint32 challenge_times		= 14; //进行挑战赛X次
+	optional uint32 lottery_times		= 15; //抽取幸运篮球X次
+	optional uint32 challenge_win_times	= 16; //挑战赛胜利X次
+	optional uint32 practice_times		= 17; //练习赛次数
+	optional uint32 bullfight_times		= 18; //斗牛赛X次
+	optional uint32 perday_login		= 19; //每日登陆
+	optional uint32 online_battle 		= 20; //联网对战
+	optional uint32 qualifying_new_times= 21; //排位赛次数
+	optional uint32 battle_win_times 	= 22; //天梯赛胜利次数
+	optional uint32 with_friend_ladder 	= 23; //邀请好友参与天梯赛
+	optional uint32 ladder_mvp_times 	= 24; //天梯赛MVP次数
+	optional uint32 online_battle_get_score = 25; //联网对战获得X分
+	optional uint32 get_money	 		= 26; //获得金币
+	optional uint32 make_badge			= 27; //涂鸦制作
+    optional uint32 qualifying_newer_win_times = 28;  //新排位赛胜利次数
+    optional uint32 qualifying_newer_mvp_times = 29;  //新排位赛MVP次数
+    optional uint32 qualifying_newer_team_times = 30; //组队完成排位赛次数
+}
+
+//签到信息通知（server-->client）
+//message TaskSignNotify
+//{
+//	optional uint32 acc_id					= 1; //AccountID
+//	optional uint32 sign_times				= 2; //签到次数
+//	optional uint32 first_sign				= 3; //是否当天第一次上线（0：否，1：是）
+//}
+
+//签到
+message SignReq
+{
+	required SignType type		= 1[default=ST_NORMAL];
+}
+
+message SignResp
+{
+	required uint32 result		= 1;
+	required SignType type		= 2[default=ST_NORMAL];
+}
+
+//领取签到奖励
+message GetSignAwardReq
+{
+	optional uint32 times		= 1;  //指定VIP奖励的次数
+	required SignAwardType type	= 2[default=SAT_DAY];  //领取奖励类型
+}
+
+message GetSignAwardResp
+{
+	optional uint32 times		= 1;
+	optional SignAwardType type	= 2[default=SAT_DAY];
+	required uint32 result		= 3;
+}
+
+//请求任务信息（client-->server）
+message TaskInfoReq
+{
+	required uint32 acc_id					= 1; //AccountID
+	required uint32 type					= 2; //任务类别
+}
+
+
+message SignInfo
+{
+	optional uint32 signed  				 = 1;
+	optional uint32 append_sign_times		 = 2; //补签次数
+	optional uint32 sign_award			 	 = 3; // 领奖次数
+	repeated uint32 sign_list 				 = 4;
+	optional uint32 signed_times			 = 5; //签到次数
+}
+
+//
+message TaskInfo
+{
+	optional SignInfo sign_info				= 1; //签到信息
+	optional uint32 last_daily_time			= 2; //上一次做日常任务的时间
+	optional TaskConditionDaily daily_info	= 3;
+	optional TaskConditionMain main_info	= 4;
+	repeated TaskData task_list				= 5;
+}
+
+//任务信息
+message TaskData
+{
+	message ConditionInfo
+	{
+		optional uint32 condition_id		= 1; //完成任务所需条件ID
+		optional uint32 condition_need		= 2; //完成任务条件所需数量
+		optional uint32 condition_cur		= 3; //当前已拥有的数量
+	}
+
+	required uint32 id						= 1; //任务ID
+	required uint32 type					= 2; //任务类别
+	required uint32 state					= 3; //任务状态
+	optional uint32 awarded					= 4; //是否已经领取了奖励（0：未领取，1：领取）
+	repeated ConditionInfo cond_info		= 5; //达成任务信息
+}
+
+//未领取的任务数量
+message UnclaimedInfo
+{
+	required uint32 type					= 1; //任务类别
+	required uint32 num						= 2; //未领取奖励的已完成任务
+}
+
+//请求任务信息回复（server-->client）
+message TaskInfoResp
+{
+	required uint32 acc_id					= 1; //AccountID
+	required uint32 type					= 2; //请求任务类别
+	repeated TaskData task_main_list		= 3; //常规任务列表
+	repeated TaskData task_daily_list		= 4; //日常任务列表
+	repeated UnclaimedInfo unclaimed_list	= 5; //未领取的信息列表（所有任务）
+}
+
+//领取任务奖励（client-->server）
+message GetTaskAward
+{
+	required uint32 acc_id			= 1; //AccountID
+	required uint32 id				= 2; //任务ID
+}
+
+//领取奖励结果（server-->client）
+message GetTaskAwardResp
+{
+	required uint32 acc_id			= 1; //AccountID
+	required uint32 id				= 2; //任务ID
+	required uint32 result			= 3; //领取结果（0：成功，其它：失败）
+	required uint32 type			= 4; //任务类别
+}
+
+//未领取奖励的任务的数量通知
+message UnclaimedTaskNumNotify
+{
+	required uint32 acc_id			= 1; //AccountID
+	required uint32 num				= 2; //未领取奖励的任务的数量
+	repeated uint32 task_id 			= 3; //已完成的任务ID列表
+}
+
+//通知任务完成
+message NotifyTaskFinish
+{
+	required uint32 acc_id			= 1;
+	required TaskData task_info		= 2;
+}

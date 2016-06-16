@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Title</key>
+	<string>제시</string>
+	<key>UploadAlert</key>
+	<string>최대 2장만 업로드 할수 있습니다.</string>
+	<key>Sure</key>
+	<string>확인</string>
+	<key>Cancel</key>
+	<string>취소</string>
+	<key>AskTitle</key>
+	<string>문의</string>
+	<key>QType</key>
+	<string>문의 종류</string>
+	<key>QDesc</key>
+	<string>문의 내용</string>
+	<key>PhoneNum</key>
+	<string>휴대폰 번호</string>
+	<key>Mail</key>
+	<string>EMail</string>
+	<key>PicAlert</key>
+	<string>스크린샷（최대 2장 5MB이하）</string>
+	<key>PicAlertNumError</key>
+	<string>스크린샷（최대 2장 5MB이하）</string>
+	<key>PicAlertLargeError</key>
+	<string>스크린샷은 최대 2장 5MB이하</string>
+	<key>UpLoadPic</key>
+	<string>업로드</string>
+	<key>Submit</key>
+	<string>제출</string>
+	<key>QDefaultDesc</key>
+	<string>10자이상으로 입력해주세요.</string>
+	<key>QDefaultPhoneDesc</key>
+	<string>휴대폰 번호를 입력해 주세요,고객센터에서 더욱 빠르게 고객응대를 할수 있습니다.</string>
+	<key>QDefaultMailDesc</key>
+	<string>请输入邮箱号，方便客服联系您</string>
+	<key>AnswerQTtile</key>
+	<string>답신</string>
+	<key>AHelpAlert</key>
+	<string>도움이 되셨는가요?</string>
+	<key>AHelpNo</key>
+	<string>아니요, 문의 추가</string>
+	<key>AHelpYes</key>
+	<string>예,닫기</string>
+	<key>AQuestionOver</key>
+	<string>해당문제는 이미 해결되었습니다. 감사합니다!</string>
+	<key>ReAskQ</key>
+	<string>추가질문</string>
+	<key>ReAskQTitle</key>
+	<string>질문추가</string>
+	<key>ReAskQDesc</key>
+	<string>10자이상 입력해주시기 바랍니다.</string>
+	<key>ReAskQPicAlert</key>
+	<string>스크린샷 추가(5M이하)</string>
+	<key>ReAskQSubmit</key>
+	<string>확인</string>
+	<key>ScoreAlertTitle</key>
+	<string>고객문의 평가</string>
+	<key>ScoreAlertDesc</key>
+	<string>이번 문의에 대해 만족 하십니까?</string>
+	<key>ScoreVeryGood</key>
+	<string>퍼팩트</string>
+	<key>ScoreNotGood</key>
+	<string>불만족</string>
+	<key>ScoreUsual</key>
+	<string>일반</string>
+	<key>ScoreGood</key>
+	<string>만족</string>
+	<key>ScoreGoodEnough</key>
+	<string>매우 만족</string>
+	<key>SubmitSuccess</key>
+	<string>성공</string>
+	<key>SuccessAlert</key>
+	<string>문의 감사합니다. 빠른 시간내에 답신드리도록 하겠습니다.고객님께서 &quot;나의 문의&quot;에서 답신을 확인할수 있습니다.</string>
+	<key>SuccessSure</key>
+	<string>알겠습니다.</string>
+	<key>1_1001</key>
+	<string>휴대폰 번호를 정확이 입력해주세요.</string>
+	<key>1_1002</key>
+	<string>휴대폰 번호를 정확히 입력해주세요.</string>
+	<key>1_1003</key>
+	<string>문의 내용이 비어 있습니다.</string>
+	<key>1_1004</key>
+	<string>10자이상으로 작성해주세요.</string>
+	<key>1_1005</key>
+	<string>문의내용과 스크린샷을 추가해주세요.</string>
+	<key>1_1006</key>
+	<string>문의실패</string>
+	<key>1_1007</key>
+	<string>메일 주소가 올바르지 않습니다.</string>
+	<key>1_QSubmitFail</key>
+	<string>문의 제출 실패</string>
+	<key>2_QGetListFail</key>
+	<string>문의 내용 불러오기 실패.</string>
+	<key>3_ReAsKQFail</key>
+	<string>문의 제출 실패</string>
+	<key>4_SubmitScoreFail</key>
+	<string>평점실패</string>
+</dict>
+</plist>

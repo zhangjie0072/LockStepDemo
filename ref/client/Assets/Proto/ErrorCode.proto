@@ -1,0 +1,229 @@
+package fogs.proto.msg;
+
+
+//---------操作失败的ID定义
+
+enum ErrorID
+{
+	SUCCESS								= 0;
+	FAILED								= 1;
+
+	DB_UNCONNECTION						= 49; //DB未连接
+	DB_QUERY_FAILED						= 50; //查询执行失败
+	DB_QUERY_EMPTY						= 51; //查询结果为空
+	DB_UNKONOW_OPERATION_TYPE			= 52; //
+
+	//Login error code  100~199
+	LOGIN_GAME_VERSION_ERROR			= 100; //游戏版本不匹配
+	LOGIN_RESOURCE_VERSION_ERROR		= 101; //资源版本不匹配
+	LOGIN_VERIFY_FAILED					= 102; //账号平台验证失败
+	LOGIN_SERVER_CLOSED					= 103; //服务器未开启
+	LOGIN_SERVER_BUSY					= 104; //服务器繁忙
+	LOGIN_SERVER_ERROR					= 105; //服务器异常
+	INVALID_SESSION						= 106; //非法Session
+	LOGIN_ACCOUNT_FAILED				= 107; //
+	LOGIN_SERVER_REPEAT					= 108; //重复登录
+	LOGIN_EMPTY_CDKEY					= 109; //EMPTY CDKEY
+	LOGIN_WRONG_PASSWORD				= 110; //密码错误
+	LOGIN_ALREADY_ACCOUNT				= 111; //账号正在验证中
+	LOGIN_ANOTHER_PLAYER				= 112; //账号在其他地方登录
+	LOGIN_LOADING						= 113; //正在登陆
+	SDK_VERIFY_FAILED					= 114; //SKD验证失败
+	INVAILD_CDKEY						= 115; //非法CDKEY
+	ACCOUNT_ALREADY_LOGIN				= 116; //账号已经登陆
+	ACCOUNT_FROZEN						= 117; //账号冻结
+	ACCOUNT_MANAGED 					= 118; //托管
+	ACCOUNT_SILENT						= 119; //禁言
+	FRESHMAN							= 120; //新玩家
+	KICK_OFFLINE						= 121; //踢人
+
+	NOT_OWNED_CAPTAIN					= 130; //尚未拥有该队长
+	ALREADY_OWNED_CAPTAIN				= 131; //已经拥有该队长
+	ALREADY_IN_PLAY						= 132; //出战中
+
+	CREATE_SESSION_FAILED				= 150; //创建Session失败
+
+	NOT_FIND_PLAYER						= 200; //未找到指定玩家
+	INVALID_NAME						= 201; //名字非法
+	REPEATED_NAME						= 202; //重复命名
+
+	INVALID_NUM							= 210; //数量非法
+
+
+	REACH_MAX							= 300; //已达上限
+	NOT_ENOUGH_MONEY					= 301; //金钱不足
+	NOT_ENOUGH_DIAMOND					= 302; //钻石不足
+	NOT_ENOUGH_STUFF 					= 303; //所需材料不足
+	NOT_ENOUGH_LEVEL					= 304; //等级不足
+	
+	NOT_ENOUGH_HP						= 305; //体力不足
+	NOT_ENOUGH_CHALLENGE_TIMES			= 306; //挑战次数不足
+	MATCH_LOSE							= 307; //比赛结果为负
+	NOT_ENOUGH_HONOR					= 308; //优秀荣誉不足
+	NOT_ENOUGH_SWEEP_CARD				= 309; //扫荡卡不足
+	NOT_ENOUGH_PRESTIGE					= 310; //初级威望不足
+	NOT_ENOUGH_PRESTIGE2				= 311; //高级威望不足
+	NOT_ENOUGH_HONOR2					= 312; //卓越荣誉不足
+	NOT_ENOUGH_REPUTATION				= 313; //声望不足
+	NOT_ENOUGH_HP2						= 314; //体力不足,只能扫荡X次
+	NOT_ENOUGH_CHALLENGE_TIMES2			= 315; //次数不足,只能扫荡X次
+	
+	
+	NOT_ENOUGH_VIP_LEVEL				= 320; //VIP等级不足
+	REPEAT_GET_AWARD					= 321; //重复领取礼包
+	VIP_AWARD_ALREADY_GET				= 322; //VIP签到奖励已领取
+	NOT_ENOUGH_SIGN						= 323; //签到次数不足
+	REPEATED_SIGN						= 324; //重复签到
+	NOT_MISS_SIGN						= 325; //没有漏签
+	SIGN_BEFORE_APPEND_SIGN				= 326; //补签之前先签到
+	
+	CAREER_SECTION_LOCK					= 350; //关卡未解锁
+	CAREER_CHAPTER_LOCK					= 351; //章节未解锁
+	CAREER_SECTION_FINISHED				= 352; //关卡已完成
+	CAREER_CHAPTER_FINISHED				= 353; //章节已完成
+	CAREER_NOT_ALL_SECTION_FINISHED 	= 354; //所有关卡尚未完成
+	ADD_SECTION_AWARD_FAILED			= 355; //添加关卡奖励失败
+	ADD_CHAPTER_AWARD_FAILED			= 356; //添加章节奖励失败
+	CAREER_SECTION_NOT_COMPLETE			= 357; //关卡尚未通关
+	CAREER_STAR_NUM_LACK				= 358; //星等不足
+	CAREER_STAR_AWARD_ALREADY_GET		= 359; //奖励已领取
+	ROLE_ALREADY_GET					= 360; //球员已领取
+	SWEEP_NEED_FULL_STAR				= 361; //扫荡需要三星
+	
+	NOT_OWNED_ROLE						= 400; //尚未拥有球员
+	ALREADY_OWNED_ROLE					= 401; //已经拥有球员
+	NOT_ENOUGH_PIECES					= 402; //碎片数量不足
+	LEVEL_LIMIT_QUALITY					= 403; //队长等级限制品质提升
+	NOT_OWNED_EXERCISE					= 404; //没有此训练项
+	EXERCISE_REACH_MAX					= 405; //训练项达到最大等级
+	EXERCISE_QUALITY_BIG_THAN_ROLE_QUALITY		= 406; //训练项品质高于球员品质
+	TALENT_LIMIT_STAR					= 407; //天资限制星等提升
+	NOT_ENOUGH_EXERCISE_QUALITY			= 408; //训练项品质不足
+	LEVEL_LIMIT_ROLE_LEVEL				= 409; //队长等级限制球员等级
+
+	CANNOT_COMPOSITE_GOODS				= 450; //物品不能合成
+	NOT_ENOUGH_COMPOSITE_STUFF			= 451; //合成所需材料不足
+	CANNOT_SELL_GOODS					= 452; //物品不能出售
+	CANNOT_USE_GOODS					= 453; //物品不能使用
+	CANNOT_DECOMPOSE_GOODS				= 454; //物品不能分解
+	REACHED_MAX_STACK_NUM				= 455; //已达最大可叠加数量
+	STR_ENHANCE_LESS_GOLD				= 456; //强化时金币不足
+	
+	SKILL_SLOT_LOCK						= 470; //技能槽位未解锁
+	SKILL_SLOT_UNLOCK					= 471; //技能槽位已解锁
+	SKILL_SLOT_FILLED					= 472; //槽位已放置技能
+	SKILL_SLOT_UNFILLED					= 473; //槽位未放置技能
+	SKILL_EQUIPED						= 474; //技能已经装备
+	SKILL_UNEQUIPED						= 475; //技能已经装备
+	NOT_ENOUGH_SKILL_UP_STUFF			= 476; //升级所需材料不足	
+	NOT_ENOUGH_ATTR_VALUE				= 477; //属性不足
+	
+	GOODS_EQUIPED						= 480; //物品已装备
+	GOODS_UNEQUIPED						= 481; //物品未装备
+	GOODS_SLOT_UNFILLED					= 482; //槽位未装备物品
+	LEVEL_LIMIT_GOODS_LEVEL  			= 483; //队伍等级限制物品等级
+	EQUIPMENT_POSITION_NOT_MATCH 		= 484; //装备位置和槽位不匹配
+	NOT_HAVE_EQUIPMENT					= 485; //连装备都没有，怎么强化呢？
+	//EQUIPMENT_REACH_MAX_LEVEL			= 486; //装备都强化满了！真给力！
+	EQUIPMENT_NOT_ENOUGH_MONTY			= 487; //先去赚点钱吧，你都快破产了！
+	EQUIPMENT_NOT_EXIST					= 488; //你刚刚装备了一件不存在的装备（空气） ！
+	GOODS_REACH_MAX						= 489; //物品已达上限
+	
+	STORE_GOODS_SELL_OUT				= 490; //商品已卖光
+	BUY_TIME_USE_UP						= 491; //购买次数已用完
+	REMAIN_CHALLENGE_TIMES				= 492; //挑战次数未用完
+	
+	ALREADY_MATCHED						= 500; //已在匹配中
+	NOT_ENOUGH_ROLES					= 501; //参赛球员不足
+	ALREADY_PVP							= 502; //已在PVP中
+	WAIT_ALL_PLAYER_READY               = 503; //还有玩家没准备好
+    
+	REACH_FRIENDS_MAX					= 510; //达到好友上限
+	REACH_BLACK_LIST_MAX				= 511; //黑名单达到上限
+	REACH_FRIEND_PRESENT_MAX			= 512; //好友赠送达到上限
+	REACH_FRIEND_GET_GIFT_MAX			= 513; //好友领取礼物达到上限
+	ALREADY_PRESEND_FRIEND				= 514; //已赠送目标好友
+	ALREADY_GET_GIFT_FRIEND				= 515; //已获取好友礼物
+	TARGET_NOT_FRIEND					= 516; //目标不是好友
+	TARGET_NOT_BLACKLIST				= 517; //目标不在黑名单
+	TARGET_IN_BLACKLIST					= 518; //目标在黑名单中
+	TARGET_IN_FRIENDS					= 519; //目标在好友列表中
+	TARGET_IS_NOT_EXIST					= 520; //目标不存在
+	NOT_FRIEND_CAN_PRESENT				= 521; //没有好友可以赠送
+	
+	
+	FRIEND_OFFLINE                      = 530; //好友离线
+	FRIEND_IN_MATCH                     = 531; //好友在比赛中
+	INVITE_OUT_DUE                      = 532; //邀请过期
+	MASTER_EXIT                         = 533; //房主退出
+	PARTTEN_OFFLINE                     = 534; //离线
+	FRIEND_IN_ROOM						= 535; //好友在组队中
+	ROOM_FULL							= 536; //房间已满
+	ALREADY_START_MATCHING				= 537; //已经开始匹配了
+	ALREADY_INVITE_FRIEND				= 538; //已经邀请过该好友
+	INVITE_REACH_MAX					= 539; //邀请达到最大数量
+	
+	IN_COOLING							= 550; //训练冷却中
+	LEVEL_LIMIT_TRAINING				= 551; //队长等级限制训练提升
+	REACH_MAX_COUNT_TRAINING			= 552; //训练个数达到最大
+	STR_EXERCIE_LESS_GOLD				= 553; //训练时金币不足
+	
+	GET_MAIL_ATTACHMENT_FAILED			= 600; //领取附件失败
+	
+	GET_HP_ERROR_TIME					= 610; //领取时间未到
+	REPEATED_GET_HP						= 611; //重复领取体力
+
+	REACH_MAX_RESET_TIMES				= 650; //已达最大重置次数
+	NEED_GET_THROUGH_FIRST				= 651; //尚未通关
+	
+	OTHER_AWARDS_CAN_GET				= 660; //还有奖励未领取
+	FUNCTION_CLOSED						= 661; //功能已关闭
+	AWARDS_GETED						= 662; //奖励已领取
+	DO_NOT_GET_AWARDS					= 663; //领取条件不足
+	
+	TASK_CONDITION_UNFINISHED			= 680; //指定任务未达成
+	GUIDE_CONDITION_UNFINISHED			= 681; //指定指引未完成
+
+	GOODS_OUT_OF_DATE					= 700; //时装已过期
+	FASHION_NOT_MATCH_SHAPE				= 701; //时装与体型不符
+	GENDER_NOT_MATCH					= 702; //性别不符
+	NOT_OWN_THIS_FASHION				= 703; //该球员没有这件时装
+	
+	NOT_REACH_CONDITION					= 720; //未达到指定条件
+	
+	NOT_IN_MATCH_QUEUE					= 760; //不在匹配队列中
+	GAME_TIME_OUT 						= 761; //时间到,该玩法关闭
+	
+	QUALIFYING_COOL						= 770; //挑战冷却中
+	RIVAL_BATTLEING						= 771; //对手正在战斗
+	RANKING_CHANGE						= 772; //排名变化
+	BE_CHALLENGEED_IN					= 773; //被挑战中
+	
+	GAME_NOT_OPEN						= 780; //玩法未开放
+	ACTIVITY_CLOSE						= 781; //活动已关闭
+	
+	NOT_ENOUGH_OPEN_CARD_TIMES			= 785; //翻牌次数不足
+	
+	PRACTICE_COOL						= 790; //练习赛冷却中
+	WORLD_CHANNEL_COOL					= 791; //世界频道CD
+	
+	NOT_ENOUGH_LOTTERY_TIMES			= 800; //抽奖次数不足
+	ADD_LOTTERY_AWARD_FAILED			= 801; //添加抽奖物品失败
+
+	BADGE_BOOK_NUM_REACH_MAX			= 820; //可拥有涂鸦墙数量达到上限
+	UNLOCK_BADGE_SLOT_IN_ORDER			= 821; //请依次开启槽位
+	NO_UNLOCK_BADGE_SLOT				= 822; //没有空的涂鸦槽位
+	NO_ENOUGH_BADGE						= 823; //涂鸦不足
+	CAN_NOT_UNLOCK_IN_ADVANCE			= 824; //无法提前解锁该槽位
+	NO_CAN_DECOMPOSE_BADGE				= 825; //没有可分解的涂鸦
+
+	INVALID_OPERATION					= 900; //非法操作
+
+	ERROR_CONFIGURATION					= 920; //配置错误
+	
+	ERROR_CHEAT							= 950; //作弊
+
+	NO_IN_CHAT_ROOM						= 970; //没有加入聊天
+
+	UNKNOW_ERROR						= 99999; //未知错误
+}

@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- account -->
+    <string name="ourpalm_dialog_account_string">账号</string>
+    <string name="ourpalm_dialog_account_hint_string">请输入账号</string>
+    <!-- <string name="ourpalm_dialog_registaccount_hint_string">数字/字母/字符，不支持中文</string> -->
+    <!-- <string name="ourpalm_dialog_account_hint_string">6&#8211;20位,数字/字母/下划线</string> -->
+    <string name="ourpalm_dialog_registaccount_hint_string">不少于6位的数字、字母和"_"</string>
+    <string name="ourpalm_dialog_pwd_string">密码</string>
+    <!-- <string name="ourpalm_dialog_pwd_hint_string">不少于6位,数字/字母/字符</string> -->
+    <string name="ourpalm_dialog_pwd_hint_string">不少于6位的数字、字母</string>
+    <string name="ourpalm_dialog_pwd_login_hint_string">请输入密码</string>
+    <string name="ourpalm_dialog_btn_login_string">立即登录</string>
+    <string name="ourpalm_dialog_btn_regist_string">立即注册</string>
+    <string name="ourpalm_dialog_findpwd">找回密码</string>
+    <string name="ourpalm_dialog_confirmpwd_string">密码确认：</string>
+    <string name="ourpalm_dialog_confirmpwd_hint_string">重新输入密码</string>
+    <string name="ourpalm_dialog_btn_registquick_string">游客登录</string>
+    <string name="ourpalm_dialog_cancel">取消</string>
+    <string name="ourpalm_dialog_confirm">确定</string>
+    <string name="ourpalm_dialog_open">开启</string>
+    <string name="ourpalm_dialog_never_toast">不再提示更新此版本</string>
+    <string name="ourpalm_binging_phonenum">手机号</string>
+    <string name="ourpalm_binging_email">邮箱地址</string>
+    <string name="ourpalm_binging_phonenum_hint">请输入手机号码</string>
+    <string name="ourpalm_binging_email_hint">请输入邮箱</string>
+    <string name="ourpalm_binging_phone_verify">验证码</string>
+    <string name="ourpalm_binging_phone_verify_hint">输入6位验证码</string>
+    <string name="ourpalm_binging_skip">以后再说</string>
+    <string name="ourpalm_binging_bind">马上绑定</string>
+    <string name="ourpalm_binging_tip">绑定手机提高帐户安全,方便及时找回密码</string>
+    <string name="ourpalm_binging_email_tip">强烈建议:绑定邮箱提高帐户安全,方便及时找回密码</string>
+    <string name="ourpalm_dialog_login_btn">账号登录</string>
+    <string name="ourpalm_dialog_loading_tip_tourist">游客</string>
+    <string name="ourpalm_tip_not_go_tourist">遊客不能進入用户中心</string>
+    <string name="ourpalm_tip_not_go_facebook">此功能僅平台會員帳號使用</string>
+
+    <!-- account net -->
+    <string name="ourpalm_net_login_fail">用户登录失败</string>
+    <string name="ourpalm_net_login_loading">登录中。。。</string>
+    <string name="ourpalm_net_logincheck_loading">登录验证中。。。</string>
+    <string name="ourpalm_net_login_success">用户登录成功</string>
+    <string name="ourpalm_net_Regist_fail">用户注册失败</string>
+    <string name="ourpalm_net_Regist_loading">注册中。。。</string>
+    <string name="ourpalm_net_Regist_success">用户注册成功</string>
+    <string name="ourpalm_net_RegistQuick_success">游客登录成功</string>
+    <string name="ourpalm_net_RegistQuick_fail">游客登录失败</string>
+    <string name="ourpalm_net_RegistQuick_loading">游客登录中。。。</string>
+    <string name="ourpalm_net_logincheck_fail">登录验证失败</string>
+    <string name="ourpalm_net_usercenterurl_error">用户中心URL为空</string>
+    <string name="ourpalm_net_bindgameinfo_error">账号绑定角色失败</string>
+
+    <!-- tip -->
+    <string name="ourpalm_tip_loading">努力加载中。。。</string>
+    <string name="ourpalm_tip_paying">支付中。。。</string>
+    <string name="ourpalm_tip_pay_prepareing">支付准备中。。。</string>
+    <string name="ourpalm_tip_title">友情提醒：\r\n\r\n</string>
+    <string name="ourpalm_tip_callbackerror">回调接口未注册</string>
+    <string name="ourpalm_tip_pbiderror">道具ID或道具名称为空</string>
+    <string name="ourpalm_tip_useriderror">用户未登录</string>
+    <string name="ourpalm_tip_setgameinfoerror">游戏未设置角色相关信息</string>
+    <string name="ourpalm_tip_payurlerror">计费中心地址错误</string>
+    <string name="ourpalm_tip_accounturlerror">用户中心地址错误</string>
+    <string name="ourpalm_tip_paramserror">参数错误</string>
+    <string name="ourpalm_tip_getcharginfoerror">获取支付协议失败，错误码：</string>
+    <string name="ourpalm_tip_prasecharginfoerror">解析支付协议失败</string>
+    <string name="ourpalm_tip_getpblisterror">获取道具列表失败</string>
+    <string name="ourpalm_tip_initneterror">联网初始化失败</string>
+    <string name="ourpalm_tip_initneturlerror">初始化地址未获取到</string>
+    <string name="ourpalm_tip_login_formaterror">账号密码格式错误</string>
+    <string name="ourpalm_tip_findpwd_account_error">您尚未输入要找回密码的账号</string>
+    <string name="ourpalm_binging_input_phonenum_null">手机号为空，请输入手机号</string>
+    <string name="ourpalm_binging_phonenum_error">手机号格式不正确，请重新输入！</string>
+    <string name="ourpalm_binging_phonenum_null">手机号不能为空！</string>
+    <string name="ourpalm_binging_email_null">邮箱不能为空</string>
+    <string name="ourpalm_binging_email_error">邮箱格式错误</string>
+    <string name="ourpalm_binging_verify_null">验证码不能为空！</string>
+    <string name="ourpalm_binging_verify_error">验证码错误</string>
+    <string name="ourpalm_tip_regist_account_error">账号不能为空！</string>
+    <string name="ourpalm_tip_regist_pwd_error">密码不能为空！</string>
+    <string name="ourpalm_tip_account_notchinese_error">帐号或者密码不能包含中文</string>
+    <string name="ourpalm_tip_gameinfologin_noset">角色登录成功后未调用设置游戏信息接口</string>
+    <string name="ourpalm_tip_setlog_true">已开启日志输出，出正式包时请关闭！</string>
+    <string name="ourpalm_tip_pay_box">已开启支付测试环境，出正式包时请关闭！</string>
+    <string name="ourpalm_tip_unknownerror">未知错误</string>
+    <string name="ourpalm_tip_cfgerror">ourpalm.cfg未找到或读取错误</string>
+    <string name="ourpalm_tip_opennetwork">支付功能需开启网络，请检查网络状态!</string>
+    <string name="ourpalm_tip_opennetwork_ex">此功能需开启网络，请检查网络状态!</string>
+    <string name="ourpalm_tip_exitgame">退出游戏</string>
+    <string name="ourpalm_tip_backgame">返回游戏</string>
+
+    <!-- new 用户注册页面提示 -->
+    <string name="ourpalm_regist_tip_null_username">账号不能为空</string>
+    <string name="ourpalm_regist_tip_username_error">账号不足6位,请重新输入!</string>
+    <string name="ourpalm_regist_tip_username_spaces">账号中含有空格,请重新输入</string>
+    <string name="ourpalm_regist_tip_username_emailerror">邮箱格式错误,请重新输入</string>
+    <string name="ourpalm_regist_tip_username_formaterror">账号只能由数字、字母和“_”组成</string>
+    <string name="ourpalm_regist_tip_null_pwd">密码不能为空!</string>
+    <string name="ourpalm_regist_tip_pwd_error">密码不足6位,请重新输入!</string>
+    <string name="ourpalm_regist_tip_pwd_spaces">密码中含有空格,请重新输入</string>
+    <string name="ourpalm_regist_tip_pwd_formaterror">密码只能由数字、字母组成!</string>
+    <string name="ourpalm_regist_tip_username_null_email">請輸入電子郵件地址</string>
+    <string name="ourpalm_regist_tip_confirmpwd_error_null">未輸入確認密碼</string>
+    <string name="ourpalm_regist_tip_confirmpwd_error">兩次輸入密碼不一致</string>
+    <string name="ourpalm_regist_tip_pwd_allnum">密碼不能只是純數字</string>
+    <string name="ourpalm_regist_tip_pwd_allenglish">密碼不能是纯字母</string>
+
+    <!-- http联网错误 -->
+    <string name="ourpalm_http_error_url">链接地址为空</string>
+    <string name="ourpalm_http_error_unsupportedencoding">字符编码异常</string>
+    <string name="ourpalm_http_error_unknownhost">未知服务器异常</string>
+    <string name="ourpalm_http_error_io">I/O异常</string>
+    <string name="ourpalm_http_error_timeout">连接超时异常</string>
+    <string name="ourpalm_http_error_other">其他错误异常</string>
+    <string name="ourpalm_http_error_unknowerror">未知异常</string>
+    <string name="ourpalm_http_error_nodata">未获取到数据</string>
+    <string name="ourpalm_exit_title">温馨提醒</string>
+    <string name="ourpalm_exit_msg">亲，确定退出游戏？欢迎下次再来！</string>
+
+    <!-- 更新 -->
+    <string name="ourpalm_dialog_update_title">检查到新版本</string>
+    <string name="ourpalm_update_now">马上更新</string>
+    <string name="ourpalm_update_later">稍后更新</string>
+    <string name="ourpalm_update_exit">退出游戏</string>
+    <string name="ourpalm_update_version_size">版本：%1$s，大小：%2$s</string>
+    <string name="ourpalm_update_tip_newworktype">您当前网络是2G/3G/4G，确定下载？</string>
+
+    <!-- 官网登录 -->
+    <string name="ourpalm_regist_individual_msg">您当前使用的是快速登录，尚未注册绑定个性账号，是否注册个性账号</string>
+    <string name="ourpalm_dialog_login_title">登录游戏</string>
+    <string name="ourpalm_dialog_login_rememberpwd">记住密码</string>
+    <string name="ourpalm_dialog_login_findpwd">找回密码</string>
+    <string name="ourpalm_dialog_login_quickgame">游客登录</string>
+    <string name="ourpalm_dialog_login_loginnow">账号登录</string>
+    <string name="ourpalm_dialog_login_up_error">请输入账号和密码</string>
+    <string name="ourpalm_dialog_login_login_fail">用户登录失败</string>
+    <string name="ourpalm_dialog_regist_title">注册账号</string>
+    <string name="ourpalm_dialog_bind_title">绑定账号</string>
+    <string name="ourpalm_dialog_bind_title_ex">绑定更安全的正式账号</string>
+    <string name="ourpalm_dialog_regist_showpwd">显示密码</string>
+    <string name="ourpalm_dialog_regist_agree">我已阅读同意</string>
+    <string name="ourpalm_dialog_regist_agreement">掌趣用户注册协议</string>
+    <string name="ourpalm_dialog_regist_readagreement">请阅读用户注册协议并勾选同意</string>
+    <string name="ourpalm_dialog_regist_button">注册</string>
+    <string name="ourpalm_dialog_regist_title_1">注册个性账号</string>
+    <string name="ourpalm_dialog_regist_button_1">现在注册</string>
+    <string name="ourpalm_dialog_regist_later">以后再说</string>
+    <string name="ourpalm_dialog_regist_error">用户注册失败</string>
+    <string name="ourpalm_dialog_regist_error_1">注册失败，逻辑错误</string>
+    <string name="ourpalm_dialog_pulllist_title">选择登录账号</string>
+    <string name="ourpalm_dialog_binding_sendcode">获取验证码</string>
+    <string name="ourpalm_dialog_binding_later">以后再说</string>
+    <string name="ourpalm_dialog_binding_now">马上绑定</string>
+    <string name="ourpalm_dialog_binding_now_regist">注册并绑定</string>
+    <string name="ourpalm_dialog_binding_sendcodeerror">获取验证码失败</string>
+    <string name="ourpalm_dialog_binding_binderror">绑定手机失败</string>
+    <string name="ourpalm_dialog_binding_binding">正在绑定手机号。。。</string>
+    <string name="ourpalm_dialog_binding_sendcodeing">正在获取验证码。。。</string>
+    <string name="ourpalm_dialog_binding_binderror_1">验证码或者密码错误</string>
+    <string name="ourpalm_dialog_binding_email">正在绑定。。。</string>
+    <string name="ourpalm_loginsuccess_tip_tourist">尊敬的游客</string>
+    <string name="ourpalm_loginsuccess_tip">%s，欢迎进入掌趣游戏!</string>
+    <string name="ourpalm_logingading_tip">正在努力登录。。。</string>
+    <string name="ourpalm_account_name_tip">掌趣帐号 :　</string>
+    <string name="ourpalm_account_swittch_name_tip">切换帐号</string>
+    <string name="ourpalm_account_waitphonenum">请在%2d秒后重试</string>
+    <string name="ourplam_change_password_success">修改密码成功</string>
+
+    <!-- 官网支付 -->
+    <string name="ourpalm_tip_gw_payurlerror">官网支付页面地址错误</string>
+    <string name="ourpalm_tip_gw_chargtype_disable">不支持当前支付方式</string>
+    <string name="ourpalm_tip_gw_chargfail">支付失败</string>
+    <string name="ourpalm_tip_gw_chargsuccess">支付成功</string>
+    <string name="ourpalm_tip_lenovo_chargefail">支付失败，请开启网络重新进入游戏支付</string>
+
+    <!-- 用户中心错误提示语 -->
+    <string name="ourpalm_ucenter_1000">操作成功</string>
+    <string name="ourpalm_ucenter_1115">新密码不能设置为空</string>
+    <string name="ourpalm_ucenter_1118">密码修改失败，新密码与原密码相同</string>
+    <string name="ourpalm_ucenter_1144">修改密码次数超过当天次数限制</string>
+    <string name="ourpalm_ucenter_1134">账号不存在</string>
+    <string name="ourpalm_ucenter_1143">找回密码次数超过当天次数限制</string>
+    <string name="ourpalm_ucenter_1136">该账户未绑定手机</string>
+    <string name="ourpalm_ucenter_1126">账号已绑定</string>
+    <string name="ourpalm_ucenter_1117">token过期，请重新登录</string>
+    <string name="ourpalm_ucenter_1106">账户已存在</string>
+    <string name="ourpalm_ucenter_1102">密码错误</string>
+    <string name="ourpalm_ucenter_1101">账号不存在</string>
+    <string name="ourpalm_ucenter_1127">该手机号已绑定过其他账号！</string>
+    <string name="ourpalm_ucenter_1132">账号已封停</string>
+    <string name="ourpalm_ucenter_1133">MAC已封停</string>
+    <string name="ourpalm_ucenter_1128">手机号有误</string>
+    <string name="ourpalm_ucenter_1129">验证码错误，请重新输入！</string>
+    <string name="ourpalm_ucenter_1135">该账户已绑定过手机</string>
+    <string name="ourpalm_ucenter_1162">当前手机号已经注册过</string>
+    <string name="ourpalm_ucenter_1006">无法获取快速登录所需的设备信息，不能进行快速登录！</string>
+    <string name="ourpalm_ucenter_1178">本次封测用户量已达到峰值，暂停注册。感谢您的支持！</string>
+    <string name="ourpalm_ucenter_2308">该邮件地址已存在</string>
+
+    <!-- 排行榜 -->
+    <string name="ourpalm_rankList_title">公 告</string>
+    <string name="ourpalm_rankList_button">查看详情</string>
+
+    <!-- 支付提示 -->
+    <string name="ourpalm_pay_success">支付成功</string>
+    <string name="ourpalm_order_success">下单成功</string>
+    <string name="ourpalm_pay_fail">支付失败</string>
+    <string name="ourpalm_pay_cancel">支付取消</string>
+    <string name="ourpalm_pay_fail_token_360">支付失败，token过期，请重新登录游戏后再进行购买！</string>
+    <string name="ourpalm_wx_login_fail_tencent">登录状态失效，正在刷新，请稍等！</string>
+    <string name="ourpalm_wx_refresh_ok_tencent">登录状态已刷新，请重新支付！</string>
+    <string name="ourpalm_not_install_qq">没有安装QQ或者QQ版本太低,请更新！</string>
+    <string name="ourpalm_not_install_weixin">没有安装微信或者微信版本太低,请更新！</string>
+    <string name="ourpalm_pay_success_prompt_tencent">支付验证中。。。\n请不要关闭游戏，否则将引起丢单</string>
+    <string name="ourpalm_unbalance_tencent">正在支付，还需等待：%s秒\n请不要关闭游戏，否则将引起丢单</string>
+    <string name="ourpalm_dialog_continue_tencent">确定</string>
+    <string name="ourpalm_pay_success_tencent">扣款成功</string>
+
+    <!-- 手机号注册页面 -->
+    <string name="ourpalm_dialog_regist_phone_tip">使用手机号注册可以找到更多好友</string>
+    <string name="ourpalm_dialog_regist_phone_hint">输入注册手机号</string>
+    <string name="ourpalm_dialog_regist_phone_verify">验证身份</string>
+    <string name="ourpalm_dialog_regist_phone_verifying">验证中,请稍后。。。</string>
+    <string name="ourpalm_dialog_getverifycode_toast_ok">验证码已发送到您的手机，请注意查收</string>
+    <string name="ourpalm_dialog_ourpalmlogin_title">掌趣账号登录</string>
+    <string name="ourpalm_dialog_ourpalmregist_title">掌趣账号注册</string>
+    <string name="ourpalm_dialog_quick_regist_btn">快速注册</string>
+
+    <!-- push -->
+    <string name="ourpalm_dialog_pushserver_Confirmation_tip">确认</string>
+    <string name="ourpalm_dialog_pushserver_download_tip">现在是移动网络,是否下载?</string>
+
+    <!-- service question -->
+    <string name="ourpalm_service_question_title">我要提问</string>
+    <string name="ourpalm_service_question_type">问题类型</string>
+    <string name="ourpalm_service_question_type_hint">充值问题</string>
+    <string name="ourpalm_service_question_describe">问题描述</string>
+    <string name="ourpalm_service_question_describe_hint">亲，请输入不少于10个字呦</string>
+    <string name="ourpalm_service_question_phone">手机号码</string>
+    <string name="ourpalm_service_question_email">Email</string>
+    <string name="ourpalm_service_question_email_hint">请输入邮箱，方便客服联系您</string>
+    <string name="ourpalm_service_question_phone_hint">请输入11位手机号，方便客服联系您</string>
+    <string name="ourpalm_service_question_screenshot">问题截图  (最多2张， 大小不超过5M)</string>
+    <string name="ourpalm_service_question_upimage">上传截图</string>
+    <string name="ourpalm_service_question_submit">提交问题</string>
+    <string name="ourpalm_service_question_submit_msg">谢谢您的反馈，我们会尽快答复！\n您可在“我的问题”中查看回复情况</string>
+    <string name="ourpalm_service_question_submit_ok">我知道了</string>
+    <string name="ourpalm_tip_service_upimage_error">最多只能上传两张图片</string>
+    <string name="ourpalm_tip_getquestionlisterror">获取用户问题类型列表失败</string>
+    <string name="ourpalm_tip_question_describe_formaterror">问题描述不足10个字</string>
+    <string name="ourpalm_tip_question_phone_formaterror">请输入11位手机号码</string>
+    <string name="ourpalm_service_question_email_formaterror">邮箱格式不正确</string>
+    <string name="ourpalm_service_update_image_1">截图1.png</string>
+    <string name="ourpalm_service_update_image_2">截图2.png</string>
+    <string name="ourpalm_service_no_login_message">您尚未登录，请先登录后再试！</string>
+    <string name="ourpalm_service_update_error_message">图片上传出错，请选择本地图片上传</string>
+    <string name="ourpalm_service_netlink_error_message">系统出错啦，请稍后重试！(%s)</string>
+
+    <!-- service question reply -->
+    <string name="ourpalm_service_reply_title">问题答复</string>
+    <string name="ourpalm_service_reply_hint">我们是否帮您解决了问题?</string>
+    <string name="ourpalm_service_reply_yes">是，关闭问题</string>
+    <string name="ourpalm_service_reply_no">不，追加问题</string>
+    <string name="ourpalm_service_add_question">追加提问</string>
+    <string name="ourpalm_service_add_describe">补充描述</string>
+    <string name="ourpalm_service_add_screenshot">补充截图  (最多2张，大小不超过5M)</string>
+    <string name="ourpalm_service_add_formaterror">请补充描述或截图</string>
+    <string name="ourpalm_service_add_submit">确认追加</string>
+    <string name="ourpalm_service_evaluate_title">客服评价</string>
+    <string name="ourpalm_service_evaluate_describe">您对本次问题的客服回复满意吗?</string>
+    <string name="ourpalm_service_evaluate_level_5">非常满意</string>
+    <string name="ourpalm_service_evaluate_level_4">很满意</string>
+    <string name="ourpalm_service_evaluate_level_3">满意</string>
+    <string name="ourpalm_service_evaluate_level_2">一般</string>
+    <string name="ourpalm_service_evaluate_level_1">不满意</string>
+    <string name="ourpalm_service_evaluate_submit">确定</string>
+
+    <!-- 礼包码功能错误提示语 -->
+    <string name="ourpalm_libao_21185">礼包码不能为空呦！⊙﹏⊙</string>
+    <string name="ourpalm_libao_21187">无效礼包码，请重新输入！⊙﹏⊙</string>
+    <string name="ourpalm_libao_21188">礼包码已经过期！╯﹏╰</string>
+    <string name="ourpalm_libao_21189">无效礼包码，请重新输入！⊙﹏⊙</string>
+    <string name="ourpalm_libao_21190">该礼包码已经兑换过啦！╯﹏╰</string>
+    <string name="ourpalm_libao_21191">您已兑换过该礼包啦！^_^</string>
+    <string name="ourpalm_libao_21192">您已兑换过该礼包啦！^_^</string>
+    <string name="ourpalm_libao_21193">无效礼包码，请重新输入！⊙﹏⊙</string>
+    <string name="ourpalm_libao_21194">该礼包码已不能兑换啦！╯﹏╰</string>
+    <string name="ourpalm_libao_21200">该礼包码已不能兑换啦！╯﹏╰</string>
+    <string name="ourpalm_libao_23157">礼包码还未开始兑换，请耐心等候！╯﹏╰</string>
+
+</resources>

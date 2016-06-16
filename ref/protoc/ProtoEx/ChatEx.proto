@@ -1,0 +1,183 @@
+package fogs.proto.msg;
+import "Base.proto";
+import "Chat.proto";
+
+//----------聊天功能协议--------
+
+/// 聊天室参与者
+message ChatRoomParticipant
+{
+	optional uint32 acc_id = 1; //玩家ID
+	optional string name = 2; //名字
+	optional uint32	level = 3; //等级
+	optional string icon = 4; //图标
+
+}
+
+// 创建聊天室
+message ChatRoomCreateReq
+{
+	optional uint64 session_id = 1; //创建的序列Id
+	repeated uint32 participant_acc_ids = 2; //初始化的参与者Id
+}
+
+//创建聊天室回复
+message ChatRoomCreateResp
+{
+	optional uint64 session_id = 1; //创建的序列Id
+	optional uint32 result = 2; //成功or失败
+	optional uint64 room_id	= 3; //房间ID
+}
+
+//创建聊天室广播
+message ChatRoomCreateBroadcast
+{
+	optional uint64 room_id	= 3; //房间ID
+}
+
+// 销毁聊天室,只有房主才能销毁
+message ChatRoomDestroyReq
+{
+	optional uint64 room_id	= 1; //房间ID
+}
+
+// 回复销毁聊天室
+message ChatRoomDestroyResp
+{
+	optional uint64 room_id	= 1; //房间ID
+	optional uint32 result = 2; //成功or失败
+}
+
+// 聊天室销毁广播
+message ChatRoomDestroyBroadcast
+{
+	optional uint64 room_id	= 1; //房间ID
+}
+
+// 进入聊天室请求
+message ChatRoomJoinReq
+{
+	optional uint64 room_id	= 1; //房间ID
+	optional uint32 result = 2; //成功or失败
+}
+
+// 返回进入聊天室请求
+message ChatRoomJoinResp
+{
+	optional uint64 room_id	= 1; //房间ID
+	optional uint32 result = 2; //成功or失败
+}
+
+// 进入聊天室广播
+message ChatRoomJoinBroadcast
+{
+	optional uint64 room_id	= 1; //房间ID
+	optional ChatRoomParticipant  participant = 2; //参与者信息
+}
+
+// 离开聊天室通知
+message ChatRoomLeaveReq
+{
+	optional uint64 room_id	= 1; //房间ID
+}
+
+// 离开聊天室通知
+message ChatRoomLeaveResp
+{
+	optional uint64 room_id	= 1; //房间ID
+	optional uint32 result = 2; //成功or失败
+}
+
+// 离开聊天室广播
+message ChatRoomLeaveBroadcast
+{
+	optional uint64 room_id	= 1; //房间ID
+	optional uint32 leave_acc_id = 2; //离开的玩家ID
+}
+
+//请求聊天室的内容
+message ChatRoomQueryReq
+{
+	optional uint64 room_id	= 1; //房间ID
+}
+
+//返回的聊天室信息
+message ChatRoomQueryResp
+{
+	optional uint64 room_id = 1; //房间Id
+	optional uint32 result = 2; //成功or失败
+	optional uint32 creator_acc_id = 3; //房间创建则Id
+	repeated ChatRoomParticipant participants = 4; //参与者信息
+}
+
+// 聊天室最近的聊天内容
+message ChatRoomQueryLatestReq
+{
+	optional uint64 room_id = 1; //房间Id
+}
+
+// 聊天室最近的聊天内容
+message ChatRoomQueryLatestResp
+{
+	optional uint64 room_id = 1; //房间Id
+	optional uint32 result = 2; //成功or失败
+	repeated ChatContent latest_contents = 3; //聊天室的最后几条信息
+}
+
+// 聊天室发送消息
+message ChatRoomDeliver
+{
+	optional uint64 room_id = 1; //房间Id
+	optional string content	= 2;// 内容
+}
+
+// 聊天室发送消息
+message ChatRoomDeliverResp
+{
+	optional uint64 room_id = 1; //房间Id
+	optional uint32 result = 2; // //成功or失败
+}
+
+// 聊天室新的消息推送
+message ChatRoomBroadcast
+{
+	optional uint64 room_id = 1; //房间Id
+	optional ChatContent content = 2; //新的消息
+}
+
+// 匹配成功后创建聊天室
+message NotifyMatchChatRoom
+{
+	optional MatchType match_type = 1; //比赛类型
+	optional uint64 room_id = 2; //房间Id
+}
+
+// 创建聊天室
+message MatchChatRoomCreateReq
+{
+	optional uint64 session_id = 1; //创建的序列Id
+	optional uint32 server_id = 2; //发送的服务器ID
+	repeated uint32 participant_acc_ids = 3; //初始化的参与者Id
+}
+
+//创建聊天室回复
+message MatchChatRoomCreateResp
+{
+	optional uint64 session_id = 1; //创建的序列Id
+	optional uint32 result = 2; //成功or失败
+	optional uint64 room_id	= 3; //房间ID
+}
+
+// 销毁比赛聊天室
+message MatchChatRoomDestroyReq
+{
+	optional uint32 server_id = 1; //发送的服务器ID
+	optional uint32 room_id = 2; //房间ID
+}
+
+//销毁聊天室回复
+message MatchChatRoomDestroyResp
+{
+	optional uint32 result = 1; //成功or失败
+	optional uint64 room_id	= 2; //房间ID
+}

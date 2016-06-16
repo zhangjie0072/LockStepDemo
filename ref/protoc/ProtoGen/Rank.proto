@@ -1,0 +1,87 @@
+package fogs.proto.msg;
+import "Player.proto";
+
+//---------排行榜模块相关
+
+//排行榜类型
+enum RankType
+{
+	RT_LEVEL				= 1; //等级
+	RT_WEALTH				= 2; //财富
+	RT_CUR_REGULAR_POINTS	= 3; //常规赛当前积分排行
+	RT_LAST_REGULAR_POINTS	= 4; //常规赛上一轮积分排行
+	RT_QUALIFYING			= 5; 
+	RT_PVP					= 6; //PVP
+	RT_QUALIFYING_NEW		= 7;
+	RT_LADDER				= 8; //天梯赛
+	RT_POSITION				= 9; //职业
+	RT_ACHIEVEMENT			= 10;//成就
+	RT_TOTAL				= 11; //
+}
+
+enum RankSubType
+{
+	RST_POSITION_C			= 1;
+	RST_POSITION_PF			= 2;
+	RST_POSITION_SF			= 3;
+	RST_POSITION_PG			= 4;
+	RST_POSITION_SG			= 5;
+}
+
+//竞技赛排名信息
+message RankInfo
+{
+	optional uint32 acc_id			= 1; //ID
+	optional string name 			= 2; //姓名
+	optional uint32 level 			= 3; //等级
+	optional uint32 wealth			= 4; //财富
+	optional uint32 points			= 5; //积分
+	optional uint32 vip_exp			= 6; //VIP经验
+	optional string show_id			= 7; //模型展示ID
+	repeated RoleInfo role_info		= 8; //球员信息
+	optional uint32 ranking			= 9; //当前排名
+	optional uint32 rank_time		= 10; //上榜时间
+	optional uint32 fight_power		= 11; //战斗力
+}
+
+
+//获取积分排行榜
+message FetchRankListReq
+{
+	required RankType type		= 1; //排行榜类型
+	optional uint32 server_id		= 2; //PlatS ID
+	optional uint32 max_item		= 3; //
+	optional uint32 max_enable_item	= 4; //
+}
+
+//获取积分排行榜回复
+message FetchRankListResp
+{
+	required RankType type		= 1; //排行榜类型
+	optional uint32 result			= 2; //获取结果
+	repeated RankInfo rank_list		= 3; //排行榜单
+}
+
+//更新积分排行榜
+message UpdateRankList
+{
+	required RankType type 		= 1; //排行榜类型
+	optional RankInfo challenger		= 2; //挑战者信息
+	repeated RankInfo rank_list		= 3; //排行榜单
+}
+
+//请求排行榜信息
+message RankListReq
+{
+	required RankType type 			= 1;
+	optional RankSubType sub_type	= 2;
+}
+
+//请求排行榜信息回复
+message RankListResp
+{
+	required uint32 result			= 1; //请求结果
+	required RankType type 		= 2; //排行榜类型
+	optional RankSubType sub_type	= 3;
+	repeated RankInfo rank_list		= 4; //排行榜单
+}

@@ -1,0 +1,9 @@
+<MatchSetting type="2"> <!--1:practice 2:ready 3:1on1 4:3on3 -->
+	<Scene>10001</Scene>
+	
+	<BgSound>
+		<Track src="bg/shequ" interval="1" loop="0"/>
+		<Track src="bg/louding" interval="10" loop="0"/>
+	</BgSound>
+	
+</MatchSetting>

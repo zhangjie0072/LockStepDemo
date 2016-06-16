@@ -1,0 +1,71 @@
+package fogs.proto.msg;
+
+//---------纹身模块相关
+
+//纹身类型
+enum TattooType
+{
+	TT_NECK		= 1; //颈部
+	TT_CHEST	= 2; //胸部
+	TT_ARM		= 3; //手臂
+	TT_BACK		= 4; //背部
+	TT_PIECE	= 5; //碎片
+	TT_ALL		= 6; //全部
+}
+
+//纹身信息
+message TattooSlotProto
+{
+	optional uint32 id 				= 1;//槽位ID
+	optional uint64 tattoo_uuid		= 2;//纹身物品UUID
+}
+
+//纹身操作类型
+enum TattooOperationType
+{
+	//TOT_UNLOCK_SLOT		= 1; //解锁纹身槽位
+	TOT_EQUIP				= 2; //装备纹身
+	TOT_UNEQUIP				= 3; //卸下纹身
+	TOT_UPGRADE				= 4; //升级纹身
+	//TOT_USE				= 5; //使用纹身
+}
+
+//纹身操作消息（C --> S）
+message TattooOperation
+{
+	required TattooOperationType type 	= 1; //操作类型
+	optional uint64 uuid				= 2; //纹身UUID
+	optional uint32 role_id				= 3; //纹身所属球员ID
+	optional uint32 slot_id				= 4; //纹身所在槽位ID
+}
+
+//纹身操作结果（S --> C）
+message TattooOperationResp
+{
+	required TattooOperationType type 	= 1; //操作类型
+	optional uint32 result				= 2; //操作结果（0：成功，其他：失败）
+	optional uint64 uuid				= 3; //纹身UUID
+	optional uint32 level				= 4; //纹身等级
+	optional uint32 role_id				= 5; //纹身所属球员ID
+	optional uint32 slot_id				= 6; //纹身所在槽位ID
+}
+
+message GoodsConsumData
+{
+	required uint64 uuid				= 1; //物品UUID
+	required uint32 num					= 2; //消耗数量
+}
+
+//纹身升级（C --> S）
+message TattooUpgrade
+{
+	required uint64 uuid					= 1; //纹身UUID
+	repeated GoodsConsumData consumables	= 2; //消耗品
+}
+
+//纹身升级（S --> C）
+message TattooUpgradeResp
+{
+	required uint32 result					= 1; //操作结果（0：成功，其他：失败）
+	required uint64 uuid					= 2; //纹身UUID
+}

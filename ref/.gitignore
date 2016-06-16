@@ -1,0 +1,20 @@
+################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+.svn
+server
+*.suo
+*.sln
+*.swp
+client/client.CSharp.*proj
+client/Assembly*
+client/Library*
+client/Temp*
+client/obj*
+client/UnityVS*
+client/Assets/UnityVS*
+client/Assets/Resources/Proto*
+client/Assets/Resources/Lua*
+/client/.vs
+client/client.userprefs
+client/client.v12.suo

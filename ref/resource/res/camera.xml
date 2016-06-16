@@ -1,0 +1,8 @@
+<CameraSetting>
+	<HalfSizeBound 	x="1.5" y="1.0" z="13.5"/>
+	<RadiusThreshold 	min="0.0" 	max="8.5"/>
+	<LookAngleVertical 	min="30.0"	max="20.0"/>
+	<DistanceToTarget	min="10.0"	max="8.5"/>
+	<AngleToTarget		min="40.0"	max="35.0"/>
+	<MoveSpeedHorizonal speed="0.8"/>
+</CameraSetting>

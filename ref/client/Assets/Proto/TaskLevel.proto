@@ -1,0 +1,28 @@
+package fogs.proto.msg;
+import "Base.proto";
+//领取升级奖励
+message GetLevelAwardReq
+{
+	optional uint32 level = 1; //领取的等级
+}
+
+//领取升级奖励回复
+message GetLevelAwardResp
+{
+	optional uint32 level = 1; //领取的等级
+	optional uint32 result = 2; //领取等级奖励的状态
+	repeated KeyValueData awards = 3; //奖励内容
+}
+
+//等级奖励状态
+message LevelAwardStateReq
+{
+	
+}
+
+//等级奖励状态回执
+message LevelAwardStateResp
+{
+	repeated KeyValueData state = 1;
+}
+

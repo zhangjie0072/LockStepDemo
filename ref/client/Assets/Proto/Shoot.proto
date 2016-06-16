@@ -1,0 +1,81 @@
+package fogs.proto.msg;
+import "Base.proto";
+
+//开始投篮比赛
+message StartShoot
+{
+	optional uint32 diffictly				= 1;
+	optional FightRoleInfo fight_list		= 2; //球员出战列表
+	optional GameMode game_mode				= 3[default=GM_None]; 
+}
+//开始投篮比赛回复
+message StartShootResp
+{
+	optional uint32 result			= 1; //结果（0：OK，其他：failed）
+	optional uint64 session_id		= 2; //本次比赛的会话ID
+}
+
+//结束投篮比赛
+message EndShoot
+{
+	optional uint64 session_id		= 1; //比赛会话ID
+	optional uint32 main_role_side	= 2; //玩家所在队伍方
+	optional uint32 score_home		= 3; //主队得分
+	optional uint32 score_away		= 4; //客队比分
+}
+
+//结束投篮比赛回复
+message EndShootResp
+{
+	optional uint32 result			= 1; //结果
+	repeated KeyValueData	awards	= 2; // 奖励物品
+	optional uint32 times			= 3;
+	optional GameMode game_mode		= 4[default=GM_None]; 
+	repeated MatchRoleInfo info		= 5;
+	optional uint32 awards_times	= 6; //翻牌次数
+	repeated KeyValueData diamond_awards	= 7;//钻石抽奖奖品
+}
+
+//投篮赛开启的玩法
+message ShootOpenReq
+{
+	optional uint32 acc_id		= 1;
+}
+
+message GameModeInfo
+{
+	optional GameMode game_mode		= 1[default=GM_None]; //玩法
+	optional uint32 times			= 2; //已挑战次数
+	optional uint32 npc				= 3; //对应NPC
+}
+
+//投篮赛开启的玩法回复
+message ShootOpenResp
+{
+	optional uint32 result					= 1;
+	repeated GameModeInfo game_mode_info	= 2; //
+}
+
+message ShootBuyTimesReq
+{
+	optional GameMode game_mode		= 1[default=GM_None]; //玩法
+}
+
+message ShootBuyTimesResp
+{
+	optional uint32 result			= 1;
+	optional uint32 times			= 2;//已购买次数
+}
+
+message ShootOpenCardReq
+{
+	optional ShootDiamondTurnCardType type		= 1[default=SDTCT_NONE]; 
+}
+
+message ShootOpendCardResp
+{
+	optional uint32 result			= 1; 
+	optional uint32 times			= 2;//还剩翻牌次数
+	optional KeyValueData awards	= 3;//翻出的奖励
+	repeated MatchRoleInfo info		= 4;
+}

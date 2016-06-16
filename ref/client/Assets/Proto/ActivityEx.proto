@@ -1,0 +1,14 @@
+package fogs.proto.msg;
+// 活动信息列表
+message  MainActivityInfo
+{
+	repeated MatchActivity match_activities = 1; //比赛任务
+}
+
+//比赛活动
+message MatchActivity
+{
+	optional uint32 id = 1;
+	optional uint32 race_times = 2;
+	optional uint32 reset_time = 3;
+}

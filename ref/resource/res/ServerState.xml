@@ -1,0 +1,20 @@
+<Data Count="3">
+  <Line>
+    <switch>
+    </switch>
+    <state>2</state>
+    <load_num>0</load_num>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <state>3</state>
+    <load_num>2</load_num>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <state>4</state>
+    <load_num>3</load_num>
+  </Line>
+</Data>

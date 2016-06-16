@@ -1,0 +1,111 @@
+package fogs.proto.msg;
+import "Base.proto";
+
+//---------GM指令相关
+
+enum PHPReqType
+{
+	PRT_MAIL			= 1; // 邮件
+	PRT_RECHARGE		= 2; // 充值
+	PRT_KICK			= 3; // 踢人
+	PRT_SILENT			= 4; // 禁言
+	PRT_NOTICE			= 5; // 公告
+}
+
+//GM指令
+message GMCommondExcu
+{
+	optional string commond_str			= 1; //指令字符串
+}
+
+message PHPReq
+{
+	optional uint32 session_id		= 1; //会话ID
+	optional PHPReqType type		= 2[default=PRT_MAIL];
+	optional GMMail mail 			= 3;
+	optional RechargeOrder recharge	= 4;
+	optional KickPlayer	kick		= 5;
+	optional SilentPlayer silent	= 6;
+	optional Notice notice			= 7;
+}
+
+message PHPResp
+{
+	optional uint32 result						= 1; //结果
+	optional uint32 session_id					= 2; //会话ID
+	optional RechargeOrderResp recharge_order	= 3; //充值订单回复
+	optional GMMailResp	mail					= 4; //邮件回复
+}
+
+//充值订单
+message RechargeOrder
+{
+	optional uint32 acc_id		= 1;  //用户ID
+}
+
+//充值订单回复
+message RechargeOrderResp
+{
+	optional uint32 result		= 1; //
+}
+
+//发送邮件
+message GMMail
+{
+	optional uint32 id				= 1;
+	optional string sender 			= 2;
+	optional string send_time		= 3;
+	repeated uint32 receivers		= 4;
+	optional uint32 timeliness		= 5;
+	optional string title			= 6;
+	optional string content			= 7;
+	repeated KeyValueData awards	= 8;
+	optional uint32 delete			= 9;
+}
+
+//邮件回复
+message GMMailResp
+{
+	required uint32 result		= 1;
+}
+
+//踢号
+message KickPlayer
+{
+	required uint32 acc_id		= 1;
+}
+
+//禁言
+message SilentPlayer
+{
+	required uint32 acc_id		= 1;
+	required uint32 type		= 2; //1:禁言,2:解禁
+	optional uint32 start_time	= 3;
+	optional uint32 time		= 4;
+}
+
+enum NoticeOpType
+{
+	NOT_ADD					= 1; //增
+	NOT_MODIFY				= 2; //改
+	NOT_DELETE				= 3; //删
+}
+
+//公告
+message Notice
+{
+	optional uint32 id			= 1; //公告ID
+	optional uint32 target		= 2; //目标人群
+	optional uint32 time_type	= 3; //时间类型
+	optional uint32 interval	= 4; //间隔时间
+	optional uint32 loop_times	= 5; //循环次数
+	optional string date		= 6; //日期
+	optional string time		= 7; //时间
+	optional string content		= 8; //内容
+	optional NoticeOpType type	= 9[default=NOT_ADD];
+}
+
+
+
+
+

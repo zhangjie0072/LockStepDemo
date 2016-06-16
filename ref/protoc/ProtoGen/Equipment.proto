@@ -1,0 +1,72 @@
+package fogs.proto.msg;
+import "Base.proto";
+
+//---------装备模块相关
+
+//装备类型
+enum EquipmentType
+{
+	ET_HEAD		= 1; //头部
+	ET_CHEST	= 2; //衣服
+	ET_BRACER	= 3; //手腕
+	ET_PANTS	= 4; //裤子
+	ET_SHOE		= 5; //鞋子
+	ET_EQUIPMENTPIECE = 6; //装备碎片
+	
+	ET_ALL		= 7; //全部
+}
+
+//装备操作类型
+enum EquipmentOperationType
+{
+	EOT_EQUIP				= 1; //装备
+	EOT_UNEQUIP				= 2; //卸下
+	EOT_EXCHANGE			= 3; //更换
+	EOT_UPGRADE_SINGLE		= 4; //单次强化
+	EOT_UPGRADE_AUTO		= 5; //自动强化
+}
+
+//栏位ID
+enum EquipmentSlotID
+{
+	ESID_HEAD		= 1;
+	ESID_CHEST		= 2;
+	ESID_BRACER		= 3;
+	ESID_PANTS		= 4;
+	ESID_SHOE		= 5;
+
+	ESID_ALL	= 6;
+}
+
+
+//装备栏位信息
+message EquipmentSlot
+{
+	required EquipmentSlotID id 		= 1;//槽位ID
+	required uint64 equipment_uuid		= 2;//装备UUID
+	required uint32 equipment_id		= 3;
+	required uint32 equipment_level		= 4;
+}
+
+//装备信息
+message EquipInfo
+{
+	required FightStatus pos			= 1[default=FS_NONE]; //卡片位置
+	repeated EquipmentSlot slot_info	= 2; //槽位信息
+}
+
+//装备操作消息（C --> S）
+message EquipOperation
+{
+	required EquipmentOperationType type 	= 1; //操作类型
+	optional EquipInfo info					= 2; //操作信息
+}
+
+//装备操作结果（S --> C）
+message EquipOperationResp
+{
+	required EquipmentOperationType type 	= 1; //操作类型
+	optional uint32 result					= 2; //操作结果（0：成功，其他：失败）
+	repeated EquipInfo info					= 3; //装备信息
+}
+

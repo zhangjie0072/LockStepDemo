@@ -1,0 +1,50 @@
+package fogs.proto.msg;
+
+
+// 时装操作类型
+enum FashionOperationType
+{
+	FOT_EQUIP 				= 1; //穿上服装.
+	FOT_UNEQUIP				= 2; //卸下服装.
+	FOT_RENEW				= 3; //续费
+	FOT_DELETE				= 4; //删除
+}
+
+
+//纹身信息
+message FashionSlotProto
+{
+	optional uint32 id 					= 1;//槽位ID
+	optional uint64 fashion_uuid		= 2;//时装物品UUID
+	optional uint32 goods_id			= 3;
+}
+
+// 时装操作信息.
+message FashionOperationInfo
+{
+	optional uint32 type  				= 1; //操作类型
+	optional uint64 uuid 				= 2; //服装UUID
+	optional uint32 subtype 			= 3; //选择类型（续费类型）
+}
+
+// 时装操作消息( C --> S )
+message FashionOperation 
+{
+	repeated FashionOperationInfo info 	= 1; // 时装操作信息.
+	optional uint32	role_id				= 2; 
+}
+
+
+// 时装操作返回信息
+message FashionOperationRespInfo
+{
+	optional uint32 result    			= 1; //返回结果(0:成功,其他:失败)
+	optional uint32 type  				= 2; //操作类型.
+	optional uint64 uuid 				= 3; //服装UUID
+}
+
+// 时装操作返回( S --> C )
+message FashionOperationResp
+{
+	repeated FashionOperationRespInfo resp_info = 1; //返回结果信息.
+}

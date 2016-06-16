@@ -1,0 +1,448 @@
+package fogs.proto.msg;
+import "Base.proto";
+import "Room.proto";
+import "Skill.proto";
+
+//---------比赛功能相关
+//进入GameServer
+message EnterGameSrv
+{
+	required uint32 acc_id				= 1; //AccountID
+	required uint64 session				= 2; //登录SessionID
+}
+
+//进入GameServer结果回复
+message EnterGameSrvResp
+{
+	required uint32 acc_id			= 1; //AccountID
+	required uint32 result			= 2; //
+}
+
+//
+message RequirePlayerData
+{
+	required uint32 acc_id			= 1; //AccountID
+	required uint32 game_id			= 2;
+	required GameMode game_mode		= 3[default=GM_None]; //比赛玩法类型
+}
+
+//
+message RequirePlayerDataResp
+{
+	required uint32 acc_id			= 1;
+	required uint32 result 			= 2;
+	required PlayerData data		= 3;
+}
+
+message Stand
+{
+	required double		time_stamp		= 1;
+	required uint32 	char_id			= 2; //
+	required double 	rotate 			= 3; //
+	required SVector3 	pos				= 4; //
+}
+
+enum MoveType
+{
+	eMT_Stand		= 1;
+	eMT_Run			= 2;
+	eMT_Rush		= 3;
+	eMT_Defense		= 4;
+	eMT_RequireBall	= 5;
+	eMT_Catch		= 6;
+	eMT_PickAndRoll = 7;
+}
+
+message Move
+{
+	required double		time_stamp		= 1;
+	required uint32 	char_id			= 2; 
+	required AnimType 	actionType		= 3 [default=B_TYPE_0];
+	required MoveType	type			= 4;
+	required int32 		dir				= 5; //方向
+	required double 	rotate 			= 6; 
+	required SVector3 	pos				= 7; 
+	required SVector3 	dest_pos		= 8;
+	required uint32		moveTo			= 9;
+}
+
+message PickBall
+{
+	required double		time_stamp	= 1;
+	required uint32 	char_id		= 2;
+	required AnimType 	actionType	= 3 [default=B_TYPE_0];
+	required SVector3 	pos			= 4;
+	required double 	rotate		= 5;
+	required uint32		ball_id		= 6;
+	required uint32		ball_state	= 7; //1:地板球
+}
+
+message Steal
+{
+	required double		time_stamp	= 1;
+	required uint32 	char_id		= 2;
+	required SVector3 	pos			= 3;
+	required double 	rotate		= 4;
+	required Skill 		skill		= 5; //技能ID
+	required AnimType 	actionType	= 6 [default=B_TYPE_0];
+	required uint32		getBall		= 7;
+	required uint32 	target_char_id	= 8;
+	required uint32		valid		= 9;
+}
+
+message Stolen
+{
+	required double		time_stamp	= 1;
+	required uint32 	char_id		= 2;
+	required SVector3 	pos			= 3;
+	required double 	rotate		= 4;
+	required uint32		success		= 5;
+	required SVector3 	ballPos		= 6;
+	required SVector3 	ballDir		= 7;
+	required uint32		stolen_char_id	= 8; //被抢断ID
+	required uint32		lostBall	= 9;
+}
+
+message CrossOver
+{
+	required double		time_stamp	= 1;
+	required uint32 	char_id		= 2;
+	required SVector3 	pos			= 3;
+	required double 	rotate		= 4;
+	required Skill 		skill		= 5; //技能ID
+	required int32		dir			= 6;
+	required AnimType   stateType	= 7 [default=B_TYPE_0];
+}
+
+message DefenseCross
+{
+	required double		time_stamp	= 1;
+	required uint32 	char_id		= 2;
+	required uint32		cross_char_id = 3;	//destUserID
+	required SVector3 	pos			= 4;
+	required SVector3 	targetPos	= 5;	//destPos
+	required double 	rotate		= 6;
+	required SVector3	velocity	= 7;	
+	required double 	playbackSpeed = 8; //fAnimPlaySpeed
+	required AnimType   stateType	= 9[default=N_TYPE_0];
+}
+
+message CutIn
+{
+	required double		time_stamp		= 1;
+	required uint32 	char_id			= 2;
+	required SVector3 	pos				= 3;
+	required double 	rotate			= 4;
+	required Skill 		skill			= 5;
+	required AnimType 	actionType		= 6[default=N_TYPE_0];
+	required int32		dir				= 7;
+}
+
+message Crossed
+{
+	required double		time_stamp	= 1;
+	required uint32 	char_id		= 2;
+	required uint32		cross_char_id = 3;	//destUserID
+	required SVector3 	pos			= 4;
+	required double 	rotate		= 5;
+	required AnimType   stateType	= 6[default=N_TYPE_0];
+}
+
+//进攻
+message Attack
+{
+	required double				time_stamp		= 1;
+	required CharacterState 	state			= 2 [default=eNone]; //状态
+	required uint32 			char_id			= 3; //球员ID
+	required SVector3 			pos				= 4;
+	required double 			rotate			= 5;
+	required Area 				area 			= 6; //投篮所在区域
+	required double 			prob			= 7; //投篮命中率
+	required double 			force_bar		= 8; //投篮力度条
+	required uint32 			success_path	= 9; //成功投篮曲线ID
+	required uint32 			failure_path	= 10; //失败投篮曲线ID
+	required SVector3 			dunk_success	= 11; //
+	required SVector3 			dunk_fail		= 12; //
+	
+	required Skill 				skill			= 13; //技能ID
+	required uint32				ballId			= 14; 
+	required SVector3			ballInitPos		= 15;
+	required SVector3			ballInitVel		= 16;
+	required BallState			ballState		= 17[default=none];
+	required uint32 			ballCurve		= 18; //成功投篮曲线ID
+	required uint32				goal			= 19; //是否进球
+	required double				ballFlyTime		= 20; //飞行时间
+	
+	required uint32				open			= 21; //空位
+}
+
+message PrepareToShoot
+{
+	required double				time_stamp		= 1;
+	required uint32 			char_id			= 2; //球员ID
+	required uint32				cancel			= 3;
+}
+
+message Collision
+{
+	required double				time_stamp		= 1;
+	required uint32 			char_id			= 2; //球员ID
+	required SVector3 			pos				= 3;
+	required double 			rotate			= 4;
+	required SVector3			newDir			= 5;
+}
+
+enum DownType
+{
+	eDT_Stagger		= 1;
+	eDT_Down		= 2;
+}
+
+message Down
+{
+	required double				time_stamp		= 1;
+	required uint32 			char_id			= 2; //球员ID
+	required SVector3 			pos				= 3;
+	required double 			rotate			= 4;
+	required DownType			downType		= 5;
+	required AnimType 			actionType		= 6 [default=B_TYPE_0];
+	required SVector3			ballInitPos		= 7;
+	required SVector3			ballInitVel		= 8;
+}
+
+message FallDown
+{
+	required double				time_stamp		= 1;
+	required uint32 			char_id			= 2;
+	required SVector3 			pos				= 3;
+	required double 			rotate			= 4;
+}
+
+message Rebound
+{
+	required double				time_stamp		= 1;
+	required uint32 			char_id			= 2;
+	required SVector3 			pos				= 3;
+	required double 			rotate			= 4;
+	required Skill 				skill			= 5;
+	required SVector3			velocity		= 6;
+	required AnimType 			actionType		= 7 [default=B_TYPE_0];
+	required uint32				success			= 8; //3是同步动作，
+	required double				time			= 9; //第一个抢篮板球员起跳帧到得球帧所需时间
+	required uint32				attr			= 10; //篮板属性
+	required uint32				valid			= 11;
+}
+
+message BodyThrowCatch
+{
+	required double				time_stamp		= 1;
+	required uint32 			char_id			= 2;
+	required SVector3 			pos				= 3;
+	required double 			rotate			= 4;
+	required Skill 				skill			= 5;
+	required AnimType 			actionType		= 6 [default=B_TYPE_0];
+	required uint32				success			= 7;
+	required SVector3			velocity 		= 8;
+	required SVector3			ballPos			= 9;
+	required SVector3			ballVelocity 	= 10;
+	required uint32				valid			= 11;
+}
+
+message Block
+{
+	required double				time_stamp		= 1;
+	required uint32 			char_id			= 2;
+	required Skill 				skill			= 3; 
+	required double				block_rate		= 4; //盖帽率
+	required double				block_value		= 5; //盖帽值
+	required uint32				blockable		= 6;
+	required uint32				block_inRange	= 7;
+	required SVector3			velocity		= 8;
+	required uint32				success			= 9; //是否
+	required SVector3 			pos				= 10;
+	required double 			rotate			= 11;
+	required SVector3 			attackerPos		= 12;
+	required uint32				nCurveType		= 13;
+	required SVector3 			ballDir			= 14;
+	required SVector3 			ballPos			= 15;
+	required uint32 			passTarget		= 16;
+	required uint32				valid			= 17;
+}
+
+message RequireBall
+{
+	required double				time_stamp		= 1;
+	required uint32 			char_id			= 2;
+	required SVector3 			pos				= 3;
+	required double 			rotate			= 4;
+	required Skill 				skill			= 5;
+	required AnimType 			actionType		= 6[default=N_TYPE_0];
+}
+
+message Pass
+{
+	required double				time_stamp		= 1;
+	required uint32 			char_id			= 2;
+	required SVector3 			pos				= 3;
+	required double 			rotate			= 4;
+	required Skill 				skill			= 5;
+	required AnimType 			actionType		= 6 [default=B_TYPE_0];
+	required uint32				target_char_id	= 7;
+	required uint32				interceptor		= 8;
+	required SVector3			ballInterceptedPos = 9;
+	required SVector3			ballInterceptedDir = 10;
+}
+
+message Interception
+{
+	required double				time_stamp		= 1;
+	required uint32 			char_id			= 2;
+	required uint32 			passer_char_id	= 3;
+	required uint32 			catcher_char_id	= 4;
+	
+	required SVector3 			pos				= 5;
+	required double 			rotate			= 6;
+	required Skill 				skill			= 7;
+	
+	required AnimType 			actionType		= 8 [default=N_TYPE_0];
+	required SVector3 			blockedBallDir	= 9;
+	required SVector3 			blockedBallPos	= 10;
+	required uint32 			getBall			= 11;
+}
+
+message Hold
+{
+	required double				time_stamp		= 1;
+	required uint32 			char_id			= 2;
+	required SVector3 			pos				= 3;
+	required double 			rotate			= 4;
+	required uint32				movedWithBall	= 5;
+}
+
+message Catch
+{
+	required double				time_stamp		= 1;
+	required uint32 			char_id			= 2;
+	required SVector3 			pos				= 3;
+	required double 			rotate			= 4;
+	required Skill 				skill			= 5;
+	required AnimType 			actionType		= 6 [default=B_TYPE_0];
+}
+
+message PickAndRoll
+{
+	required double				time_stamp		= 1;
+	required uint32 			char_id			= 2;
+	required SVector3 			pos				= 3;
+	required double 			rotate			= 4;
+	required Skill 				skill			= 5;
+	required AnimType 			actionType		= 6 [default=N_TYPE_0];
+}
+
+message BePickAndRoll
+{
+	required double				time_stamp		= 1;
+	required uint32 			char_id			= 2;
+	required SVector3 			pos				= 3;
+	required double 			rotate			= 4;
+	required AnimType 			actionType		= 5 [default=N_TYPE_0];
+}
+
+message GameMsg
+{
+	required uint32           	senderID			= 1;
+	required uint32           	destUserID        	= 2;
+	optional CharacterState 	eState			    = 3 [default=eNone];
+	optional SVector3         	pos 	            = 4;
+	optional SVector3         	destPos          	= 5;
+	optional SVector3         	ballPos          	= 6;
+	optional SVector3         	ballVelocity     	= 7;
+	optional double           	curTime           	= 8;
+	optional uint32             nextAction			= 9;
+	optional int32              dir                 = 10;
+	optional double           	rotate              = 11;
+	optional SVector3			velocity			= 12;
+	optional uint32             nAIState            = 13;
+	optional AnimType      		eStateType          = 14 [default=B_TYPE_0];
+	optional uint32             nSuccess            = 15;
+	//optional uint32           nSectorNum          = 16;
+	optional uint32             nIsGoal				= 17;
+	optional uint32           	nCurveType          = 18;
+	optional uint32             nGoalPoint          = 19;
+	optional double           	fAnimPlaySpeed      = 20;
+	optional double           	fRotateTime         = 21;
+	optional double           	fPassTime           = 22;
+	optional double           	fBallFlyTime        = 23;
+	optional uint32             nPassType           = 24;
+	optional double           	fAniTime			= 25;
+	optional uint32             nHandIndex          = 26;
+	optional BallState       	eBallState          = 27  [default=none];
+	optional Skill				skill				= 28;
+	optional uint32				moveTo				= 29;
+	optional uint32				ballId				= 30;
+	optional uint32				relativePlayerId	= 31;
+}  
+
+
+message GameBeginReq
+{
+	required uint32 acc_id	= 1;
+}
+
+//比赛开始
+message GameBeginResp
+{
+	required uint32 round_time		= 1; //每回合时间
+	required uint32 home_score		= 2; 
+	required uint32 away_score		= 3;
+	required TeamType on_ball		= 4[default=TT_HOME];   //执球方
+	required double total_time		= 5; //整场比赛时间
+	required double cur_time		= 6; //当前时间
+	optional uint32 tip_off			= 7; //0不跳球  1跳球
+	optional FightRoleInfo home_position		= 8;
+	optional FightRoleInfo away_position		= 9;
+}
+
+//进球
+message GameGoal
+{
+	required uint32		index	= 1;
+	required uint32		score	= 2;
+}
+
+//24秒违规
+message GameFaul
+{
+	required TeamType	type	= 1[default=TT_HOME];// 违规方
+}
+
+message GameOver
+{
+	required GameResult result 	= 1[default=GR_WIN];
+	optional uint32 remain_time	= 2; //比赛剩余事件
+}
+
+message TimeTracer
+{
+	required uint32 id					= 1;
+	required double sendTimeStamp 		= 2;
+	optional double revTimeStamp 		= 3;
+}
+
+message SyncTime
+{
+	required double serverTime			= 1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

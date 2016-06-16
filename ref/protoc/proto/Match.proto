@@ -1,0 +1,689 @@
+package fogs.proto.msg;
+import "Base.proto";
+import "Practice.proto";
+import "Career.proto";
+import "Tour.proto";
+import "Room.proto";
+import "Qualifying.proto";
+import "BullFight.proto";
+import "Shoot.proto";
+import "Player.proto";
+//---------比赛匹配
+
+
+
+//参赛信息
+message MatchInfo
+{
+	message MemberInfo
+	{
+		optional uint32 id				= 1; //球员ID
+		optional uint32 level			= 2; //球员等级
+		optional uint32 quality			= 3; //球员品质
+	}
+
+	optional uint32 acc_id				= 1; //AccountID
+	optional uint32 team_level			= 2; //队伍等级
+	optional string team_name			= 3;
+	optional string team_icon			= 4; //队伍图标
+	optional uint32 winning_streak		= 5; //连胜次数
+
+	repeated MemberInfo members			= 6; //参赛球员信息
+
+	optional uint32 pos 				= 7; //在房间中的位置
+}
+
+
+
+
+//结束竞技赛请求
+message EndRaceReq
+{
+	required MatchType type 			= 1[default=MT_NONE]; //
+	optional uint32 acc_id 				= 2; //AccountID
+	optional uint64 session_id			= 3; //匹配会话ID
+	optional uint32 main_role_side		= 4; //玩家所在队伍方
+	optional uint32 score_home			= 5; //主队得分
+	optional uint32 score_away			= 6; //客队比分
+}
+
+//结束竞技赛回复
+message EndRaceResp
+{
+	required uint32 result				= 1; //比赛结果
+	optional MatchType type 			= 2[default=MT_NONE]; //比赛类型
+	optional uint32 winning_streak		= 3; //连胜次数
+	optional uint32 cur_regular_points	= 4; //当前积分
+	optional uint32 run_times			= 5; //已挑战次数
+}
+
+//中途退出竞技赛请求
+message ExitRaceReq
+{
+	required ExitMatchType type 		= 1[default=EMT_END]; //退出比赛的方式
+	optional uint32 acc_id 				= 2; //AccountID
+	optional uint64 session_id			= 3; //匹配会话ID
+}
+
+//中途退出竞技赛请求回复
+message ExitRaceResp
+{
+	required uint32 result				= 1; //退出结果
+	required ExitMatchType type 		= 2[default=EMT_END]; //退出比赛的方式
+}
+
+
+//购买竞技次数请求
+message BuyRaceTimesReq
+{
+	required MatchType type 			= 1[default=MT_NONE]; //竞技类型
+}
+
+//购买竞技次数回复
+message BuyRaceTimesResp
+{
+	required uint32 result				= 1; //请求结果
+	required MatchType type 			= 2[default=MT_NONE]; //竞技类型
+	optional uint32 times 				= 3; //竞技次数
+}
+
+
+
+//进入房间请求
+message AsynEnterRoomReq
+{
+	required MatchType type 			= 1[default=MT_NONE]; //比赛类型
+	optional MatchInfo info 			= 2; //比赛信息
+	optional uint32 plat_id				= 3; //Plat服务器ID
+}
+
+//进入房间回复
+message AsynEnterRoomResp
+{
+	required uint32 result				= 1; //请求结果
+	required MatchType type 			= 2[default=MT_NONE]; //比赛类型
+	repeated MatchInfo others_info 		= 3; //房间内其他玩家信息
+	optional uint32 room_id				= 4; //房间ID
+	optional uint32 match_id			= 5; //Match服务器ID
+	optional uint32 server_time			= 6; //服务器当前时间
+}
+
+//退出房间请求
+message AsynExitRoomReq
+{
+	required MatchType type 			= 1[default=MT_NONE]; //比赛类型
+	optional uint32 acc_id 				= 2; //AccountID
+	optional uint32 room_id				= 3; //房间ID
+	optional uint32 game_id				= 4; //GameServerID
+}
+
+//退出房间回复
+message AsynExitRoomResp
+{
+	required uint32 result				= 1; //请求结果
+	required MatchType type 			= 2[default=MT_NONE]; //比赛类型
+	optional uint32 acc_id				= 3; //AccountID
+}
+
+//开始匹配请求
+message AsynMatchReq
+{
+	required MatchType type 			= 1[default=MT_NONE]; //
+	optional uint32 acc_id 				= 2; //AccountID
+	optional FightRoleInfo fight_list		= 3; //球员出战列表
+	repeated uint32 apart_list			= 4; //已挑战过的玩家ID列表
+	optional MatchInfo info 			= 5; //比赛信息
+}
+
+//开始匹配回复
+message AsynMatchResp
+{
+	required uint32 result				= 1; //匹配结果
+	optional MatchType type 			= 2[default=MT_NONE]; //比赛类型	
+	optional FightRoleInfo fight_list		= 3; //球员出战列表
+	repeated MatchInfo rival_info 		= 4; //对手玩家信息
+	optional uint64 session_id			= 5; //匹配会话ID
+}
+
+//取消匹配请求
+message AsynCancelReq
+{
+	required MatchType type 			= 1[default=MT_NONE]; //
+	optional uint32 acc_id 				= 2; //AccountID
+	optional FightRoleInfo fight_list			= 3; //球员出战列表
+	repeated uint32 apart_list			= 4; //已挑战过的玩家ID列表
+}
+
+//取消匹配回复
+message AsynCancelResp
+{
+	required uint32 result				= 1; //匹配结果
+	optional MatchType type 			= 2[default=MT_NONE]; //比赛类型	
+	optional FightRoleInfo fight_list			= 3; //球员出战列表
+	repeated MatchInfo rival_info 		= 4; //对手玩家信息
+	optional uint64 session_id			= 5; //匹配会话ID
+}
+
+//荣誉争霸赛结束请求
+message AsynEndReq
+{
+	required MatchType type 			= 1[default=MT_NONE]; //
+	optional uint32 acc_id 				= 2; //AccountID
+	optional uint64 session_id			= 3; //匹配会话ID
+	optional uint32 main_role_side		= 4; //玩家所在队伍方
+	optional uint32 score_home			= 5; //主队得分
+	optional uint32 score_away			= 6; //客队比分
+}
+
+//荣誉争霸塞结束回复
+message AsynEndResp
+{
+	required uint32 result				= 1; //比赛结果
+	optional MatchType type 			= 2[default=MT_NONE]; //比赛类型
+	optional uint32 winning_streak		= 3; //连胜次数
+	optional uint32 cur_regular_points	= 4; //当前积分
+	optional uint32 run_times			= 5; //已挑战次数
+}
+
+
+message MatchPlayerInfo
+{
+	optional uint32 acc_id				= 1;
+	optional uint32 plat_id				= 2;
+	optional uint32 level				= 3;
+	//optional uint32 captain_id			= 4;
+	optional string name				= 5;
+	optional uint32 team				= 6;
+	optional uint32 score				= 7;
+}
+
+//开始匹配请求
+message StartMatchReq
+{	
+	required uint32 acc_id							= 1;
+	required MatchType type 						= 2[default=MT_NONE]; //比赛类型
+	optional ChallengeMatchReq challenge			= 3; //1v1挑战赛
+	optional ChallengePlusMatchReq challenge_plus	= 4; //1+2vs1+2挑战赛
+	optional ChallengeExtendMatchReq challenge_ex	= 5;
+	optional GameMode game_mode						= 6[default=GM_None];
+	optional PlayerData  data						= 7;
+	repeated KeyValueData fight_power				= 8;//己方球员各自战斗力
+	optional RegularRaceReq regular					= 9;//常规赛
+	optional QualifyingNewMatchReq qualifying_new	= 10;//排位赛（新）
+}
+
+//常规赛
+message RegularRaceReq
+{
+	optional uint32 level				= 1; //玩家等级
+	optional string name				= 2; //玩家名字
+	optional uint32 plat_id				= 3; //PlatServerID
+	optional uint32 score				= 4; //常规赛比赛的积分
+	optional uint32 fight_power			= 5; //战斗力
+	optional uint32 race_type			= 6; //普通赛（1）or定级赛（2）or 定级假赛(3)
+}
+
+//排位赛（新）
+message QualifyingNewMatchReq
+{
+	optional uint32 level				= 1; //玩家等级
+	optional string name 				= 2; //玩家名字
+	optional uint32 plat_id				= 3; //PlatServerID
+	optional uint32 score				= 4; //新排位赛比赛的积分
+	optional uint32 fight_power			= 5; //战斗力
+	optional uint32 race_type			= 6; //普通赛（1）or定级赛（2）or 定级假赛(3) or 晋级赛(4)
+}
+
+//3vs3匹配请求
+message ChallengeExtendMatchReq
+{
+	optional uint32 level				= 1; //玩家等级
+	optional string name				= 2; //玩家名字
+	optional uint32 plat_id				= 3; //PlatServerID
+	optional FightRoleInfo fight_list	= 4; //球员出战列表
+}
+//1+2vs1+2匹配请求
+message ChallengePlusMatchReq
+{
+	optional uint32 level				= 1; //玩家等级
+	optional string name				= 2; //玩家名字
+	optional uint32 plat_id				= 3; //PlatServerID
+	optional uint32 score				= 4; // 1+2vs1+2 比赛的积分
+	optional uint32 fight_power			= 5; //战斗力
+	optional uint32 race_type			= 6; //普通赛（1）or定级赛（2）
+}
+
+//挑战赛匹配请求
+message ChallengeMatchReq
+{
+	optional string play_way			= 1; //1V1比赛选择的玩法 （可多选）
+	optional FightRoleInfo fight_list	= 2; //球员出战列表
+	optional uint32 level				= 3; //玩家等级
+	optional string name				= 4; //玩家名字
+	optional uint32 plat_id				= 5; //PlatServerID
+}
+
+
+//开始匹配回复
+message StartMatchResp
+{
+	required uint32 acc_id							= 1;
+	required MatchType type 						= 2[default=MT_NONE]; //比赛类型
+	required uint32 result							= 3; //
+	optional AsynMatchResp honorCompetition			= 4;
+	optional uint32 match_id						= 5; //MatchServerID
+	optional uint32 game_id							= 6; //GameServerID
+	optional string game_ip							= 7; //GameServer的IP
+	optional uint32 game_port						= 8; //GameServer的Port
+	optional uint32 room_id							= 9; //RoomID
+	optional uint32 aver_time						= 10;//匹配平均花费时间
+}
+
+
+
+
+//取消匹配请求
+message CancelMatchReq
+{
+	required uint32 acc_id				= 1;
+	required MatchType type 			= 2[default=MT_NONE]; //比赛类型
+	optional uint32 level				= 3;
+	optional uint32 plat_id				= 4;
+}
+
+//取消匹配回复
+message CancelMatchResp
+{
+	required uint32 acc_id				= 1;
+	required MatchType type 			= 2[default=MT_NONE]; //比赛类型
+	required uint32 result				= 3; //
+}
+
+//创建比赛
+message CreateGameReq
+{
+	required MatchType type 					= 1[default=MT_NONE]; //比赛类型
+	optional uint32 session_id					= 2;
+	optional uint32 scene_id					= 3;
+	optional uint32 match_id					= 4;
+	repeated MatchPlayerInfo match_player_info	= 5;
+	//optional MatchPlayerInfo match_player2_info = 6;
+	optional uint32 play_way					= 7;
+	optional uint32 room_id						= 8;
+	repeated PlayerData  data					= 9; //用于掉线后
+}
+
+//创建比赛回复
+message CreateGameResp
+{
+	required MatchType type 					= 1[default=MT_NONE]; //比赛类型
+	required uint32 result						= 2; //
+	optional uint32	session_id					= 3;
+	optional uint32 play_way					= 4;
+	optional uint32 scene_id					= 5;
+	repeated MatchPlayerInfo match_player_info	= 8;
+	//optional MatchPlayerInfo match_player2_info = 9;
+	optional uint32 room_id						= 10;
+	optional uint32 game_id						= 11;
+}
+
+//通知挑战赛开始
+message ChallengeGameStart
+{
+	optional uint32 room_id					= 1;
+	optional uint32 play_way				= 2;
+	optional uint32 scene_id				= 3;
+	optional string game_ip					= 4; //GameServer的IP
+	optional uint32 game_port				= 5; //GameServer的Port
+	optional uint32 game_id					= 6;
+	optional GameMode game_mode				= 7[default=GM_None]; //比赛玩法类型
+}
+
+//通知1+2vs1+2开始
+message ChallengePlusGameStart
+{
+	optional uint32 room_id					= 1;
+	optional uint32 scene_id				= 2;
+	optional string game_ip					= 3; //GameServer的IP
+	optional uint32 game_port				= 4; //GameServer的Port
+	optional uint32 game_id					= 5;
+}
+
+message ChallengeExtendGameStart
+{
+	optional uint32 room_id					= 1;
+	optional uint32 scene_id				= 2;
+	optional string game_ip					= 3; //GameServer的IP
+	optional uint32 game_port				= 4; //GameServer的Port
+	optional uint32 game_id					= 5;
+}
+
+message RegularGameStart
+{
+	optional uint32 room_id					= 1;
+	optional uint32 scene_id				= 2;
+	optional string game_ip					= 3; //GameServer的IP
+	optional uint32 game_port				= 4; //GameServer的Port
+	optional uint32 game_id					= 5;
+	optional uint32 race_times				= 6; //第几场定级赛
+	optional uint32 ai_flag					= 7; //AI标记  为1  表示使用AI
+	optional uint64 session_id				= 8; //session_id
+	optional uint32 rival_score				= 9; //对方积分
+}
+
+message QualifyingNewGameStart
+{
+	optional uint32 room_id					= 1;
+	optional uint32 scene_id				= 2;
+	optional string game_ip					= 3; //GameServer的IP
+	optional uint32 game_port				= 4; //GameServer的Port
+	optional uint32 game_id					= 5;
+	optional uint32 race_times				= 6; //第几场定级赛
+	optional uint32 ai_flag					= 7; //AI标记  为1  表示使用AI
+	optional uint64 session_id				= 8; //session_id
+	optional uint32 rival_score				= 9; //对方积分
+}
+
+
+//通知比赛开始
+message NotifyGameStart
+{
+	optional uint32 acc_id							= 1;
+	required MatchType type 						= 2[default=MT_NONE]; //比赛类型	
+	optional uint64 session_id						= 3;
+	optional ChallengeGameStart challenge			= 4;
+	optional ChallengePlusGameStart challenge_plus	= 5;
+	optional ChallengeExtendGameStart challenge_ex	= 6;
+	repeated PlayerData data						= 7;//本方数据
+	repeated PlayerData rival_data					= 8;//对方数据
+	optional RegularGameStart regular				= 9;//常规赛
+	optional QualifyingNewGameStart qualifying_new	= 10;//排位赛（新）
+}
+
+//通知比赛开始回复
+message NotifyGameStartResp
+{
+	required uint32 acc_id					= 1;
+	required MatchType type 				= 2[default=MT_NONE]; //比赛类型
+}
+
+
+//客户端loading结束 发送请求
+message PVPLoadComplete
+{
+	optional MatchType type					= 1[default=MT_NONE];
+}		
+
+//
+message PVPLoadCompleteResp
+{
+	optional uint32  load_acc_id 			= 1;
+}
+
+//广播比赛开始
+message MatchBegin
+{
+	optional uint32 result						= 1; 
+	optional MatchType type						= 2[default=MT_NONE];
+	optional FightRoleInfo home_position		= 3;
+	optional FightRoleInfo away_position		= 4;
+}
+
+
+message PVPChallengeResp
+{
+	repeated PlayerData rival_data			= 1;
+}
+
+message PVPEndChallengeReq
+{
+	optional uint32 main_role_side			= 1; //玩家所在队伍方
+	optional uint32 room_id					= 2; 
+}
+
+message PVPEndChallengeResp
+{
+	required uint32 result					= 1; //比赛结果
+	repeated KeyValueData	home_awards		= 2; //主队奖励物品
+	repeated KeyValueData	away_awards		= 3; //客队奖励物品
+	optional uint32  other_acc_id			= 4;
+}
+
+message PVPEndChallengePlusReq
+{
+	optional uint32 main_role_side			= 1; //玩家所在队伍方
+	optional uint32 room_id					= 2; 
+}
+
+message PVPEndChallengeExReq
+{
+}
+
+message PVPEndRegularReq
+{
+	optional uint32 score_home				= 1;
+	optional uint32 score_away				= 2;
+	optional uint32 main_role_side			= 3;
+	optional uint64 session_id				= 4;
+	optional uint32 rival_score				= 5;  //对手积分
+	optional uint32 flag					= 6;  //对手标记 ( 1:异步PVP， 2:打NPC)
+	repeated MatchRoleData	data			= 7;  //比赛数据
+}
+
+message PVPEndQualifyingReq
+{
+	optional uint32 score_home				= 1;
+	optional uint32 score_away				= 2;
+	optional uint32 main_role_side			= 3;
+	optional uint64 session_id				= 4;
+	optional uint32 rival_score				= 5;  //对手积分
+	optional uint32 flag					= 6;  //对手标记 ( 1:异步PVP， 2:打NPC)
+	repeated MatchRoleData	data			= 7;  //比赛数据
+}
+
+message GameData
+{
+	optional uint32 role_id					= 1;
+	optional uint32 two_score				= 2; //得分
+	optional uint32 shoot_times				= 3;
+	optional uint32 three_score  			= 4;
+	optional uint32 far_shoot_times 		= 5;
+	optional uint32 steal					= 6; //抢断
+	optional uint32 block					= 7; //盖帽
+	optional uint32 rebound					= 8; //篮板
+	optional uint32 assist					= 9; //助攻
+	optional uint32 mvp 					= 10;
+	optional string name 					= 11;
+	optional uint32 index					= 12;
+}
+
+//1+2vs1+2 退出回复
+message PVPEndChallengePlusResp
+{
+	required uint32 result					= 1; //比赛结果
+	repeated KeyValueData	home_awards		= 2; //主队奖励物品
+	repeated KeyValueData	away_awards		= 3; //客队奖励物品
+	repeated GameData  main_data			= 4; //比赛数据
+	repeated GameData  away_data			= 5; //比赛数据
+	required uint32 main_score				= 6;
+	required uint32 away_score				= 7;
+	optional string off_name	 			= 8; //掉线玩家名字
+	optional uint32 score					= 9;
+}
+
+//3V3 退出回复
+message PVPEndChallengeExResp
+{
+	required uint32 result					= 1; //比赛结果
+	repeated KeyValueData	home_awards		= 2; //主队奖励物品
+	repeated KeyValueData	away_awards		= 3; //客队奖励物品
+	repeated GameData  main_data			= 4; //比赛数据
+	repeated GameData  away_data			= 5; //比赛数据
+	required uint32 main_score				= 6;
+	required uint32 away_score				= 7;
+	optional string off_name	 			= 8; //掉线玩家名字
+}
+
+//常规赛 退出回复
+message PVPEndRegularResp
+{
+	required uint32 result					= 1; //比赛结果
+	repeated KeyValueData	home_awards		= 2; //主队奖励物品
+	repeated KeyValueData	away_awards		= 3; //客队奖励物品
+	repeated GameData  main_data			= 4; //比赛数据
+	repeated GameData  away_data			= 5; //比赛数据
+	required uint32 main_score				= 6;
+	required uint32 away_score				= 7;
+	optional string off_name	 			= 8; //掉线玩家名字
+	optional uint32 score					= 9;
+}
+
+//排位赛（新） 退出回复
+message PVPEndQualifyingResp
+{
+	required uint32 result					= 1; //比赛结果
+	repeated KeyValueData	home_awards		= 2; //主队奖励物品
+	repeated KeyValueData	away_awards		= 3; //客队奖励物品
+	repeated GameData  main_data			= 4; //比赛数据
+	repeated GameData  away_data			= 5; //比赛数据
+	required uint32 main_score				= 6;
+	required uint32 away_score				= 7;
+	optional string off_name	 			= 8; //掉线玩家名字
+	optional uint32 score					= 9;
+	optional uint32 is_upgrade				= 10; //是否晋级赛
+	optional uint32 ranking					= 11; //排名
+	optional uint32 race_times				= 12; //比赛次数 
+	optional uint32 win_times				= 13; //胜利次数
+	optional uint32 max_winning_streak		= 14; //连胜
+}
+
+//比赛结束通知plat
+message PVPEndGameToPlat
+{
+	required MatchType	type				= 1[default=MT_NONE];
+	required uint32 result					= 2;
+	required ExitMatchType exit_type		= 3[default=EMT_END]; //结束比赛类型
+	optional uint32 main_role_side			= 4; //玩家所在队伍方
+	optional uint32 score_home				= 5; //主队得分
+	optional uint32 score_away				= 6; //客队比分
+	optional uint32 game_id					= 7;
+	optional uint32 rival_score				= 8; //对手积分
+	optional uint32 team_score				= 9; //本队积分
+	optional uint32 winning_streak			= 10; //连胜次数
+	optional string rival_name				= 11; //对手名字
+	repeated MatchRoleData data				= 12; //比赛数据
+	optional uint32 kill_goal				= 13; //绝杀
+	optional uint32 score_king				= 14; //得分王
+	optional uint32 rebound_king			= 15; //篮板王
+	optional uint32 block_king				= 16; //盖帽王
+	optional uint32 assist_king				= 17; //助攻王
+	optional uint32 steal_king				= 18; //抢断王
+	optional uint32 mvp						= 19; 
+}
+//plat回复game
+message PVPEndPlatToGame
+{
+	required MatchType	type				= 1[default=MT_NONE];
+	optional uint32 result					= 2;
+	repeated KeyValueData	home_awards		= 3; //主队奖励物品
+	repeated KeyValueData	away_awards		= 4; //客队奖励物品
+	required ExitMatchType exit_type		= 5[default=EMT_END]; //结束比赛类型
+	optional uint32 score					= 6;
+	optional uint32 race_times				= 7;
+	optional uint32 win_times				= 8;
+	optional uint32 max_winning_streak 		= 9;
+	optional uint32 ranking					= 10;
+	optional uint32 is_upgrade				= 11;
+}
+
+
+//进入比赛请求
+message EnterGameReq
+{
+	required uint32 acc_id					= 1;
+	required MatchType type 				= 2[default=MT_NONE]; //比赛类型
+
+	optional uint64 session_id				= 3;
+
+	optional BeginPractice practice			= 4; //
+	optional StartSectionMatch career		= 5; //
+	optional TourStartReq tour				= 6; //
+	optional AsynMatchReq honorCompetition	= 7; //
+	optional QualifyingMatchReq qualifying	= 8; //
+	optional StartBullFight bull_fight		= 9; //
+	optional StartShoot shoot				= 10;
+	optional GameMode game_mode				= 11[default=GM_None]; //比赛玩法类型
+}
+
+
+
+//进入比赛回复
+message EnterGameResp
+{
+	required uint32 acc_id					= 1;
+	required MatchType type					= 2[default=MT_NONE]; //比赛类型
+	required uint32 result					= 3;
+
+	optional BeginPracticeResp practice		= 4; //
+	optional StartSectionMatchResp career	= 5; //
+	optional TourStartResp tour				= 6; //
+	optional AsynMatchResp honorCompetition	= 7; //
+	optional PVPChallengeResp challenge		= 8;
+	optional QualifyingMatchResp qualifying	= 9;
+	optional StartBullFightResp bull_fight  = 10;
+	optional StartShootResp	shoot			= 11;
+	//optional PVPChallengePlusResp challenge_plus = 12;
+	optional GameMode game_mode				= 13[default=GM_None]; //比赛玩法类型
+}
+
+
+//结束（退出）比赛
+message ExitGameReq
+{
+	required uint32 acc_id					= 1;
+	required MatchType type					= 2[default=MT_NONE]; //比赛类型
+	
+	required ExitMatchType exit_type		= 3[default=EMT_END]; //结束比赛类型
+
+	optional EndPractice practice			= 4; //
+	optional EndSectionMatch career			= 5; //
+	optional TourEndReq tour				= 6; //
+	optional AsynEndReq honorCompetition	= 7; //
+	optional PVPEndChallengeReq challenge	= 8;
+	optional QualifyingEndReq qualifying	= 9;
+	optional EndBullFight bull_fight		= 10;
+	optional EndShoot shoot					= 11;
+	optional PVPEndChallengePlusReq challenge_plus = 12;
+	optional PVPEndChallengeExReq challenge_ex = 13;
+	optional PVPEndRegularReq regular		= 14; //常规赛
+	optional PVPEndQualifyingReq qualifying_new	= 15; //排位赛（新）
+}
+
+
+//结束（退出）比赛回复
+message ExitGameResp
+{
+	required uint32 acc_id					= 1;
+	required MatchType type					= 2[default=MT_NONE]; //比赛类型
+
+	required ExitMatchType exit_type		= 3[default=EMT_END]; //结束比赛类型
+
+	optional EndPracticeResp practice		= 4; //
+	optional EndSectionMatchResp career		= 5; //
+	optional TourEndResp tour				= 6; //
+	optional AsynEndResp honorCompetition	= 7; //
+	optional PVPEndChallengeResp challenge 	= 8;
+	optional QualifyingEndResp qualifying	= 9;
+	optional EndBullFightResp bull_fight	= 10;
+	optional EndShootResp shoot				= 11;
+	optional PVPEndChallengePlusResp challenge_plus = 12;
+	optional PVPEndChallengeExResp challenge_ex = 13;
+	optional PVPEndRegularResp regular		= 14;
+	optional PVPEndQualifyingResp qualifying_new	= 15;
+}
+
+
+
+
+
+

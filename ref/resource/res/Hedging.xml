@@ -1,0 +1,80 @@
+﻿  <!--
+	factorMin: 极限对冲系数Min
+	factorMax: 极限对冲系数Max
+ -->
+<Hedging factorMin="0.5" factorMax="2">
+	<!--
+		投篮
+		factorMin: 干扰和抗干扰的比值，包括小于，对resultMin（极限对冲结果Min）产生影响
+		factorMax: 干扰和抗干扰的比值，包括大于，对resultMax（极限对冲结果Max）产生影响
+		resultDefault: 干扰和抗干扰的比值，在factorMin和factorMax之间的值，合理对冲结果
+		resultDefault：干扰和抗干扰相同下的命中率削减百分比，原命中率*（1-X）
+		resultMin：干扰是抗干扰的1/2时，命中率削减百分比，原命中率*（1-x）
+		resultMax：干扰是抗干扰的2倍时，命中率削减百分比，原命中率*（1-x）
+		防守方为分子，进攻方为分母
+	 -->
+  <ShootFar resultDefault="0.5" resultMin="0" resultMax="0.8"/>
+  <ShootMiddle resultDefault="0.2" resultMin="0" resultMax="0.6"/>
+  <LayupMiddle resultDefault="0.19" resultMin="0" resultMax="0.6"/>
+  <DunkMiddle resultDefault="0.17" resultMin="0" resultMax="0.25"/>
+  <ShootNear resultDefault="0.13" resultMin="0" resultMax="0.35"/>
+  <LayupNear resultDefault="0.09" resultMin="0" resultMax="0.3"/>
+  <DunkNear resultDefault="0.04" resultMin="0" resultMax="0.1"/>
+
+	  <!-- 
+		盖帽系数
+		factorMin: 干扰和抗干扰的比值，包括小于，对resultMin（极限对冲结果Min）产生影响
+		factorMax: 干扰和抗干扰的比值，包括大于，对resultMax（极限对冲结果Max）产生影响
+		resultDefault: 干扰和抗干扰的比值，在factorMin和factorMax之间的值，合理对冲结果
+		resultDefault  盖帽和抗盖帽相同下的命中率削减百分比，原命中率*（1-X）
+		resultMin盖帽和抗盖帽的1/2时，命中率削减百分比，原命中率*（1-x）
+		resultMax盖帽和抗盖帽的2倍时，命中率削减百分比，原命中率*（1-x）
+		防守方为分子，进攻方为分母
+	  -->
+  <BlockShootFar resultDefault="0.52" resultMin="0.1" resultMax="0.9"/>
+  <BlockShootMiddle resultDefault="0.68" resultMin="0.1" resultMax="0.95"/>
+  <BlockLayupMiddle resultDefault="0.73" resultMin="0.12" resultMax="1"/>
+  <BlockDunkMiddle resultDefault="0.75" resultMin="0.13" resultMax="1"/>
+  <BlockShootNear resultDefault="0.78" resultMin="0.14" resultMax="1"/>
+  <BlockLayupNear resultDefault="0.79" resultMin="0.14" resultMax="1"/>
+  <BlockDunkNear resultDefault="0.8" resultMin="0.15" resultMax="1"/>
+
+	<Steal resultMin="0.15" resultMax="0.5" resultDefault="0.25"/><!-- 抢断系数（防守方为分子，进攻方为分母） -->
+
+	<CrossOver resultMin="0.15" resultMax="0.85" resultDefault="0.3"/><!-- 突破系数（进攻方为分子，防守方为分母） -->
+
+	<CrossOverToCollide resultMin="0.85" resultMax="0.95" resultDefault="0.9"/><!-- 突破碰撞系数（防守方为分子，进攻方为分母） -->
+
+	<Collide resultMin="0.7" resultMax="0.9" resultDefault="0.8"/><!-- 碰撞不倒地系数 -->
+
+	<BackToBack resultMin="0.1" resultMax="0.9" resultDefault="0.5"/><!-- 背打系数 -->
+
+	<Rebound resultMin="0.1" resultMax="0.9" resultDefault="0.5"/><!-- 篮板系数 -->
+
+	<Pass resultMin="0.0" resultMax="0.2" resultDefault="0.1"/><!-- 传球截球系数 -->
+	
+	<PickAndRoll resultMin="0.7" resultMax="0.9" resultDefault="0.8"/><!-- 挡拆不倒地系数 -->
+
+  <ratio>
+    <ShootFar multiply = "0.0005625" add = "0.1"/>
+    <ShootMiddle multiply = "0.000625" add = "0.25"/>
+    <ShootNear multiply = "0.000725" add = "0.4"/>
+    <LayupNear multiply = "0.000675" add = "0.45"/>
+    <LayupMiddle multiply = "0.0005625" add = "0.35"/>
+    <DunkMiddle multiply = "0.0005625" add = "0.45"/>
+    <DunkNear multiply = "0.0006125" add = "0.5"/>
+  </ratio>
+  <HedgeLevelFactor>
+	<addn_disturb id="54" oppositeID="14" factor="0.0025"/>
+	<addn_anti_disturb id="48" oppositeID="8" factor="0.0025"/>
+	<addn_steal id="53" oppositeID="13" factor="0.0025"/>
+	<addn_control id="50" oppositeID="10" factor="0.0025"/>
+	<addn_block id="51" oppositeID="11" factor="0.0025"/>
+	<addn_anti_block id="52" oppositeID="12" factor="0.0025"/>
+	<addn_rebound id="55" oppositeID="15" factor="0.0025"/>
+	<addn_strength id="59" oppositeID="19" factor="0.0025"/>
+	<addn_interception id="64" oppositeID="24" factor="0.0025"/>
+	<addn_pass id="49" oppositeID="9" factor="0.0025"/>
+  </HedgeLevelFactor>
+</Hedging>
+

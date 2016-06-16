@@ -1,0 +1,59 @@
+package fogs.proto.msg;
+
+
+//---------训练模块相关
+                     
+
+
+//训练状态
+enum TrainingState
+{
+	TS_IDLE			= 1; //空闲
+	TS_COOLING		= 2; //冷却中
+}
+
+//训练信息
+message TrainingInfo
+{
+	optional uint32 id 				= 1; //ID
+	optional uint32 level 			= 2; //等级
+	optional TrainingState state	= 3; //当前状态
+	optional uint32 remaining_time	= 4; //冷却剩余的时间
+}
+
+//打开训练界面
+message OpenTraining
+{
+	optional uint32 captain_id		= 1; //队长ID
+}
+
+//打开训练界面回复
+message OpenTrainingResp
+{
+	optional uint32 result			= 1; //操作结果
+	optional uint32 captain_id		= 2; //队长ID
+	repeated TrainingInfo training 	= 3; //训练信息
+}
+
+//开始训练
+message StartTraining
+{
+	optional uint32 captain_id		= 1; //队长ID
+	optional uint32 training_id		= 2; //训练ID
+}
+
+//开始训练回复
+message StartTrainingResp
+{
+	optional uint32 captain_id		= 1; //队长ID
+	optional uint32 training_id		= 2; //训练ID
+	optional uint32 result			= 3; //操作结果
+}
+
+//通知训练信息
+message NotifyTrainingInfo
+{
+	optional uint32 captain_id		= 1; //队长ID
+	repeated TrainingInfo training 	= 2; //训练信息
+}
+

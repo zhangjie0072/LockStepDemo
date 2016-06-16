@@ -1,0 +1,194 @@
+package fogs.proto.msg;
+import "Base.proto";
+
+//---------物品模块相关
+
+//物品类别
+enum GoodsCategory
+{
+	GC_NONE			= 0; //NONE
+	GC_RESOURCE		= 1; //资源
+	GC_SKILL		= 2; //技能
+	GC_FAVORITE		= 3; //喜好品
+	GC_CONSUME		= 4; //消耗品
+	GC_EQUIPMENT	= 5; //装备
+	GC_FASHION		= 6; //时装
+	GC_EXERCISE		= 7; //训练项
+	GC_MATERIAL		= 8; //素材
+	GC_ROLE			= 9; //球员
+	GC_BADGE		= 10; //涂鸦
+
+	GC_TOTAL		= 20; //所有
+}
+
+//物品子类别
+enum GoodsSubCategory
+{
+	GSC_NONE			= 0; //NONE
+	GSC_1				= 1; //
+	GSC_2				= 2; //
+	GSC_3				= 3; //
+	GSC_4				= 4; //
+	GSC_5				= 5; //
+	GSC_6				= 6; //
+	GSC_7				= 7; //
+	GSC_BADGE_PAINT		= 8; //涂鸦喷漆
+
+	GSC_TOTAL			= 100; //所有
+}
+
+//物品品质
+enum GoodsQuality
+{
+	GQ_NONE			= 0; //NONE
+	GQ_WHITE		= 1; //白
+	GQ_GREEN		= 2; //绿
+	GQ_BLUE			= 3; //蓝
+	GQ_PURPEL		= 4; //紫
+	GQ_GOLDEN		= 5; //金
+}
+
+
+
+//-------------------------------------
+//物品对象数据
+message GoodsProto
+{
+	required uint64 uuid				= 1; //UUID
+	required uint32 id					= 2; //物品ID
+	required GoodsCategory category		= 3; //物品类别
+	optional uint32 num					= 4; //物品数量
+	optional uint32 level				= 5; //物品等级
+	optional GoodsQuality quality		= 6; //物品品质
+	optional uint32 is_equip			= 7; //是否装备（1：是，0：否）
+	optional uint32 time_left			= 8; //剩余时间.
+	optional uint32 is_used				= 9; //是否使用过(1: 是, 0: 否)
+	optional uint32 exp					= 10;//经验
+	repeated uint32 fashion_attr_id		= 11;
+}
+
+//物品类别列表
+message GoodsList
+{
+	required GoodsCategory category		= 1;
+	repeated GoodsProto item			= 2;
+}
+
+
+
+//-------------------------------------
+//物品数据更新类型
+enum GoodsUpdateType
+{
+	GUT_NEW			= 1; //新增
+	GUT_UPDATE		= 2; //更新
+	GUT_DELETE		= 3; //删除
+}
+
+//物品数据更新信息
+message UpdateGoodsInfo
+{
+	optional GoodsUpdateType type 		= 1; //操作的类型
+	optional GoodsProto data 			= 2;
+}
+
+//更新物品（S -- > C）
+message UpdateGoods
+{
+	optional uint32 acc_id				= 1;
+	repeated UpdateGoodsInfo goods_list	= 2;
+}
+
+message GoodsInfo
+{
+	required uint64 uuid 				= 1; //出售物品UUID
+	required uint32 num					= 2; //出售物品数量
+	required GoodsCategory category 	= 3; //物品类别
+	optional uint32 id					= 4; //出售物品ID
+}
+
+//出售物品（C -- > S）
+message SellGoods
+{
+	repeated GoodsInfo info 	= 1; 
+}
+
+//出售物品回复（S -- > C）
+message SellGoodsResp
+{
+	required uint32 result				= 1; //出售结果
+	repeated GoodsInfo 	info			= 2; 
+	//required uint64 uuid 				= 2; //出售物品UUID
+	//required uint32 id					= 3; //出售物品ID
+	//required uint32 num					= 4; //剩余数量
+	//required GoodsCategory category 	= 5; //物品类别
+}
+
+//使用物品（C -- > S）
+message UseGoods
+{
+	optional uint64 uuid 				= 1; //使用物品UUID
+	required GoodsCategory category 	= 2; //物品类别
+	optional uint32 num					= 3; //物品数量
+	optional uint32 target				= 4; //物品使用的目标ID
+	optional uint32 exp_card				= 5;
+}
+
+//使用物品回复（S -- > C）
+message UseGoodsResp
+{
+	required uint32 result				= 1; //使用结果
+	optional uint64 uuid 				= 2; //使用物品UUID
+	optional uint32 id					= 3; //使用物品ID
+	required GoodsCategory category 	= 4; //物品类别
+	optional uint32 num					= 5; //物品数量
+	optional uint32 target				= 6; //物品使用的目标ID
+	optional uint32 target_exp			= 7; //使用物品后目标的经验值
+	optional uint32 target_level		= 8; //使用物品后目标的等级
+	repeated KeyValueData awards		= 9; //使用后得到的道具
+}
+
+//合成物品（C -- > S）
+message CompositeGoods
+{
+	required uint64 uuid 				= 1; //合成物品UUID
+	required GoodsCategory category 	= 2; //物品类别
+}
+
+//合成物品回复（S -- > C）
+message CompositeGoodsResp
+{
+	required uint32 result 				= 1; //合成结果
+	required uint64 uuid 				= 2; //原始物品UUID
+	required uint32 id					= 3; //原始物品ID
+	required GoodsCategory category 	= 4; //物品类别
+}
+
+//分解物品（C -- > S）
+message DecomposeGoods
+{
+	repeated uint64 uuid 				= 1; //待分解物品UUID列表
+	required GoodsCategory category 	= 2; //物品类别
+}
+
+//分解物品回复（S -- > C）
+message DecomposeGoodsResp
+{
+	required uint32 result 				= 1; //分解结果
+	required uint64 uuid 				= 2; //原始物品UUID
+	required uint32 id					= 3; //原始物品ID
+	required GoodsCategory category 	= 4; //物品类别
+}
+
+//时装重置属性
+message FashionResetAttrReq
+{
+	required uint64 uuid				= 1;
+}
+
+//时装重置属性回复
+message FashionResetAttrResp
+{
+	required uint32 result				= 1;
+}
+

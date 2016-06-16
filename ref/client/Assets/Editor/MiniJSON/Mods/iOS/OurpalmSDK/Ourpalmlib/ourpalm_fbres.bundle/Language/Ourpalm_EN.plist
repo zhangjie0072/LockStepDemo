@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Title</key>
+	<string>Hint</string>
+	<key>UploadAlert</key>
+	<string>Uploaded 2 screenshots maximum!</string>
+	<key>Sure</key>
+	<string>Sure</string>
+	<key>Cancel</key>
+	<string>Cancel</string>
+	<key>AskTitle</key>
+	<string>I have question</string>
+	<key>QType</key>
+	<string>Question type</string>
+	<key>QDesc</key>
+	<string>Question decripition</string>
+	<key>PhoneNum</key>
+	<string>Phone number</string>
+	<key>Mail</key>
+	<string>Email address</string>
+	<key>PicAlert</key>
+	<string>Screenshot(2 photos maximum)</string>
+	<key>PicAlertNumError</key>
+	<string>Uploaded 2 screenshot maximum!</string>
+	<key>PicAlertLargeError</key>
+	<string>The screenshot can&apos;t over 5M</string>
+	<key>UpLoadPic</key>
+	<string>Screenshot upload</string>
+	<key>Submit</key>
+	<string>Submit question</string>
+	<key>QDefaultDesc</key>
+	<string>Dear player, Please input 10 charachers minimum.</string>
+	<key>QDefaultPhoneDesc</key>
+	<string>Please input 11 digital numbers, we could feed you back soon! </string>
+	<key>QDefaultMailDesc</key>
+	<string>Please input your Email address, Custormer service will contact your later.</string>
+	<key>AnswerQTtile</key>
+	<string>Question feed back</string>
+	<key>AHelpAlert</key>
+	<string>Did we solve your question?</string>
+	<key>AHelpNo</key>
+	<string>No,addtional question</string>
+	<key>AHelpYes</key>
+	<string>Yes, close the case</string>
+	<key>AQuestionOver</key>
+	<string>The case has been closed, thanks for you feed backs!</string>
+	<key>ReAskQ</key>
+	<string>Addtional question</string>
+	<key>ReAskQTitle</key>
+	<string>Addtional description</string>
+	<key>ReAskQDesc</key>
+	<string>Dear player, Please input 10 charachers minimum.</string>
+	<key>ReAskQPicAlert</key>
+	<string>Additional screenshot</string>
+	<key>ReAskQSubmit</key>
+	<string>Addtional</string>
+	<key>ScoreAlertTitle</key>
+	<string>Evaluate our customer service</string>
+	<key>ScoreAlertDesc</key>
+	<string>Do you satisfied our sustomer service feed back?</string>
+	<key>ScoreVeryGood</key>
+	<string>Very Saitisfied</string>
+	<key>ScoreNotGood</key>
+	<string>Unsaitisfied</string>
+	<key>ScoreUsual</key>
+	<string>Average</string>
+	<key>ScoreGood</key>
+	<string>Helpful</string>
+	<key>ScoreGoodEnough</key>
+	<string>Saitisfied</string>
+	<key>SubmitSuccess</key>
+	<string>Submit successful</string>
+	<key>SuccessAlert</key>
+	<string>Thanks for your feed back, we will resopned you sonn! You could open &quot;My qustion&quot;, to check the proccess!</string>
+	<key>SuccessSure</key>
+	<string>I&apos;v got it</string>
+	<key>1_1001</key>
+	<string>Please input 11 digits cell phone number</string>
+	<key>1_1002</key>
+	<string>Irregular cell phone number format.</string>
+	<key>1_1003</key>
+	<string>The description can&apos;t be empty</string>
+	<key>1_1004</key>
+	<string>The question has to get 10 words minimum</string>
+	<key>1_1005</key>
+	<string>Plese provide the description or screenshot</string>
+	<key>1_1006</key>
+	<string>Failded to submit</string>
+	<key>1_1007</key>
+	<string>Incorrect Email format</string>
+	<key>1_QSubmitFail</key>
+	<string>Failed to submit the question</string>
+	<key>2_QGetListFail</key>
+	<string>Failed to obtian the question list</string>
+	<key>3_ReAsKQFail</key>
+	<string>Failed to sumbit the question</string>
+	<key>4_SubmitScoreFail</key>
+	<string>Failed to evaluat the customer service</string>
+</dict>
+</plist>

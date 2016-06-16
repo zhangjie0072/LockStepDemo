@@ -1,0 +1,50 @@
+package fogs.proto.msg;
+
+
+//---------技能模块相关
+
+//技能槽位信息
+message SkillSlotProto
+{
+	optional uint32 id				= 1; //技能槽ID
+	optional uint32 is_unlock		= 2; //是否解锁（1：是，0：否）
+	optional uint64 skill_uuid		= 3; //装备的技能UUID（is_unlock=1时有效）
+
+}
+
+//技能操作类型
+enum SkillOperationType
+{
+	SOT_UNLOCK_SLOT			= 1; //解锁技能槽位
+	SOT_EQUIP				= 2; //装备技能
+	SOT_UNEQUIP				= 3; //卸下技能
+	SOT_UPGRADE				= 4; //升级技能
+	SOT_USE					= 5; //使用技能
+}
+
+//技能操作消息（C --> S）
+message SkillOperation
+{
+	required SkillOperationType type 		= 1; //操作类型
+	optional uint64 skill_uuid				= 2; //技能UUID
+	optional uint32 role_id					= 3; //技能所属球员ID
+	optional uint32 slot_id					= 4; //技能所在槽位ID
+}
+
+//技能操作结果（S --> C）
+message SkillOperationResp
+{
+	required SkillOperationType type 		= 1; //操作类型
+	optional uint32 result					= 2; //操作结果（0：成功，其他：失败）
+	optional uint64 skill_uuid				= 3; //技能UUID
+	optional uint32 skill_level				= 4; //技能等级
+	optional uint32 role_id					= 5; //技能所属球员ID
+	optional uint32 slot_id					= 6; //技能所在槽位ID
+}
+
+message Skill
+{
+	required uint32		skill_id			= 1;
+	required uint32		action_id			= 2;
+	required int32		skill_matchedKeyIdx	= 3;
+}

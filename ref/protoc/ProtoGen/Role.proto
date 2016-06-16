@@ -1,0 +1,81 @@
+package fogs.proto.msg;
+import "Player.proto";
+import "Exercise.proto";
+import "Base.proto";
+
+
+//---------球员邀请和品阶提升相关
+
+//发送品阶提升(C-->S)
+message ImproveQualityReq
+{
+	optional uint32 role_id			= 1; //角色球员ID
+}
+
+//球员品阶提升返回(S-->C)
+message ImproveQualityResp
+{
+	optional uint32 result			= 1; //返回结果
+	optional uint32 role_id			= 2; //返回球员ID
+	optional uint32 new_quality		= 3; //球员提升后品阶
+	optional uint32 cur_pieces		= 4; //球员当前拥有碎片数量
+}
+
+//发送球员邀请(C-->S)
+message InviteRoleReq
+{
+	optional uint32 role_id			= 1; //角色球员ID 
+	optional uint32 flag 			= 2; //特殊邀请标记  不消耗资源 (1：钻石，2：金币，100：生涯)
+	optional uint32 chapter			= 3; //特殊邀请的章节ID
+	optional uint32 section_id		= 4; //特殊邀请的关卡ID
+}
+
+//发送球员邀请返回(S-->C)
+message InviteRoleResp
+{
+	optional uint32 result			= 1; //返回结果
+	optional RoleInfo role			= 2; //返回球员
+	optional uint32 cur_pieces		= 3; //球员当前拥有碎片数量
+}
+
+//强化等级
+message EnhanceLevelReq
+{
+	optional uint32 role_id			= 1;
+}
+
+//强化等级回复
+message EnhanceLevelResp
+{
+	optional uint32 result			= 1;
+	optional RoleInfo role			= 2;
+}
+
+//强化训练项
+message EnhanceExerciseReq
+{
+	optional uint32 role_id			= 1;
+	optional uint32 exercise_id		= 2;
+	optional uint32 type			= 3;
+}
+
+//强化训练项回复
+message EnhanceExerciseResp
+{
+	optional uint32 result			= 1;
+	optional uint32 role_id			= 2;
+	repeated ExerciseInfo exercise	= 3;
+}
+
+//球员重置
+message ResetRoleReq
+{
+	optional uint32 role_id			= 1;
+}
+
+message ResetRoleResp
+{
+	optional uint32 result 				= 1;
+	repeated KeyValueData resource 		= 2; //返回资源
+	optional RoleInfo role				= 3; //球员
+}

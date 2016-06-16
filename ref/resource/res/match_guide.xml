@@ -1,0 +1,41 @@
+<MatchSetting type="12"> <!--1:practice 2:ready 3:1on1 4:3on3 -->
+	<Scene>10010</Scene>
+	<Team>
+		<Away>
+			<NPC pos="1" id="50002"/>
+			<NPC pos="2" id="50003"/>
+			<NPC pos="3" id="50007"/>
+		</Away>
+	</Team>
+	<Time x="60"/>
+	
+	<BgSound>
+		<Track src="bg/gongdi" interval="1" loop="0"/>
+	</BgSound>
+
+  <Tips>
+    <Tip name="Intro" text="接下来通过练习赛再熟悉一下操作和比赛规则吧！"/>
+    <Tip name="CIntro" text="中锋的主要作用在于篮下，依靠身体的优势为队友抢得篮板球。当然中锋在内线的得分能力同样不容小觑。"/>
+    <Tip name="SFIntro" text="前锋主要活跃在3分线内，进攻和防守能力都较为均衡。是场上的全能选手！"/>
+    <Tip name="PGSGIntro" text="灵活的后卫们擅长给队友创造进攻机会，同时也拥有出色的进攻能力。3分是他们的拿手手段之一。但防守方面相对其他职业更薄弱一些。"/>
+    <Tip name="TipOff" text="比赛开始的倒计时结束后，双方通过[FF0000]跳球[-]决定球权，把握好球的落点，[FF0000]找准时机按篮板键。[-]"/>
+    <Tip name="Defense" text="这次是我们进行防守，按[FF0000]盯防键[-]盯紧自己负责的对手，尽可能的不让对方完成进攻。"/>
+    <Tip name="SwitchRole" text="进攻得分后，将会更换球权。进攻方将会在三分线外等待开球。"/>
+    <Tip name="SwitchMainRole" text="当前持球的球员即为操作球员，现在开始操作这个球员吧！"/>
+    <Tip name="HoldLock" text="角色持球移动后使用假投篮和突破时被阻拦会进入二次运球，此时角色无法移动。"/>
+    <Tip name="CrossOver" text="被盯防时，可点击[FF0000]突破键[-]使用突破来破解对方的防守，但是突破也有一定的风险被撞倒以及进入二次运球状态。"/>
+    <Tip name="Clutch" text="被盯防时，内线球员可[FF0000]长按背打键[-]来将对手逼向篮下。对抗属性越强，背打效果越明显。"/>
+    <Tip name="Steal" text="在适当的时机，[FF0000]点击抢断键[-]来抢下对方的球。打断对方的进攻。抢断属性越高，成功率越高。"/>
+    <Tip name="Block" text="对方想要进攻篮筐！赶紧[FF0000]盖帽[-]封锁对方的进攻！"/>
+    <Tip name="BodyThrowCatch" text="篮球[FF0000]处于地板球[-]时，后卫[FF0000]在扑球距离范围[-]内，可[FF0000]点击扑球键[-]来争夺球权。扑球属性越高，成功率越高、扑球距离更远。"/>
+    <Tip name="Undefended" text="对方的防守出现空隙。进攻命中几率会大大增加。赶快进攻！"/>
+    <Tip name="AttackTimeOut" text="哎呀超过进攻限定时间了，[FF0000]计分板旁边的秒表要时刻留意！[-]在限定时间内没有进攻将会交换球权！"/>
+    <Tip name="ReviseRebound" text="起跳太早了，要等球落下！"/>
+    <Tip name="ReviseDefense" text="按盯防键盯紧，不要漏人！"/>
+    <Tip name="ReviseShootTimming" text="出手时机不佳，找准时机再出手！"/>
+    <Tip name="ReviseShootDist" text="这个位置出手太勉强了，距离太远！"/>
+    <Tip name="ReviseDistance" text="距离太远！"/>
+    <Tip name="ReviseBlockTimming" text="把握时机，再来一次！"/>
+  </Tips>
+	
+</MatchSetting>

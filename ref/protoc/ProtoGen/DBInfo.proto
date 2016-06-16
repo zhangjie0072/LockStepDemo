@@ -1,0 +1,22 @@
+package fogs.proto.msg;
+
+
+//---------DB信息
+
+message ConnTimeInfo
+{
+	optional int32 read_timeout		= 1;
+	optional int32 write_timeout	= 2;
+	optional int32 conn_timeout		= 3;
+}
+
+message DBInfo
+{
+	optional string name			= 1;
+	optional string ip				= 2;
+	optional int32 port				= 3;
+	optional string user			= 4;
+	optional string pwd				= 5;
+	optional ConnTimeInfo timeout	= 6;
+	optional int32 id				= 7;
+}

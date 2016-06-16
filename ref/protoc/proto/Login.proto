@@ -1,0 +1,190 @@
+package fogs.proto.msg;
+import "Base.proto";
+import "Player.proto";
+
+
+//---------登录相关
+
+
+message VerifySdk
+{
+	optional string cdkey				= 1; //	
+	optional string token_id            = 2; // token_id
+	optional string id                  = 3; // id
+	optional string nick_name           = 4; //
+	optional string user_name           = 5; //
+}
+
+message VerifySdkResp
+{
+	required uint32 result				= 1; //验证结果（0：OK，其他：Failed）
+	optional string cdkey				= 2; //账号ID
+}
+
+
+//登录验证(C --> S)
+message VerifyCDKey
+{
+	optional string authorization_code	= 1; //账号
+	optional string game_ver			= 2; //当前游戏版本
+	optional string res_ver				= 3; //当前资源版本
+	optional string token_id            = 4; // token_id
+	optional uint32 server_id			= 5;
+	//required string password			= 4; //密码
+	//optional bool register			= 5; //是否注
+	optional string mac_add				= 6; //唯一标识
+}
+
+
+//登录验证返回(S --> C)
+message VerifyCDKeyResp
+{
+	required uint32 result				= 1; //验证结果（0：OK，其他：Failed）
+	optional uint32 acc_id				= 2; //账号ID
+	optional uint64 session				= 3; //登录会话ID
+	optional uint32 login_index			= 4; //LoginServer Index
+	//optional bool freshman			= 5; //是否为新玩家（0：否，1：是）
+	//optional bool register			= 6; //是否注册
+	optional string ip					= 7; 
+	optional uint32 port				= 8;
+}
+
+//进入PlatServer请求(C --> S)
+message EnterPlat
+{
+	required uint32 acc_id				= 1; //AccountID
+	optional uint64 session				= 2; //登录SessionID
+	optional uint32 login_index			= 3; //LoginServer Index
+}
+
+//进入PlatServer回复(S --> C)
+message EnterPlatResp
+{
+	required uint32 result				= 1; //请求结果（0：OK，其他：Failed）
+	optional uint32 acc_id				= 2; //AccountID
+	//optional uint32 freshman			= 3; //是否为新玩家（0：否，1：是）
+	optional uint32 create_step			= 4; //创建账号步骤
+	optional PlayerInfo info			= 5; //玩家数据（freshman==false时有效）
+	optional uint32 hp_restore_remain	= 6; //体力回复剩余时间
+	optional uint32 silent_time			= 7; //禁言时长
+	optional uint32 silent_start		= 8; //禁言开始时间
+}
+
+//创建玩家（队伍）(C --> S)
+message CreateTeam
+{
+	optional string name				= 1; //玩家（队伍）名
+}
+
+//创建玩家（队伍）回复(S --> C)
+message CreateTeamResp
+{
+	required uint32 result				= 1; //创建结果（0：OK，其他：Failed）
+	optional string name				= 2; //玩家（队伍）名
+}
+
+//选择球员(C --> S)
+message ChooseRole
+{
+	optional uint32 role_id				= 1; //角色队员ID
+	optional uint32 position			= 2; //队员职业
+}
+
+//选择球员回复(S --> C)
+message ChooseRoleResp
+{
+	required uint32 result				= 1; //创建结果（0：OK，其他：Failed）
+	optional PlayerInfo info			= 2; //玩家数据
+}
+
+//PlatS向LoginS验证登录Session的有效性(S --> S)
+message CheckSession
+{
+	required uint32 acc_id				= 1; //AccountID
+	required uint64 session				= 2; //登录SessionID
+}
+
+//Session有效性验证回复(S --> S)
+message CheckSessionResp
+{
+	required int32 result				= 1; //验证结果（0：OK，其他：Failed）
+	optional uint32 acc_id				= 2; //AccountID
+	optional string cdkey				= 3; //CDKey
+	optional uint32 freshman			= 4; //是否为新玩家（0：否，1：是）
+	optional uint32 register			= 5; //是否注册（0：非注册，1：注册）
+	optional uint32 silent_time			= 6; //禁言时长
+	optional uint32 silent_start		= 7; //禁言开始时间
+}
+
+//创建队长
+message CreateCaptain
+{
+	required GenderType gender 			= 1; //性别
+	required PositionType position 			= 2; //职业
+	required CaptainBias bias 			= 3; //偏向
+	required string name				= 4; //队长名
+}
+
+//
+message CreateStepIn
+{
+	optional uint32 acc_id			= 1;
+	optional uint32 step			= 2;
+}
+
+//
+message CreateStepInResp
+{
+	optional uint32 acc_id			= 1;
+	optional uint32 result			= 2;
+	optional uint32 step			= 3;
+	optional RoleInfo role			= 4;
+}
+
+//登出游戏(C --> S)
+message Logout
+{
+	required uint32 acc_id				= 1; //AccountID
+	required uint32 type				= 2; //登出操作类型
+}
+
+//登出游戏回复(S --> C)
+message LogoutResp
+{
+	required int32 result				= 1; //请求结果（0：OK，其他：Failed）
+	required uint32 acc_id				= 2; //AccountID
+	required uint32 type				= 3; //登出操作类型
+}
+
+message ClearUserAcc
+{
+	required uint32 acc_id	= 1;
+}
+
+message ServerListInfo
+{
+	optional string plat_ip				= 1; //PlatServer的IP
+	optional uint32 plat_port			= 2; //PlatServer的Port
+	optional string server_name			= 3; //服务器名
+	optional uint32 server_id			= 4; //服务器ID
+	optional string name				= 5; //角色名
+	optional uint32 level				= 6; //角色等级
+	optional uint32 load				= 7; //服务器负载
+	optional uint32 sdk_verify			= 8; //SDK验证开关
+	optional uint32 default_server		= 9; //默认登陆服务器  
+	optional uint32 mac_add_verify		= 10;
+}
+
+message ServerInfoReq
+{
+	required string cdkey	= 1;
+	required string mac_add	= 2;
+}
+
+
+message ServerInfoResp
+{
+	required uint32 result			= 1;
+	repeated ServerListInfo info	= 2;
+}
+

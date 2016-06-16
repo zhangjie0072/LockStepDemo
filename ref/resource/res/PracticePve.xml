@@ -1,0 +1,16 @@
+<Data Count="2">
+  <Line>
+    <switch>
+    </switch>
+    <id>int</id>
+    <gamemode>int</gamemode>
+    <awardpack>int</awardpack>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>1</id>
+    <gamemode>50001</gamemode>
+    <awardpack>100001</awardpack>
+  </Line>
+</Data>

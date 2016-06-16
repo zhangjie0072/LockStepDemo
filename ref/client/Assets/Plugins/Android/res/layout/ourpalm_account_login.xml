@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="310dp"
+    android:layout_height="290dp"
+    android:layout_gravity="center_horizontal|center_vertical"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:id="@+id/ourpalm_login_title"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/ourpalm_login_title_bg_press" >
+
+            <TextView
+                android:id="@+id/ourpalm_login_title_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="@string/ourpalm_dialog_login_title"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
+
+            <View
+                android:id="@+id/ourpalm_login_title_line"
+                android:layout_width="2dp"
+                android:layout_height="fill_parent"
+                android:layout_alignBottom="@+id/ourpalm_login_title_textView"
+                android:layout_alignTop="@+id/ourpalm_login_title_textView"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_toLeftOf="@+id/ourpalm_login_title_textView"
+                android:background="@color/ourpalm_login_button_bg" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/ourpalm_regist_title"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/ourpalm_login_title_bg_normal"
+            android:gravity="center" >
+
+            <TextView
+                android:id="@+id/ourpalm_regist_title_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:text="@string/ourpalm_dialog_regist_title"
+                android:textColor="@color/ourpalm_login_titleline_grey"
+                android:textSize="20sp" />
+
+            <View
+                android:id="@+id/ourpalm_regist_title_line"
+                android:layout_width="2dp"
+                android:layout_height="fill_parent"
+                android:layout_alignBottom="@+id/ourpalm_regist_title_textView"
+                android:layout_alignTop="@+id/ourpalm_regist_title_textView"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_toLeftOf="@+id/ourpalm_regist_title_textView"
+                android:background="@color/ourpalm_login_button_bg_quick" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <ourpalm.android.view.ourpalm_ViewPage
+        android:id="@+id/ourpalm_account_viewpage"
+        android:layout_width="fill_parent"
+        android:layout_height="195dp"
+        android:layout_gravity="center"
+        android:background="#000000"
+        android:flipInterval="30"
+        android:persistentDrawingCache="animation" />
+
+</LinearLayout>

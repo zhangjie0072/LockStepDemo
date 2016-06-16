@@ -1,0 +1,20 @@
+<Data Count="3">
+  <Line>
+    <stage>1</stage>
+    <value_1>0</value_1>
+    <value_2>35</value_2>
+    <Regain>20</Regain>
+  </Line>
+  <Line>
+    <stage>2</stage>
+    <value_1>35</value_1>
+    <value_2>70</value_2>
+    <Regain>26</Regain>
+  </Line>
+  <Line>
+    <stage>3</stage>
+    <value_1>70</value_1>
+    <value_2>100</value_2>
+    <Regain>32</Regain>
+  </Line>
+</Data>

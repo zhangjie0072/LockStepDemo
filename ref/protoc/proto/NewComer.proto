@@ -1,0 +1,80 @@
+
+package fogs.proto.msg;
+import "Base.proto";
+
+
+message NewComerInfo
+{
+	repeated uint32 sign_list				= 1;//签到列表   //nil:未达天数,0:未签到,1:已签到,2:已领取累计签到奖励
+	required uint32 open_flag				= 2;//开启标记
+}
+
+enum NewComerSignType
+{
+	NCST_SIGN		= 1;//普通签到
+	NCST_APEND		= 2;//补签
+	NCST_CUMULATIVE = 3;//领取累计签到奖励   
+}
+
+message NewComerSignReq
+{
+	required NewComerSignType type	= 1[default=NCST_SIGN]; 
+	optional uint32	day				= 2; //领取累计签到天数
+}
+
+message NewComerSignResp
+{
+	required uint32 result			= 1;
+	required NewComerSignType type	= 2[default=NCST_SIGN];
+	optional uint32	day				= 3; //领取累计签到天数
+}
+
+message NewDayCome
+{
+	required NewComerInfo info 	= 1;
+}
+
+
+
+message NewComerTrial
+{
+	repeated KeyValueData record		= 1; // value值为2时表示可领取 value值为1时  表示已领取
+}
+
+//7日活动
+message NewComerTrialInfo
+{
+	repeated NewComerTrial info 		= 1;
+	optional uint32 shoot_times			= 2;
+	optional uint32 challenge_times		= 3;
+	optional uint32 bullfight_times		= 4;
+	optional uint32 qualifying_times	= 5;
+	optional uint32 ladder_times		= 6;
+	optional uint32 diamond_use			= 7;
+	required uint32 total_score			= 8;
+	optional uint32 awards_flag			= 9; //最终奖励领取标记  1:领取 
+}
+
+message NewComerTrialNotify
+{
+	repeated NewComerTrial info 	= 1;
+}
+
+message GetNewComerTrialAwardsReq
+{
+	required NewComerTrialAwardsType type	= 1[default=NCTAT_NORMAL];
+	optional uint32 day						= 2; //第X天奖励
+	optional uint32 index					= 3; //第X个活动
+	optional uint32 force_get				= 4; //1:强制领取最终奖励   
+}
+
+message GetNewComerTrialAwardsResp
+{
+	required uint32 result				= 1;
+	repeated NewComerTrial info			= 2;
+	optional uint32 total_score			= 3;
+	repeated KeyValueData	awards		= 4; // 奖励物品
+}
+
+
+

@@ -1,0 +1,1307 @@
+package fogs.proto.config;
+
+
+//---------基本数据配置相关
+
+//公共数据配置
+message CommonConfig
+{
+	optional string description			= 1; // 数据说明
+	optional string value				= 2; // 配置值
+}
+
+
+//消耗品，属性加成等数据结构
+message DataConstruction
+{
+	optional uint32 id			= 1; //ID
+	optional uint32 value		= 2; //数量
+}
+
+message DataFloatConstruction
+{
+	optional uint32 id			= 1;
+	optional double	value		= 2;
+}
+
+
+//
+message DataConstruction2
+{
+	optional string id			= 1; //ID symbol
+	optional uint32 value		= 2; //Value
+}
+
+//游戏文字配置
+message StringConfig
+{
+	optional string name		= 1;//文字名称
+	optional string info		= 2;//文字内容
+}
+
+//属性值配置
+message AttrValueConfig
+{	
+	optional uint32 shoot_near				= 1; // 篮下投篮
+	optional uint32 shoot_middle			= 2; // 中距离投篮
+	optional uint32 shoot_far				= 3; // 三分投篮
+	optional uint32 dunk_near				= 4; // 篮下扣篮
+	optional uint32 dunk_middle				= 5; // 中距离扣篮
+	optional uint32 layup_near				= 6; // 篮下上篮
+	optional uint32 layup_middle			= 7; // 中距离上篮
+	optional uint32 pass					= 8; // 传球
+	optional uint32 control					= 9; // 控球
+	optional uint32 steal					= 10; // 抢断
+	optional uint32 block					= 11; // 盖帽
+	optional uint32 rebound					= 12; // 篮板
+	optional uint32 strength				= 13; // 身体强度
+	optional uint32 speed					= 14; // 跑动速度
+	optional uint32 ph						= 15; // 体力
+	optional uint32 anti_shoot_near			= 16; // 篮下投篮抗干扰
+	optional uint32 anti_shoot_middle		= 17; // 中距离投篮抗干扰
+	optional uint32 anti_shoot_far			= 18; // 三分投篮抗干扰
+	optional uint32 anti_dunk_near			= 19; // 篮下扣篮抗干扰
+	optional uint32 anti_dunk_middle		= 20; // 中距离扣篮抗干扰
+	optional uint32 anti_layup_near			= 21; // 篮下上篮抗干扰
+	optional uint32 anti_layup_middle		= 22; // 中距离上篮抗干扰
+	optional uint32 disturb					= 23; // 干扰
+	optional uint32 bodythrowcatch_distance	= 24; //
+	optional uint32 bodythrowcatch_prob		= 25; //
+}
+
+//队长等级成长配置
+message LevelConfig
+{
+	optional uint32 level				= 1; // 等级
+	optional uint32 exp					= 2; // 经验
+	optional uint32 max_hp				= 3; // 体力
+	optional uint32 add_hp				= 4; // 等级提升时赠送体力
+	optional uint32 role_qua_limit		= 5; // 球员最高品质限制
+	optional uint32 tattoo_limit		= 6; //
+	optional uint32 train_limit			= 7; //
+	optional uint32 passive_skill_limit	= 8; //
+}
+
+//
+message AIConfig
+{
+	optional uint32 switch				= 2; // #
+	optional uint32 aiid				= 3; // aiid
+	optional uint32 delay				= 4; // 思考延迟
+	optional uint32 time				= 5; // 时间误差
+	optional double ball_height				= 6; // 篮板球高度
+	optional double angle_attacker			= 7; // 与进攻者角度(扇形区)
+	optional double dist_aod				= 8; // 与进攻者距离(扇形区)
+	optional double dist_front				= 9; // 与进攻者距离(正面区)
+	optional double dist_ball				= 10; // 球的距离
+	optional double dist_block				= 11; // 与进攻者距离(盖帽)
+	optional double time_block				= 12; // 当前时间（盖帽）
+	optional double favorite_area				= 13; // 幸运区
+	optional double angle_defender				= 14; // 防守者角度（突破）
+	optional double rate_def_cross				= 15; // 错误防守突破机率
+
+}
+
+message ModelConfig
+{
+	optional uint32 id					= 1; // 模型ID
+	optional string body				= 4; // 身上模型
+	optional string cloth				= 5; // 上装
+}
+
+message NPCConfig
+{
+	optional uint32 npc_id				= 1; // NPC ID
+	optional string name				= 2; // 名字
+	optional string icon				= 3; // 头像
+	optional uint32 level 				= 4; // 等级
+	optional uint32 quality 			= 5; // 品质
+	optional uint32 position			= 6; // 职业
+	optional uint32 shape				= 7; // 外形
+	optional uint32 aiid				= 8; // AIID
+	repeated uint32 skills				= 9; // 技能
+	optional AttrValueConfig attrs		= 10; // 属性配置
+	optional uint32 talent				= 11;// npc天资
+}
+
+
+message LevelAttrConfig
+{
+	//optional uint32 id				= 1; // 角色ID
+	//optional uint32 name				= 2; // 角色名称
+	optional uint32 bias				= 3; // 队长偏向（1：进攻，2：防御，3：均衡），非队长球员配置为0
+	optional uint32 level				= 4; // 等级
+	optional uint32 aiid				= 5; // 该值对于普通球员无效，对于外援球员，对应外援球员调用的AI等级
+	optional AttrValueConfig attrs		= 6; // 属性配置
+}
+
+message AttrDataConfig
+{
+	optional uint32 id					= 1; // 角色ID
+	repeated LevelAttrConfig attr		= 2; // 等级属性
+
+}
+
+message ChapterConfig
+{
+	optional uint32 id					= 1; // 章节ID
+	optional string name				= 2; // 章节名称
+	optional uint32 next_chapter_id		= 3; // 下一章节ID
+	optional uint32 first_section_id	= 4; // 第一个关卡ID
+	optional string area				= 5; // 地图区域
+	optional uint32 unlock_level		= 6; // 解锁等级
+	optional uint32 bronze_value		= 7; // 铜宝箱需求值
+	optional uint32 bronze_award		= 8; // 铜宝箱奖励库ID
+	optional uint32 silver_value		= 9; // 银宝箱需求值
+	optional uint32 silver_award		= 10; // 银宝箱奖励库ID
+	optional uint32 gold_value			= 11; // 金宝箱需求值
+	optional uint32 gold_award			= 12; // 金宝箱奖励库ID
+
+}
+
+message SectionConfig
+{
+	optional uint32 id					= 1; // 关卡ID
+	optional string name				= 2; // 关卡名称
+	optional string icon				= 3; // 关卡图标
+	optional uint32 coord_x				= 4; // 坐标X
+	optional uint32 coord_y				= 5; // 坐标Y
+	optional string next_section_id		= 6; // 下一关卡ID
+	optional uint32 costing				= 7; // 体力消耗
+	optional uint32 sweep_card			= 8; // 扫荡卡消耗数量
+	optional uint32 daily_times			= 9; // 每日次数
+	optional uint32 buy_consume			= 10; // 次数购买消耗库ID
+	optional uint32 member_need			= 11; // 参赛球员数量
+	optional uint32 space_need			= 12; // 背包需求空间数量
+	optional uint32 condition_id		= 13; // 通关条件ID
+	optional uint32 condition_value		= 14; // 通关条件ID数量
+	optional uint32 award_id			= 15; // 关卡奖励库ID
+	optional uint32 sweep_award_id		= 16; // 扫荡奖励库
+	optional uint32 one_star_id			= 17; // 铜牌达成条件ID
+	optional uint32 one_star_value		= 18; // 铜牌达成条件值
+	optional uint32 two_star_id			= 19; // 银牌达成条件ID
+	optional uint32 two_star_value		= 20; // 银牌达成条件值
+	optional uint32 three_star_id		= 21; // 金牌达成条件ID
+	optional uint32 three_star_value	= 22; // 金牌达成条件值
+	optional uint32 plot_begin_id		= 23; // 开始剧情ID
+	optional uint32 plot_end_id			= 24; // 结束剧情ID
+	optional string plot_intro			= 25; // 剧情简介
+	optional string scene				= 26; // 战斗场景
+	optional string music				= 27; // 战斗音乐
+	optional uint32 time				= 28; // 比赛时间（秒）
+	optional uint32 team_side			= 29; // 主客队（1：主队，2：客队）
+	optional uint32 home_score			= 30; // 初始主队比分
+	optional uint32 guest_score			= 31; // 初始客队比分
+	repeated uint32 npc_id				= 32; // 敌对NPC
+	optional string assistant_id		= 34; // 该关卡解锁的外援球员ID
+	optional uint32 assistant_level		= 35; // 该关卡外援球员的等级
+	optional uint32 game_mode_id		= 36; //  玩法ID
+	optional string loading				= 37; // loading图
+	optional uint32 type				= 38; // 关卡类型
+	optional uint32 role_gift			= 39; // 是否有球员赠送
+	optional string awards_id 			= 40; // 关卡产出
+	optional string icon_level          = 41; // 小关卡图标
+}
+
+
+//奖励倍数类别
+enum AwardMultipleType
+{
+	AMT_NONE		= 0; //未知
+	AMT_GOLD		= 1; //金币
+	AMT_DIAMOND		= 2; //钻石
+	AMT_EXP			= 3; //经验
+	AMT_PROP		= 4; //物品
+	AMT_ALL_NUM		= 5; //所有数值类的奖励
+	AMT_ALL			= 6; //所有奖励
+
+}
+
+message CareerAwardLibConfig
+{
+	optional uint32 id							= 1; // 奖励库ID
+	optional uint32 loop_times					= 2; // 奖励包循环次数
+	optional AwardMultipleType multiple_type	= 3; // 奖励倍数的类别
+	optional uint32 multiple_value				= 4; // 奖励倍数
+	repeated uint32 award_pack					= 5; // 奖励包ID列表
+
+}
+
+message AwardConfig
+{
+	optional uint32 award_id			= 2; // 奖励物品ID
+	optional uint32 award_value			= 3; // 获得物品数量
+	optional uint32 award_max_value		= 4; // 获得物品数量(最大)
+	optional uint32 award_prob			= 5; // 获得物品概率(万分比的整数)
+}
+
+//奖励包配置
+message AwardPackConfig
+{
+	optional uint32 id					= 1; // 奖励库ID
+	repeated AwardConfig awards			= 2; // 奖励列表
+}
+
+//关卡剧情配置
+message PlotConfig
+{
+	optional uint32 id					= 1; // 剧情ID
+	optional uint32 dialog_id			= 2; // 剧情对话ID
+	optional string icon				= 3; // 头像ID
+	optional string content				= 4; // 对话内容（文本）
+	optional uint32 next_dialog_id		= 5; // 下一句对话ID
+}
+
+message GoodsAttrConfig
+{
+	optional uint32 id					= 1; // 物品ID
+	optional string name				= 2; // 物品名称
+	optional string icon				= 3; // 显示图标
+	optional string purpose				= 4; // 物品用途
+	optional string intro				= 5; // 文字说明
+	optional uint32 category			= 6; // 物品类型	
+	optional string sub_category		= 7; // 物品子类型
+	optional uint32 gender 				= 8; //性别
+	optional uint32 suit_id				= 9; // 套装ID
+	optional string suit_addn_attr		= 10; // 套装加成属性 --加系数
+	optional string suit_multi_attr		= 11; // 套装加成属性 --乘系数
+	optional uint32 quality				= 12; // 物品品质
+	optional uint32 can_use				= 13; // 可否使用
+	optional uint32 use_result_id		= 14; // 使用结果ID
+	optional uint32 stack_num			= 15; // 叠加数量
+	optional uint32 can_sell			= 16; // 可否出售
+	optional uint32 sell_id				= 17; // 出售可获得的物品ID
+	optional uint32 sell_price			= 18; // 出售可获得的物品数量
+	optional uint32 can_composite		= 19; // 可否合成（s：是，0：否）
+	optional uint32 access_way_type		= 20; //产出指引类型
+	optional string access_way			= 21; //产出指引
+	optional string show_special_effect = 22; //显示的特效
+}
+
+message GenerateNewGoodsArgConfig
+{
+	optional uint32 type				= 1; // 新物品的类型
+	optional uint32 id					= 2; // 新物品ID
+	optional uint32 odds				= 3; // 获得几率(万分之几)
+	optional uint32 num_min				= 4; // 最小数量
+	optional uint32 num_max				= 5; // 最大数量
+}
+
+message GoodsUseConfig
+{
+	optional uint32 id						= 1; // 使用结果ID
+	optional uint32 pack_num				= 2; // 需要的背包空位
+	repeated GenerateNewGoodsArgConfig args	= 3; //生成新物品信息
+
+}
+
+message GoodsCompositeConfig
+{
+	optional uint32 src_id				= 1; // 原始物品ID
+	optional uint32 src_num				= 2; // 原始物品数量
+	optional uint32 dest_id				= 3; // 目标物品ID
+	optional uint32 dest_num			= 4; // 目标物品数量
+	optional uint32 costing				= 5; // 合成所需金币
+
+}
+
+message GoodsComposeConfig
+{
+	optional string src				= 1; // 原始物品
+	optional string dest				= 2; // 目标物品
+	optional string costing				= 5; // 合成所需金币
+
+}
+
+//装备类物品的配置
+message EquipmentConfig
+{
+	optional uint32 id					= 1; // 装备ID
+	optional uint32 level				= 2; // 装备等级
+	optional string name				= 3; // 装备名称
+	optional string icon				= 4; // 显示图标
+	optional string addn_attr			= 5; // 属性加成
+	optional uint32 position			= 6; // 适用职业
+	//optional uint32 require_exp 		= 7; // 进阶需求经验
+	optional uint32 require_level		= 8; // 进阶需求等级
+	optional uint32 sacrifice_consume	= 9; // 消耗金币
+	optional uint32 sell_price			= 10;// 出售价格
+}
+
+
+//品质碎片配置
+message QualityAttrConfig
+{
+	optional uint32 bias 				= 1; //
+	optional uint32 quality 			= 2; //
+	optional string piece_id			= 3; //
+	optional string piece_num 			= 4; //
+	optional AttrValueConfig attrs		= 5; // 篮下投篮
+	optional uint32 talent				= 6; //球员意识
+	repeated uint32 skill				= 7; //技能列表
+}
+
+//技能使用方式描述
+message SkillUseDesc
+{
+	optional string action_id			= 1; //调用的动作ID
+	optional uint32 trigger_type		= 2; //动作触发方式
+	optional uint32 play_key			= 3; //动作调用的组合键
+}
+
+//技能属性基础配置
+message SkillAttrConfig
+{
+	optional uint32 id						= 1; // 技能ID
+	optional string name					= 2; // 技能名称
+	optional string icon					= 3; // 显示图标
+	optional string intro					= 4; // 技能说明
+	optional string cast 					= 5; //
+	optional string actions					= 6; //
+	optional uint32 type					= 7; // 技能类型（1：被动，2：主动，3：花式）
+	optional uint32 subtype					= 8; //
+	optional uint32 actiontype				= 9; //
+	optional string sideeffect				= 10; //
+	optional uint32 position				= 11; // 对应职业
+	optional uint32 role					= 12; // 对应球员
+	optional uint32 use_area				= 13; // 技能使用区域
+	optional uint32 power					= 14; //使用技能消耗的耐力
+	optional uint32 vigour					= 15; //使用技能消耗的气势
+	optional string condition 				= 16; //
+	repeated SkillUseDesc use_desc			= 17; //技能使用方式描述
+	repeated DataConstruction equip_cond	= 18; //装备限制条件
+    optional string attrange                = 19;
+    optional string switch                 = 20;
+}
+
+//技能升级配置
+message SkillUpConfig
+{
+	optional uint32 id						= 1; // 技能ID
+	optional uint32 level					= 2; // 技能等级
+	optional string consume		= 3; //消耗信息
+	optional string addn_attr		= 4; //属性加成信息
+}
+
+//技能槽位配置
+message SkillSlotConfig
+{
+	optional uint32 id						= 1; // 技能ID
+	optional uint32 need_level				= 2; // 开启等级限制
+	optional uint32 type					= 3; // 槽类型
+	repeated DataConstruction consume		= 5; // 消耗信息
+}
+
+//技能等级配置
+message SkillLevelConfig
+{
+	optional uint32 id					= 1;
+	optional uint32 level				= 2;
+	optional string consume				= 3;
+	optional string addn_attr			= 4;
+	optional uint32 stama				= 5;
+	optional uint32 weight				= 6;
+	optional string special_parameter	= 7;
+}
+
+
+//商店物品配置
+message StoreGoodsConfig
+{
+	optional uint32 store_id				= 1; // 商店ID
+	optional uint32 apply_min_level			= 2; // 等级区间-最小适用等级
+	optional uint32 apply_max_level			= 3; // 等级区间-最大适用等级
+	optional uint32 weight					= 4; // 出现权重（权重相同的物品不会同时生成）
+	optional uint32 goods_id				= 5; // 物品ID
+	optional uint32 odds					= 6; // 物品出现几率（相同等级区间的相同权重的物品几率相加的总值为100）
+	optional uint32 num_min					= 7; // 物品最小数量
+	optional uint32 num_max					= 8; // 物品最大数量
+	optional uint32 consume_type			= 9; // 购买需要消耗的金钱类型
+	optional uint32 price					= 10; // 购买的单价
+	optional uint32 is_sell					= 11; //是否出售
+
+}
+
+//商店刷新的消耗配置
+message StoreRefreshConsumeConfig
+{
+	optional uint32 store_id				= 1; // 商店ID
+	optional uint32 times					= 2; // 刷新次数
+	optional uint32 consume_type			= 3;//刷新商店需消耗的数值类型
+	optional uint32 consume					= 4; // 所需要数值数量
+
+}
+
+//基础数据购买配置
+message BaseDataBuyConfig
+{
+	optional uint32 times					= 1; // 购买的次数
+	optional uint32 diamond_need			= 2; // 需要消耗的钻石数量
+	optional uint32 value_get				= 3; // 购买得到
+	optional uint32 level_min				= 4; // 适用等级最小值
+	optional uint32 level_max				= 5; // 适用等级最大值
+}
+
+//任务条件（前置条件和完成条件）
+message TaskConditionInfo
+{
+	optional uint32 condition_id			= 1; // 任务完成条件ID
+	optional uint32 condition_value			= 2; // 任务完成条件达到的值
+}
+
+//任务配置
+message TaskConfig
+{
+	optional uint32 id						= 1; // 任务ID
+	optional uint32 type					= 2; // 任务类型
+	optional string icon					= 3; // 任务图标
+	optional string title					= 4; // 任务标题
+	optional string desc					= 5; // 任务描述
+	optional string award_tips				= 6; // 任务奖励提示
+	repeated TaskConditionInfo precondition	= 7; // 任务开启的前置条件ID
+	repeated TaskConditionInfo condition	= 8; // 任务完成条件
+	optional uint32 award_id				= 9; // 任务奖励库ID
+	repeated uint32 link					= 10; // 任务前往链接
+	optional uint32 show_process			= 11;  // 是否显示任务进度
+	optional uint32 activity				= 12; //活跃度
+}
+
+//邮件配置
+message MailConfig
+{
+	optional uint64 id						= 1; // 邮件ID
+	optional uint32 type					= 2; // 邮件类型
+	optional string sender					= 3; // 发送者
+	optional string send_time				= 4; // 发送时间
+	optional string receiver				= 5; // 接收者
+	optional uint32 timeliness				= 6; // 邮件时效（单位：分钟）
+	optional string title					= 7; // 邮件标题
+	optional string content					= 8; // 邮件内容
+	optional uint32 attachment				= 9; // 附件
+	optional uint32 get_delete				= 10; // 领取附件后是否删除（1：是，0：否）
+	optional uint32 level_min				= 11; // 邮件适用等级最小值
+	optional uint32 level_max				= 12; // 邮件适用等级最大值
+
+}
+
+//操作练习配置
+message PracticeConfig
+{
+	optional uint32 id						= 1; // 练习内容ID
+	optional uint32 type					= 2;
+	optional string title					= 3; // 标题
+	optional string intro					= 4; // 描述
+	optional string tips					= 5; // 提示语
+	optional uint32 num_practice			= 6; // 练习次数
+	optional uint32 num_award				= 7; // 达成奖励的练习次数
+	optional uint32 self					= 8; // 操控的NPCID
+	optional uint32 npc						= 9; // 对手NPCID
+	optional string scene					= 10; // 场景
+	optional string achieved_mic			= 11; // 执行操作成功后播放的音效
+	optional string fail_mic				= 12; // 执行操作失败后播放的音效
+	repeated DataConstruction awards 		= 13; //奖励列表
+	optional uint32 diffcult				= 14;
+    optional string is_activity             = 15;
+
+}
+
+//练习赛1V1
+message PracticePveConfig
+{
+	optional uint32 id = 1;
+	optional uint32 game_mode = 2;
+	optional uint32 awardpack = 3;
+}
+
+//荣誉争霸赛排名奖励配置
+message HonorRankAwardConfig
+{
+	optional uint32 rank_min				= 1; // 排名区间最小值
+	optional uint32 rank_max				= 2; // 排名区间最大值
+	optional uint32 award_id				= 3; // 奖励ID
+}
+
+//购买比赛次数（关卡挑战次数，荣誉赛次数等）
+message BuyGameTimesConfig
+{
+	optional uint32 consume_type			= 1;//消耗类型
+	optional uint32 consume	 				= 2;//消耗数值
+}
+
+//训练配置
+message TrainingConfig
+{
+	optional uint32 id						= 1; // 训练项目ID
+	optional string name					= 2; // 训练项目名称
+	optional string icon					= 3; // 训练图标
+	optional string intro					= 4; // 训练介绍
+	optional string lv_limit				= 5; // 职业对训练等级的限制(职业1：等级限制&职业2：等级限制。。。)
+}
+
+//训练等级配置
+message TrainingLevelConfig
+{
+	optional uint32 id						= 1; // 训练项目ID
+	optional uint32 level					= 2; // 训练项目等级
+	optional uint32 exp						= 3; // 训练项目升级所需经验
+	optional uint32 duration				= 4; // 训练持续时间（单位：秒）
+	optional uint32 level_limit				= 5; // 队长等级对训练的限制
+	optional string addn_attr				= 6; // 提升属性值（属性1ID：属性1提升值&属性2ID：属性2提升值）
+	optional string normal_consume			= 7; // 普通训练消耗（物品1ID：物品1数量&物品2ID：物品2数量）
+	optional string elite_consume			= 8; // 精英训练消耗（物品1ID：物品1数量&物品2ID：物品2数量）
+	optional uint32 normal_exp				= 9; // 普通训练每次获得的经验
+	optional uint32 elite_exp				= 10; // 精英训练每次获得的经验
+}
+
+
+//巡回赛配置
+message TourConfig
+{
+	optional uint32 id						= 1; // 比赛场次ID
+	optional uint32 level					= 2; // 等级
+	optional string attr_upper_limit		= 3; // 属性修正上限
+	optional string attr_lower_limit		= 4; // 属性修正下限
+	optional string npc1					= 5; // NPC1
+	optional string quality1				= 6; // 品阶
+	optional string npc2					= 7; // NPC2
+	optional string quality2				= 8; // 品阶
+	optional string npc3 					= 9; // NPC3
+	optional string quality3				= 10; //品阶
+	optional uint32 challenge_consume		= 11; //挑战徽章消耗
+	optional uint32 win_awards				= 12; //胜利奖励
+	optional uint32 fail_awards				= 13; //败北奖励
+	optional uint32 game_mode_id			= 14;
+    optional string quality_star1           = 15;
+    optional string quality_star2           = 16;
+    optional string quality_star3           = 17;
+	//optional uint32 min_level				= 2; // 最小等级
+	//optional uint32 max_level				= 3; // 最大等级
+	//optional uint32 hp_cost					= 4; // 体力消耗
+	//optional uint32 clear_cost_id			= 5; // 直接通关消耗物品ID
+	//optional uint32 clear_cost_value		= 6; // 直接通关消耗物品数量
+	//optional string award_pack				= 7; // 奖励库ID列表
+	//optional string fixed_awards			= 8; // 固定奖励（用于显示）
+	//optional uint32 game_mode_id			= 9; // 玩法ID
+	//optional uint32 is_boss					= 10; //是否boss关卡
+}
+
+//巡回赛次数重置消耗配置
+message TourResetCostConfig
+{
+	optional uint32 reset_time				= 1; // 重置次数
+	optional uint32 id						= 2; // 花费物品ID
+	optional uint32 value					= 3; // 花费物品数量
+
+}
+
+//巡回赛购买徽记次数
+message TourBuyTimesConfig
+{
+	optional uint32 times			= 1; //购买次数
+	optional uint32 consume_type	= 2; //消耗类型 
+	optional uint32 consume_value	= 3; //消耗数量
+}
+
+//新手引导
+message GuideConfig
+{
+	optional uint32 id						= 1; //模块ID
+	optional string ui_name					= 2; //UI名称
+	optional string type					= 3; //条件类型
+	optional string param					= 4; //参数
+	optional uint32 first_step				= 5; //第一步
+	optional uint32 end_step				= 6; //结束步骤
+	optional string link_id					= 7; //中断跳转
+	optional uint32 next_module				= 8; //下一模块
+	optional uint32 skip_condition			= 9; //跳过指引条件
+	optional string skip_param				= 10;//参数
+	optional uint32 award_pack				= 11;//奖励包
+	optional uint32 restart_step			= 12;
+}
+
+//时装商城
+message FashionShopConfig
+{
+	optional uint32 store_id				= 1; //商店ID
+	optional uint32 id						= 2; // 服装ID
+	optional string time_dur				= 3; // 购买时限
+	optional string cost_type				= 4; // 消费类型
+	optional string cost_num				= 5; // 消费数量
+	optional string is_discount				= 6; // 是否打折0-不打折1-打折
+	optional string discount_cost			= 7; // 打折后的价格
+	optional uint32 is_new					= 8; // 是否是新品0-不是新品.1-是新品.
+	optional uint32 sort_value				= 9; // 排序权重.数字越大,越靠前.默认为0.
+	optional string renew_time_dur			= 10; // 续费时限
+	optional string renew_cost_type			= 11; // 续费消费类型
+	optional string renew_cost_num			= 12; // 续费消费数量
+	optional uint32 vip						= 13; // 所需VIP等级
+}
+
+//队长训练个数
+message TrainingMaxConfig
+{
+	optional uint32 level					= 1; //队长等级
+	optional uint32 max_concurrent			= 2; //最多同时训练个数
+}
+
+//功能 限制
+message FunctionConditionConfig
+{
+	optional string id 				= 1; //功能ID
+	optional string name 			= 2; //名字
+	optional uint32 type			= 3; //条件类型
+	optional string param			= 4; //参数
+	optional string lock_tip		= 5; //未开启时提示
+	optional string unlock_tip		= 6; //解锁提示
+}
+
+//匹配规则
+message MatchRegularConfig
+{
+	optional uint32 match_type			= 1; //比赛类型
+	optional uint32 wait_time			= 2; //等候时间
+	optional uint32 level_low			= 3; //等级-低
+	optional uint32 level_high			= 4; //等级-高
+	optional uint32 score				= 5; //积分
+	optional uint32 score_high			= 6; //积分-高
+	optional uint32 fight_power			= 7; //战斗力
+}
+
+//VIP 
+message VipPrivilegeConfig
+{
+	optional uint32 level				= 1; //VIP等级
+	optional uint32 consume				= 2; //升级消耗
+	optional uint32 hp_times				= 3; //购买体力次数
+	optional uint32 gold_times			= 4; //购买金币次数
+	optional uint32 career_times			= 5; //生涯模式副本重置次数
+	optional uint32 regular_times		= 6; //荣誉争霸赛比赛次数增加
+	optional uint32 reset_regular_times	= 7; //重置荣誉争霸赛次数
+	optional uint32 reset_tour_times		= 8; //重置街头巡回赛次数
+	optional uint32 skill_slot			= 9; //VIP技能槽
+	optional uint32 add_vigor_limit		= 10;//增加气势上限
+	optional uint32 mail_id				= 11;//每日赠送邮件ID
+	optional uint32	gift				= 12;//特权礼包ID
+	optional uint32 add_training_count 	= 13; //训练个数
+	optional uint32 gift_price			= 14; //礼包购买价格
+	optional uint32 append_sign			= 15; //补签次数
+	optional uint32 bullfight_buytimes	= 16; //斗牛购买次数
+	optional uint32 shoot_buytimes		= 17; //投篮赛购买次数
+	optional uint32 tour_buytimes		= 18; //巡回赛购买次数
+	optional uint32 qualify_buytimes	= 19; //排位赛购买次数
+	optional uint32 exp_buytimes_1		= 20; //经验1购买次数
+	optional uint32 exp_buytimes_2		= 21; //经验2购买次数
+	optional uint32 exp_buytimes_3		= 22; //经验3购买次数
+	optional uint32 exp_buytimes_4		= 23; //经验4购买次数
+	optional uint32 exp_buytimes_5		= 24; //经验5购买次数
+	optional uint32 exp_buytimes_6		= 25; //经验6购买次数
+    optional string ori_gift_price      = 26;
+}
+
+message VipGoodsConfig
+{
+	optional uint32 id				= 1; //商品ID
+	optional uint32 recharge		= 2; //充值金额
+	optional uint32 diamond			= 3; //获得钻石
+	optional uint32 ext_diamond		= 4; //首次额外赠送
+	optional string first_intro		= 5; //首次说明
+	optional string intro			= 6;
+	optional uint32 recommend		= 7; //推荐
+	optional string icon			= 8; //图标
+    optional string name            = 9;
+    optional string des             = 10;
+}
+
+
+//每日赠送体力
+message PresentHpConfig
+{
+	optional string time				= 1;
+	optional uint32 hp					= 2;
+}
+
+
+//排位赛机器人
+message QualifyingRobotConfig
+{
+	optional string ranking				= 1;  //排名段
+	optional uint32 level				= 2;  //等级
+	optional string role1				= 3;  //球员
+	optional uint32 star1				= 4;  //星等
+	optional uint32 quality1			= 5;  //品阶
+	optional string aptitude1			= 6;  //资质
+	optional string role2				= 7;  //
+	optional uint32 star2				= 8;  //
+	optional uint32 quality2			= 9;  //
+	optional string aptitude2			= 10; //
+	optional string role3				= 11; //
+	optional uint32 star3				= 12; //
+	optional uint32 quality3			= 13; //
+	optional string aptitude3			= 14; //
+	optional uint32 AI					= 15; 
+	optional string modify				= 16;
+}
+
+message QualifyingDayAwardsConfig
+{
+	optional string ranking					= 1;
+	repeated DataConstruction data			= 2;
+}
+
+message QualifyingRankingAwardsConfig
+{
+	optional string ranking					= 1;
+	repeated DataFloatConstruction data	= 2;
+}
+
+message QualifyingBuyTimesConfig
+{
+	optional uint32 buy_times 		= 1; //购买次数 
+	optional uint32 consume_type	= 2; //消耗
+	optional uint32 consume_value	= 3; //消耗数量
+}
+
+message QualifyingRewardConfig
+{
+	optional string level			= 1;
+	optional uint32 winid			= 2;
+	optional uint32 value1			= 3;
+	optional uint32 loseid			= 4;
+	optional uint32 value2			= 5;
+}
+
+//抽奖配置
+message LotteryConfig
+{
+	optional uint32 type					= 1; //抽奖类型（金/银）
+	optional uint32 level_min				= 2; //适用最小等级
+	optional uint32 level_max				= 3; //适用最大等级
+	optional uint32 goods_id				= 4; //得到物品
+	optional uint32 consume_id				= 5; //消耗数值类型
+	optional uint32 consume_num_single		= 6; //单次消耗
+	optional uint32 consume_num_multi		= 7; //10次消耗
+	optional uint32 normal_award_pack		= 8; //普通奖励库ID
+	optional uint32 special_award_pack		= 9; //必得奖励库ID
+	optional uint32 first_multi				= 10;//首次钻石10连抽必得
+	optional uint32 first_lott				= 11;//首次抽奖奖励
+}
+
+//日签到
+message SignDayConfig
+{
+	optional uint32 sign_times			= 1;
+	optional uint32 sign_award			= 2;
+	optional uint32 award_count			= 3;
+	optional uint32 vip_level			= 4;
+	optional uint32 vip_award			= 5;
+	optional uint32 current_month		= 6;
+}
+
+//月签到
+message SignMonthConfig
+{
+	optional uint32 sign_times			= 1;
+	//optional uint32 current_month		= 2;
+	repeated DataConstruction awards	= 3;
+}
+
+//队伍等级配置
+message TeamLevelConfig
+{
+	optional string switch				= 1; // 配置开关（配置为“#”时，此行配置失效）
+	optional uint32 level				= 2; // 等级
+	optional uint32 exp				= 3; // 经验
+	optional uint32 max_hp				= 4; // 体力
+	optional uint32 add_hp				= 5; // 等级提升时赠送体力
+	optional uint32 unlock_func				= 6; // 球队等级达到X级时解锁某个功能
+	optional uint32 role_qua_limit		= 7;
+    optional string unlock_icon         = 8;
+    optional string unlock_describe     = 9;
+    optional string link                = 10;
+    optional uint32 award_id			= 11; //等级奖励ID
+}
+
+//球员等级配置
+message RoleLevelConfig
+{
+	optional string switch				= 1; // 配置开关（配置为“#”时，此行配置失效）
+	optional uint32 level				= 2; // 等级
+	optional uint32 exp				= 3; // 经验
+	optional float factor				= 4; // 修正系数
+}
+
+//属性显示配置
+message AttrNameConfig
+{
+	optional string switch				= 2; // #
+	optional uint32 id				= 3; // id
+	optional uint32 type				= 4; // 属性类型（1：进攻，2：防守，3：其它）
+	optional string symbol 				= 5; // 属性标示
+	optional string name				= 6; // 属性名称
+	optional uint32 display				= 7; // 显示标示（1：显示，0：不显示）
+	optional string recommend				= 8; // 对应职业(1:pf,2:sf,3:c,4:pg,5:sg)。如在属性中配置了职业，则在此职业的属性显示推荐；如未配置，则不显示
+	optional uint32 is_factor				= 9; // 等级成长修正(0:不修正,1:修正)
+	optional uint32 fc_weight				= 10;
+}
+
+//球员基础属性配置
+message RoleBaseConfig
+{
+	optional string switch				= 2; // #
+	optional uint32 id				= 3; // id
+	optional uint32 display				= 4; // 
+	optional uint32 bias				= 5; // 偏向
+	optional uint32 position				= 6; // 职业
+	optional string icon				= 7; // 调用icon图标
+	optional string icon_bust				= 8; // 调用半身像图标
+	optional uint32 shape				= 9; // 调用模型id
+	optional string name				= 10; // 名称
+	optional string intro				= 11; // 简介
+	optional uint32 gender				= 12; // 性别
+	optional uint32 init_star				= 13; // 球员强化等级
+	optional string talent				= 14; // 天资
+	optional string training_slots				= 15; // 初始训练项
+	optional string passive_skill				= 16; // 被动技能
+	optional string special_skill				= 17; // 特殊技能
+	optional string special_attr				= 18; // 特性
+	optional string recruit_consume				= 19; // 招募消耗
+	optional string recruit_output				= 20; // 重复招募产出
+	optional string access_way				= 21; // 喜好物产出
+	optional string attrs				= 22; // 属性值
+	optional string goodAt				= 23;
+	optional uint32 init_existed		= 24; //初始拥有
+    optional string icon_bg             = 25;
+    optional string display_action      = 26;
+    optional string training_skill      = 27;
+    optional string match_msg_id        = 28;
+    optional string display_effect      = 29;
+    optional string specialityInfo      = 30;
+}
+
+//球员星等配置
+message RoleStarConfig
+{
+	optional string switch					= 2; // #
+	optional uint32 id					= 3; // 球员id
+	optional uint32 star					= 4; // 星等
+	optional string consume					= 5; // 资源消耗
+	optional string attrs					= 6; // 属性值
+}
+
+//球员品质基础配置
+message RoleQualityConfig
+{
+	optional string switch				= 2; // #
+	optional uint32 id				= 3; // 球员id
+	optional uint32 quality				= 4; // 品质
+	optional string skill_id				= 5; // 技能id
+	optional string attrs				= 6; // 属性值
+}
+//机器人名字库
+message RobotFullNameConfig
+{
+	optional string full_name	= 1;
+}
+
+message RobotAdjConfig
+{
+	optional string adj	= 1;
+}
+
+message RobotNameConfig
+{
+	optional string name = 1;
+}
+
+//球员品质升阶配置
+message RoleQualityUpConfig
+{
+	optional string switch				= 2; // #
+	optional uint32 quality				= 3; // 品质
+	optional uint32 symbol				= 4; // 跨阶标识
+	optional string consume				= 5; // 升品资源消耗
+	optional float factor				= 6; // 品质改变修正比例
+	optional uint32 id					= 7; 
+}
+
+
+//排行榜配置
+message RankConfig
+{
+	optional string switch				= 2; // #
+	optional uint32 type				= 3; // 排行榜类型
+	optional uint32 sub_type				= 4; // 榜单子类型
+	optional uint32 default_display				= 5; // 默认显示的榜单标示
+	optional string points_name					= 6; // 排名数值名称
+	optional string limit_condition				= 7; // 排行限制条件
+	optional uint32 max_item				= 8; // 最大排行条目数
+	optional uint32 max_enable_item				= 9; // 最大可参与排行条目数
+	optional uint32 refresh_time				= 10; // 刷新时间（分钟）
+	optional uint32 click_refresh				= 11; // 点击是否刷新
+	optional uint32 display_vip				= 12; // 是否显示vip等级
+	optional uint32 display_win_times				= 13; // 是否显示胜利场次
+}
+
+
+//斗牛比赛配置
+message BullFightLevelConfig
+{
+	optional uint32 hard			= 1; //难度
+	optional uint32 unlock_level	= 2; //解锁等级
+	optional uint32 win_hp_cost		= 3; //胜利扣除体力
+	optional uint32 lose_hp_cost	= 4; //失败扣除体力
+	optional uint32 reward_id		= 5; //奖励包
+	optional string npc				= 6; // npc
+}
+
+message BullFightBuyTimesConfig
+{
+	optional uint32 buy_times 		= 1; //购买次数 
+	optional uint32 consume_type	= 2; //消耗
+	optional uint32 consume_value	= 3; //消耗数量
+}
+
+
+//投篮赛配置
+message ShootMatchConfig
+{
+	optional uint32 id				= 1; //玩法ID
+	repeated ShootInfoConfig info			= 2;
+}
+
+message ShootInfoConfig
+{
+	optional string level_region	= 1; //等级区间
+	optional uint32 times			= 2; //每天可玩次数
+	//optional uint32 hard			= 2; //难度
+	//optional uint32 unlock_level	= 3; //解锁等级
+	//optional uint32 win_hp_cost		= 5; //胜利扣除体力
+	//optional uint32 lose_hp_cost	= 6; //失败扣除体力
+	//optional uint32 game_mode		= 8; //对应gameMode配置的玩法
+	optional uint32 npc_level		= 3; //NPC等级
+	optional double	modified_factor	= 4; //修正系数
+	optional uint32 game_mode		= 5; //调用玩法ID
+	optional string score_level		= 6; //玩家得分
+	optional string rewards_num		= 7; //翻牌次数
+	optional uint32 rewards_id		= 8; //奖励包
+	optional uint32 diamond_rewards_id	= 9; //钻石奖励包
+}
+
+//投篮赛购买比赛次数
+message ShootBuyTimesConfig
+{
+	optional uint32 buy_times 		= 1;	//购买次数 
+	optional uint32 consume_type	= 2; //消耗
+	optional uint32 consume_value	= 3; //消耗数量
+}
+
+//游戏玩法配置
+message GameModeConfig
+{
+	optional string switch				= 1;
+	optional uint32 id					= 2;
+	optional uint32 level				= 3;
+	optional uint32 type				= 4;
+	optional uint32 map_npc				= 5;
+	optional uint32 time 				= 6;
+	optional uint32 scene				= 7;
+	optional uint32 npc_c				= 8;
+	optional uint32 npc_pf 				= 9;
+	optional uint32 npc_pg				= 10;
+	optional uint32 npc_sf 				= 11;
+	optional uint32 npc_sg				= 12;
+	optional string unmapped_npc1		= 13;
+	optional string unmapped_npc2		= 14;
+	optional string unmapped_npc3		= 15;
+	optional uint32 additional_info 	= 16;
+	optional uint32 ai_delay			= 17;
+	optional double rush_stamina		= 18;
+	optional uint32 skill_prob			= 19;
+	optional uint32 reposition_dist		= 20;
+	optional uint32 extra_level_info	= 21;
+	
+}
+
+
+message ServerInfoConfig
+{
+	optional string id				= 1;
+	optional string server_name 	= 2; //服务器名
+	optional string server_ip		= 3;   //服务器ip
+	optional uint32 server_port		= 4; //服务器端口
+}
+
+
+message ServerStateConfig
+{
+	optional uint32 state		= 1; //服务器状态
+	optional uint32 load_num	= 2; //负载人数
+}
+
+//服务器分组
+message ServerGroupConfig
+{
+	optional uint32 group_id	= 1; //组ID
+	optional string server_list	= 2; //服务器列表
+}
+
+//新人签到配置
+message NewComerSignConfig
+{
+	optional uint32 type			= 1;
+	optional uint32  day			= 2;//天数
+	optional uint32 index			= 3; //索引
+	optional string awards			= 4;//签到奖励
+	optional string append_consume	= 5;//补签消耗
+	optional string desc			= 6;//描述
+}
+
+//公告配置
+message NoticeConfig
+{
+	optional uint32 id				= 1; //公告ID
+	optional string purpose			= 2; //用途
+	optional uint32 target			= 3; //公告对象
+	optional string time			= 4; //公告具体时间(某天的时间)
+	optional string date			= 5; //公告具体某天
+	optional string content			= 6; //公告内容
+	optional uint32 time_type		= 7; //公告时间类型
+	optional uint32 interval		= 8; //时间间隔
+	optional uint32 loop_times		= 9; //循环次数
+}
+
+//事件公告
+message EventNoticeConfig
+{
+	optional uint32 id				= 1; //事件ID
+	optional string purpose			= 2; //用途
+	optional uint32 target			= 3; //公告对象
+	optional string condition		= 4; //事件触发条件
+	optional string content			= 5; //公告内容
+	optional uint32 notice_id		= 6; 
+}
+
+//图鉴
+message RoleMapConfig
+{
+	optional uint32 id				= 1; //ID
+	optional string describe		= 2; //描述
+	optional string squad_ids		= 3; //图鉴组合
+	optional string squad_name		= 4; //组合名称
+	optional uint32 attr_id			= 5; //属性ID
+	optional uint32 attr_num		= 6; //属性值
+}
+
+//活跃度
+message ActivityConfig
+{
+	optional uint32 id				= 1; //ID
+	optional uint32 activity		= 2; //活跃度
+	optional string level_range		= 3; //等级范围
+	optional string awards			= 4; //奖励
+	optional string icon			= 5; //图标
+}
+
+//7日活动
+message NewComerTrialConfig
+{
+	optional uint32 day	= 1; //天
+	repeated TaskConditionInfo precondition = 2; //条件
+	repeated TaskConditionInfo condition = 3; //条件
+	optional uint32 type = 4;
+	optional uint32 id = 5; //ID
+	optional uint32 index = 6; //第X个活动
+	optional uint32 score = 7; //积分
+	optional uint32 award_id = 8; //奖励
+}
+
+//白名单
+message WhiteAddressConfig
+{
+	optional string mac_address			= 1;
+}
+
+//MVP 计算公式
+message MvpConfig
+{
+	optional uint32 position	= 1; //职业
+	optional float two_score	= 2; //2分系数
+	optional float three_score	= 3; //3分系数
+	optional float rebound		= 4; //篮板系数
+	optional float assist		= 5; //組攻系数
+	optional float steal		= 6; //抢断系数
+	optional float block		= 7; //盖帽系数
+}
+
+
+message FashionDataConfig
+{
+	optional uint32 id 			= 1;//时装ID
+	optional uint32 rand_num	= 2;//属性数量
+	optional uint32 lib_id		= 3;//库ID
+	optional string reset_price	= 4;//重置价格
+}
+
+message FashionAttrConfig
+{
+	optional uint32 rand_id			= 1; //库ID
+	optional uint32 attrs_id		= 2; //ID
+	optional string attrs			= 3; //对应属性
+	optional uint32 weight			= 4; //权重
+}
+
+//新巡回赛
+message QualifyingNewConfig
+{
+	optional uint32 score			= 1;
+	optional string title			= 2;
+	optional uint32 star			= 3;
+	optional string icon			= 4;
+	optional uint32 upgrade_score	= 5;
+	optional uint32 section			= 6;
+	optional uint32 mail_id			= 7; //邮件ID
+	optional uint32 award_id		= 8; //奖励ID（用于显示）
+	optional string award_icon		= 9; //奖励icon
+	optional uint32 awardpack_id	= 10;
+    optional string icon_small      = 11;
+    optional uint32 opponentAI      = 12;
+}
+
+//新巡回赛赛季时间配置
+message QualifyingNewSeasonConfig
+{
+	optional uint32 season		= 1; //赛季
+	optional string start_time	= 2; //起始时间
+	optional string end_time	= 3; //截止时间
+}
+
+//新版排位赛
+message QualifyingNewerConfig
+{
+	optional uint32 score			= 1;
+	optional string title			= 2;
+	optional uint32 star			= 3;
+	optional string icon			= 4;
+	optional uint32 upgrade_score	= 5;
+	optional uint32 section			= 6;
+	optional uint32 mail_id			= 7; //邮件ID
+	optional uint32 award_id		= 8; //奖励ID（用于显示）
+	optional string award_icon		= 9; //奖励icon
+	optional uint32 awardpack_id	= 10;
+    optional string icon_small      = 11;
+    optional uint32 combo           = 12;//连胜次数可得额外奖励
+    optional string icon_board      = 13;
+    optional uint32 sub_section     = 14;
+    optional uint32 team_ai         = 15;
+    optional uint32 enemy_ai        = 16;
+}
+
+//新版排位赛赛季时间配置
+message QualifyingNewerSeasonConfig
+{
+	optional uint32 season		= 1; //赛季
+	optional string start_time	= 2; //起始时间
+	optional string end_time	= 3; //截止时间
+}
+
+//新版排位赛战绩额外奖励积分
+message QualifyingNewerLeagueAwardsConfig
+{
+	optional uint32 win_times			= 1; //胜利场次
+	optional uint32 extra_score			= 2; //奖励积分
+	optional string rewards				= 3; //奖励
+}
+
+//新版排位赛匹配规则
+message QualifyingNewerMatchRegularConfig
+{
+    optional uint32 grade       = 1;
+    optional uint32 wait_time   = 2;
+    optional uint32 grade_low   = 3;
+    optional uint32 grade_high  = 4;
+    optional uint32 one_way     = 5;
+}
+
+
+//天梯赛联赛额外奖励积分
+message LadderLeagueExtraScoreConfig
+{
+	optional uint32 win_times			= 1; //胜利场次
+	optional uint32 extra_score			= 2; //奖励积分
+	optional string rewards				= 3; //奖励
+}
+//涂鸦槽位
+message BadgeSlotConfig
+{
+	optional uint32 id						= 1; //槽位ID
+	optional uint32 category				= 2; //槽位类型
+	optional uint32 need_level				= 3; //槽位解锁的等级限制
+	optional DataConstruction unlock_consume= 4; //槽位解锁的消耗
+	optional uint32 can_buy					= 5; //是否可通过购买解锁
+    optional string name                    = 6;
+    optional string layoutPosX              = 7;
+    optional string layoutPosY              = 8;
+}
+
+//天梯赛赛季时间配置
+message LadderSeasonConfig
+{
+	optional uint32 season		= 1; //赛季
+	optional string start_time	= 2; //起始时间
+	optional string end_time	= 3; //截止时间
+}
+
+//天梯赛
+message LadderConfig
+{
+	optional uint32 score_start		= 1; //起始分
+	optional uint32 score_end		= 2; //截止分
+	optional uint32 mail_id			= 3; //邮件ID
+	optional uint32 level			= 4;
+	optional string name			= 5;
+	optional string icon			= 6;
+	optional uint32 awardpack_id	= 7; //胜利方奖励库ID
+    optional string icon_small      = 8;
+}
+
+//时间段配置
+message PeriodConfig
+{
+	optional uint32 id = 1;
+	optional uint32 year_start = 2;
+	optional uint32 year_stop = 3;
+	optional uint32 month_start = 4;
+	optional uint32 month_stop = 5;
+	optional uint32 month_day_start = 6;
+	optional uint32 month_day_stop = 7;
+	optional uint32 week_day_start = 8;
+	optional uint32 week_day_stop = 9;
+	optional uint32 hour_start = 10;
+	optional uint32 hour_stop = 11;
+	optional uint32 mintue_start = 12;
+	optional uint32 mintue_stop = 13;
+	optional uint32 second_start = 14;
+	optional uint32 second_stop = 15;
+}
+
+//比赛任务
+message MatchActivityConfig
+{
+	optional uint32 id = 1;
+	optional uint32 min_level = 2;
+	optional uint32 max_level = 3;
+	repeated uint32 game_mode = 4;
+	optional uint32 win_award_id = 5; //比赛胜利奖励
+	optional uint32 lose_award_id = 6; //比赛失败奖励
+	optional uint32 times_limit = 7; //次数上限
+	repeated uint32 period_id = 8; //时间段ID
+	optional uint32 reset_period_id = 9; //重置时间段ID
+}
+
+//功能开关
+message FunctionSwitchConfig
+{
+	optional string id = 1;
+	optional string protocol = 2;
+	optional uint32 opened = 3;
+}

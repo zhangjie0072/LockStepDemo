@@ -1,0 +1,30 @@
+@charset "utf-8";
+/* CSS Document */
+
+body{margin:0;padding:0;font-size:100%;font-family:Arial, Helvetica, sans-serif,Simsun;}
+form,ul,li,p,h1,h2,h3,h4,h5,h6{margin:0;padding:0;list-style:none;}
+input,select{ margin:0px; padding:0;}
+img{border:0px; display:block;}
+.cl{ clear:both;}
+.fl_l{float:left;} .fl_r{float:right;}
+.hidden{display:block; overflow:hidden; height:0;}
+a{text-decoration:none;blr:expression(this.onFocus=this.blur()); outline:none}
+a:hover{color:#Fff;text-decoration:none;}
+.clearfix:after{content:"&nbsp;";display:block;height:0;clear:both;visibility:hidden;}
+.clearfix{*display:inline-block;}
+header,section,footer,nav,atricle{ display:block;}
+#Wrap{ width:100%; margin:0 auto; overflow:auto;}
+
+.header2{ width:100%; height:63px; background:#02beff; z-index:99; float:left; overflow:hidden;}
+.header2 span{ width:100%; float:left;font-size:1.5em; line-height:63px; color:#fff; text-align:center; }
+.header .back{ width:40px; height:63px; background:url(../images/g_back.jpg) no-repeat; float:left; margin-left:1%; display:inline;}
+.close{  width:45px; height:63px; background:url(../images/g_c.jpg) no-repeat; float:right; margin-left:-45px; display:inline; }
+
+
+/*pay*/
+.reg_cont .account3{ font-size:0.75em; color:#eb6100; line-height:36px; text-align:center; font-weight:bold;}
+.pay_img{ width:60%; float:left; text-align:center; margin:10px 20%; display:inline;}
+.pay_img img{ width:40%; float:left; text-align:center; margin:0 30%; display:inline;}
+.pay_but{ width:60%; line-height:32px; float:left; text-align:center; margin:10px 20%; display:inline; background:#eb6100; color:#fff;  border-radius:5px; border:1px solid #bd4e00;}
+
+

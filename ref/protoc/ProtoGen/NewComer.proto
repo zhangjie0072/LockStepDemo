@@ -1,0 +1,62 @@
+
+package fogs.proto.msg;
+import "Base.proto";
+
+
+message NewComerInfo
+{
+	repeated uint32 sign_list				= 1;//签到列表   //nil:未达天数,0:未签到,1:已签到,2:已领取累计签到奖励
+	required uint32 open_flag				= 2;//开启标记
+}
+
+enum NewComerSignType
+{
+	NCST_SIGN		= 1;//普通签到
+	NCST_APEND		= 2;//补签
+	NCST_CUMULATIVE = 3;//领取累计签到奖励   
+}
+
+message NewComerSignReq
+{
+	required NewComerSignType type	= 1[default=NCST_SIGN]; 
+	optional uint32	day				= 2; //领取累计签到天数
+}
+
+message NewComerSignResp
+{
+	required uint32 result			= 1;
+	required NewComerSignType type	= 2[default=NCST_SIGN];
+	optional uint32	day				= 3; //领取累计签到天数
+}
+
+message NewDayCome
+{
+	required NewComerInfo info 	= 1;
+}
+
+//7日活动
+message NewComerTrialInfo
+{
+	optional uint32 total_score			= 2;
+	optional uint32 awards_flag			= 3; //最终奖励领取标记  1:领取 
+}
+
+//积分，奖励状态变化通知
+message NewComerTrialNotify
+{
+	optional uint32 total_score			= 1;
+	optional uint32 awards_flag			= 2; //最终奖励领取标记  1:领取 
+}
+
+//领取总奖励
+message GetNewComerTrialAwardsReq
+{
+	optional uint32 force_get = 1; //1:强制领取最终奖励   
+}
+
+//领取总奖励回复
+message GetNewComerTrialAwardsResp
+{
+	required uint32 result				= 1;
+	repeated KeyValueData	awards		= 3; // 奖励物品
+}

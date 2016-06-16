@@ -1,0 +1,21 @@
+<MatchSetting type="4"> <!--1:practice 2:ready 3:1on1 4:3on3 -->
+	<Scene>10008</Scene>
+	<Team>
+		<Home>
+			<NPC pos="1" id="20001"/>
+			<NPC pos="2" id="20002"/>
+			<NPC pos="3" id="20003"/>
+		</Home>
+		<Away>
+			<MainRole pos="1" id="1000"/>
+			<NPC pos="2" id="20002"/>
+			<NPC pos="3" id="20007"/>
+		</Away>
+	</Team>
+	<Time x="180"/>
+	
+	<BgSound>
+		<Track src="bg/gongdi" interval="1" loop="0"/>
+	</BgSound>
+	
+</MatchSetting>

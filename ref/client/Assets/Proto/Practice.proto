@@ -1,0 +1,95 @@
+package fogs.proto.msg;
+import "Base.proto";
+
+
+//---------练习模块相关
+
+//练习数据结构
+message PracticeInfo
+{
+	optional uint32 id				= 1; //练习ID
+	optional uint32 finished		= 2; //是否已完成（1：是，0：否）
+}
+
+
+//开始操作练习
+message BeginPractice
+{
+	optional uint32 id				= 1; //练习ID
+}
+
+//开始操作练习回复
+message BeginPracticeResp
+{
+	optional uint32 result			= 1; //
+	optional uint32 id				= 2; //练习ID
+	optional uint64 session_id		= 3; //SessionID
+}
+
+//结束操作练习
+message EndPractice
+{
+	optional uint64 session_id		= 1; //SessionID
+	optional uint32 goal_times		= 2; //命中次数
+}
+
+//结束操作练习回复
+message EndPracticeResp
+{
+	optional uint32 result			= 1; //
+	optional uint32 time			= 2; //练习赛结束时间
+	repeated KeyValueData awards	= 3; //奖励
+	optional uint32 id				= 4;
+}
+
+//退出操作练习
+message ExitPractice
+{
+	optional uint64 session_id		= 1; //SessionID
+}
+
+//退出操作练习回复
+message ExitPracticeResp
+{
+	optional uint32 result			= 1; //
+}
+
+// 练习PVE数据结构
+message PracticePveInfo
+{
+	optional uint32 id				= 1; //练习ID
+	optional uint32 race_times		= 2; //比赛次数
+	optional uint32 win_times		= 3; //胜利次数
+}
+
+//开始联系场1V1
+message BeginPracticePve
+{
+	optional uint32 id = 1; //练习ID
+	optional FightRoleInfo fight_list = 2; //球员出战列表
+}
+
+//开始联系场1V1回复
+message BeginPracticePveResp
+{
+	optional uint32 result = 1; //
+	optional uint32 id = 2; //练习ID
+	optional uint64 session_id = 3; //本次比赛的SessionID
+}
+
+//结束联系场1V1
+message EndPracticePve
+{
+	optional uint64 session_id	= 1;
+	optional uint32 main_role_side = 2; //主队Or客队
+	optional uint32 score_home = 3; //主队得分
+	optional uint32 score_away	= 4; //客队得分
+}
+
+//结束联系场1V1回复
+message EndPracticePveResp
+{
+	optional uint32 result = 1; //比赛结果
+	repeated KeyValueData awards = 2; //主队奖励物品
+	optional uint32 id = 3;
+}

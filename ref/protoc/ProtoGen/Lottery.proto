@@ -1,0 +1,22 @@
+package fogs.proto.msg;
+import "Base.proto";
+
+//购买抽奖
+message BuyLotteryReq
+{
+	required uint32 type			= 1; //类型
+	required uint32 count			= 2; //购买数量
+	optional uint32 is_free			= 3; //是否使用免费次数
+}
+
+message BuyLotteryResp
+{
+	required uint32 result			= 1; //
+	required uint32 type			= 2; //类型
+	required uint32 count			= 3; //购买数量
+	optional uint32 is_free			= 4; //是否使用免费次数
+	optional uint32 free_times		= 5; //免费抽奖的剩余次数
+	optional uint32 last_time		= 6; //免费抽奖最后一次的使用时间
+	repeated KeyValueData prizes	= 7; //奖品列表
+}
+
