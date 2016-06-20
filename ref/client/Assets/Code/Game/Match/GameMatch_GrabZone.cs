@@ -105,11 +105,16 @@ public class GameMatch_GrabZone : GameMatch
 		npc.m_alwaysForbiddenPickup = false;
 
 		_UpdateCamera(m_mainRole);
-		m_stateMachine.SetState(m_config.needPlayPlot ? MatchState.State.ePlotBegin : MatchState.State.eShowRule);
+
 
 		CreateZoneIndicator();
 
 		mCurScene.mGround.AddZoneConstrain( new GrabPointConstrain(this) );
+	}
+	protected override void OnLoadingComplete ()
+	{
+		base.OnLoadingComplete ();
+		m_stateMachine.SetState(m_config.needPlayPlot ? MatchState.State.ePlotBegin : MatchState.State.eShowRule);
 	}
 
     public override void HandleGameBegin(Pack pack)

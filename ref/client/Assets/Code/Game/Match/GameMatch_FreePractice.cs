@@ -43,12 +43,12 @@ public class GameMatch_FreePractice
    
 		m_bShowGoalUIEffect = false;
 
-		m_stateMachine.SetState(MatchState.State.eBegin);
+        GameMsgSender.SendGameBegin();
 	}
 
     public override void HandleGameBegin(Pack pack)
     {
-		m_stateMachine.SetState(MatchState.State.eTipOff);
+		m_stateMachine.SetState(MatchState.State.eBegin);
     }
 
     public Player CreatePlayer(Config.TeamMember mem)

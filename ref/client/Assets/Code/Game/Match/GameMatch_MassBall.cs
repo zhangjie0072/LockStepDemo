@@ -97,6 +97,11 @@ public class GameMatch_MassBall : GameMatch
 		_UpdateCamera(m_mainRole);
 
 		mCurScene.mBasket.onGoal += OnGoal;
+
+	}
+	protected override void OnLoadingComplete ()
+	{
+		base.OnLoadingComplete ();
 		m_stateMachine.SetState(m_config.needPlayPlot ? MatchState.State.ePlotBegin : MatchState.State.eShowRule);
 	}
 

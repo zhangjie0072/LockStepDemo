@@ -97,6 +97,11 @@ public class GameMatch_Ultimate21 : GameMatch
 		_UpdateCamera(m_mainRole);
 		CreateUI ();
 
+
+	}
+	protected override void OnLoadingComplete ()
+	{
+		base.OnLoadingComplete ();
 		m_stateMachine.SetState(m_config.needPlayPlot ? MatchState.State.ePlotBegin : MatchState.State.eShowRule);
 	}
 

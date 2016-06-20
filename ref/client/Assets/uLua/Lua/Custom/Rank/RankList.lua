@@ -27,17 +27,17 @@ function GetMyRankInfo(rankType)
 end
 
 function ReqList(rankType)
-	print(modname, "ReqRankList", rankType)
-	local req = {
-		type = tostring(rankType)
-	}
+	-- print(modname, "ReqRankList", rankType)
+	-- local req = {
+	-- 	type = tostring(rankType)
+	-- }
 
-	if firstRefreshCallback then
-		firstRefreshCallback = false
-	end
-	local buf = protobuf.encode("fogs.proto.msg.RankListReq", req)
-	CommonFunction.ShowWait()
-	LuaHelper.SendPlatMsgFromLua(MsgID.RankListReqID, buf)
+	-- if firstRefreshCallback then
+	-- 	firstRefreshCallback = false
+	-- end
+	-- local buf = protobuf.encode("fogs.proto.msg.RankListReq", req)
+	-- CommonFunction.ShowWait()
+	-- LuaHelper.SendPlatMsgFromLua(MsgID.RankListReqID, buf)
 end
 
 function HandleRankListResp(buf)
@@ -79,21 +79,23 @@ function HandleRankListResp(buf)
 end
 
 function MakeMyRankInfo(rankType)
-	local rankInfo = {
-		acc_id = MainPlayer.Instance.AccountID,
-		ranking = 0,
-		name = MainPlayer.Instance.Name,
-		level = MainPlayer.Instance.Level,
-		show_id = tostring(MainPlayer.Instance.SquadInfo:get_Item(0).role_id),
-	}
-	if rankType == RankType.RT_QUALIFYING_NEW then
-		rankInfo.points = MainPlayer.Instance.qualifying_new.score
-	elseif rankType == RankType.RT_LADDER then
-		rankInfo.points = MainPlayer.Instance.pvpLadderScore
-	elseif rankType == RankType.RT_ACHIEVEMENT then
-		rankInfo.points = MainPlayer.Instance.Honor2
+	if MainPlayer.Instance.SquadInfo.Count > 0 then 
+		local rankInfo = {
+			acc_id = MainPlayer.Instance.AccountID,
+			ranking = 0,
+			name = MainPlayer.Instance.Name,
+			level = MainPlayer.Instance.Level,
+			show_id = tostring(MainPlayer.Instance.SquadInfo:get_Item(0).role_id),
+		}
+		if rankType == RankType.RT_QUALIFYING_NEW then
+			rankInfo.points = MainPlayer.Instance.qualifying_new.score
+		elseif rankType == RankType.RT_LADDER then
+			rankInfo.points = MainPlayer.Instance.pvpLadderScore
+		elseif rankType == RankType.RT_ACHIEVEMENT then
+			rankInfo.points = MainPlayer.Instance.Honor2
+		end
+		return rankInfo
 	end
-	return rankInfo
 end
 
 -- 服务器每小时推送一次，不需要请求

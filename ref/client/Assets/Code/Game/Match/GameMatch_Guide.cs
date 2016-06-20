@@ -28,10 +28,18 @@ public class GameMatch_Guide : GameMatch_3ON3, MatchStateMachine.Listener,GameMa
         : base(config)
     {
 		playerIndicatorPrefab = ResourceLoadManager.Instance.GetResources("Prefab/Indicator/ArrowDown") as GameObject;
+
 		areaPrefab = ResourceLoadManager.Instance.GetResources("Prefab/Indicator/Area") as GameObject;
+		GameUtils.SetRenderQueue(areaPrefab, RenderQueue.PlayGroundLine - 1);
+
 		layupAreaPrefab = ResourceLoadManager.Instance.GetResources("Prefab/Indicator/LayupArea") as GameObject;
+		GameUtils.SetRenderQueue(layupAreaPrefab, RenderQueue.PlayGroundLine - 1);
+
 		_button_highlight_prefab = ResourceLoadManager.Instance.GetResources("Prefab/GUI/ButtonHighlight") as GameObject;
+		GameUtils.SetRenderQueue(_button_highlight_prefab, RenderQueue.PlayGroundLine - 1);
+
 		_circle_highlight_prefab = ResourceLoadManager.Instance.GetResources("Prefab/GUI/CircleHighlight") as GameObject;
+		GameUtils.SetRenderQueue(_circle_highlight_prefab, RenderQueue.PlayGroundLine - 1);
     }
 
 	public static void SetConfig(ref GameMatch.Config config)

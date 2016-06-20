@@ -52,6 +52,8 @@ function LotteryResultPopup:Start()
 	self.lblRebuy.text = getCommonStr(self.count == 1 and "BUY_ONE_MORE" or "BUY_TEN_MORE")
 
 	local count = table.getn(self.awards)
+	local depth = 3022--self.transform:GetComponent("UIPanel").startingRenderQueue + 1
+	local icon = nil
 	for i, goods in ipairs(self.awards) do
 		if count <= 1 then
 			local goodsIcon = getLuaComponent(createUI("GoodsIcon", self.grid:GetChild(10).transform))
@@ -65,10 +67,12 @@ function LotteryResultPopup:Start()
 				goodsIcon.hideNum = true
 			end
 			if self.type == 1 and (g.quality >= 2 and g.quality <= 3) then
-				local effect = goodsIcon.transform:FindChild('SpecialEffect/Ef_Blink2')
+				local effect = goodsIcon.transform:FindChild('SpecialEffect/Ef_Blink1')
+				effect:GetComponent("ParticleSystemRenderer").material.renderQueue = depth
 				NGUITools.SetActive(effect.gameObject, true)
 			elseif self.type == 2 and (g.quality >= 4 and g.quality <= 5) then
-				local effect = goodsIcon.transform:FindChild('SpecialEffect/Ef_Blink2')
+				local effect = goodsIcon.transform:FindChild('SpecialEffect/Ef_Blink1')
+				effect:GetComponent("ParticleSystemRenderer").material.renderQueue = depth
 				NGUITools.SetActive(effect.gameObject, true)
 			end
 		else
@@ -83,10 +87,12 @@ function LotteryResultPopup:Start()
 				goodsIcon.hideNum = true
 			end
 			if self.type == 1 and (g.quality >= 2 and g.quality <= 3) then
-				local effect = goodsIcon.transform:FindChild('SpecialEffect/Ef_Blink2')
+				local effect = goodsIcon.transform:FindChild('SpecialEffect/Ef_Blink1')
+				effect:GetComponent("ParticleSystemRenderer").material.renderQueue = depth
 				NGUITools.SetActive(effect.gameObject, true)
 			elseif self.type == 2 and (g.quality >= 4 and g.quality <= 5) then
-				local effect = goodsIcon.transform:FindChild('SpecialEffect/Ef_Blink2')
+				local effect = goodsIcon.transform:FindChild('SpecialEffect/Ef_Blink1')
+				effect:GetComponent("ParticleSystemRenderer").material.renderQueue = depth
 				NGUITools.SetActive(effect.gameObject, true)
 			end
 		end

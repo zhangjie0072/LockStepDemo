@@ -159,14 +159,20 @@ function UIRankList:MakeOnSwitch(rankType)
 		end
 
 		self.curRankType = rankType
-
+		print('UIRankList:MakeOnSwitch',rankType)
 		local config = self.rankTypes[rankType].config
 		self.lblPointsTitle.text = config.points_name
-		if config.click_refresh == 1 or not RankList.GetList(rankType) then
-			RankList.ReqList(rankType)
-		else
-			self:RefreshList(rankType, RankList.GetList(rankType), RankList.GetMyRankInfo(rankType))
+		-- if config.click_refresh == 1 or not RankList.GetList(rankType) then
+		-- 	RankList.ReqList(rankType)
+		-- else
+		local myRank = RankList.GetMyRankInfo(rankType)
+		if not myRank then 
+			RankList.myRankInfos[rankType] = RankList.MakeMyRankInfo(rankType)
+			myRank = RankList.myRankInfos[rankType]
 		end
+
+			self:RefreshList(rankType, RankList.GetList(rankType),myRank)
+		-- end
 	end
 end
 

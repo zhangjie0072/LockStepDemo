@@ -129,24 +129,27 @@ public class InputReader : Singleton<InputReader>
 		//defense
 		else
 		{
-			if (ball.m_ballState == BallState.eUseBall 
-                || ball.m_ballState == BallState.eUseBall_Pass
-                || ball.m_ballState == BallState.eUseBall_Shoot)
-			{
-				if (match.IsCommandValid(Command.Rush) && match.GetMatchType() == GameMatch.Type.ePVP_3On3)
-					validCmdList.Add(Command.Rush);
-				if (match.IsCommandValid(Command.Defense))
-					validCmdList.Add(Command.Defense);
-			}
+            if (ball != null)
+            {
+                if (ball.m_ballState == BallState.eUseBall
+                    || ball.m_ballState == BallState.eUseBall_Pass
+                    || ball.m_ballState == BallState.eUseBall_Shoot)
+                {
+                    if (match.IsCommandValid(Command.Rush) && match.GetMatchType() == GameMatch.Type.ePVP_3On3)
+                        validCmdList.Add(Command.Rush);
+                    if (match.IsCommandValid(Command.Defense))
+                        validCmdList.Add(Command.Defense);
+                }
 
-			if(ball != null && ball.m_owner != null && match.IsCommandValid(Command.Steal) || (ball.m_ballState == BallState.eUseBall_Pass ) )
-				validCmdList.Add(Command.Steal);
+                if (ball != null && ball.m_owner != null && match.IsCommandValid(Command.Steal) || (ball.m_ballState == BallState.eUseBall_Pass))
+                    validCmdList.Add(Command.Steal);
 
-			if (ball != null && (ball.m_ballState == BallState.eUseBall || ball.m_ballState == BallState.eUseBall_Shoot))
-			{
-				if (match.IsCommandValid(Command.Block))
-					validCmdList.Add(Command.Block);
-			}
+                if (ball != null && (ball.m_ballState == BallState.eUseBall || ball.m_ballState == BallState.eUseBall_Shoot))
+                {
+                    if (match.IsCommandValid(Command.Block))
+                        validCmdList.Add(Command.Block);
+                }
+            }
 			if (hasTeamMate && match.IsCommandValid(Command.Switch))
 				validCmdList.Add(Command.Switch);
 		}

@@ -69,7 +69,6 @@ public class MatchStateOver
 		foreach( Player player in GameSystem.Instance.mClient.mPlayerManager )
 		{
 			player.model.EnableGrey(false);
-			player.m_smcManager = null;
 
 			player.m_enableAction = false;
 			if( player.m_catchHelper != null )

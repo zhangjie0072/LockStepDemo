@@ -107,11 +107,8 @@ public class AISystem
 
 	void _RandomInput()
 	{
-        if (!m_player.m_bSimulator && m_curMatch is GameMatch_PVP)
-			return;
 		//angle sector from 0 to 16
 		m_player.m_curInputDir = Random.Range(-1, 16);
-		GameMsgSender.SendSyncInput(m_player, m_player.m_curInputDir);
 	}
 
 	protected virtual void _BuildAIState()

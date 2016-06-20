@@ -96,8 +96,6 @@ public class PlayerState_Interception : PlayerState_Skill
 		m_curAction = "";
 
 		Logger.Log("animType: " + m_animType);
-		if( m_bSendMsg )
-			GameMsgSender.SendInterception(m_player, m_curExecSkill, m_passer, m_catcher, m_animType, m_bGetBall, (Vector3)ballPosWhenBlocked, (Vector3)m_player.forward);
 		++m_player.mStatistics.data.interception;
 	}
 

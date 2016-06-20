@@ -187,9 +187,8 @@ public class MatchPointsConfig {
         if (ThreePTCenter.transform == null)
             ThreePTCenter.transform = new IM.Transform();
         XmlDocument xmlDoc = CommonFunction.LoadXmlConfig(name1, text);
-        XmlNode root = xmlDoc.SelectSingleNode("data");
-        XmlNode node = root.SelectSingleNode("ThreePTCenter");
-        PariseTransformInfo(node, ThreePTCenter.transform);
+        XmlNode root = xmlDoc.LastChild;
+        ParseTransformInfo(root, ThreePTCenter.transform);
     }
 
     private void ReadBeginPosConfig()
@@ -208,7 +207,7 @@ public class MatchPointsConfig {
             BeginPos.offenses_transform = new List<IM.Transform>();
 
         XmlDocument xmlDoc = CommonFunction.LoadXmlConfig(name2, text);
-        XmlNode root = xmlDoc.SelectSingleNode("data");
+        XmlNode root = xmlDoc.LastChild;
         XmlNode defenseNode = root.SelectSingleNode("DefenseNode");
         XmlNodeList defenseList = defenseNode.ChildNodes;
         int deCount = defenseList.Count;
@@ -216,7 +215,7 @@ public class MatchPointsConfig {
         {
             XmlNode node = defenseList.Item(i);
             IM.Transform tempTrans = new IM.Transform();
-            PariseTransformInfo(node, tempTrans);
+            ParseTransformInfo(node, tempTrans);
             BeginPos.defenses_transform.Add(tempTrans);
         }
 
@@ -227,7 +226,7 @@ public class MatchPointsConfig {
         {
             XmlNode node = offenseList.Item(i);
             IM.Transform tempTrans = new IM.Transform();
-            PariseTransformInfo(node, tempTrans);
+            ParseTransformInfo(node, tempTrans);
             BeginPos.offenses_transform.Add(tempTrans);
         }
     }
@@ -245,14 +244,14 @@ public class MatchPointsConfig {
             BlockStormPos.npc_transforms = new List<IM.Transform>();
 
         XmlDocument xmlDoc = CommonFunction.LoadXmlConfig(name3, text);
-        XmlNode root = xmlDoc.SelectSingleNode("data");
+        XmlNode root = xmlDoc.LastChild;
         XmlNodeList npcs = root.ChildNodes;
         int npcCount = npcs.Count;
         for (int i = 0; i < npcCount; ++i)
         {
             XmlNode node = npcs.Item(i);
             IM.Transform tempTrans = new IM.Transform();
-            PariseTransformInfo(node, tempTrans);
+            ParseTransformInfo(node, tempTrans);
             BlockStormPos.npc_transforms.Add(tempTrans);
         }
 
@@ -270,9 +269,8 @@ public class MatchPointsConfig {
         if (FreeThrowCenter.transform == null)
             FreeThrowCenter.transform = new IM.Transform();
         XmlDocument xmlDoc = CommonFunction.LoadXmlConfig(name4, text);
-        XmlNode root = xmlDoc.SelectSingleNode("data");
-        XmlNode node = root.SelectSingleNode("FreeThrowCenter");
-        PariseTransformInfo(node, FreeThrowCenter.transform);
+        XmlNode root = xmlDoc.LastChild;
+        ParseTransformInfo(root, FreeThrowCenter.transform);
     }
 
     private void ReadGrabPointPosConfig()
@@ -289,13 +287,13 @@ public class MatchPointsConfig {
         if (GrabPointPos.mainRole_transform == null)
             GrabPointPos.mainRole_transform = new IM.Transform();
         XmlDocument xmlDoc = CommonFunction.LoadXmlConfig(name5, text);
-        XmlNode root = xmlDoc.SelectSingleNode("data");
+        XmlNode root = xmlDoc.LastChild;
 
         XmlNode npcNode = root.SelectSingleNode("NPC");
         XmlNode mainRoleNode = root.SelectSingleNode("MainRole");
 
-        PariseTransformInfo(npcNode, GrabPointPos.npc_transform);
-        PariseTransformInfo(mainRoleNode, GrabPointPos.mainRole_transform);
+        ParseTransformInfo(npcNode, GrabPointPos.npc_transform);
+        ParseTransformInfo(mainRoleNode, GrabPointPos.mainRole_transform);
     }
     
     private void ReadGrabZonePosConfig()
@@ -317,7 +315,7 @@ public class MatchPointsConfig {
             GrabZonePos.npc_transform = new IM.Transform();
 
         XmlDocument xmlDoc = CommonFunction.LoadXmlConfig(name6, text);
-        XmlNode root = xmlDoc.SelectSingleNode("data");
+        XmlNode root = xmlDoc.LastChild;
         //--- BallNode-----
         XmlNode ballNode = root.SelectSingleNode("BallNode");
         XmlNodeList ballNodeList = ballNode.ChildNodes;
@@ -326,7 +324,7 @@ public class MatchPointsConfig {
         {
             XmlNode node = ballNodeList.Item(i);
             IM.Transform tempTrans = new IM.Transform();
-            PariseTransformInfo(node, tempTrans);
+            ParseTransformInfo(node, tempTrans);
             GrabZonePos.balls_transform.Add(tempTrans);
         }
 
@@ -337,15 +335,15 @@ public class MatchPointsConfig {
         {
             XmlNode node = zoneList.Item(i);
             IM.Transform tempTrans = new IM.Transform();
-            PariseTransformInfo(node, tempTrans);
+            ParseTransformInfo(node, tempTrans);
             GrabZonePos.zones_transform.Add(tempTrans);
         }
 
         XmlNode mainRoleNode = root.SelectSingleNode("MainRole");
-        PariseTransformInfo(mainRoleNode, GrabZonePos.mainRole_transform);
+        ParseTransformInfo(mainRoleNode, GrabZonePos.mainRole_transform);
      
         XmlNode npcNode = root.SelectSingleNode("NPC");
-        PariseTransformInfo(npcNode, GrabZonePos.npc_transform);
+        ParseTransformInfo(npcNode, GrabZonePos.npc_transform);
     }
 
     private void ReadMassBallConfig()
@@ -362,12 +360,12 @@ public class MatchPointsConfig {
         if (MassBallPos.npc_transform == null)
             MassBallPos.npc_transform = new IM.Transform();
         XmlDocument xmlDoc = CommonFunction.LoadXmlConfig(name7, text);
-        XmlNode root = xmlDoc.SelectSingleNode("data");
+        XmlNode root = xmlDoc.LastChild;
         XmlNode npcNode = root.SelectSingleNode("NPC");
         XmlNode mainRoleNode = root.SelectSingleNode("MainRole");
 
-        PariseTransformInfo(npcNode, MassBallPos.npc_transform);
-        PariseTransformInfo(mainRoleNode, MassBallPos.mainRole_transform);
+        ParseTransformInfo(npcNode, MassBallPos.npc_transform);
+        ParseTransformInfo(mainRoleNode, MassBallPos.mainRole_transform);
     }
 
     private void ReadPractiseMovePosConfig()
@@ -388,7 +386,7 @@ public class MatchPointsConfig {
         PractiseMovePos.move2_transform = new IM.Transform();
 
         XmlDocument xmlDoc = CommonFunction.LoadXmlConfig(name9, text);
-        XmlNode root = xmlDoc.SelectSingleNode("data");
+        XmlNode root = xmlDoc.LastChild;
 
         XmlNode ballNode = root.SelectSingleNode("Ball");
         XmlNode npc1Node = root.SelectSingleNode("NPC1");
@@ -398,13 +396,13 @@ public class MatchPointsConfig {
         XmlNode move1Node = root.SelectSingleNode("move1");
         XmlNode move2Node = root.SelectSingleNode("move2");
 
-        PariseTransformInfo(ballNode, PractiseMovePos.ball_transform);
-        PariseTransformInfo(npc1Node, PractiseMovePos.npc1_transform);
-        PariseTransformInfo(npc2Node, PractiseMovePos.npc2_transform);
-        PariseTransformInfo(mainRole1Node, PractiseMovePos.mainRole1_transform);
-        PariseTransformInfo(mainRole2Node, PractiseMovePos.mainRole2_transform);
-        PariseTransformInfo(move1Node, PractiseMovePos.move1_transform);
-        PariseTransformInfo(move2Node, PractiseMovePos.move2_transform);
+        ParseTransformInfo(ballNode, PractiseMovePos.ball_transform);
+        ParseTransformInfo(npc1Node, PractiseMovePos.npc1_transform);
+        ParseTransformInfo(npc2Node, PractiseMovePos.npc2_transform);
+        ParseTransformInfo(mainRole1Node, PractiseMovePos.mainRole1_transform);
+        ParseTransformInfo(mainRole2Node, PractiseMovePos.mainRole2_transform);
+        ParseTransformInfo(move1Node, PractiseMovePos.move1_transform);
+        ParseTransformInfo(move2Node, PractiseMovePos.move2_transform);
     }
 
     private void ReadRedboundStormConfig()
@@ -421,13 +419,13 @@ public class MatchPointsConfig {
         ReboundStormPos.shoots_transform = new List<IM.Transform>();
 
         XmlDocument xmlDoc = CommonFunction.LoadXmlConfig(name10, text);
-        XmlNode root = xmlDoc.SelectSingleNode("data");
+        XmlNode root = xmlDoc.LastChild;
 
         XmlNode npcNode = root.SelectSingleNode("NPC");
-        PariseTransformInfo(npcNode, ReboundStormPos.npc_transform);
+        ParseTransformInfo(npcNode, ReboundStormPos.npc_transform);
 
         XmlNode mainRoleNode = root.SelectSingleNode("MainRole");
-        PariseTransformInfo(mainRoleNode, ReboundStormPos.mainRole_transform);
+        ParseTransformInfo(mainRoleNode, ReboundStormPos.mainRole_transform);
 
         XmlNode shootNode = root.SelectSingleNode("ShootNode");
         XmlNodeList shoots = shootNode.ChildNodes;
@@ -436,7 +434,7 @@ public class MatchPointsConfig {
         {
             XmlNode node = shoots.Item(i);
             IM.Transform tempTrans = new IM.Transform();
-            PariseTransformInfo(node, tempTrans);
+            ParseTransformInfo(node, tempTrans);
             ReboundStormPos.shoots_transform.Add(tempTrans);
         }
     }
@@ -456,7 +454,7 @@ public class MatchPointsConfig {
             TipOffPos.offenses_transform = new List<IM.Transform>();
 
         XmlDocument xmlDoc = CommonFunction.LoadXmlConfig(name11, text);
-        XmlNode root = xmlDoc.SelectSingleNode("data");
+        XmlNode root = xmlDoc.LastChild;
         XmlNode defenseNode = root.SelectSingleNode("DefenseNode");
         XmlNodeList defenseList = defenseNode.ChildNodes;
         int deCount = defenseList.Count;
@@ -500,16 +498,16 @@ public class MatchPointsConfig {
         TwoDefenderPos.defense1_transform = new IM.Transform();
 
         XmlDocument xmlDoc = CommonFunction.LoadXmlConfig(name12, text);
-        XmlNode root = xmlDoc.SelectSingleNode("data");
+        XmlNode root = xmlDoc.LastChild;
 
         XmlNode attackerNode = root.SelectSingleNode("Attacker");
-        PariseTransformInfo(attackerNode, TwoDefenderPos.attacker_transform);
+        ParseTransformInfo(attackerNode, TwoDefenderPos.attacker_transform);
 
         XmlNode defender0Node = root.SelectSingleNode("Defender0");
-        PariseTransformInfo(defender0Node, TwoDefenderPos.defense0_transform);
+        ParseTransformInfo(defender0Node, TwoDefenderPos.defense0_transform);
 
         XmlNode defender1Node = root.SelectSingleNode("Defender1");
-        PariseTransformInfo(defender1Node, TwoDefenderPos.defense1_transform);
+        ParseTransformInfo(defender1Node, TwoDefenderPos.defense1_transform);
     }
 
     private void ReadWayPointsConfig()
@@ -517,7 +515,7 @@ public class MatchPointsConfig {
 
     }
 
-    private void PariseTransformInfo(XmlNode node , IM.Transform iMtrans)
+    private void ParseTransformInfo(XmlNode node , IM.Transform iMtrans)
     {
         XmlNode pointNode = node.SelectSingleNode("Point");
         iMtrans.SetPosition(IM.Vector3.Parse(pointNode.InnerText));

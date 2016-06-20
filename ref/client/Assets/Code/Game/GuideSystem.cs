@@ -33,7 +33,7 @@ public class GuideSystem : Singleton<GuideSystem>
 	Dictionary<string, bool> buttonStates = new Dictionary<string, bool>();
 	List<GameObject> listenedFinishButton = new List<GameObject>();
 	List<GameObject> effects = new List<GameObject>();
-	GameUtils.Timer timerFinishStep;
+	GameUtils.Timer4View timerFinishStep;
 
 	public bool guideHiding = false;
 
@@ -66,7 +66,7 @@ public class GuideSystem : Singleton<GuideSystem>
         prefabHalo = ResourceLoadManager.Instance.LoadPrefab("Prefab/GUI/YellowHalo") as GameObject;
         prefabBlinkArea = ResourceLoadManager.Instance.LoadPrefab("Prefab/GUI/BlinkArea") as GameObject;
 
-		timerFinishStep = new GameUtils.Timer(new IM.Number(3), EndCurStep);
+		timerFinishStep = new GameUtils.Timer4View(3f, EndCurStep);
 		timerFinishStep.stop = true;
 
 		initialized = true;
@@ -117,7 +117,7 @@ public class GuideSystem : Singleton<GuideSystem>
 		}
 
 		if (timerFinishStep != null)
-			timerFinishStep.Update(IM.Number.ToIMNumber(Time.deltaTime));
+			timerFinishStep.Update(Time.deltaTime);
 		
 		if (toListenPractiseGuide)
 		{

@@ -28,7 +28,9 @@ public class UIPanelWrap
 			new LuaMethod("ConstrainTargetToBounds", ConstrainTargetToBounds),
 			new LuaMethod("Find", Find),
 			new LuaMethod("GetViewSize", GetViewSize),
+#if UNITY_EDITOR
 			new LuaMethod("GetMainGameViewSize", GetMainGameViewSize),
+#endif
 			new LuaMethod("New", _CreateUIPanel),
 			new LuaMethod("GetClassType", GetClassType),
 			new LuaMethod("__eq", Lua_Eq),
@@ -1738,6 +1740,7 @@ public class UIPanelWrap
 		return 1;
 	}
 
+#if UNITY_EDITOR
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int GetMainGameViewSize(IntPtr L)
 	{
@@ -1746,6 +1749,7 @@ public class UIPanelWrap
 		LuaScriptMgr.Push(L, o);
 		return 1;
 	}
+#endif
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int Lua_Eq(IntPtr L)

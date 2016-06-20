@@ -53,18 +53,5 @@ public class PlayerManager
 
 	public void IsolateCollision( Player isoPlayer, bool bIsolated )
 	{
-		Collider isoCollidePlayer = isoPlayer.gameObject.GetComponent<Collider>();
-		if( isoCollidePlayer == null )
-			return;
-		foreach( Player player in m_Players )
-		{
-			if(player == isoPlayer)
-				continue;
-			if (!player.gameObject.activeInHierarchy)
-				continue;
-			Collider colliderPlayer = player.gameObject.GetComponent<Collider>();
-			if( colliderPlayer != null )
-				Physics.IgnoreCollision(isoCollidePlayer, colliderPlayer, bIsolated);
-		}
 	}
 }

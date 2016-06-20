@@ -46,30 +46,12 @@ namespace IM
             raw = (int)x;
         }
 
-#if IM_UNITY_COMPATIBLE
-        public Number(float f)
-        {
-            _raw = UnityEngine.Mathf.RoundToInt(f * Math.FACTOR);
-        }
-
-        public float ToUnity()
-        {
-            return (float)this;
-        }
-#endif
-
-#if IM_UNITY_COMPATIBLE2
-        public static Number ToIMNumber(float f)
+#if UNITY_EDITOR
+        public static Number FromUnity(float f)
         {
              return Number.Raw(UnityEngine.Mathf.RoundToInt(f * Math.FACTOR));
         }
-
-        public float ToUnity2()
-        {
-            return (float)this;
-        }
 #endif
-
 
         public static Number Raw(int x)
         {

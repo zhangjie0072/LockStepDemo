@@ -8,11 +8,23 @@ public static class MatchPointsTool{
 
     private static string DIR_PREFAB = "Prefab/DynObject/MatchPoints/";
 
-    private static string[] prefebName = { "ThreePTCenter", "BeginPos", "BlockStorm_Pos", "FreeThrowCenter", "GrabPoint_Pos", "GrabZone_Pos", "MassBall_Pos", "PractiseMove_Pos", "ReboundStorm_Pos", "TipOffPos", "TwoDefender_Pos"};
+    private static string[] prefebName = { 
+        "ThreePTCenter",
+        "BeginPos",
+        "BlockStorm_Pos",
+        "FreeThrowCenter",
+        "GrabPoint_Pos",
+        "GrabZone_Pos",
+        "MassBall_Pos",
+        "PractiseMove_Pos",
+        "ReboundStorm_Pos",
+        "TipOffPos",
+        "TwoDefender_Pos"
+    };
+
     [MenuItem("MatchPoints/生成配置", false, 120)]
     public static void DoConfig()
     {
-        EditorUtility.DisplayDialog("MatchPoints", "生成中..", "OK");
         int configLen = prefebName.Length;
         for(int i=0;i<configLen;i++)
         {
@@ -41,47 +53,38 @@ public static class MatchPointsTool{
             XmlDocument doc = new XmlDocument();
             XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
             doc.AppendChild(dec);
-            XmlElement root = doc.CreateElement("data");
-            root.SetAttribute("Version", GlobalConst.VERSION_NUMBER.ToString());
-            PariseTransformss(trans, doc, root);
-            doc.AppendChild(root);
+            ParseTransformss(trans, doc, doc);
             doc.Save(saveName);
         }
     }
 
-    private static void PariseTransformss(Transform trans, XmlDocument doc, XmlElement parent)
+    private static void ParseTransformss(Transform trans, XmlDocument doc, XmlNode parent)
     {
         if (trans.childCount > 0)
         {
+            XmlElement tempparent = doc.CreateElement(trans.name);
+            parent.AppendChild(tempparent);
+
             for (int i = 0; i < trans.childCount; i++)
             {
-                Transform temp = trans.GetChild(i);
-                if (temp.childCount > 1)
-                {
-                    XmlElement tempparent = doc.CreateElement(temp.name);
-                    parent.AppendChild(tempparent);
-                    PariseTransformss(temp, doc, tempparent);
-                }
-                else
-                {
-                    PariseTransformToXML(temp, doc, parent);
-                }
+                Transform child = trans.GetChild(i);
+                ParseTransformss(child, doc, tempparent);
             }
         }
         else
         {
-            PariseTransformToXML(trans, doc, parent);
+            ParseTransformToXML(trans, doc, parent);
         }
     }
 
-    private static void PariseTransformToXML(Transform trans, XmlDocument doc, XmlElement parent)
+    private static void ParseTransformToXML(Transform trans, XmlDocument doc, XmlNode parent)
     {
         XmlElement item = doc.CreateElement(trans.name);
         XmlElement pointNode = doc.CreateElement("Point");
         XmlElement rotationNode = doc.CreateElement("Rotation");
-        IM.Vector3 point = IM.Vector3.ToIMVector3(trans.localPosition);
+        IM.Vector3 point = IM.Vector3.FromUnity(trans.localPosition);
         pointNode.InnerText = point.ToString();
-        IM.Quaternion rotation = IM.Quaternion.ToIMQuaternion(trans.localRotation);
+        IM.Quaternion rotation = IM.Quaternion.FromUnity(trans.localRotation);
         rotationNode.InnerText = rotation.ToString();
         item.AppendChild(pointNode);
         item.AppendChild(rotationNode);

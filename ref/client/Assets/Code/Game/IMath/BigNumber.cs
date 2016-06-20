@@ -47,31 +47,6 @@ namespace IM
             raw = (int)x;
         }
 
-#if IM_UNITY_COMPATIBLE
-        public BigNumber(float f)
-        {
-            _raw = UnityEngine.Mathf.RoundToInt(f * Math.BIG_FACTOR);
-        }
-
-        public float ToUnity()
-        {
-            return (float)this;
-        }
-#endif
-
-#if IM_UNITY_COMPATIBLE2
-        public static BigNumber ToIMBigNumber(float f)
-        {
-             return new BigNumber(UnityEngine.Mathf.RoundToInt(f * Math.BIG_FACTOR));
-        }
-
-        public float ToUnity2()
-        {
-            return (float)this;
-        }
-#endif
-
-
         public static BigNumber Raw(int x)
         {
             BigNumber number = new BigNumber();

@@ -511,19 +511,6 @@ public class NetworkConn
 								Logger.LogError("Can not find sender: " + msg.senderID + " for command: " + msg.eState);
 								break;
 							}
-							{
-								SimulateCommand cmd = match.GetSmcCommandByGameMsg(sender, msg);
-								//Logger.Log( "SimulateCommand time  : " + (System.DateTime.Now.Ticks - now) * 0.0001f );
-
-								if( cmd != null && sender.m_smcManager != null && !sender.m_bSimulator )
-								{
-									NetworkManager nm = GameSystem.Instance.mNetworkManager;
-									double dConsumeTime = nm.m_dServerTime + (DateTime.Now.Ticks * 0.0001 - nm.m_dLocalTime) - msg.curTime;
-									//Logger.Log( "Command: " + cmd.m_state + " time consume: " + string.Format("{0:f4}", dConsumeTime) );
-									if( dConsumeTime > 20.0 )
-										m_log = "Command: " + cmd.m_state + " time consume: " + string.Format("{0:f4}", dConsumeTime);
-								}
-							}
 						}
 
 						if( msgID == MsgID.GameBeginRespID )

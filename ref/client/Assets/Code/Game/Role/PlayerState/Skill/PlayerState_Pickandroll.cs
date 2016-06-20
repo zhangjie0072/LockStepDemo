@@ -40,9 +40,6 @@ public class PlayerState_PickAndRoll : PlayerState_Skill
 		m_player.model.EnableGrey(false);
 		m_player.m_moveType = MoveType.eMT_PickAndRoll;
 
-		if( !m_player.m_bSimulator )
-			GameMsgSender.SendPickAndRoll(m_player, m_curExecSkill, AnimType.N_TYPE_0);
-
 		SkillSpec skillSpec = m_player.GetSkillSpecialAttribute(SkillSpecParam.ePickAndRoll_range);
         m_fInfluRadius = skillSpec.value;
 
@@ -53,23 +50,12 @@ public class PlayerState_PickAndRoll : PlayerState_Skill
 		m_bFrozen = true;
 	}
 
-	public void OnSimulateAction(AnimType animType)
-	{
-		if( !m_player.m_bSimulator )
-			return;
-		m_animType = animType;
-		m_curAction = m_mapAnimType[m_animType];
-		m_player.animMgr.CrossFade(m_curAction, false);
-
-		m_bOnCollide = true;
-	}
-
 	override public void Update (IM.Number fDeltaTime)
 	{
 		if( prNoMove != null )
 			prNoMove.Update(fDeltaTime);
 
-		if( m_bFrozen && !m_player.m_bSimulator )
+		if( m_bFrozen)
 			return;
 
 		if( m_player.m_team.m_role != GameMatch.MatchRole.eOffense )
@@ -86,24 +72,10 @@ public class PlayerState_PickAndRoll : PlayerState_Skill
 				return;
 			}
 		}
-		else if( m_player.m_toSkillInstance == null && !m_player.m_bSimulator )
+		else if( m_player.m_toSkillInstance == null)
 		{
 			m_stateMachine.SetState(PlayerState.State.eStand);
 			return;
-		}
-
-		if( m_player.m_bSimulator )
-		{
-			if( m_player.m_moveType == MoveType.eMT_Stand )
-			{
-				m_stateMachine.SetState(PlayerState.State.eStand);
-				return;
-			}
-			if( m_player.m_team.m_role != GameMatch.MatchRole.eOffense )
-			{
-				m_stateMachine.SetState(PlayerState.State.eStand);
-				return;
-			}
 		}
 	}
 
@@ -113,8 +85,6 @@ public class PlayerState_PickAndRoll : PlayerState_Skill
 			return;
 		m_player.m_stamina.ConsumeStamina(new IM.Number((int)m_curExecSkill.skill.levels[m_curExecSkill.level].stama ));
 
-		if( m_player.m_bSimulator )
-			return;
 		m_player.model.RestoreMaterial();
 
 		IM.Vector3 player2Blocked = GameUtils.HorizonalNormalized(blockedPlayer.position, m_player.position);
@@ -130,7 +100,6 @@ public class PlayerState_PickAndRoll : PlayerState_Skill
 
 		m_player.mStatistics.SkillUsageSuccess(m_curExecSkill.skill.id, true);
 
-		GameMsgSender.SendPickAndRoll(m_player, m_curExecSkill, m_animType);
 		m_player.animMgr.CrossFade(m_curAction, false);
 	}
 
@@ -172,9 +141,6 @@ public class PlayerState_BePickedAndRolled : PlayerState
 	
 	public void OnCollided(Player blockPlayer)
 	{
-		if( m_player.m_bSimulator )
-			return;
-
 		if( m_bOnCollide )
 			return;
 
@@ -215,19 +181,6 @@ public class PlayerState_BePickedAndRolled : PlayerState
 		
 		m_curAction = m_mapAnimType[m_animType];
 		m_player.animMgr.Play(m_curAction, true).rootMotion.Reset();
-
-		if( !m_player.m_bSimulator )
-			GameMsgSender.SendBePickAndRolled(m_player, m_animType);
-	}
-
-	public void OnSimulateAction(AnimType animType)
-	{
-		if( !m_player.m_bSimulator )
-			return;
-		m_curAction = m_mapAnimType[m_animType];
-		m_player.animMgr.CrossFade(m_curAction, true);
-		
-		m_bOnCollide = true;
 	}
 
 	override public void Update (IM.Number fDeltaTime)

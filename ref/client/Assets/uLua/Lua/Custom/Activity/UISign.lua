@@ -130,6 +130,11 @@ function UISign:CreateItem(lists, signlists, i)
 	daySignLua.hideSign = false
 	daySignLua.goodsID = GameSystem.Instance.signConfig:GetDaySignData(i).sign_award
 	daySignLua.num = GameSystem.Instance.signConfig:GetDaySignData(i).award_count
+
+	-- 调整特效层级
+	local ef = daySign.transform:FindChild("SpecialEffect/Ef_Blink2")
+	ef:GetComponent("ParticleSystemRenderer").material.renderQueue = 3042
+
 	-- daySignLua:Refresh()
 	-- daySignLua.onClick = self:OnItemClick(i)
 

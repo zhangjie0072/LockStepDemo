@@ -153,13 +153,17 @@ public class LuaComponent : MonoBehaviour
 
 	void Start()
 	{
-		if (info.funcStart != null)
+        if (info.funcStart != null)
 			info.funcStart.Call(table);
 		table.Set("started", true);
 		LuaFunction funcOnStarted = table["onStarted"] as LuaFunction;
 		if (funcOnStarted != null)
 			funcOnStarted.Call();
-	}
+
+        // 解决开始不播动画 by conglin
+        if(animator != null)
+            animator.SetTrigger("Start");
+    }
 
 	//Lua中是否有必要Update？
 	//void Update()
@@ -204,11 +208,13 @@ public class LuaComponent : MonoBehaviour
     IEnumerator PlayStartAnimation()
     {
         yield return new WaitForEndOfFrame();
+
         if (animatorDisabledByFinish && initialEnabled)
         {
             animator.enabled = true;
             animatorDisabledByFinish = false;
         }
+
         if (info.funcOnEnable != null)
             info.funcOnEnable.Call(table);
     }

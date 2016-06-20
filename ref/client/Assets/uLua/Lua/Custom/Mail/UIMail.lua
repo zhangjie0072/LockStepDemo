@@ -41,6 +41,7 @@ UIMail = UIMail or
 	uiAnimator,
 
 	sprBgIcon,
+	MailOpenNotify = nil,
 }
 
 
@@ -211,17 +212,27 @@ function UIMail:ReadMailResp()
 		local resp, err = protobuf.decode('fogs.proto.msg.ReadMailResp', message)
 		if resp == nil then
 			Debugger.LogError('------ReadMailResp error: ', err)
+			if self.MailOpenNotify then 
+				self.MailOpenNotify()
+			end
 			return
 		end
 
 		if resp.result ~= 0 then
 			print('error --  ReadMailResp return failed: ', resp.result)
 			CommonFunction.ShowErrorMsg(ErrorID.IntToEnum(resp.result),nil)
+			if self.MailOpenNotify then 
+				self.MailOpenNotify()
+			end
 			return
 		end
 		local data = self:ReadMail(resp.mail_id)
 		if data then
 			self:OnOpenMail(data, resp.mail_id)
+		else			
+			if self.MailOpenNotify then 
+				self.MailOpenNotify()
+			end
 		end
 	end
 end
@@ -282,6 +293,10 @@ function UIMail:OnOpenMail(data, mail_id)
 		or data.state == MailState.READ_GET
 		or data.state == MailState.READ_WITHOUT then
 		NGUITools.Destroy(detail.uiAwardBtn.gameObject)
+	end
+	
+	if self.MailOpenNotify then 
+		self.MailOpenNotify()
 	end
 end
 

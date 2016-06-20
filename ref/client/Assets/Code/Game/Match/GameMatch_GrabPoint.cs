@@ -71,11 +71,15 @@ public class GameMatch_GrabPoint
 
 		_UpdateCamera(m_mainRole);
 
-		m_stateMachine.SetState(m_config.needPlayPlot ? MatchState.State.ePlotBegin : MatchState.State.eShowRule);
-
 		mCurScene.mBasket.onGoal += OnGoal;
 	}
 
+	protected override void OnLoadingComplete ()
+	{
+		base.OnLoadingComplete ();
+		m_stateMachine.SetState(m_config.needPlayPlot ? MatchState.State.ePlotBegin : MatchState.State.eShowRule);
+	}
+    
     public override void HandleGameBegin(Pack pack)
     {
         m_stateMachine.SetState(MatchState.State.eBegin);

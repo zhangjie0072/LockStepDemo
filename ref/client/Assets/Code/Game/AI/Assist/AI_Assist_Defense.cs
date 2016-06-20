@@ -45,7 +45,6 @@ public class AI_Assist_Defense : AIState
             && target.m_blockable.blockable)
         {
             m_player.m_StateMachine.SetState(PlayerState.State.eDisturb);
-            GameMsgSender.SendDisturb(m_player);
         }
 	}
 }

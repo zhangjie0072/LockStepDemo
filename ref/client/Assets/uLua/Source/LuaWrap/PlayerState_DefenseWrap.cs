@@ -9,7 +9,6 @@ public class PlayerState_DefenseWrap
 		{
 			new LuaMethod("OnEnter", OnEnter),
 			new LuaMethod("Update", Update),
-			new LuaMethod("OnExit", OnExit),
 			new LuaMethod("New", _CreatePlayerState_Defense),
 			new LuaMethod("GetClassType", GetClassType),
 		};
@@ -68,15 +67,6 @@ public class PlayerState_DefenseWrap
 		PlayerState_Defense obj = (PlayerState_Defense)LuaScriptMgr.GetNetObjectSelf(L, 1, "PlayerState_Defense");
 		IM.Number arg0 = (IM.Number)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Number));
 		obj.Update(arg0);
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int OnExit(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 1);
-		PlayerState_Defense obj = (PlayerState_Defense)LuaScriptMgr.GetNetObjectSelf(L, 1, "PlayerState_Defense");
-		obj.OnExit();
 		return 0;
 	}
 }

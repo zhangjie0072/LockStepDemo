@@ -677,6 +677,7 @@ function UISelectRole:SelectOtherRoleIcon(index, id, flag, name,skills)
     -- local roleIcon = self:CreateRoleIcon(id, self.roleIconNodes[index]:FindChild("RoleIconNode"))
     -- roleIcon.onClick = nil      -- 不能点击
     -- roleIcon.transform.name = index
+    print("1927 - <UISelectRole>  index, id, flag, name=",index, id, flag, name)
     local placeIcon = self.rightRolePlaceIcons[index]
     local preRoleId = placeIcon:GetRoleId()
     if index == self.myPos then

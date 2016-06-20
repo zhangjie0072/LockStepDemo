@@ -21,13 +21,8 @@ public class PlayerState_FallLostBall : PlayerState
 		m_step = Step.eFall;
 		m_animType = AnimType.N_TYPE_0;
 		
-		if( !m_player.m_bSimulator )
-		{
-			m_player.m_lostBallContext.vInitPos = m_ball.position;
-			m_player.m_lostBallContext.vInitVel = m_player.forward;
-            //TO_DO
-            //GameMsgSender.SendDown(m_player, DownType.eDT_Down, m_animType, m_ball.transform.position, m_player.forward);
-		}
+        m_player.m_lostBallContext.vInitPos = m_ball.position;
+        m_player.m_lostBallContext.vInitVel = m_player.forward;
 
 		Logger.Log("m_animType: " + m_animType);
 		m_curAction = m_mapAnimType[m_animType];

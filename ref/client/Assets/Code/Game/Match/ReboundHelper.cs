@@ -1,23 +1,21 @@
-﻿using fogs.proto.msg;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class ReboundHelper
 {
 	class Info
 	{
-		public Rebound msg;
 		public Player player;
 		public uint reboundValue;
 	}
 
 	List<Info> rebounders = new List<Info>();
 	bool closed = false;
-	float validTime;
+	IM.Number validTime;
 
 	static HedgingHelper hedging = new HedgingHelper("Rebound");
 
-	public void AddRebounder(Rebound msg)
+	public void AddRebounder(Player rebounder, SkillInstance skillInst)
 	{
 		GameMatch match = GameSystem.Instance.mClient.mCurMatch;
 		UBasketball ball = match.mCurScene.mBall;
@@ -26,35 +24,28 @@ public class ReboundHelper
 			return;
 		if (rebounders.Count > 0 && closed)
 			return;
-		if (rebounders.Find(info => info.msg.char_id == msg.char_id) != null)
+		if (rebounders.Find(info => info.player.m_roomPosId == rebounder.m_roomPosId) != null)
 			return;
-
-		Player rebounder = GameSystem.Instance.mClient.mPlayerManager.m_Players.Find(
-			player => player.m_roomPosId == msg.char_id);
 
 		uint reboundValue = rebounder.m_finalAttrs["rebound"];
 
 		Info rebounderInfo = new Info();
-		rebounderInfo.msg = msg;
 		rebounderInfo.player = rebounder;
 		rebounderInfo.reboundValue = reboundValue;
 		rebounders.Add(rebounderInfo);
 
 		if (rebounders.Count == 1)	//first rebounder
 		{
-			//string action = rebounder.m_StateMachine.GetState(PlayerState.State.eRebound).GetActionByType(msg.actionType);
-
-			SkillAttr skillAttr = GameSystem.Instance.SkillConfig.GetSkill( msg.skill.skill_id );
-			SkillAction curAction = skillAttr.actions.Find( (SkillAction skillAction)=>{ return skillAction.id == msg.skill.action_id; });
-			string action =  rebounder.m_skillSystem.ParseAction(curAction.action_id, msg.skill.skill_matchedKeyIdx, Command.Rebound);
+            SkillAction curAction = skillInst.curAction;
+			string action =  rebounder.m_skillSystem.ParseAction(curAction.action_id, skillInst.matchedKeyIdx, Command.Rebound);
             IM.Number frameRate = rebounder.animMgr.GetFrameRate(action);
 			Dictionary<string, PlayerAnimAttribute.AnimAttr> rebounds = rebounder.m_animAttributes.m_rebound;
 			int reboundKey = rebounds[rebounder.animMgr.GetOriginName(action)].GetKeyFrame("OnRebound").frame;
-			validTime = (float)reboundKey / (float)frameRate;
+			validTime = reboundKey / frameRate;
 		}
 	}
 
-	public void Update()
+	public void Update(IM.Number deltaTime)
 	{
 		if (rebounders.Count == 0)
 			return;
@@ -64,8 +55,8 @@ public class ReboundHelper
 
 		if (!closed)
 		{
-			validTime -= Time.deltaTime;
-			if (validTime < 0f)		//close
+			validTime -= deltaTime;
+			if (validTime < IM.Number.zero)		//close
 			{
 				closed = true;
 
@@ -118,26 +109,27 @@ public class ReboundHelper
 					foreach (Info info in rebounders)
 					{
 						bool canPick = (selectedRebounder == info && ball.m_ballState == BallState.eRebound && ball.m_picker == null);
-						if (canPick)
-							ball.m_picker = selectedRebounder.player;
+                        if (canPick)
+                        {
+                            ball.m_picker = selectedRebounder.player;
 
-						GameMsg msg = new GameMsg();
-						msg.senderID = selectedRebounder.msg.char_id;
-						msg.eStateType = selectedRebounder.msg.actionType;
-						msg.pos = selectedRebounder.msg.pos;
-						msg.rotate = selectedRebounder.msg.rotate;
-						msg.eState = CharacterState.eRebound;
-						msg.velocity = selectedRebounder.msg.velocity;
-						msg.nSuccess = canPick ? 1u : 0u;
-
-						Player rebounder = GameSystem.Instance.mClient.mPlayerManager.m_Players.Find(
-							player => player.m_roomPosId == msg.senderID);
-						SimulateCommand cmd = match.GetSmcCommandByGameMsg(rebounder, msg);
-						if( cmd != null && rebounder.m_smcManager != null )
-							rebounder.m_smcManager.AddCommand(cmd);
+                            PlayerState_Rebound stateRebound = ball.m_picker.m_StateMachine.GetState(PlayerState.State.eRebound) as PlayerState_Rebound;
+                            if (ball.m_picker.m_StateMachine.m_curState.m_eState == PlayerState.State.eRebound && !stateRebound.m_toReboundBall)
+                                stateRebound.m_toReboundBall = true;
+                            else
+                            {
+                                MatchState.State eCurState = match.m_stateMachine.m_curState.m_eState;
+                                if (eCurState == MatchState.State.ePlaying || eCurState == MatchState.State.eTipOff)
+                                {
+                                    if (ball.m_owner != null)
+                                        Logger.LogError("can not grab ball.");
+                                    ball.m_picker.GrabBall(ball);
+                                }
+                            }
+                        }
 
 						string trace = "Rebound: player: " + info.player.m_id + " " + info.player.m_name +
-							" value:" + info.reboundValue + " success:" + msg.nSuccess;
+							" value:" + info.reboundValue + " canPick:" + canPick;
 						Debugger.Instance.m_steamer.message += "\n" + trace + "\n";
 						Logger.Log(trace);
 					}

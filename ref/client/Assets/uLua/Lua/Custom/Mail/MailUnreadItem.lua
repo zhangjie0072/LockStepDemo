@@ -20,6 +20,7 @@ MailUnreadItem =
 	uiButtonLabel,
 
 	uiDragSV,
+	mbClickMail = false,
 };
 
 
@@ -89,7 +90,10 @@ end
 --
 function MailUnreadItem:OnIconClick()
 	return function (go)
-		self:OnOperClick(self.gameObject)
+		if not self.mbClickMail then 
+			self.mbClickMail = true
+			self:OnOperClick(self.gameObject)
+		end
 	end
 end
 
@@ -103,12 +107,26 @@ function MailUnreadItem:OnOperClick()
 				LuaHelper.SendPlatMsgFromLua(MsgID.ReadMailID, msg)
 				--注册回复处理消息
 				LuaHelper.RegisterPlatMsgHandler(MsgID.ReadMailRespID, self.parent:ReadMailResp(), self.uiName)
-				CommonFunction.ShowWait()
+				CommonFunction.ShowWait()				
 			else
 				self.parent:OnOpenMail(self.data, self.data.uuid)
 			end
+
 			self.isOpen = true
+			self.parent.MailOpenNotify = self:OnOpenMailResp()
+		else
+			self.mbClickMail = false
 		end
+
+	end
+end
+function MailUnreadItem:OnOpenMailResp( ... )
+	-- body
+	return function (  )
+		-- body
+			-- LuaHelper.UnRegisterPlatMsgHandler(MsgID.ReadMailRespID, self.uiName)
+			self.mbClickMail = false
+			print('OnOpenMailResp')
 	end
 end
 --领取奖励

@@ -277,6 +277,7 @@ public static class LuaBinder
 			case "ParticleAnimatorWrap": ParticleAnimatorWrap.Register(L); break;
 			case "ParticleEmitterWrap": ParticleEmitterWrap.Register(L); break;
 			case "ParticleRendererWrap": ParticleRendererWrap.Register(L); break;
+			case "ParticleSystemRendererWrap": ParticleSystemRendererWrap.Register(L); break;
 			case "ParticleSystemWrap": ParticleSystemWrap.Register(L); break;
 			case "PhysicsWrap": PhysicsWrap.Register(L); break;
 			case "PlatNetworkWrap": PlatNetworkWrap.Register(L); break;

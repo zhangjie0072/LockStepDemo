@@ -8,8 +8,6 @@ public class IM_Vector3Wrap
 	{
 		LuaMethod[] regs = new LuaMethod[]
 		{
-			new LuaMethod("ToIMVector3", ToIMVector3),
-			new LuaMethod("ToUnity2", ToUnity2),
 			new LuaMethod("Normalize", Normalize),
 			new LuaMethod("Dot", Dot),
 			new LuaMethod("DotForNumber", DotForNumber),
@@ -519,26 +517,6 @@ public class IM_Vector3Wrap
 			LuaScriptMgr.Push(L, "Table: IM.Vector3");
 		}
 
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int ToIMVector3(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 1);
-		Vector3 arg0 = LuaScriptMgr.GetVector3(L, 1);
-		IM.Vector3 o = IM.Vector3.ToIMVector3(arg0);
-		LuaScriptMgr.PushValue(L, o);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int ToUnity2(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 1);
-		IM.Vector3 obj = (IM.Vector3)LuaScriptMgr.GetNetObjectSelf(L, 1, "IM.Vector3");
-		Vector3 o = obj.ToUnity2();
-		LuaScriptMgr.Push(L, o);
 		return 1;
 	}
 

@@ -23,6 +23,7 @@ public class GameUtilsWrap
 			new LuaMethod("StripV3Y", StripV3Y),
 			new LuaMethod("DummyV2Y", DummyV2Y),
 			new LuaMethod("FindChildRecursive", FindChildRecursive),
+			new LuaMethod("SetRenderQueue", SetRenderQueue),
 			new LuaMethod("SetLayerRecursive", SetLayerRecursive),
 			new LuaMethod("SetWidgetColorRecursive", SetWidgetColorRecursive),
 			new LuaMethod("CreateBounds", CreateBounds),
@@ -179,13 +180,6 @@ public class GameUtilsWrap
 			LuaScriptMgr.PushObject(L, o);
 			return 1;
 		}
-		else if (count == 1 && LuaScriptMgr.CheckTypes(L, 1, typeof(fogs.proto.msg.SVector3)))
-		{
-			fogs.proto.msg.SVector3 arg0 = (fogs.proto.msg.SVector3)LuaScriptMgr.GetLuaObject(L, 1);
-			IM.Vector3 o = GameUtils.Convert(arg0);
-			LuaScriptMgr.PushValue(L, o);
-			return 1;
-		}
 		else
 		{
 			LuaDLL.luaL_error(L, "invalid arguments to method: GameUtils.Convert");
@@ -310,6 +304,16 @@ public class GameUtilsWrap
 		Transform o = GameUtils.FindChildRecursive(arg0,arg1);
 		LuaScriptMgr.Push(L, o);
 		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int SetRenderQueue(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 2);
+		GameObject arg0 = (GameObject)LuaScriptMgr.GetUnityObject(L, 1, typeof(GameObject));
+		int arg1 = (int)LuaScriptMgr.GetNumber(L, 2);
+		GameUtils.SetRenderQueue(arg0,arg1);
+		return 0;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

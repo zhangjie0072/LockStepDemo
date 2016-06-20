@@ -110,8 +110,13 @@ public class GameMatch_ReboundStorm : GameMatch
 
 		_UpdateCamera(m_mainRole);
 
-		m_stateMachine.SetState(m_config.needPlayPlot ? MatchState.State.ePlotBegin : MatchState.State.eShowRule);
 
+
+	}
+	protected override void OnLoadingComplete ()
+	{
+		base.OnLoadingComplete ();
+		m_stateMachine.SetState(m_config.needPlayPlot ? MatchState.State.ePlotBegin : MatchState.State.eShowRule);
 	}
 
     public override void HandleGameBegin(Pack pack)

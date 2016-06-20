@@ -25,11 +25,7 @@ public class PlayerState_LayupFailed: PlayerState
 		m_curAction = m_mapAnimType[m_animType];
 		m_player.animMgr.Play(m_curAction, false);
 
-		if( !m_player.m_bSimulator )
-		{
-            m_player.FaceTo(m_basket.m_vShootTarget);
-			GameMsgSender.SendLayupFailed( m_player, m_animType );
-		}
+        m_player.FaceTo(m_basket.m_vShootTarget);
 	}
 
 	protected override void _OnActionDone ()

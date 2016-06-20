@@ -106,10 +106,9 @@ public class PlayerState_Run : PlayerState
 		m_bSwitchBall = false;
 
 		m_player.m_moveType = MoveType.eMT_Run;
-		if( !m_player.m_bSimulator && lastState.m_eState != State.eRun )
+		if(lastState.m_eState != State.eRun )
 		{
 			m_lastMoveDir = m_player.moveDirection;
-			GameMsgSender.SendMove(m_player, MoveType.eMT_Run, m_animType);
 		}
 	}
 
@@ -231,14 +230,10 @@ public class PlayerState_Run : PlayerState
 		else
 			m_player.MoveTowards(new IM.Vector3(-dirMove.x, IM.Number.zero, -dirMove.z), m_turningSpeed, fDeltaTime, dirMove * m_fRunSpeed);
 
-		if( !m_player.m_bSimulator )
-		{
-			if( IM.Vector3.Angle(m_player.moveDirection, m_lastMoveDir) > GlobalConst.ROTATE_ANGLE_SEC - IM.Number.one )
-			{
-				GameMsgSender.SendMove(m_player, MoveType.eMT_Run, m_animType);
-				m_lastMoveDir = m_player.moveDirection;
-			}
-		}
+        if( IM.Vector3.Angle(m_player.moveDirection, m_lastMoveDir) > GlobalConst.ROTATE_ANGLE_SEC - IM.Number.one )
+        {
+            m_lastMoveDir = m_player.moveDirection;
+        }
 	}
 
 	void _SwitchBall(SwitchType type)

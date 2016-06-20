@@ -77,15 +77,20 @@ public class GameMatch_1ON1 :GameMatch, MatchStateMachine.Listener
 		LoadLua();
 
 		m_stateMachine.m_matchStateListeners.Add(this);
-        if (m_config.needPlayPlot)
-        {
-            m_stateMachine.SetState(MatchState.State.ePlotBegin);
-        }
-        else
-        {
-			m_stateMachine.SetState(MatchState.State.eOpening);
-        }
     }
+
+	protected override void OnLoadingComplete ()
+	{
+		base.OnLoadingComplete ();
+		if (m_config.needPlayPlot)
+		{
+			m_stateMachine.SetState(MatchState.State.ePlotBegin);
+		}
+		else
+		{
+			m_stateMachine.SetState(MatchState.State.eOpening);
+		}
+	}
 
     public override void HandleGameBegin(Pack pack)
     {

@@ -147,7 +147,7 @@ public class PlayerInfoVisualizer
 			}
 		}
 
-		Vector3 viewPos = Camera.main.WorldToViewportPoint(m_owner.position.ToUnity2());
+		Vector3 viewPos = Camera.main.WorldToViewportPoint(m_owner.transform.position);
 		Vector3 viewHeadPos = Camera.main.WorldToViewportPoint(m_owner.model.head.position);
 
 		Vector3 worldPos = uiMgr.m_uiCamera.GetComponent<Camera>().ViewportToWorldPoint(viewPos);

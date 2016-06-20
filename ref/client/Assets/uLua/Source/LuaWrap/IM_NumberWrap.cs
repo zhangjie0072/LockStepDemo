@@ -7,8 +7,6 @@ public class IM_NumberWrap
 	{
 		LuaMethod[] regs = new LuaMethod[]
 		{
-			new LuaMethod("ToIMNumber", ToIMNumber),
-			new LuaMethod("ToUnity2", ToUnity2),
 			new LuaMethod("Raw", Raw),
 			new LuaMethod("CompareTo", CompareTo),
 			new LuaMethod("Equals", Equals),
@@ -372,26 +370,6 @@ public class IM_NumberWrap
 			LuaScriptMgr.Push(L, "Table: IM.Number");
 		}
 
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int ToIMNumber(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 1);
-		float arg0 = (float)LuaScriptMgr.GetNumber(L, 1);
-		IM.Number o = IM.Number.ToIMNumber(arg0);
-		LuaScriptMgr.PushValue(L, o);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int ToUnity2(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 1);
-		IM.Number obj = (IM.Number)LuaScriptMgr.GetNetObjectSelf(L, 1, "IM.Number");
-		float o = obj.ToUnity2();
-		LuaScriptMgr.Push(L, o);
 		return 1;
 	}
 

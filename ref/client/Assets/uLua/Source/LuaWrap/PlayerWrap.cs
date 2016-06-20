@@ -76,7 +76,6 @@ public class PlayerWrap
 			new LuaField("m_LayupDistance", get_m_LayupDistance, set_m_LayupDistance),
 			new LuaField("m_startPos", get_m_startPos, set_m_startPos),
 			new LuaField("m_eHandWithBall", get_m_eHandWithBall, set_m_eHandWithBall),
-			new LuaField("m_bSimulator", get_m_bSimulator, set_m_bSimulator),
 			new LuaField("m_bOnGround", get_m_bOnGround, set_m_bOnGround),
 			new LuaField("m_catchHelper", get_m_catchHelper, set_m_catchHelper),
 			new LuaField("m_alwaysForbiddenPickup", get_m_alwaysForbiddenPickup, set_m_alwaysForbiddenPickup),
@@ -106,7 +105,6 @@ public class PlayerWrap
 			new LuaField("m_blockable", get_m_blockable, set_m_blockable),
 			new LuaField("shootStrength", get_shootStrength, set_shootStrength),
 			new LuaField("m_lostBallContext", get_m_lostBallContext, set_m_lostBallContext),
-			new LuaField("m_smcManager", get_m_smcManager, set_m_smcManager),
 			new LuaField("m_toTakeOver", get_m_toTakeOver, set_m_toTakeOver),
 			new LuaField("m_takingOver", get_m_takingOver, set_m_takingOver),
 			new LuaField("m_applyLogicPostion", get_m_applyLogicPostion, set_m_applyLogicPostion),
@@ -731,30 +729,6 @@ public class PlayerWrap
 		}
 
 		LuaScriptMgr.Push(L, obj.m_eHandWithBall);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_m_bSimulator(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Player obj = (Player)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name m_bSimulator");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index m_bSimulator on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.m_bSimulator);
 		return 1;
 	}
 
@@ -1417,30 +1391,6 @@ public class PlayerWrap
 		}
 
 		LuaScriptMgr.PushValue(L, obj.m_lostBallContext);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_m_smcManager(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Player obj = (Player)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name m_smcManager");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index m_smcManager on a nil value");
-			}
-		}
-
-		LuaScriptMgr.PushObject(L, obj.m_smcManager);
 		return 1;
 	}
 
@@ -2957,30 +2907,6 @@ public class PlayerWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_m_bSimulator(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Player obj = (Player)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name m_bSimulator");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index m_bSimulator on a nil value");
-			}
-		}
-
-		obj.m_bSimulator = LuaScriptMgr.GetBoolean(L, 3);
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_m_bOnGround(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -3639,30 +3565,6 @@ public class PlayerWrap
 		}
 
 		obj.m_lostBallContext = (LostBallContext)LuaScriptMgr.GetNetObject(L, 3, typeof(LostBallContext));
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_m_smcManager(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		Player obj = (Player)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name m_smcManager");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index m_smcManager on a nil value");
-			}
-		}
-
-		obj.m_smcManager = (SimulateCommandManager)LuaScriptMgr.GetNetObject(L, 3, typeof(SimulateCommandManager));
 		return 0;
 	}
 

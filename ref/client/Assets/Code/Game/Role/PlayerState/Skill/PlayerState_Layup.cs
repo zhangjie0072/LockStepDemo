@@ -33,9 +33,6 @@ public class PlayerState_Layup:  PlayerState_Skill
 		base.OnEnter(lastState);
 
 		m_skillArea = m_match.mCurScene.mGround.GetArea(m_player);
-		
-		if( !m_player.m_bSimulator )
-			GameMsgSender.SendLayup(m_player, m_curExecSkill, m_skillArea);
 
 		m_movingTime = IM.Number.zero;
 		m_bMoving = false;
@@ -241,7 +238,7 @@ public class PlayerState_Layup:  PlayerState_Skill
 
 		bool bShootOut = false;
 		bool bOpen = false;
-		if( !m_player.m_bSimulator && m_player.m_bWithBall )
+		if(m_player.m_bWithBall )
 		{
 			/*
 			bool sumValue = false;
@@ -282,7 +279,6 @@ public class PlayerState_Layup:  PlayerState_Skill
 				else if (m_skillArea == Area.eMiddle)
 					++m_player.mStatistics.data.layup_mid_open_shoot;
 			}
-			GameMsgSender.SendLayupShoot(m_player, uBallId, m_layupRate.ToUnity2(), m_skillArea, solution.m_bSuccess, (uint)solution.m_id, fFlyTime.ToUnity2(), bOpen);
 
 			Debugger.Instance.m_steamer.message = " Final shoot rate: " + m_layupRate;
 		}

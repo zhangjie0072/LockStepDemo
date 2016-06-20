@@ -1,7 +1,9 @@
 ﻿using System.Xml;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 public class SampleData
 {
@@ -78,7 +80,7 @@ public class AnimationSampleManager : Singleton<AnimationSampleManager>
         animData.sampleDatas = new List<SampleData>();
         datas.Add(clip.name, animData);
 
-        animData.frameRate = IM.Number.ToIMNumber(clip.frameRate);
+        animData.frameRate = IM.Number.FromUnity(clip.frameRate);
         animData.wrapMode = clip.wrapMode;
 
         Dictionary<SampleNode, Transform> transforms = new Dictionary<SampleNode, Transform>();
@@ -98,7 +100,7 @@ public class AnimationSampleManager : Singleton<AnimationSampleManager>
 
             float time = Mathf.Min((float)t, clip.averageDuration);
             clip.SampleAnimation(go, time);
-            data.time = IM.Number.ToIMNumber(time);
+            data.time = IM.Number.FromUnity(time);
 
             data.nodes = new Dictionary<SampleNode, SampleNodeData>();
             for (int i = 0; i < (int)SampleNode.Count; ++i)
@@ -111,12 +113,12 @@ public class AnimationSampleManager : Singleton<AnimationSampleManager>
                 SampleNodeData nodeData = new SampleNodeData();
                 if (node == SampleNode.Root)    //Root节点采样相对于Player的位置
                 {
-                    nodeData.position = IM.Vector3.ToIMVector3(curPos);
-                    nodeData.horiAngle = IM.Number.ToIMNumber(curRot.eulerAngles.y);
+                    nodeData.position = IM.Vector3.FromUnity(curPos);
+                    nodeData.horiAngle = IM.Number.FromUnity(curRot.eulerAngles.y);
                 }
                 else    //其他节点采样相对于Root的位置
                 {
-                    nodeData.position = IM.Vector3.ToIMVector3(root.transform.InverseTransformPoint(transform.position));
+                    nodeData.position = IM.Vector3.FromUnity(root.transform.InverseTransformPoint(transform.position));
                 }
                 //Logger.Log(string.Format("Sample, clip:{0} node:{1} time:{2} pos:{3} angle:{4}",
                 //    clip.name, node, time, nodeData.position, nodeData.horiAngle));
@@ -139,9 +141,9 @@ public class AnimationSampleManager : Singleton<AnimationSampleManager>
             AnimationEvent evt = events[i];
             AnimEventData eventData = new AnimEventData();
             eventData.funcName = evt.functionName;
-            eventData.time = IM.Number.ToIMNumber(evt.time);
+            eventData.time = IM.Number.FromUnity(evt.time);
             eventData.intParameter = evt.intParameter;
-            eventData.floatParameter = IM.Number.ToIMNumber(evt.floatParameter);
+            eventData.floatParameter = IM.Number.FromUnity(evt.floatParameter);
             eventData.stringParameter = evt.stringParameter;
             animData.eventDatas.Add(eventData);
             evt.messageOptions = SendMessageOptions.DontRequireReceiver;

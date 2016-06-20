@@ -20,8 +20,7 @@ public class MatchStateGoal_PVP
 			player.m_enablePickupDetector = false;
 		}
 
-		if( !m_goalOwner.m_bSimulator )
-			GameMsgSender.SendGameGoal(m_goalOwner, (uint)m_match.mCurScene.mBall.m_pt, m_bCriticalShoot);
+        //GameMsgSender.SendGameGoal(m_goalOwner, (uint)m_match.mCurScene.mBall.m_pt, m_bCriticalShoot);
 	}
 	
 	override public void Update (IM.Number fDeltaTime)

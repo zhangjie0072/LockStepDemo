@@ -125,33 +125,14 @@ namespace IM
             this.w = w;
         }
 
-#if IM_UNITY_COMPATIBLE
-        public Quaternion(UnityEngine.Quaternion quat)
+#if UNITY_EDITOR
+        public static Quaternion FromUnity(UnityEngine.Quaternion quat)
         {
-            x = new Number(quat.x);
-            y = new Number(quat.y);
-            z = new Number(quat.z);
-            w = new Number(quat.w);
-        }
-        public UnityEngine.Quaternion ToUnity()
-        {
-            return (UnityEngine.Quaternion)this;
-        }
-#endif
-
-#if IM_UNITY_COMPATIBLE2
-        public static Quaternion ToIMQuaternion(UnityEngine.Quaternion quat)
-        {
-            Number x = Number.ToIMNumber(quat.x);
-            Number y = Number.ToIMNumber(quat.y);
-            Number z = Number.ToIMNumber(quat.z);
-            Number w = Number.ToIMNumber(quat.w);
+            Number x = Number.FromUnity(quat.x);
+            Number y = Number.FromUnity(quat.y);
+            Number z = Number.FromUnity(quat.z);
+            Number w = Number.FromUnity(quat.w);
             return new Quaternion(x, y, z, w);
-        }
-
-        public UnityEngine.Quaternion ToUnity2()
-        {
-            return (UnityEngine.Quaternion)this;
         }
 #endif
 

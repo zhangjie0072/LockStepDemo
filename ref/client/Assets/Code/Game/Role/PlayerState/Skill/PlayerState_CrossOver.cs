@@ -67,9 +67,6 @@ public class PlayerState_CrossOver:  PlayerState_Skill
 
 		targetPos = GetEndPos();
 
-		if( !m_player.m_bSimulator )
-			GameMsgSender.SendCrossOver(m_player, m_curExecSkill);
-
 		++m_player.mStatistics.data.cross_times;
 	}
 
@@ -107,7 +104,7 @@ public class PlayerState_CrossOver:  PlayerState_Skill
 		if( m_player.m_blockable.tooEarly )
 			return;
 
-		if( !m_player.m_bSimulator && !m_bDefenderOp )
+		if(!m_bDefenderOp )
 		{
 			Player defender = m_player.m_defenseTarget;
 			if(m_player.m_blockable.blockable && !m_bChecked)
@@ -123,7 +120,6 @@ public class PlayerState_CrossOver:  PlayerState_Skill
 						state.left = (m_crossDir == CrossDir.Right);
 						state.m_animType = state.left ? AnimType.N_TYPE_0 : AnimType.N_TYPE_1;
 						defender.m_StateMachine.SetState(state);
-						GameMsgSender.SendCrossed(defender, m_player, state.m_animType);
 						++m_player.mStatistics.data.success_cross_times;
 						m_player.mStatistics.SkillUsageSuccess(m_curExecSkill.skill.id, true);
 						
@@ -163,7 +159,6 @@ public class PlayerState_CrossOver:  PlayerState_Skill
 						state.left = (m_crossDir == CrossDir.Right);
 						state.m_animType = state.left ? AnimType.N_TYPE_0 : AnimType.N_TYPE_1;
 						defender.m_StateMachine.SetState(state);
-						GameMsgSender.SendCrossed(defender, m_player, state.m_animType);
 						++m_player.mStatistics.data.success_cross_times;
 						m_player.mStatistics.SkillUsageSuccess(m_curExecSkill.skill.id, true);
 						
@@ -186,8 +181,6 @@ public class PlayerState_CrossOver:  PlayerState_Skill
 		defender.m_StateMachine.SetState(state);
 
 		m_bDefenderOp = true;
-
-		GameMsgSender.SendDefenseCross(defender, m_player, state.m_animType, (float)state.speed, (Vector3)state.targetPos, (Vector3)state.dirMove);
 	}
 
 	IM.Vector3 GetEndPos()

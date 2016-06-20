@@ -22,19 +22,15 @@ public class PlayerState_Knocked : PlayerState
 
 	override public void OnEnter ( PlayerState lastState )
 	{
-		if( !m_player.m_bSimulator )
-		{
-			//bool bHoldBall = Random.value < m_rateHoldBall;
-			bool bHoldBall = true;
-			if( m_player.m_eHandWithBall == Player.HandWithBall.eLeft )
-				m_animType = bHoldBall ? AnimType.B_TYPE_0 : AnimType.B_TYPE_1;
-			else if( m_player.m_eHandWithBall == Player.HandWithBall.eRight )
-				m_animType = bHoldBall ? AnimType.B_TYPE_2 : AnimType.B_TYPE_3;
-			else
-				m_animType = AnimType.N_TYPE_0;
+        //bool bHoldBall = Random.value < m_rateHoldBall;
+        bool bHoldBall = true;
+        if( m_player.m_eHandWithBall == Player.HandWithBall.eLeft )
+            m_animType = bHoldBall ? AnimType.B_TYPE_0 : AnimType.B_TYPE_1;
+        else if( m_player.m_eHandWithBall == Player.HandWithBall.eRight )
+            m_animType = bHoldBall ? AnimType.B_TYPE_2 : AnimType.B_TYPE_3;
+        else
+            m_animType = AnimType.N_TYPE_0;
 
-			GameMsgSender.SendDown(m_player, DownType.eDT_Stagger, m_animType, m_ball.transform.position, Vector3.zero);
-		}
 		m_curAction = m_mapAnimType[m_animType];
 		m_player.animMgr.Play(m_curAction, false);
 

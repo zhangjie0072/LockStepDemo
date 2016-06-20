@@ -674,124 +674,113 @@ public class PlayerState_Block : PlayerState_Skill
 		IM.Vector3 attackerPos = IM.Vector3.zero;
 		bool bValid = false;
 
-		if( !m_player.m_bSimulator )
-		{
-			m_success = false;
-			IM.Vector3 vBallVel = IM.Vector3.zero;
-			IM.Vector3 vBallPos = IM.Vector3.zero;
+        m_success = false;
+        IM.Vector3 vBallVel = IM.Vector3.zero;
+        IM.Vector3 vBallPos = IM.Vector3.zero;
 
-			if( attacker != null )
-			{
-				m_player.FaceTo( attacker.position );
+        if( attacker != null )
+        {
+            m_player.FaceTo( attacker.position );
 
-				//shooter is blocked.. set a ball solution to him
-				m_failedShootSolution = GameSystem.Instance.shootSolutionManager.GetShootSolution(m_basket.m_vShootTarget, attacker.position, false);
-				if( m_failedShootSolution == null )
-					Logger.LogError("No shoot solution can be set to block.");
+            //shooter is blocked.. set a ball solution to him
+            m_failedShootSolution = GameSystem.Instance.shootSolutionManager.GetShootSolution(m_basket.m_vShootTarget, attacker.position, false);
+            if( m_failedShootSolution == null )
+                Logger.LogError("No shoot solution can be set to block.");
 
-				m_bMoveForward 	= false;
-				m_speed 		= IM.Vector3.zero;
-				m_bFailDown 	= false;
+            m_bMoveForward 	= false;
+            m_speed 		= IM.Vector3.zero;
+            m_bFailDown 	= false;
 
-				if( !m_ball.m_bBlockSuccess && m_ball.m_picker == null )
-				{
-					m_heightScale = IM.Number.one;
+            if( !m_ball.m_bBlockSuccess && m_ball.m_picker == null )
+            {
+                m_heightScale = IM.Number.one;
 
-					if( m_ball != null && !m_ball.m_bReachMaxHeight && 
-						(m_ball.m_ballState == BallState.eUseBall_Shoot || m_ball.m_ballState == BallState.eUseBall))
-					{
-						if(attacker.m_StateMachine.m_curState.m_eState == State.eShoot)
-						{
-							m_success = _CalcBlockShoot(attacker, out bBlockable, out bBlockInRange, out fBlockRate, out fBlockValue, out attackerPos, out vBallVel, out bValid);
-							if( m_success )
-								_BeginBlockShoot(m_failedShootSolution, attacker, out vBallPos);
-						}
-						else if(attacker.m_StateMachine.m_curState.m_eState == State.eLayup)
-						{
-							m_success = _CalcBlockLayup(attacker, out bBlockable, out bBlockInRange, out fBlockRate, out fBlockValue, out attackerPos, out vBallVel, out bValid);
-							if( m_success )
-								_BeginBlockLayup(m_failedShootSolution, attacker, out vBallPos);
-						}
-						else if(attacker.m_StateMachine.m_curState.m_eState == State.eDunk)
-						{
-							m_success = _CalcBlockDunk(attacker, out bBlockable, out bBlockInRange, out fBlockRate, out fBlockValue, out attackerPos, out vBallVel, out bValid);
-							if( m_success )
-								_BeginBlockDunk(attacker, out vBallPos);
-						}
-						else
-						{
-							Logger.Log("Block failed, cur attacker state: " + attacker.m_StateMachine.m_curState.m_eState);
-							m_success = false;
-						}
-						string rateLog = "Block rate: " + fBlockRate + " value: " + fBlockValue;
-						Debugger.Instance.m_steamer.message = rateLog;
-						Logger.Log(rateLog);
-						Logger.Log("block success: " + m_success);
-						Logger.Log("block ball pos: " + vBallPos + ", vel: " + vBallVel);
-                        if (!m_success)
-                            Logger.Log("Block fail reason: " + m_failReason);
+                if( m_ball != null && !m_ball.m_bReachMaxHeight && 
+                    (m_ball.m_ballState == BallState.eUseBall_Shoot || m_ball.m_ballState == BallState.eUseBall))
+                {
+                    if(attacker.m_StateMachine.m_curState.m_eState == State.eShoot)
+                    {
+                        m_success = _CalcBlockShoot(attacker, out bBlockable, out bBlockInRange, out fBlockRate, out fBlockValue, out attackerPos, out vBallVel, out bValid);
+                        if( m_success )
+                            _BeginBlockShoot(m_failedShootSolution, attacker, out vBallPos);
+                    }
+                    else if(attacker.m_StateMachine.m_curState.m_eState == State.eLayup)
+                    {
+                        m_success = _CalcBlockLayup(attacker, out bBlockable, out bBlockInRange, out fBlockRate, out fBlockValue, out attackerPos, out vBallVel, out bValid);
+                        if( m_success )
+                            _BeginBlockLayup(m_failedShootSolution, attacker, out vBallPos);
+                    }
+                    else if(attacker.m_StateMachine.m_curState.m_eState == State.eDunk)
+                    {
+                        m_success = _CalcBlockDunk(attacker, out bBlockable, out bBlockInRange, out fBlockRate, out fBlockValue, out attackerPos, out vBallVel, out bValid);
+                        if( m_success )
+                            _BeginBlockDunk(attacker, out vBallPos);
+                    }
+                    else
+                    {
+                        Logger.Log("Block failed, cur attacker state: " + attacker.m_StateMachine.m_curState.m_eState);
+                        m_success = false;
+                    }
+                    string rateLog = "Block rate: " + fBlockRate + " value: " + fBlockValue;
+                    Debugger.Instance.m_steamer.message = rateLog;
+                    Logger.Log(rateLog);
+                    Logger.Log("block success: " + m_success);
+                    Logger.Log("block ball pos: " + vBallPos + ", vel: " + vBallVel);
+                    if (!m_success)
+                        Logger.Log("Block fail reason: " + m_failReason);
 
-						m_player.mStatistics.SkillUsageSuccess(m_curExecSkill.skill.id, m_success);
-					}
-					else 
-					{
-						m_success = false;
-						Logger.Log("496 failed.");
-						m_failReason = FailReason.TooLate;
-					}
-				}//if( !m_ball.m_bBlockSuccess )
-			}
+                    m_player.mStatistics.SkillUsageSuccess(m_curExecSkill.skill.id, m_success);
+                }
+                else 
+                {
+                    m_success = false;
+                    Logger.Log("496 failed.");
+                    m_failReason = FailReason.TooLate;
+                }
+            }//if( !m_ball.m_bBlockSuccess )
+        }
 
-			if( m_curExecSkill.skill.id == idBlockPassBall || m_curExecSkill.skill.id == idBlockGrabBall )
-			{
-				if( m_ball.m_picker != null || m_ball.m_bGoal )
-					m_success = false;
-				else
-					m_ball.m_picker = m_player;
-			}
+        if( m_curExecSkill.skill.id == idBlockPassBall || m_curExecSkill.skill.id == idBlockGrabBall )
+        {
+            if( m_ball.m_picker != null || m_ball.m_bGoal )
+                m_success = false;
+            else
+                m_ball.m_picker = m_player;
+        }
 
-			if( !m_success )
-			{
-				m_speed = m_player.forward;
-				m_bMoveForward 	= false;
+        if( !m_success )
+        {
+            m_speed = m_player.forward;
+            m_bMoveForward 	= false;
 
-				if( attacker != null && attacker.m_StateMachine.m_curState.m_eState == State.eDunk 
-				   && GameUtils.HorizonalDistance(m_player.position, attacker.position) < IM.Number.one )
-					m_bFailDown = IM.Random.value > IM.Number.half;
-			}
+            if( attacker != null && attacker.m_StateMachine.m_curState.m_eState == State.eDunk 
+               && GameUtils.HorizonalDistance(m_player.position, attacker.position) < IM.Number.one )
+                m_bFailDown = IM.Random.value > IM.Number.half;
+        }
 
-			if( !m_success )
-			{
-				List<SkillInstance> basicBlockSkills = m_player.m_skillSystem.GetBasicSkillsByCommand(Command.Block);
-				m_curExecSkill = basicBlockSkills[0];
-				GameMsgSender.SendBlock(m_player, (Vector3)m_speed, false, 0.0f, 0.0f, m_curExecSkill, false, Vector3.zero, Vector3.zero, false, bValid);
-			}
-			else
-			{
-				//m_curExecSkill = _DecideBlockSkill();
-				bool bBlockPass = false;
-				if( m_curExecSkill.skill.id == idBlockPassBall )
-				{
-					int value = Random.Range(0,2);
-					bBlockPass = true;
-					if(value == 0)
-					{
-						Player catcher = PassHelper.ChoosePassTarget(m_player);
-						if(catcher != null)
-							m_player.m_passTarget = catcher;
-					}
-				}
-				m_loseBallContext.vInitPos = vBallPos;
-				m_loseBallContext.vInitVel = vBallVel;
-
-				GameMsgSender.SendBlock(m_player, (Vector3)m_speed, bBlockable, (float)fBlockRate, (float)fBlockValue, m_curExecSkill, m_success, (Vector3)vBallVel, (Vector3)vBallPos, bBlockPass, bValid);
-			}
-		}
-		else
-		{
-			m_speed = m_blockedMoveVel;
-			m_bMoveForward 	= false;
-		}
+        if( !m_success )
+        {
+            List<SkillInstance> basicBlockSkills = m_player.m_skillSystem.GetBasicSkillsByCommand(Command.Block);
+            m_curExecSkill = basicBlockSkills[0];
+        }
+        else
+        {
+            //m_curExecSkill = _DecideBlockSkill();
+            bool bBlockPass = false;
+            if( m_curExecSkill.skill.id == idBlockPassBall )
+            {
+                int value = Random.Range(0,2);
+                bBlockPass = true;
+                if(value == 0)
+                {
+                    Player catcher = PassHelper.ChoosePassTarget(m_player);
+                    if(catcher != null)
+                        m_player.m_passTarget = catcher;
+                }
+            }
+            m_loseBallContext.vInitPos = vBallPos;
+            m_loseBallContext.vInitVel = vBallVel;
+        }
 
 		m_player.animMgr.Play(m_curAction, false);
 
@@ -831,14 +820,10 @@ public class PlayerState_Block : PlayerState_Skill
 		if( m_bFailDown )
 		{
 			m_stateMachine.SetState(State.eFallGround);
-			GameMsgSender.SendFallDown( m_player );
 			return;
 		}
 		if( !m_success )
 			return;
-
-		if( !m_player.m_bSimulator )
-			GameMsgSender.SendBlockSuccess(m_player);
 
         m_speed *= new IM.Number(0, 100);
 		{
@@ -884,19 +869,15 @@ public class PlayerState_Block : PlayerState_Skill
 	void _BlockToFallDown(Player attacker)
 	{
 		//block reaction to attacker
-		if( !m_player.m_bSimulator )
-		{
-			if( attacker.m_StateMachine.m_curState.m_eState == State.eDunk )
-			{
-				attacker.m_StateMachine.SetState(PlayerState.State.eFallGround);
-				GameMsgSender.SendFallDown(attacker);
-			}
-			else if( attacker.m_StateMachine.m_curState.m_eState == PlayerState.State.eLayup && IM.Random.value < new IM.Number(0,350) )
-			{
-				attacker.m_StateMachine.SetState(PlayerState.State.eFallGround);
-				GameMsgSender.SendFallDown(attacker);
-			}
-		}
+
+        if( attacker.m_StateMachine.m_curState.m_eState == State.eDunk )
+        {
+            attacker.m_StateMachine.SetState(PlayerState.State.eFallGround);
+        }
+        else if( attacker.m_StateMachine.m_curState.m_eState == PlayerState.State.eLayup && IM.Random.value < new IM.Number(0,350) )
+        {
+            attacker.m_StateMachine.SetState(PlayerState.State.eFallGround);
+        }
 	}
 	
 	void _ExecBlock(LostBallContext lostBallContext, bool bPassBall)

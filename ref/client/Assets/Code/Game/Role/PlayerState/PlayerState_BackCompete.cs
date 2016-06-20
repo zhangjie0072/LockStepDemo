@@ -37,23 +37,19 @@ public class PlayerState_BackCompete : PlayerState
 
         m_dirPlayerToBasket = GameUtils.HorizonalNormalized(m_basket.m_vShootTarget, m_player.position);
 		
-		if( !m_player.m_bSimulator )
-		{
-			if( curAnimStep == 1 )
-			{
-				Player target = m_player.m_defenseTarget;
-				if( target != null )
-				{
-					isCompeteWin = _Competing(m_player, target);
-					m_match.m_context.m_backToBackWinnerId = isCompeteWin ? m_player.m_roomPosId : target.m_roomPosId;
-				}
-				if (m_player.m_eHandWithBall == Player.HandWithBall.eLeft)
-					m_animType = AnimType.B_TYPE_0;
-				else
-					m_animType = AnimType.B_TYPE_1;
-			}
-			GameMsgSender.SendBackCompete(m_player, m_animType, isCompeteWin);
-		}
+        if( curAnimStep == 1 )
+        {
+            Player target = m_player.m_defenseTarget;
+            if( target != null )
+            {
+                isCompeteWin = _Competing(m_player, target);
+                m_match.m_context.m_backToBackWinnerId = isCompeteWin ? m_player.m_roomPosId : target.m_roomPosId;
+            }
+            if (m_player.m_eHandWithBall == Player.HandWithBall.eLeft)
+                m_animType = AnimType.B_TYPE_0;
+            else
+                m_animType = AnimType.B_TYPE_1;
+        }
 
 		isCompeteWin = (m_match.m_context.m_backToBackWinnerId == m_player.m_roomPosId);
 		Logger.Log("BackCompete: " + isCompeteWin + " m_match.m_context.m_backToBackWinnerId: " + m_match.m_context.m_backToBackWinnerId );
@@ -73,28 +69,26 @@ public class PlayerState_BackCompete : PlayerState
 
 	public override void Update(IM.Number fDeltaTime)
 	{
-		if( !m_player.m_bSimulator )
-		{
-			if( m_player.animMgr.GetPlayInfo(m_curAction).normalizedTime > new IM.Number((int)curAnimStep))
-			{
-				curAnimStep++;
-				_OnActionDone();
-				return;
-			}
-				
-			if (m_player.m_toSkillInstance == null)
-			{
-				curAnimStep = 1;
-				m_stateMachine.SetState(PlayerState.State.eBackToStand);
-				return;
-			}
+        if( m_player.animMgr.GetPlayInfo(m_curAction).normalizedTime > new IM.Number((int)curAnimStep))
+        {
+            curAnimStep++;
+            _OnActionDone();
+            return;
+        }
+            
+        if (m_player.m_toSkillInstance == null)
+        {
+            curAnimStep = 1;
+            m_stateMachine.SetState(PlayerState.State.eBackToStand);
+            return;
+        }
 
-			if ( GameUtils.HorizonalDistance(m_player.position, m_basket.m_vShootTarget) < IM.Number.half)
-			{
-				m_player.m_StateMachine.SetState(State.eBackToBack, true);
-				return;
-			}
-		}
+        if ( GameUtils.HorizonalDistance(m_player.position, m_basket.m_vShootTarget) < IM.Number.half)
+        {
+            m_player.m_StateMachine.SetState(State.eBackToBack, true);
+            return;
+        }
+
 		PlayerMovement.MoveAttribute attr = m_player.mMovements[(int)PlayerMovement.Type.eBackToBackRun].mAttr;
 		m_player.MoveTowards(m_dirPlayerToBasket, IM.Number.zero, fDeltaTime, 
             (isCompeteWin? IM.Number.one : -IM.Number.one) * m_dirPlayerToBasket * attr.m_initSpeed);

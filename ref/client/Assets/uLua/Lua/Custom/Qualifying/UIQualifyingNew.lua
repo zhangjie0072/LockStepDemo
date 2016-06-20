@@ -263,7 +263,6 @@ function UIQualifyingNew:IsShowGradeEffect(last_score, cur_score, grade)
 end
 
 function UIQualifyingNew:GetGrade(score)
-
     if not score then return nil end
 
     local grade = nil
@@ -273,9 +272,9 @@ function UIQualifyingNew:GetGrade(score)
         -- print (self.qualifyingConfig[i].score)
         -- print (score)
 
-        if score < self.qualifyingConfig[i].score then
-            grade = i - 1
-            break
+        if score >= self.qualifyingConfig[i].score then
+            grade = i
+            -- break
         end
     end
 

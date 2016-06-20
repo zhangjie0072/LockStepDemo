@@ -72,7 +72,6 @@ public class GameMatchWrap
 			new LuaMethod("AssumeDefenseTarget", AssumeDefenseTarget),
 			new LuaMethod("GetAttrReduceScale", GetAttrReduceScale),
 			new LuaMethod("InitBallHolder", InitBallHolder),
-			new LuaMethod("GetSmcCommandByGameMsg", GetSmcCommandByGameMsg),
 			new LuaMethod("EnhanceAttr", EnhanceAttr),
 			new LuaMethod("ProcessTurn", ProcessTurn),
 			new LuaMethod("GetClassType", GetClassType),
@@ -2435,18 +2434,6 @@ public class GameMatchWrap
 		GameMatch obj = (GameMatch)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch");
 		obj.InitBallHolder();
 		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int GetSmcCommandByGameMsg(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 3);
-		GameMatch obj = (GameMatch)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch");
-		Player arg0 = (Player)LuaScriptMgr.GetNetObject(L, 2, typeof(Player));
-		fogs.proto.msg.GameMsg arg1 = (fogs.proto.msg.GameMsg)LuaScriptMgr.GetNetObject(L, 3, typeof(fogs.proto.msg.GameMsg));
-		SimulateCommand o = obj.GetSmcCommandByGameMsg(arg0,arg1);
-		LuaScriptMgr.PushObject(L, o);
-		return 1;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

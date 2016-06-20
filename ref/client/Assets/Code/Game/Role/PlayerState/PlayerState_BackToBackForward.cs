@@ -22,13 +22,11 @@ public class PlayerState_BackToBackForward : PlayerState
 	{
 		base.OnEnter(lastState);
 
-		if( !m_player.m_bSimulator )
-		{
-			if (m_player.m_eHandWithBall == Player.HandWithBall.eLeft)
-				m_animType = AnimType.B_TYPE_0;
-			else if (m_player.m_eHandWithBall == Player.HandWithBall.eRight)
-				m_animType = AnimType.B_TYPE_1;			
-		}
+        if (m_player.m_eHandWithBall == Player.HandWithBall.eLeft)
+            m_animType = AnimType.B_TYPE_0;
+        else if (m_player.m_eHandWithBall == Player.HandWithBall.eRight)
+            m_animType = AnimType.B_TYPE_1;			
+
 		m_curAction = m_mapAnimType[m_animType];
 
         m_dirPlayerToBasket = GameUtils.HorizonalNormalized(m_basket.m_vShootTarget, m_player.position);
@@ -50,9 +48,6 @@ public class PlayerState_BackToBackForward : PlayerState
 
 		m_player.animMgr.CrossFade(m_curAction, false);
 		m_player.m_stamina.m_bEnableRecover = false;
-
-		if( !m_player.m_bSimulator )
-			GameMsgSender.SendBackToBackForward(m_player, m_animType);
 	}
 
 	override public void Update (IM.Number fDeltaTime)
@@ -61,59 +56,56 @@ public class PlayerState_BackToBackForward : PlayerState
 
 		bool bKnocked = false;
 		Player target = m_player.m_defenseTarget;
-		if( !m_player.m_bSimulator )
-		{
-			if( m_player.m_toSkillInstance == null )
-			{
-				m_player.m_StateMachine.SetState(State.eStand);
-				return;
-			}
 
-			if (m_player.moveDirection == IM.Vector3.zero)
-			{
-				m_player.m_StateMachine.SetState(State.eBackToBack, true);
-				return;
-			}
-			IM.Number angle = IM.Vector3.Angle(m_dirPlayerToBasket, m_player.moveDirection);
-            if (angle > new IM.Number(45) || GameUtils.HorizonalDistance(m_player.position, m_basket.m_vShootTarget) < IM.Number.half)
-			{
-				m_player.m_StateMachine.SetState(State.eBackToBack, true);
-				return;
-			}
+        if( m_player.m_toSkillInstance == null )
+        {
+            m_player.m_StateMachine.SetState(State.eStand);
+            return;
+        }
 
-			if ( target != null )
-			{
-				IM.Vector3 vecPlayerToDefender = target.position - m_player.position;
-				IM.Number dist = vecPlayerToDefender.magnitude;
-				IM.Vector3 dirPlayerToDefender = vecPlayerToDefender.normalized;
-				angle = IM.Vector3.Angle(m_dirPlayerToBasket, dirPlayerToDefender);
-				if (angle <= GlobalConst.BACK_TO_BACK_FAN_ANGLE && dist <= GlobalConst.BACK_TO_BACK_FAN_RADIUS)
-				{
-					State targetState = target.m_StateMachine.m_curState.m_eState;
-					if( targetState == State.eDefense || targetState == State.eRun || targetState == State.eStand )
-					{						
-						m_player.m_toSkillInstance = m_curExecSkill;
-						m_stateMachine.SetState(State.eBackCompete, true);
+        if (m_player.moveDirection == IM.Vector3.zero)
+        {
+            m_player.m_StateMachine.SetState(State.eBackToBack, true);
+            return;
+        }
+        IM.Number angle = IM.Vector3.Angle(m_dirPlayerToBasket, m_player.moveDirection);
+        if (angle > new IM.Number(45) || GameUtils.HorizonalDistance(m_player.position, m_basket.m_vShootTarget) < IM.Number.half)
+        {
+            m_player.m_StateMachine.SetState(State.eBackToBack, true);
+            return;
+        }
 
-						PlayerState_BackBlock state = target.m_StateMachine.GetState(State.eBackBlock) as PlayerState_BackBlock;
-						state.m_competor = m_player;
-						target.m_StateMachine.SetState(state, true);
+        if ( target != null )
+        {
+            IM.Vector3 vecPlayerToDefender = target.position - m_player.position;
+            IM.Number dist = vecPlayerToDefender.magnitude;
+            IM.Vector3 dirPlayerToDefender = vecPlayerToDefender.normalized;
+            angle = IM.Vector3.Angle(m_dirPlayerToBasket, dirPlayerToDefender);
+            if (angle <= GlobalConst.BACK_TO_BACK_FAN_ANGLE && dist <= GlobalConst.BACK_TO_BACK_FAN_RADIUS)
+            {
+                State targetState = target.m_StateMachine.m_curState.m_eState;
+                if( targetState == State.eDefense || targetState == State.eRun || targetState == State.eStand )
+                {						
+                    m_player.m_toSkillInstance = m_curExecSkill;
+                    m_stateMachine.SetState(State.eBackCompete, true);
 
-						return;
-					}
-					else if (targetState == State.eStand || targetState == State.eRun || targetState == State.eRush )
-					{
-						Logger.Log("Defender state: " + targetState);
-						bKnocked = true;
-					}
-				}
-			}
-		}
+                    PlayerState_BackBlock state = target.m_StateMachine.GetState(State.eBackBlock) as PlayerState_BackBlock;
+                    state.m_competor = m_player;
+                    target.m_StateMachine.SetState(state, true);
+
+                    return;
+                }
+                else if (targetState == State.eStand || targetState == State.eRun || targetState == State.eRush )
+                {
+                    Logger.Log("Defender state: " + targetState);
+                    bKnocked = true;
+                }
+            }
+        }
 
 		if( bKnocked && target != null )
 		{
 			target.m_StateMachine.SetState(State.eKnocked, true);
-			GameMsgSender.SendDown(target, DownType.eDT_Stagger, AnimType.N_TYPE_0, m_ball.transform.position, Vector3.zero);
 		}
 
 		PlayerMovement.MoveAttribute attr = m_player.mMovements[(int)PlayerMovement.Type.eBackToBackRun].mAttr;

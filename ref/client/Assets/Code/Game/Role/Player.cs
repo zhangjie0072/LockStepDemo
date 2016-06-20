@@ -116,7 +116,12 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
     public IM.Vector3 forward
     {
         get { return moveCtrl.forward; }
-        set { moveCtrl.forward = value; }
+        set
+        {
+            moveCtrl.forward = value;
+            //同时设置显示层（非平滑转向）
+            transform.rotation = (Quaternion)rotation;
+        }
     }
 
     public IM.Vector3 up
@@ -134,8 +139,8 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
         get { return moveCtrl.rotation; }
         set
         {
-            //同时设置显示层（非平滑移动）
             moveCtrl.rotation = value;
+            //同时设置显示层（非平滑转向）
             transform.rotation = (Quaternion)value;
         }
     }
@@ -220,7 +225,6 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 		set{}
 	}
 
-	public	bool				m_bSimulator = false;
 	public	bool				m_bOnGround = true;
 	
 	public 	PlayerStateMachine				m_StateMachine{ get; private set; }
@@ -302,7 +306,6 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 	
 	public	MoveToHelper		m_moveHelper{ private set; get; }
 
-	public SimulateCommandManager 		m_smcManager = new SimulateCommandManager();
 	public SparkEffect			mSparkEffect{ get; private set; }
 
 	public bool					m_toTakeOver = false;
@@ -392,8 +395,6 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 		m_lostBallContext = new LostBallContext();
 		m_moveHelper = new MoveToHelper(this);
 		m_dir = 0;
-
-		m_bSimulator = false;
 	}
 
 	//private void CalcFinalAttr()

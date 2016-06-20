@@ -84,13 +84,17 @@ public class GameMatch_BlockStorm : GameMatch, PlayerActionEventHandler.Listener
 		AssumeDefenseTarget();
 		_UpdateCamera(m_mainRole);
 
-		m_stateMachine.SetState(m_config.needPlayPlot ? MatchState.State.ePlotBegin : MatchState.State.eShowRule);
-
 		//对手分数不变，当己方得分达到1星分数时达成胜利条件
 		m_awayScore = oneStarScore - 1;
 
 	}
 
+	protected override void OnLoadingComplete ()
+	{
+		base.OnLoadingComplete ();
+		m_stateMachine.SetState(m_config.needPlayPlot ? MatchState.State.ePlotBegin : MatchState.State.eShowRule);
+	}
+    
     public override void HandleGameBegin(Pack pack)
     {
         m_stateMachine.SetState(MatchState.State.eBegin);

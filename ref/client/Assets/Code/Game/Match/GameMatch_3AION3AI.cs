@@ -78,20 +78,26 @@ public class GameMatch_3AION3AI
 		//_CreateGUI();
         //m_uiMatch.SetMyTeamSide(m_mainRole.m_team.m_side);
 
-        if (m_config.needPlayPlot)
-        {
-            m_stateMachine.SetState(MatchState.State.ePlotBegin);
-        }
-        else
-        {
-			m_stateMachine.SetState(MatchState.State.eOpening);
-        }
-
 		m_mainTeam = m_mainRole.m_team;
-		initDone = true;
 
 		m_needTipOff = true;
     }
+
+	protected override void OnLoadingComplete ()
+	{
+		base.OnLoadingComplete ();
+		initDone = true;
+
+		if (m_config.needPlayPlot)
+		{
+			m_stateMachine.SetState(MatchState.State.ePlotBegin);
+		}
+		else
+		{
+			m_stateMachine.SetState(MatchState.State.eOpening);
+		}
+	}
+
 
     public override void HandleGameBegin(Pack pack)
     {

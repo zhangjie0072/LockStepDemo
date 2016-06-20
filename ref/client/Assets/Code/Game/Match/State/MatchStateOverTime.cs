@@ -23,7 +23,6 @@ public class MatchStateOverTime
 	{
 		foreach( Player player in GameSystem.Instance.mClient.mPlayerManager )
 		{
-			player.m_smcManager = new SimulateCommandManager();
 			player.moveDirection = IM.Vector3.zero;
 			player.m_toSkillInstance = null;
 			player.m_bToCatch = false;

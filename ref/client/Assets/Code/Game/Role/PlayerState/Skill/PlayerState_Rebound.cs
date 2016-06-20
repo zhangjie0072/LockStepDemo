@@ -34,104 +34,103 @@ public class PlayerState_Rebound : PlayerState_Skill
 
 		//Logger.Log("rebound action is: " + m_curAction );
 
-		if( !m_player.m_bSimulator )
-		{
-			m_heightScale = IM.Number.one;
-			m_success = true;
-			if( m_ball.m_bGoal )
-				m_success = false;
-			if( m_ball.m_picker != null )
-				m_success = false;
-			if( m_ball.m_ballState != BallState.eRebound )
-				m_success = false;
+        m_heightScale = IM.Number.one;
+        m_success = true;
+        if( m_ball.m_bGoal )
+            m_success = false;
+        if( m_ball.m_picker != null )
+            m_success = false;
+        if( m_ball.m_ballState != BallState.eRebound )
+            m_success = false;
 
-			Dictionary<string, uint> skillAttr = m_player.GetSkillAttribute();
-			Dictionary<string, uint> data = m_player.m_finalAttrs;
-			if( data == null )
-			{
-				Logger.LogError("Can not find data.");
-				m_success = false;
-			}
-			if( !m_match.m_ruler.CanRebound() || m_ball.m_owner != null )
-			{
-				m_success = false;
-				tooLate = false;
-				Logger.Log(m_player.m_name + " Rebound failed, ball haven't been reached the highest position or ball has owner");
-			}
+        Dictionary<string, uint> skillAttr = m_player.GetSkillAttribute();
+        Dictionary<string, uint> data = m_player.m_finalAttrs;
+        if( data == null )
+        {
+            Logger.LogError("Can not find data.");
+            m_success = false;
+        }
+        if( !m_match.m_ruler.CanRebound() || m_ball.m_owner != null )
+        {
+            m_success = false;
+            tooLate = false;
+            Logger.Log(m_player.m_name + " Rebound failed, ball haven't been reached the highest position or ball has owner");
+        }
 
-			//Logger.Log("Rebound distance:" + m_player.m_fReboundDist);
-			IM.Number fDistPlayer2Ball = GameUtils.HorizonalDistance(m_player.position, m_ball.position);
+        //Logger.Log("Rebound distance:" + m_player.m_fReboundDist);
+        IM.Number fDistPlayer2Ball = GameUtils.HorizonalDistance(m_player.position, m_ball.position);
 
-			IM.Number reboundDist = PlayerState_Rebound.GetMaxDist(m_player);
-			if( fDistPlayer2Ball > reboundDist)
-			{
-				m_success = false;
-				Logger.Log("player to ball distance: " + fDistPlayer2Ball + " farther than rebound distance: " + reboundDist);
-			}
+        IM.Number reboundDist = PlayerState_Rebound.GetMaxDist(m_player);
+        if( fDistPlayer2Ball > reboundDist)
+        {
+            m_success = false;
+            Logger.Log("player to ball distance: " + fDistPlayer2Ball + " farther than rebound distance: " + reboundDist);
+        }
 
-			IM.Number minHeight, maxHeight;
-			GetHeightRange(m_player, out minHeight, out maxHeight);
+        IM.Number minHeight, maxHeight;
+        GetHeightRange(m_player, out minHeight, out maxHeight);
 
-			IM.Number fEventTime = GetEventTime(m_player, m_curAction);
+        IM.Number fEventTime = GetEventTime(m_player, m_curAction);
 
-			if( m_success )
-			{
-				IM.Vector3 vBallPosRebound;
-                IM.Number fCurTime = m_ball.m_fTime;
-                IM.Number fHighestTime = m_ball.CompleteLastCurve().GetHighestTime();
-				if (fCurTime + fEventTime < fHighestTime)	//������
-				{
-					m_success = false;
-					tooLate = false;
-					Logger.Log("Rebound failed, ball not in falling.");
-				}
-				else if( m_ball.GetPositionInAir( (fCurTime + fEventTime), out vBallPosRebound) )
-				{
-					if( vBallPosRebound.y > minHeight && vBallPosRebound.y < maxHeight)
-					{
-						//Debugger.Instance.DrawSphere("Rebound", vBallPosRebound, Color.red);
-						m_player.FaceTo(vBallPosRebound);
-						IM.Vector3 reboundAnimBall;
-						m_player.GetNodePosition(SampleNode.Ball, m_curAction, fEventTime, out reboundAnimBall);
-						m_heightScale = vBallPosRebound.y / reboundAnimBall.y;
+        if( m_success )
+        {
+            IM.Vector3 vBallPosRebound;
+            IM.Number fCurTime = m_ball.m_fTime;
+            IM.Number fHighestTime = m_ball.CompleteLastCurve().GetHighestTime();
+            if (fCurTime + fEventTime < fHighestTime)	//������
+            {
+                m_success = false;
+                tooLate = false;
+                Logger.Log("Rebound failed, ball not in falling.");
+            }
+            else if( m_ball.GetPositionInAir( (fCurTime + fEventTime), out vBallPosRebound) )
+            {
+                if( vBallPosRebound.y > minHeight && vBallPosRebound.y < maxHeight)
+                {
+                    //Debugger.Instance.DrawSphere("Rebound", vBallPosRebound, Color.red);
+                    m_player.FaceTo(vBallPosRebound);
+                    IM.Vector3 reboundAnimBall;
+                    m_player.GetNodePosition(SampleNode.Ball, m_curAction, fEventTime, out reboundAnimBall);
+                    m_heightScale = vBallPosRebound.y / reboundAnimBall.y;
 
-						IM.Vector3 root;
-						m_player.GetNodePosition(SampleNode.Root, m_curAction, fEventTime, out root);
-						IM.Vector3 root2Ball = reboundAnimBall - root;
+                    IM.Vector3 root;
+                    m_player.GetNodePosition(SampleNode.Root, m_curAction, fEventTime, out root);
+                    IM.Vector3 root2Ball = reboundAnimBall - root;
 
-						IM.Number fDistPlayerToReboundPos = GameUtils.HorizonalDistance(vBallPosRebound - root2Ball, m_player.position);
-						IM.Number fDistOrigReboundPos = GameUtils.HorizonalDistance(root, m_player.position);
-						rootMotionScale = fDistPlayerToReboundPos / fDistOrigReboundPos;
-						//Logger.Log("root motion scale: " + m_player.m_rootMotion.m_scale);
-					}
-					else
-					{
-						m_success = false;
-						tooLate = vBallPosRebound.y <= minHeight;
-						Logger.Log("Rebound failed, ball height: " + m_ball.transform.position.y + " height range: min: " + minHeight + " ,max: " + maxHeight);
-					}
-				}
-				else
-				{
-					m_success = false;
-					tooLate = true;
-					Logger.Log("reboundTime out of the curve, too slow");
-				}
-			}
-			else
-				m_player.FaceTo(m_ball.position);
+                    IM.Number fDistPlayerToReboundPos = GameUtils.HorizonalDistance(vBallPosRebound - root2Ball, m_player.position);
+                    IM.Number fDistOrigReboundPos = GameUtils.HorizonalDistance(root, m_player.position);
+                    rootMotionScale = fDistPlayerToReboundPos / fDistOrigReboundPos;
+                    //Logger.Log("root motion scale: " + m_player.m_rootMotion.m_scale);
+                }
+                else
+                {
+                    m_success = false;
+                    tooLate = vBallPosRebound.y <= minHeight;
+                    Logger.Log("Rebound failed, ball height: " + m_ball.transform.position.y + " height range: min: " + minHeight + " ,max: " + maxHeight);
+                }
+            }
+            else
+            {
+                m_success = false;
+                tooLate = true;
+                Logger.Log("reboundTime out of the curve, too slow");
+            }
+        }
+        else
+            m_player.FaceTo(m_ball.position);
 
-			//m_curAction = m_mapAnimType[m_animType];
-			IM.Vector3 vRoundScale = new IM.Vector3(rootMotionScale, m_heightScale, rootMotionScale);
+        //m_curAction = m_mapAnimType[m_animType];
+        IM.Vector3 vRoundScale = new IM.Vector3(rootMotionScale, m_heightScale, rootMotionScale);
 
-			uint skillValue = 0;
-			m_player.m_skillSystem.HegdingToValue("addn_rebound", ref skillValue);
+        uint skillValue = 0;
+        m_player.m_skillSystem.HegdingToValue("addn_rebound", ref skillValue);
 
-			GameMsgSender.SendRebound(m_player, m_success, m_curExecSkill, (Vector3)vRoundScale, (float)fEventTime, m_player.m_finalAttrs["rebound"] + skillValue, m_success);
-			++m_player.mStatistics.data.rebound_times;
-			if (m_success)
-				++m_player.mStatistics.data.valid_rebound_times;
-		}
+        m_match.reboundHelper.AddRebounder(m_player, m_curExecSkill);
+
+        ++m_player.mStatistics.data.rebound_times;
+        if (m_success)
+            ++m_player.mStatistics.data.valid_rebound_times;
+
 		GameSystem.Instance.mClient.mPlayerManager.IsolateCollision(m_player, true);
 		m_fEventTime = GetEventTime(m_player, m_curAction);
 		IM.RootMotion rootMotion = m_player.animMgr.Play(m_curAction, true).rootMotion;

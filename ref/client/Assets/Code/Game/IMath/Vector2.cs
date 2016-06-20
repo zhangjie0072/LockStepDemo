@@ -75,18 +75,6 @@ namespace IM
             this.y = y;
         }
 
-#if IM_UNITY_COMPATIBLE
-        public Vector2(UnityEngine.Vector2 vec)
-        {
-            x = new Number(vec.x);
-            y = new Number(vec.y);
-        }
-        public UnityEngine.Vector2 ToUnity()
-        {
-            return (UnityEngine.Vector2)this;
-        }
-#endif
-
         public static Vector2 operator + (Vector2 lhs, Vector2 rhs)
         {
             return new Vector2(lhs.x + rhs.x, lhs.y + rhs.y);

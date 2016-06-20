@@ -58,7 +58,7 @@ public class UCamCtrl_Match : MonoBehaviour
 			Vector3 cameraPosV = m_trLook.position - dirToTargetV * fDistToTarget;
 			cameraPosV = new Vector3(0.0f, cameraPosV.y, cameraPosV.z);
 
-            Vector3 vShootTargetPos = m_basket.m_vShootTarget.ToUnity2();
+            Vector3 vShootTargetPos = (Vector3)m_basket.m_vShootTarget;
 			Vector3 dirLookH = vShootTargetPos - transform.position;
 			dirLookH.y = 0.0f;
 			dirLookH.Normalize();

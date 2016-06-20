@@ -1,4 +1,4 @@
-<Data Count="27">
+<Data Count="28">
   <Line>
     <switch>
     </switch>
@@ -153,7 +153,7 @@
     <level_low>0</level_low>
     <level_high>0</level_high>
     <score>30</score>
-    <score_high>0</score_high>
+    <score_high>30</score_high>
     <fight_power>0</fight_power>
   </Line>
   <Line>
@@ -165,8 +165,21 @@
     </level_low>
     <level_high>
     </level_high>
-    <score>50</score>
-    <score_high>0</score_high>
+    <score>60</score>
+    <score_high>100</score_high>
+    <fight_power>0</fight_power>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <match_type>13</match_type>
+    <wait_time>8</wait_time>
+    <level_low>
+    </level_low>
+    <level_high>
+    </level_high>
+    <score>100</score>
+    <score_high>100</score_high>
     <fight_power>0</fight_power>
   </Line>
   <Line>
@@ -178,8 +191,8 @@
     </level_low>
     <level_high>
     </level_high>
-    <score>60</score>
-    <score_high>0</score_high>
+    <score>150</score>
+    <score_high>150</score_high>
     <fight_power>0</fight_power>
   </Line>
   <Line>

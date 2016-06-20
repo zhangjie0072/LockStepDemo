@@ -103,7 +103,7 @@ public class CatchHelper
 
 	public void Update(IM.Number deltaTime)
 	{
-		if(!enabled || _player.m_bSimulator)
+		if(!enabled)
 			return;
 		//should be a parallel state, but not now
 		GameMatch match = GameSystem.Instance.mClient.mCurMatch;

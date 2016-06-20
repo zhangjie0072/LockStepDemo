@@ -102,7 +102,7 @@ public class UpdatePrec
     private List<UpdatePrec> updatePreclist;
 
 
-void Awake()
+	void Awake()
     {
 
         updatePreclist = new List<UpdatePrec>();
@@ -152,7 +152,7 @@ void Awake()
         GameSystem.Instance.mClient.mUIManager.isInMatchLoading = true;
     }
 
-	void OnTimer()
+	void OnHandleMatchBeginTimer()
 	{
 		Logger.Log("match begin.");
 		NetworkConn conn = GameSystem.Instance.mNetworkManager.m_gameConn;
@@ -260,7 +260,7 @@ void Awake()
 	void HandleMatchBegin(Pack pack)
 	{
 		m_matchBeginPack = pack;
-		m_wait = new GameUtils.Timer4View(3f, OnTimer, 0);
+		m_wait = new GameUtils.Timer4View(3f, OnHandleMatchBeginTimer, 0);
 	}
 
     void Update()
@@ -294,6 +294,9 @@ void Awake()
 			if (loaded)
 			{
 				GameSystem.Instance.mClient.pause = false;
+				if( onComplete != null )
+					onComplete();
+				loadComplete = true;
 				Object.Destroy(gameObject);
 			}
 		}

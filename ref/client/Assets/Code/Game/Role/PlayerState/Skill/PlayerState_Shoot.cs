@@ -67,15 +67,12 @@ public class PlayerState_PrepareToShoot : PlayerState_Skill
 		mCachedShootSkill = m_curExecSkill;
 
 		m_skillArea = m_match.mCurScene.mGround.GetArea(m_player);
-
-		if( !m_player.m_bSimulator )
-			GameMsgSender.SendPrepareShoot(m_player, m_curExecSkill, m_skillArea, AnimType.B_TYPE_0, false);
 	}
 
 	protected override void _OnActionDone ()
 	{
 		base._OnActionDone();
-		if( !mCanShoot && m_player.m_moveType == MoveType.eMT_Stand && !m_player.m_bSimulator)
+		if( !mCanShoot && m_player.m_moveType == MoveType.eMT_Stand)
 			m_stateMachine.SetState(PlayerState.State.eHold);
 	}
 
@@ -83,13 +80,12 @@ public class PlayerState_PrepareToShoot : PlayerState_Skill
 	{
 		base.Update(fDeltaTime);
 
-		if( !m_player.m_bSimulator && mCanShoot )
+		if(mCanShoot )
 		{
 			if( (m_player.m_toSkillInstance == null || m_player.m_toSkillInstance.skill.action_type != (uint)Command.Shoot)
 			   && !m_player.m_bForceShoot)
 			{
 				mCanShoot = false;
-				GameMsgSender.SendFakeShoot(m_player, true);
 			}
 			m_curExecSkill = m_player.m_toSkillInstance;
 		}
@@ -138,9 +134,6 @@ public class PlayerState_Shoot : PlayerState_Skill
 			rootMotion.Reset();
             IM.Vector3 dirPlayerToBasket = GameUtils.HorizonalNormalized(m_basket.m_vShootTarget, m_player.position);
 			rootMotion.dirMove = dirPlayerToBasket;
-
-			if( !m_player.m_bSimulator )
-				GameMsgSender.SendShootSkill(m_player, m_curExecSkill, m_skillArea, m_ball.m_id, false);
 		}
 
         if (m_curAction.Length == 0)
@@ -200,7 +193,7 @@ public class PlayerState_Shoot : PlayerState_Skill
 	public void OnShoot()
 	{
 		bool bOpen = false;
-		if( !m_player.m_bSimulator && m_player.m_bWithBall )
+		if(m_player.m_bWithBall )
 		{
 			IM.Number rate_adjustment = IM.Number.zero;
 			if (m_player.m_InfoVisualizer != null && m_player.m_InfoVisualizer.m_strengthBar != null)
@@ -366,9 +359,6 @@ public class PlayerState_Shoot : PlayerState_Skill
 
 			curBall.m_castedSkill = m_curExecSkill;
 			
-			int solutionId = solution.m_id;
-			GameMsgSender.SendShoot(m_player, m_curExecSkill, m_skillArea, ballId, solution.m_bSuccess, (IM.Number)fShootRate, (uint)solutionId, rate_adjustment, fFlyTime, bOpen);
-
 			Debugger.Instance.m_steamer.message = " Final shoot rate: " + fShootRate;
 		}
 

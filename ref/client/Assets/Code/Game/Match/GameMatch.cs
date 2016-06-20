@@ -224,7 +224,7 @@ public abstract class GameMatch
     /**比赛倒计时间功能开启enable*/
     public bool m_gameMathCountEnable = true;
     /**进攻24秒常量*/
-    public IM.Number MAX_COUNT24_TIME = new IM.Number(200);
+    public IM.Number MAX_COUNT24_TIME = new IM.Number(14);
     private IM.Number _count24TimeSec;
     /**进攻24秒*/
     public IM.Number m_count24Time {
@@ -316,6 +316,8 @@ public abstract class GameMatch
 		}
 	}
 	
+	public ReboundHelper reboundHelper = new ReboundHelper();
+
 	public GameRuler			m_ruler{ get; protected set; }
 	public UCamCtrl_MatchNew	m_cam{ get; protected set; }
 	public UCamCtrl_FollowPath 	m_camFollowPath{ get; protected set; }
@@ -567,7 +569,7 @@ public abstract class GameMatch
 		m_uiInGamePanel.transform.localPosition = Vector3.zero;
 		m_uiInGamePanel.transform.localScale = Vector3.one;
 		GameUtils.SetLayerRecursive(inGameInfoPanel.transform, LayerMask.NameToLayer("GUI"));
-
+		goLoading.onComplete += OnLoadingComplete;
 
         /*string prefabName = "Prefab/GUI/MatchTipAnim";
 		ResourceLoadManager.Instance.LoadPrefab(prefabName);
@@ -587,7 +589,9 @@ public abstract class GameMatch
 		ResourceLoadManager.Instance.LoadPrefab(prefabName);*/
     }
 
-
+	virtual protected void OnLoadingComplete()
+	{
+	}
 
 
 	virtual protected void OnRimCollision(UBasket basket, UBasketball ball)
@@ -804,6 +808,8 @@ public abstract class GameMatch
             ball.Update(deltaTime);
         }
 
+        //抢篮板队列
+		reboundHelper.Update(deltaTime);
         /*
         //测试功能键
 		if( GameSystem.Instance.mClient.mInputManager.m_CmdBtnTestClick )
@@ -2074,87 +2080,6 @@ public abstract class GameMatch
 			offenserWithBall.GrabBall(ball);
 			offenserWithBall.m_StateMachine.SetState(PlayerState.State.eHold);
 		}
-	}
-
-	public SimulateCommand GetSmcCommandByGameMsg( Player sender, GameMsg msg )
-	{
-		SimulateCommand cmd = null;
-        if (msg.eState == CharacterState.eRun)
-            cmd = new SMC_Run(sender, msg, this);
-        else if (msg.eState == CharacterState.eRush)
-            cmd = new SMC_Rush(sender, msg, this);
-        else if (msg.eState == CharacterState.eDefense)
-            cmd = new SMC_Defense(sender, msg, this);
-        else if (msg.eState == CharacterState.eStand)
-            cmd = new SMC_Stand(sender, msg, this);
-        else if (msg.eState == CharacterState.ePickup)
-            cmd = new SMC_Pick(sender, msg, this);
-        else if (msg.eState == CharacterState.ePrepareToShoot)
-            cmd = new SMC_PrepareShoot(sender, msg, this);
-        else if (msg.eState == CharacterState.eHold)
-            cmd = new SMC_Hold(sender, msg, this);
-        else if (msg.eState == CharacterState.eCatch)
-            cmd = new SMC_Catch(sender, msg, this);
-        else if (msg.eState == CharacterState.eShoot)
-            cmd = new SMC_Shoot(sender, msg, this);
-        else if (msg.eState == CharacterState.eLayup)
-            cmd = new SMC_Layup(sender, msg, this);
-        else if (msg.eState == CharacterState.eLayupFailed)
-			cmd = new SMC_LayupFailed(sender, msg, this);
-        else if (msg.eState == CharacterState.eDunk)
-            cmd = new SMC_Dunk(sender, msg, this);
-        else if (msg.eState == CharacterState.eBlock)
-            cmd = new SMC_Block(sender, msg, this);
-        else if (msg.eState == CharacterState.eSteal)
-            cmd = new SMC_Steal(sender, msg, this);
-        else if (msg.eState == CharacterState.eStolen)
-            cmd = new SMC_Stolen(sender, msg, this);
-        else if (msg.eState == CharacterState.eFallGround)
-            cmd = new SMC_FallGround(sender, msg, this);
-        else if (msg.eState == CharacterState.eCrossOver)
-            cmd = new SMC_CrossOver(sender, msg, this);
-        else if (msg.eState == CharacterState.eRebound)
-            cmd = new SMC_Rebound(sender, msg, this);
-        else if (msg.eState == CharacterState.eBodyThrowCatch)
-            cmd = new SMC_BodyThrowCatch(sender, msg, this);
-        else if (msg.eState == CharacterState.eFallLostBall)
-            cmd = new SMC_FallLostBall(sender, msg, this);
-        else if (msg.eState == CharacterState.eKnocked)
-            cmd = new SMC_Knocked(sender, msg, this);
-        else if (msg.eState == CharacterState.eDefenseCross)
-            cmd = new SMC_DefenseCross(sender, msg, this);
-        else if (msg.eState == CharacterState.eCrossed)
-            cmd = new SMC_Crossed(sender, msg, this);
-        else if (msg.eState == CharacterState.eDisturb)
-            cmd = new SMC_Disturb(sender, msg, this);
-        else if (msg.eState == CharacterState.ePass)
-            cmd = new SMC_Pass(sender, msg, this);
-        else if (msg.eState == CharacterState.eRequireBall)
-            cmd = new SMC_RequireBall(sender, msg, this);
-        else if (msg.eState == CharacterState.eCutIn)
-            cmd = new SMC_CutIn(sender, msg, this);
-        else if (msg.eState == CharacterState.eInterception)
-            cmd = new SMC_Interception(sender, msg, this);
-        else if (msg.eState == CharacterState.ePickAndRoll)
-            cmd = new SMC_PickAndRoll(sender, msg, this);
-        else if (msg.eState == CharacterState.eBePickAndRoll)
-            cmd = new SMC_BePickAndRoll(sender, msg, this);
-		else if( msg.eState == CharacterState.eInput )
-			cmd = new SMC_SyncInput(sender, msg, this);
-		else if( msg.eState == CharacterState.eBackToBack )
-			cmd = new SMC_BackToBack(sender, msg, this);
-		else if( msg.eState == CharacterState.eBackToBackForward )
-			cmd = new SMC_BackToBackForward(sender, msg, this);
-		else if( msg.eState == CharacterState.eBackToStand )
-			cmd = new SMC_BackToStand(sender, msg, this);
-		else if( msg.eState == CharacterState.eBackBlock )
-			cmd = new SMC_BackBlock(sender, msg, this);
-		else if( msg.eState == CharacterState.eBackCompete )
-			cmd = new SMC_BackCompete(sender, msg, this);
-		else if( msg.eState == CharacterState.eBackTurnRun )
-			cmd = new SMC_BackTurnRun(sender, msg, this);
-
-		return cmd;
 	}
 
 	public void EnhanceAttr()

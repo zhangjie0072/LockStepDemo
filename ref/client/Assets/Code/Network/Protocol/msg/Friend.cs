@@ -347,13 +347,13 @@ namespace fogs.proto.msg
       get { return _icon; }
       set { _icon = value; }
     }
-    private fogs.proto.msg.PvpRegularInfo _regular = null;
-    [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"regular", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    private fogs.proto.msg.QualifyingNewerInfo _qualifying_newer = null;
+    [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"qualifying_newer", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public fogs.proto.msg.PvpRegularInfo regular
+    public fogs.proto.msg.QualifyingNewerInfo qualifying_newer
     {
-      get { return _regular; }
-      set { _regular = value; }
+      get { return _qualifying_newer; }
+      set { _qualifying_newer = value; }
     }
     private readonly global::System.Collections.Generic.List<fogs.proto.msg.RoleMatchResData> _role_data = new global::System.Collections.Generic.List<fogs.proto.msg.RoleMatchResData>();
     [global::ProtoBuf.ProtoMember(7, Name=@"role_data", DataFormat = global::ProtoBuf.DataFormat.Default)]
@@ -425,6 +425,14 @@ namespace fogs.proto.msg
     {
       get { return _pvp_ladder_score; }
       set { _pvp_ladder_score = value; }
+    }
+    private uint _qualifying_newer_score = default(uint);
+    [global::ProtoBuf.ProtoMember(16, IsRequired = false, Name=@"qualifying_newer_score", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint qualifying_newer_score
+    {
+      get { return _qualifying_newer_score; }
+      set { _qualifying_newer_score = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)

@@ -37,11 +37,7 @@ public class PlayerState_Defense : PlayerState
 		
 		_GetDefenseAction();
 		
-		if( !m_player.m_bSimulator )
-		{
-			m_animType = AnimType.N_TYPE_0;
-			GameMsgSender.SendMove( m_player, MoveType.eMT_Defense, m_animType );
-		}
+        m_animType = AnimType.N_TYPE_0;
 		
 		m_player.animMgr.CrossFade( m_mapAnimType[m_animType], false);
 
@@ -50,26 +46,22 @@ public class PlayerState_Defense : PlayerState
 	
 	override public void Update (IM.Number fDeltaTime)
 	{
-		if( !m_player.m_bSimulator )
-		{
-			if( m_player.m_team.m_role != GameMatch.MatchRole.eDefense || m_ball.m_ballState == BallState.eLoseBall )
-			{
-				m_stateMachine.SetState(PlayerState.State.eStand);
-				return;
-			}
+        if( m_player.m_team.m_role != GameMatch.MatchRole.eDefense || m_ball.m_ballState == BallState.eLoseBall )
+        {
+            m_stateMachine.SetState(PlayerState.State.eStand);
+            return;
+        }
 
-			if( m_player.m_toSkillInstance == null || m_player.m_bWithBall )
-			{
-				//Logger.Log("defense failed because of skill is null");
-				m_stateMachine.SetState(PlayerState.State.eStand);
-				return;
-			}
-			if( m_player.m_dir != m_lastMoveDir )
-			{
-				m_lastMoveDir = m_player.m_dir;
-				GameMsgSender.SendMove(m_player, MoveType.eMT_Defense, m_animType);
-			}
-		}
+        if( m_player.m_toSkillInstance == null || m_player.m_bWithBall )
+        {
+            //Logger.Log("defense failed because of skill is null");
+            m_stateMachine.SetState(PlayerState.State.eStand);
+            return;
+        }
+        if( m_player.m_dir != m_lastMoveDir )
+        {
+            m_lastMoveDir = m_player.m_dir;
+        }
 		if( m_player.m_moveType == MoveType.eMT_Stand )
 		{
 			m_stateMachine.SetState(PlayerState.State.eStand);
@@ -114,12 +106,4 @@ public class PlayerState_Defense : PlayerState
 			}
 		}
 	}
-	
-	public override void OnExit ()
-	{
-		base.OnExit ();
-		if( !m_player.m_bSimulator )
-			GameMsgSender.SendMove(m_player, MoveType.eMT_Stand, AnimType.N_TYPE_0);
-	}
-	
 }

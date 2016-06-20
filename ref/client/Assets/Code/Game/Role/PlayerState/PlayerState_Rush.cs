@@ -68,8 +68,6 @@ public class PlayerState_Rush : PlayerState
 
 		m_lastMoveDir = 0;
 		m_player.m_moveType = MoveType.eMT_Rush;
-		if( !m_player.m_bSimulator )
-			GameMsgSender.SendMove(m_player, MoveType.eMT_Rush, m_animType);
 	}
 
 	override public void Update (IM.Number fDeltaTime)
@@ -116,10 +114,9 @@ public class PlayerState_Rush : PlayerState
 		m_player.MoveTowards(dirVelocity, m_turningSpeed, fDeltaTime, dirVelocity * m_fRushSpeed);
         m_player.m_moveHelper.movingSpeed = m_fRushSpeed;
 		
-		if( !m_player.m_bSimulator && m_player.m_dir != m_lastMoveDir )
+		if(m_player.m_dir != m_lastMoveDir )
 		{
 			m_lastMoveDir = m_player.m_dir;
-			GameMsgSender.SendMove(m_player, MoveType.eMT_Rush, m_animType);
 		}
 	}
 }

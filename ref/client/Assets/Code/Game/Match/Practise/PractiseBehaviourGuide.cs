@@ -687,13 +687,18 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 		{
 			Player player = GetPlayer(pair.Key);
 			GameObject faceToObj = GetSceneObject(pair.Value);
-			player.FaceTo(IM.Vector3.ToIMVector3(faceToObj.transform.position));
+            //此处只用于PVE，使用从float转换为IM.Number不会有问题
+            Vector3 faceToPoint = faceToObj.transform.position;
+            IM.Number x = IM.Number.Raw((int)faceToPoint.x * IM.Math.FACTOR);
+            IM.Number y = IM.Number.Raw((int)faceToPoint.y * IM.Math.FACTOR);
+            IM.Number z = IM.Number.Raw((int)faceToPoint.z * IM.Math.FACTOR);
+			player.FaceTo(new IM.Vector3(x, y, z));
 		}
 	}
 
 	void SetBehaviour()
 	{
-		bool hasController = false;
+		//bool hasController = false;
 		for (int i = 0; i < playerList.Count; ++i)
 		{
 			Player player = playerList[i];
@@ -702,7 +707,7 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 			{
 				if (behaviour == PractiseStepBehaviour.PlayerControl)
 				{
-					hasController = true;
+					//hasController = true;
 					player.m_inputDispatcher.m_enable = true;
 					player.m_inputDispatcher.m_enableMove = curStep.canMove;
                     InputReader.Instance.player = player;

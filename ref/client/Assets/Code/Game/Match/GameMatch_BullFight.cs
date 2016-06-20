@@ -122,6 +122,11 @@ public class GameMatch_BullFight : GameMatch, GameMatch.Count24Listener, MatchSt
 		//_CreateGUI();
 
 		m_stateMachine.m_matchStateListeners.Add(this);
+
+	}
+	protected override void OnLoadingComplete ()
+	{
+		base.OnLoadingComplete ();
 		m_stateMachine.SetState(m_config.needPlayPlot ? MatchState.State.ePlotBegin : MatchState.State.eShowRule);
 	}
 

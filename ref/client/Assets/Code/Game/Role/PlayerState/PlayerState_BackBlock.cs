@@ -22,18 +22,14 @@ public class PlayerState_BackBlock : PlayerState
 	override public void OnEnter(PlayerState lastState)
 	{
         dirAttackerToBasket = GameUtils.HorizonalNormalized(m_basket.m_vShootTarget, m_player.m_defenseTarget.position);
-		if( !m_competor.m_bSimulator )
-		{
-			if (m_player.m_defenseTarget.m_eHandWithBall == Player.HandWithBall.eLeft)
-				m_animType = AnimType.N_TYPE_0;
-			else if (m_player.m_defenseTarget.m_eHandWithBall == Player.HandWithBall.eRight)
-				m_animType = AnimType.N_TYPE_1;
 
-			IM.Number distToAttacker = GameUtils.HorizonalDistance(m_player.position, m_player.m_defenseTarget.position);
-            m_player.position = m_player.m_defenseTarget.position + dirAttackerToBasket * distToAttacker;
+        if (m_player.m_defenseTarget.m_eHandWithBall == Player.HandWithBall.eLeft)
+            m_animType = AnimType.N_TYPE_0;
+        else if (m_player.m_defenseTarget.m_eHandWithBall == Player.HandWithBall.eRight)
+            m_animType = AnimType.N_TYPE_1;
 
-			GameMsgSender.SendBackBlock(m_player, m_animType, true);
-		}
+        IM.Number distToAttacker = GameUtils.HorizonalDistance(m_player.position, m_player.m_defenseTarget.position);
+        m_player.position = m_player.m_defenseTarget.position + dirAttackerToBasket * distToAttacker;
 		m_curAction = m_mapAnimType[m_animType];
 
 		isCompeteWin = (m_match.m_context.m_backToBackWinnerId == m_player.m_roomPosId);
@@ -56,7 +52,6 @@ public class PlayerState_BackBlock : PlayerState
 		if (state.m_eState != State.eBackCompete)
 		{
 			m_stateMachine.SetState(PlayerState.State.eStand);
-			GameMsgSender.SendStand(m_player);
 		}
 	}
 }

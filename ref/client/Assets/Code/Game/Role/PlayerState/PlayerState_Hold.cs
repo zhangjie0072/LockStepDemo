@@ -27,9 +27,6 @@ public class PlayerState_Hold:  PlayerState
 		else
 			m_validStateTransactions.Add(Command.BackToBack);
 
-		if( !m_player.m_bSimulator )
-			GameMsgSender.SendHold(m_player);
-
         m_player.animMgr.CrossFade(m_mapAnimType[m_animType], false);
 	}
 	

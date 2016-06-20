@@ -41,30 +41,28 @@ public class PlayerState_Pickup : PlayerState
 
 		IM.Number fBallHeight = ball.position.y;
 
-		if( !m_player.m_bSimulator )
-		{
-			IM.Number fProb = new IM.Number(0,800);
-			if( m_player.m_position == fogs.proto.msg.PositionType.PT_C )
-				fProb = new IM.Number(0,300);
-			else if( m_player.m_position == fogs.proto.msg.PositionType.PT_PF || m_player.m_position == fogs.proto.msg.PositionType.PT_SF )
-				fProb = IM.Number.half;
+        IM.Number fProb = new IM.Number(0,800);
+        if( m_player.m_position == fogs.proto.msg.PositionType.PT_C )
+            fProb = new IM.Number(0,300);
+        else if( m_player.m_position == fogs.proto.msg.PositionType.PT_PF || m_player.m_position == fogs.proto.msg.PositionType.PT_SF )
+            fProb = IM.Number.half;
 
-            fProb = IM.Number.one;
-			m_animType = AnimType.B_TYPE_0;
-			if( fBallHeight < m_player.pelvisPos.y)
-			{
-				if( IM.Random.value < fProb )
-					m_animType = AnimType.B_TYPE_1;
-			}
-			else
-			{
-				if( lastState.m_eState == PlayerState.State.eRun || lastState.m_eState == PlayerState.State.eRush )
-					m_animType = AnimType.B_TYPE_2;
-				else if( lastState.m_eState == PlayerState.State.eStand )
-					m_animType = AnimType.B_TYPE_3;
-			}
-			m_bSuccess = true;
-		}
+        m_animType = AnimType.B_TYPE_0;
+        if( fBallHeight < m_player.pelvisPos.y)
+        {
+            if( IM.Random.value < fProb )
+                m_animType = AnimType.B_TYPE_1;
+        }
+        else
+        {
+            if( lastState.m_eState == PlayerState.State.eRun || lastState.m_eState == PlayerState.State.eRush )
+                m_animType = AnimType.B_TYPE_2;
+            else if( lastState.m_eState == PlayerState.State.eStand )
+                m_animType = AnimType.B_TYPE_3;
+        }
+        m_bSuccess = true;
+        m_player.GrabBall(m_ballToPickup);
+        m_player.eventHandler.NotifyAllListeners(PlayerActionEventHandler.AnimEvent.ePickupBall);
 
 		if( m_animType == AnimType.B_TYPE_1 )
 		{
@@ -80,9 +78,6 @@ public class PlayerState_Pickup : PlayerState
 		}
 
 		m_curAction = m_mapAnimType[m_animType];
-
-		if( !m_player.m_bSimulator )
-			GameMsgSender.SendPickBall(m_player, ball.m_id, m_animType, ball.m_ballState);
 
 		m_speed = IM.Vector3.zero;
 		IM.RootMotion rootMotion = m_player.animMgr.Play(m_curAction, true).rootMotion;

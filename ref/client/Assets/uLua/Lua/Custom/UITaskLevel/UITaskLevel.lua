@@ -50,9 +50,10 @@ function UITaskLevel:Awake()
     self.uiGridAwardLevel = self.transform:FindChild('Left/Scroll View/Grid'):GetComponent('UIGrid')
     self.uiGridTaskItem = self.transform:FindChild('Right/ScrollView/Grid'):GetComponent('UIGrid')
     self.uiGridTeamUpItem = self.transform:FindChild('Right/Grid'):GetComponent('UIGrid')
-    self.uiScrollViewAsyncLoadItem = self.transform:FindChild('Right/ScrollView'):GetComponent('ScrollViewAsyncLoadItem')
 
     self.uiGridDaily = self.transform:FindChild('Righ1/TaskList/Grid'):GetComponent('UIGrid')
+    self.uiScrollViewAsyncLoadItem = self.transform:FindChild('Righ1/TaskList'):GetComponent('ScrollViewAsyncLoadItem')
+
     self.uiActivity = self.transform:FindChild('Righ1/Activity').gameObject
     self.sprBgIcon = self.uiActivity.transform:FindChild('BgIcon'):GetComponent('UISprite')
 
@@ -302,26 +303,24 @@ function UITaskLevel:InitDailyList()
     local scroll = self.uiGridDaily.transform.parent:GetComponent('UIScrollView')
     CommonFunction.ClearGridChild(self.uiGridDaily.transform)
 
-    local vList = {}
-    local count = 0
+    local taskList = {}
+    local taskCount = 0
 
     for k, v in pairs(self.dailyList or {}) do
-        count = count + 1
-        vList[count] = v
 
-        self:CreateDailyItem(v, scroll)
+        taskList[taskCount] = v
+        taskCount = taskCount + 1
+
+        --self:CreateDailyItem(v, scroll)
     end
 
-    print("!!count=".. count)
+    print("!!taskCount=".. taskCount)
 
-    if  self.uiScrollViewAsyncLoadItem ~= nil then
-        print("uiScrollViewAsyncLoadItem")
+    self.uiScrollViewAsyncLoadItem.OnCreateItem = function ( index, parent )
+        --print('@@@@ index='.. index)
+        return self:CreateDailyItem(taskList[index], scroll)
     end
-
-    -- self.uiScrollViewAsyncLoadItem.OnCreateItem = function ( index, parent )
-    --     return self:CreateDailyItem(vList[index + 1], scroll)
-    -- end
-    -- self.uiScrollViewAsyncLoadItem:Refresh(count)
+    self.uiScrollViewAsyncLoadItem:Refresh(taskCount)
 
     self.uiGridDaily.repositionNow = true
     scroll:ResetPosition()

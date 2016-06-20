@@ -146,10 +146,10 @@ public class ShootSimulator : Editor
             m_iCurSector = GameSystem.Instance.shootSolutionManager.CalcSectorIdx(m_basket.m_rim.center, m_ball.position);
 			ShootSimulation.Instance.Build(m_basket, m_ball);
 
-			m_editingShootSolution.m_vBounceRimAdjustment = IM.Vector3.ToIMVector3(m_vBounceRimAdjustment);
-			m_editingShootSolution.m_fBounceBackboard = IM.Number.ToIMNumber(m_fBounceBackboard);
+			m_editingShootSolution.m_vBounceRimAdjustment = IM.Vector3.FromUnity(m_vBounceRimAdjustment);
+			m_editingShootSolution.m_fBounceBackboard = IM.Number.FromUnity(m_fBounceBackboard);
 
-			if( !ShootSimulation.Instance.DoSimulate(m_iCurSector, IM.Vector3.ToIMVector3(m_vAngleAdjustment), IM.Number.ToIMNumber(m_fSpeed), ref m_editingShootSolution) )
+			if( !ShootSimulation.Instance.DoSimulate(m_iCurSector, IM.Vector3.FromUnity(m_vAngleAdjustment), IM.Number.FromUnity(m_fSpeed), ref m_editingShootSolution) )
 				return;
 			
 			m_shootSolutionKeys.Clear();
@@ -160,9 +160,9 @@ public class ShootSimulator : Editor
 			float fStep = 0.01f;
 			IM.Vector3 curPos;
 			
-			while( m_editingShootSolution.GetPosition(IM.Number.ToIMNumber(fTime), out curPos) )
+			while( m_editingShootSolution.GetPosition(IM.Number.FromUnity(fTime), out curPos) )
 			{
-				m_shootSolutionKeys.Add(curPos.ToUnity2());
+				m_shootSolutionKeys.Add((Vector3)curPos);
 				fTime += fStep;
 			}
 			

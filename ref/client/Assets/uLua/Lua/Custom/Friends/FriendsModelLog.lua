@@ -38,7 +38,7 @@ function FriendsModelLog:OnClose()
 	
 end
 
-function FriendsModelLog:setRegularData(reg)
+function FriendsModelLog:setqualifying_newerData(reg)
     self.uiLabNum.text = string.format(getCommonStr("STR_FRIENDS_NUM_SECOND1"), reg.race_times)
     if reg.race_times == 0 then
         self.uiLabWinPer.text = ""
@@ -48,7 +48,7 @@ function FriendsModelLog:setRegularData(reg)
     end
     self.uiLabTitle.text = getCommonStr("STR_REGULAR_MATCH")
 
-    self.uiBgIcon.spriteName = "tencent_routine"
+    self.uiBgIcon.spriteName = "tencent_ladder"
 end
 
 function FriendsModelLog:setRankingData(rank)
@@ -74,7 +74,7 @@ function FriendsModelLog:setLadderData(ladder)
     end
     self.uiLabTitle.text = getCommonStr("STR_LADDER_MATCH")
 
-    self.uiBgIcon.spriteName = "tencent_ladder"
+    self.uiBgIcon.spriteName = "tencent_routine"
 end
 
 return FriendsModelLog

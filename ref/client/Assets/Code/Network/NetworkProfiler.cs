@@ -11,7 +11,7 @@ public class NetworkProfiler
 
 
 	private NetworkConn 	m_server;
-	private GameUtils.Timer	m_timer;
+    private GameUtils.Timer4View m_timer;
 	private	uint			m_msgId = 0;
 	private double			m_curTime;
 
@@ -25,7 +25,7 @@ public class NetworkProfiler
 	public NetworkProfiler( NetworkConn server )
 	{
 		m_server = server;
-		m_timer = new GameUtils.Timer(IM.Number.one, _OnTimer);
+		m_timer = new GameUtils.Timer4View(1f, _OnTimer);
 		m_dataUsage = 0;
 	}
 
@@ -84,7 +84,7 @@ public class NetworkProfiler
 
 		m_curTime += fDeltaTime;
 		if( m_timer != null )
-			m_timer.Update(IM.Number.ToIMNumber(fDeltaTime));
+			m_timer.Update(fDeltaTime);
 	}
 
 	void _OnTimer()

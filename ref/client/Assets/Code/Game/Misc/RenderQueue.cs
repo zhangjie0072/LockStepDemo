@@ -1,4 +1,4 @@
-public static class RenderQueue
+public class RenderQueue
 {
 	public const int PlayGround = 2000;
 	// Mid-ground.

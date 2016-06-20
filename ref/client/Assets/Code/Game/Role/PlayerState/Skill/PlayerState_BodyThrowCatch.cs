@@ -39,64 +39,64 @@ public class PlayerState_BodyThrowCatch : PlayerState_Skill
 
 		bool bValid = false;
 
-		if( !m_player.m_bSimulator )
-		{
-			m_player.FaceTo( m_ball.position );
-			
-			m_dirThrow = GameUtils.HorizonalNormalized(m_ball.position, m_player.position);
+        m_player.FaceTo( m_ball.position );
+        
+        m_dirThrow = GameUtils.HorizonalNormalized(m_ball.position, m_player.position);
 
-			m_bSuccess = true;
+        m_bSuccess = true;
 
-			if( m_ball.m_picker != null )
-				m_bSuccess = false;
+        if( m_ball.m_picker != null )
+            m_bSuccess = false;
 
-			/*
-			Dictionary<string, PlayerAnimAttribute.AnimAttr> catches = m_player.m_animAttributes.m_catch;
-			PlayerAnimAttribute.AnimAttr catchAnim = catches[m_curAction];
-			PlayerAnimAttribute.KeyFrame catchFrame = catchAnim.GetKeyFrame("OnCatch");
-			if( catchFrame == null )
-				return;
-			AnimationClip catchClip = m_stateMachine.m_Animation[m_curAction].clip;
-			float fEventTime = catchFrame.frame / catchClip.frameRate;
-			Vector3 vBallPosWhenCatch;
-			m_player.GetAnimatedBonePosition(m_curAction, "ball", fEventTime, out vBallPosWhenCatch);
-			float fDistPlayer2Ball = GameUtils.HorizonalDistance(vBallPosWhenCatch, m_player.position);
-			*/
+        /*
+        Dictionary<string, PlayerAnimAttribute.AnimAttr> catches = m_player.m_animAttributes.m_catch;
+        PlayerAnimAttribute.AnimAttr catchAnim = catches[m_curAction];
+        PlayerAnimAttribute.KeyFrame catchFrame = catchAnim.GetKeyFrame("OnCatch");
+        if( catchFrame == null )
+            return;
+        AnimationClip catchClip = m_stateMachine.m_Animation[m_curAction].clip;
+        float fEventTime = catchFrame.frame / catchClip.frameRate;
+        Vector3 vBallPosWhenCatch;
+        m_player.GetAnimatedBonePosition(m_curAction, "ball", fEventTime, out vBallPosWhenCatch);
+        float fDistPlayer2Ball = GameUtils.HorizonalDistance(vBallPosWhenCatch, m_player.position);
+        */
 
-			Dictionary<string, uint> data = m_player.m_finalAttrs;
-			if( data == null )
-				Logger.LogError("Can not build player: " + m_player.m_name + " ,can not find state by id: " + m_player.m_id );
+        Dictionary<string, uint> data = m_player.m_finalAttrs;
+        if( data == null )
+            Logger.LogError("Can not build player: " + m_player.m_name + " ,can not find state by id: " + m_player.m_id );
 
-			IM.Number fDistCurPlayer2Ball = GameUtils.HorizonalDistance(m_ball.position, m_player.position);
-			IM.Number fMaxDist = GetMaxDistance(m_player);
-			Debugger.Instance.m_steamer.message = "Body throw catch: cur distance: " + fDistCurPlayer2Ball + " maxCatchDistance: " + fMaxDist;
-			if( fDistCurPlayer2Ball > fMaxDist )
-				m_bSuccess = false;
+        IM.Number fDistCurPlayer2Ball = GameUtils.HorizonalDistance(m_ball.position, m_player.position);
+        IM.Number fMaxDist = GetMaxDistance(m_player);
+        Debugger.Instance.m_steamer.message = "Body throw catch: cur distance: " + fDistCurPlayer2Ball + " maxCatchDistance: " + fMaxDist;
+        if( fDistCurPlayer2Ball > fMaxDist )
+            m_bSuccess = false;
 
-			if( m_ball.position.y > IM.Number.one)
-			{
-				m_bSuccess = false;
-				Debugger.Instance.m_steamer.message = "Body throw catch: Ball height: " + m_ball.transform.position.y + " higher than MaxHeight: " + 1.0f;
-			}
+        if( m_ball.position.y > IM.Number.one)
+        {
+            m_bSuccess = false;
+            Debugger.Instance.m_steamer.message = "Body throw catch: Ball height: " + m_ball.transform.position.y + " higher than MaxHeight: " + 1.0f;
+        }
 
-			bValid = m_bSuccess;
-			SkillSpec skillSpec = m_player.GetSkillSpecialAttribute(SkillSpecParam.eBodyThrowCatch_rate);
-            IM.Number fProb = skillSpec.value;
-			IM.Number fProbValue = IM.Random.value;
-			if( fProbValue > fProb )
-			{
-				m_bSuccess = false;
-				Debugger.Instance.m_steamer.message = "Body throw catch: Probability: " + fProb + " actual prob: " + fProbValue;
-			}
+        bValid = m_bSuccess;
+        SkillSpec skillSpec = m_player.GetSkillSpecialAttribute(SkillSpecParam.eBodyThrowCatch_rate);
+        IM.Number fProb = skillSpec.value;
+        IM.Number fProbValue = IM.Random.value;
+        if( fProbValue > fProb )
+        {
+            m_bSuccess = false;
+            Debugger.Instance.m_steamer.message = "Body throw catch: Probability: " + fProb + " actual prob: " + fProbValue;
+        }
 
-			m_vInitPos = m_ball.position;
-			m_vInitVelocity = m_dirThrow * new IM.Number(1,500);
-			m_vInitVelocity.y = IM.Number.two;
+        m_vInitPos = m_ball.position;
+        m_vInitVelocity = m_dirThrow * new IM.Number(1,500);
+        m_vInitVelocity.y = IM.Number.two;
 
-			GameMsgSender.SendBodyThrowCatch(m_player, m_bSuccess, m_curExecSkill, (Vector3)m_dirThrow, (Vector3)m_vInitPos, (Vector3)m_vInitVelocity, bValid);
-			if (m_bSuccess)
-				++m_player.mStatistics.data.success_body_throw_catch_times;
-		}
+        if (m_bSuccess)
+        {
+            m_player.GrabBall(m_ball);
+            m_player.eventHandler.NotifyAllListeners(PlayerActionEventHandler.AnimEvent.ePickupBall);
+            ++m_player.mStatistics.data.success_body_throw_catch_times;
+        }
 
 		m_player.animMgr.Play(m_curAction, true).rootMotion.Reset();
 

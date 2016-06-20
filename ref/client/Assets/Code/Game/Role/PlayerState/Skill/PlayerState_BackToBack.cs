@@ -38,35 +38,30 @@ public class PlayerState_BackToBack : PlayerState_Skill
 		m_player.animMgr.CrossFade(m_curAction, false);
 
 		m_player.m_stamina.m_bEnableRecover = false;
-		if( !m_player.m_bSimulator )
-			GameMsgSender.SendBackToBack(m_player, m_curExecSkill);
 	}
 
 	override public void Update (IM.Number fDeltaTime)
 	{
 		base.Update(fDeltaTime);
 
-		if( !m_player.m_bSimulator )
-		{
-			if (m_player.m_toSkillInstance == null)
-			{
-				m_stateMachine.SetState(PlayerState.State.eBackToStand);
-				return;
-			}
+        if (m_player.m_toSkillInstance == null)
+        {
+            m_stateMachine.SetState(PlayerState.State.eBackToStand);
+            return;
+        }
 
-			bool moving = false;
-			if (m_player.moveDirection != IM.Vector3.zero)
-			{
-				IM.Number angle = IM.Vector3.Angle(m_dirPlayerToBasket, m_player.moveDirection);
-                if (angle < new IM.Number(45) && GameUtils.HorizonalDistance(m_player.position, m_basket.m_vShootTarget) > IM.Number.half)
-					moving = true;
-			}
-			if( moving )
-			{
-				m_stateMachine.SetState(State.eBackToBackForward, true);
-				return;
-			}
-		}
+        bool moving = false;
+        if (m_player.moveDirection != IM.Vector3.zero)
+        {
+            IM.Number angle = IM.Vector3.Angle(m_dirPlayerToBasket, m_player.moveDirection);
+            if (angle < new IM.Number(45) && GameUtils.HorizonalDistance(m_player.position, m_basket.m_vShootTarget) > IM.Number.half)
+                moving = true;
+        }
+        if( moving )
+        {
+            m_stateMachine.SetState(State.eBackToBackForward, true);
+            return;
+        }
 	}
 
 	public override void OnExit ()

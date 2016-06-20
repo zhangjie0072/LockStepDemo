@@ -40,12 +40,8 @@ public class MatchStateTipOff_PVP: MatchStateTipOff
 			}
 		}
 		
-		double dSyncSrvTime = GameSystem.Instance.mNetworkManager.m_dServerTime;
 		foreach( Player player in GameSystem.Instance.mClient.mPlayerManager )
 		{
-			if( player.m_smcManager == null )
-				continue;
-			player.m_smcManager.Reset(dSyncSrvTime);
 			player.m_InfoVisualizer.SetActive(true);
 		}
         m_match.m_mainRole.ShowIndicator(Color.yellow, true);

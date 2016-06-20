@@ -25,7 +25,7 @@ public class Logger
 		}
 		set{
 			_EnableLog = value;
-			Debug.LogError("it's not suggested to set log switch!");
+			Debug.LogWarning("it's not suggested to set log switch!");
 		}
 	}
     static public bool EnableTimeTrace = false;

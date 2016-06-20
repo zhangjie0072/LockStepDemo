@@ -101,8 +101,8 @@ public class ShootSolutionEditor : EditorWindow
 				{
 					mDistanceCount = GameSystem.Instance.shootSolutionManager.m_DistanceList.Count;
 					mAngleCount = GameSystem.Instance.shootSolutionManager.m_AngleList.Count;
-					if( GameSystem.Instance.shootSolutionManager.m_AngleList.Count > 1 )
-						mDistanceStep = GameSystem.Instance.shootSolutionManager.m_DistanceList[0].ToUnity2();
+                    if (GameSystem.Instance.shootSolutionManager.m_AngleList.Count > 1)
+                        mDistanceStep = (float)GameSystem.Instance.shootSolutionManager.m_DistanceList[0];
 				}
 				ShootSimulator.instance.Repaint();
 				SceneView.RepaintAll();
@@ -132,11 +132,11 @@ public class ShootSolutionEditor : EditorWindow
 			{
 				GameSystem.Instance.shootSolutionManager.Reset();
 				for( int idx = 1; idx <= mDistanceCount; idx++ )
-					GameSystem.Instance.shootSolutionManager.m_DistanceList.Add(IM.Number.ToIMNumber(mDistanceStep) * idx);
+					GameSystem.Instance.shootSolutionManager.m_DistanceList.Add(IM.Number.FromUnity(mDistanceStep) * idx);
 
 				float angleStep = 180.0f / ( mAngleCount + 1 );
 				for( int idx = 1; idx <= mAngleCount; idx++ )
-					GameSystem.Instance.shootSolutionManager.m_AngleList.Add(IM.Number.ToIMNumber(angleStep) * idx);
+					GameSystem.Instance.shootSolutionManager.m_AngleList.Add(IM.Number.FromUnity(angleStep) * idx);
 
 				int iNumSector = (mDistanceCount + 1) * (mAngleCount + 1);
 				for( int idx = 0; idx < iNumSector; idx++)
@@ -301,14 +301,14 @@ public class ShootSolutionEditor : EditorWindow
 			Vector3 dirBall2BasketH = ((Vector3)mBasket.m_rim.center - mBall.transform.position).normalized;
 			dirBall2BasketH.y = 0.0f;
 
-			Vector3 dirInitVel = mCurSelectedSolution.m_vInitVel.normalized.ToUnity2();
+			Vector3 dirInitVel = (Vector3)mCurSelectedSolution.m_vInitVel.normalized;
 			Vector3 dirInitVelH = dirInitVel;
 			dirInitVelH.y = 0.0f;
 			ShootSimulator.instance.m_vAngleAdjustment.y = Vector3.Angle(dirInitVelH, dirInitVel);
 			ShootSimulator.instance.m_vAngleAdjustment.x = Vector3.Cross(dirInitVelH, dirBall2BasketH).y > 0.0f ? -Vector3.Angle(dirInitVelH, dirBall2BasketH) : Vector3.Angle(dirInitVelH, dirBall2BasketH);
-			ShootSimulator.instance.m_fSpeed = mCurSelectedSolution.m_vInitVel.magnitude.ToUnity2();
-			ShootSimulator.instance.m_fBounceBackboard = mCurSelectedSolution.m_fBounceBackboard.ToUnity2();
-			ShootSimulator.instance.m_vBounceRimAdjustment = mCurSelectedSolution.m_vBounceRimAdjustment.ToUnity2();
+			ShootSimulator.instance.m_fSpeed = (float)mCurSelectedSolution.m_vInitVel.magnitude;
+			ShootSimulator.instance.m_fBounceBackboard = (float)mCurSelectedSolution.m_fBounceBackboard;
+			ShootSimulator.instance.m_vBounceRimAdjustment = (Vector3)mCurSelectedSolution.m_vBounceRimAdjustment;
 
 			ShootSimulator.instance.Repaint();
 			SceneView.RepaintAll();
@@ -347,7 +347,7 @@ public class ShootSolutionEditor : EditorWindow
 			if( iCurveCnt == 0 )
 				return;
 			ShootSolution.SShootCurve curve = solution.m_ShootCurveList[iCurveCnt - 1];
-			Vector3 vPosHighest = curve.GetHighestPosition().ToUnity2();
+			Vector3 vPosHighest = (Vector3)curve.GetHighestPosition();
 
 			GUIStyle style = new GUIStyle();
 			style.normal.textColor = Color.red;
@@ -386,7 +386,7 @@ public class ShootSolutionEditor : EditorWindow
 		Handles.DrawLine(center, center + Vector3.right * radius);
 		for( int idx = 0; idx != iCount; idx++ )
 		{
-			float angle = GameSystem.Instance.shootSolutionManager.m_AngleList[idx].ToUnity2();
+			float angle = (float)GameSystem.Instance.shootSolutionManager.m_AngleList[idx];
 			Handles.DrawLine(center, center + Quaternion.AngleAxis(angle, Vector3.up) * Vector3.right * radius);
 		}
 		Handles.DrawLine(center, center - Vector3.right * radius);
@@ -394,7 +394,7 @@ public class ShootSolutionEditor : EditorWindow
 		iCount = GameSystem.Instance.shootSolutionManager.m_DistanceList.Count;
 		for( int idx = 0; idx != iCount; idx++ )
 		{
-			float distance = GameSystem.Instance.shootSolutionManager.m_DistanceList[idx].ToUnity2();
+			float distance = (float)GameSystem.Instance.shootSolutionManager.m_DistanceList[idx];
 			Handles.DrawWireArc(center, Vector3.up, Vector3.right, 180.0f, distance);
 		}
 	}
@@ -412,7 +412,7 @@ public class ShootSolutionEditor : EditorWindow
 
 		while( mBall.m_shootSolution.GetPosition(fTime, out curPos) )
 		{
-			m_shootCurveKeys.Add(curPos.ToUnity2());
+			m_shootCurveKeys.Add((Vector3)curPos);
 			fTime += fStep;
 		}
 	}

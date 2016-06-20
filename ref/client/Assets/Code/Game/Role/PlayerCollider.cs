@@ -19,8 +19,6 @@ public class PlayerCollider
 
 	public void Update(IM.Number fDeltaTime)
 	{
-		if (m_Owner.m_bSimulator)
-			return;
 		PlayerManager pm = GameSystem.Instance.mClient.mPlayerManager;
 		foreach( Player player in pm )
 		{

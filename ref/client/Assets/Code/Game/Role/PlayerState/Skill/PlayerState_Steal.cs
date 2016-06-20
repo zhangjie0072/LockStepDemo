@@ -44,27 +44,23 @@ public class PlayerState_Steal : PlayerState_Skill
 	{
 		base.OnEnter(lastState);
 
-		if( !m_player.m_bSimulator )
-		{
-			stealTarget = null;
-			ratio = IM.Number.zero;
+        stealTarget = null;
+        ratio = IM.Number.zero;
 
-			if (m_ball != null)
-				m_player.FaceTo(m_ball.position);
+        if (m_ball != null)
+            m_player.FaceTo(m_ball.position);
 
-			bool bValid;
-			m_success = _StealBall(out bValid);
-			if( m_success )
-			{
-				SkillSpec stealSkill = m_player.GetSkillSpecialAttribute(SkillSpecParam.eSteal_get_ball_rate);
-				m_bGetBall = IM.Random.value < stealSkill.value;
-			}
+        bool bValid;
+        m_success = _StealBall(out bValid);
+        if( m_success )
+        {
+            SkillSpec stealSkill = m_player.GetSkillSpecialAttribute(SkillSpecParam.eSteal_get_ball_rate);
+            m_bGetBall = IM.Random.value < stealSkill.value;
+        }
 
-			GameMsgSender.SendSteal(m_player, stealTarget, m_curExecSkill, m_bGetBall, bValid);
-			++m_player.mStatistics.data.steal_times;
-			if (bValid)
-				++m_player.mStatistics.data.valid_steal_times;
-		}
+        ++m_player.mStatistics.data.steal_times;
+        if (bValid)
+            ++m_player.mStatistics.data.valid_steal_times;
 
 		//m_curAction = m_mapAnimType[m_animType];
 		m_player.animMgr.Play(m_curAction, true).rootMotion.Reset();
@@ -74,23 +70,19 @@ public class PlayerState_Steal : PlayerState_Skill
 
 	public void OnSteal()
 	{
-		if( !m_player.m_bSimulator )
-		{
-			if( m_success )
-			{
-				if(!m_bGetBall)
-				{
-					stealTarget.m_lostBallContext.vInitPos 	 = m_ball.position;
-                    stealTarget.m_lostBallContext.vInitPos.y = IM.Math.Max(m_ball.position.y, m_player.position.y + new IM.Number(0,300));
-                    stealTarget.m_lostBallContext.vInitPos = m_player.right.normalized;
-				}
+        if( m_success )
+        {
+            if(!m_bGetBall)
+            {
+                stealTarget.m_lostBallContext.vInitPos 	 = m_ball.position;
+                stealTarget.m_lostBallContext.vInitPos.y = IM.Math.Max(m_ball.position.y, m_player.position.y + new IM.Number(0,300));
+                stealTarget.m_lostBallContext.vInitPos = m_player.right.normalized;
+            }
 
-				GameMsgSender.SendStolen(m_player, stealTarget, !m_bGetBall, stealTarget.m_lostBallContext.vInitPos.ToUnity2(), stealTarget.m_lostBallContext.vInitVel.ToUnity2());
-				PlayerState_Stolen stolen = stealTarget.m_StateMachine.GetState(State.eStolen) as PlayerState_Stolen;
-				stolen.m_bLostBall = !m_bGetBall;
-				stealTarget.m_StateMachine.SetState(stolen);
-			}
-		}
+            PlayerState_Stolen stolen = stealTarget.m_StateMachine.GetState(State.eStolen) as PlayerState_Stolen;
+            stolen.m_bLostBall = !m_bGetBall;
+            stealTarget.m_StateMachine.SetState(stolen);
+        }
 
 		/*
 		if(m_bGetBall)

@@ -44,9 +44,6 @@ public class PlayerState_Stand:  PlayerState
 		m_player.m_curInputDir = -1;
 
 		m_player.m_moveType = MoveType.eMT_Stand;
-		
-		if( !m_player.m_bSimulator )
-			GameMsgSender.SendStand(m_player);
 	}
 
 	protected virtual string DetermineAction()

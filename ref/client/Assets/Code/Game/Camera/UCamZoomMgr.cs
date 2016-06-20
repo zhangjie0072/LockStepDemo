@@ -35,8 +35,8 @@ public class UCamZoomMgr : MonoBehaviour
 	private float		m_fZSpeed;
 
 	private ZoomParam 	m_curZoomParam;
-	private GameUtils.Timer		m_timerDelay;
-	private GameUtils.Timer		m_timerStay;
+    private GameUtils.Timer4View m_timerDelay;
+    private GameUtils.Timer4View m_timerStay;
 
 	public void Awake()
 	{
@@ -53,7 +53,7 @@ public class UCamZoomMgr : MonoBehaviour
 			m_timerDelay.stop = true;
 			m_timerDelay.Reset();
 		}
-		m_timerDelay = new GameUtils.Timer(IM.Number.ToIMNumber(m_curZoomParam.m_fTimeDelay), Init, 1);
+		m_timerDelay = new GameUtils.Timer4View(m_curZoomParam.m_fTimeDelay, Init, 1);
 	}
 
 	public void ReleaseZoom()
@@ -72,7 +72,7 @@ public class UCamZoomMgr : MonoBehaviour
 			m_timerStay.stop = true;
 			m_timerStay.Reset();
 		}
-		m_timerStay = new GameUtils.Timer(IM.Number.ToIMNumber(m_curZoomParam.m_fTimeZoomStay), ReleaseZoom, 1);
+		m_timerStay = new GameUtils.Timer4View(m_curZoomParam.m_fTimeZoomStay, ReleaseZoom, 1);
 
 		float fDistToMoveZ = Mathf.Abs(m_zoomTarget.position.z - m_curZoomParam.m_fZDistToTarget - transform.position.z);
 
@@ -88,7 +88,7 @@ public class UCamZoomMgr : MonoBehaviour
 	void Update()
 	{
 		if( m_timerDelay != null )
-			m_timerDelay.Update(IM.Number.ToIMNumber(Time.deltaTime));
+			m_timerDelay.Update(Time.deltaTime);
 	}
 	
 	public void OnUpdate (float fDeltaTime) 
@@ -97,7 +97,7 @@ public class UCamZoomMgr : MonoBehaviour
 			return;
 
 		if( m_timerStay != null )
-			m_timerStay.Update(IM.Number.ToIMNumber(fDeltaTime));
+			m_timerStay.Update(fDeltaTime);
 
 		float fZPosition = transform.position.z;
 		float fDistToMoveZ = m_zoomTarget.position.z - m_curZoomParam.m_fZDistToTarget - transform.position.z;

@@ -16,7 +16,6 @@ public class GameMsgHandler
 		RegisterHandler(MsgID.EndGuideRespID, 		GuideSystem.Instance.EndGuideHandler);
 		RegisterHandler(MsgID.HeartbeatID, 			HeartbeatHandle);
 		RegisterHandler(MsgID.GameBeginRespID,		HandleGameBegin);
-		RegisterHandler(MsgID.GameMsgID, 			OnGameMsg);
 		RegisterHandler(MsgID.TeamMateStateChangeID, 			OnTeamMateStateChange);
     }
 
@@ -71,41 +70,6 @@ public class GameMsgHandler
 		}
 	}
 	
-	private void OnGameMsg(Pack pack)
-	{
-		GameMsg msg = Serializer.Deserialize<GameMsg>(new MemoryStream(pack.buffer));
-		//GameSystem.Instance.mClient.mCurMatch.AddGameMsg(msg);
-		List<Player> players = GameSystem.Instance.mClient.mPlayerManager.m_Players;
-        //if( Application.isEditor)
-        //{
-        //    Logger.Log("game msg: sender: " + msg.senderID + " state: " + msg.eState + " action type: " + msg.eStateType);
-        //}
-		Player sender = players.Find( (Player player)=>{ return player.m_roomPosId == msg.senderID; } );
-		GameMatch match = GameSystem.Instance.mClient.mCurMatch;
-		if(match == null || match.m_stateMachine == null || match.m_stateMachine.m_curState == null)
-			return;
-		 
-		if( sender == null && 
-		   (match.m_config.type == GameMatch.Type.ePVP_1PLUS || match.m_config.type == GameMatch.Type.ePVP_3On3)
-		   )
-		{
-			Logger.LogError("Can not find sender: " + msg.senderID + " for command: " + msg.eState);
-			return;
-		}
-		{
-			SimulateCommand cmd = match.GetSmcCommandByGameMsg(sender, msg);
-			if( cmd != null && sender.m_smcManager != null)
-			{
-				//NetworkManager nm = GameSystem.Instance.mNetworkManager;
-                //if( Application.isEditor)
-                //{
-                //    Logger.Log("Command: " + cmd.m_state + " time consume: " + string.Format("{0:f4}", GameSystem.Instance.mNetworkManager.m_dServerTime + (Time.time - nm.m_dLocalTime) - msg.curTime));
-                //}
-				sender.m_smcManager.AddCommand(cmd);
-			}
-		}
-	}
-
 	private void OnTeamMateStateChange(Pack pack)
 	{
 		TeamMateStateChange msg = Serializer.Deserialize<TeamMateStateChange>(new MemoryStream(pack.buffer));
@@ -308,182 +272,14 @@ public class VirtualGameMsgHandler
 
 	private Dictionary<UBasketball, Player>		m_mapToPickupBall = new Dictionary<UBasketball, Player>();
 
-	ReboundHelper reboundHelper = new ReboundHelper();
-
 	public VirtualGameMsgHandler()
 	{
 		m_strId = "vgs";
 		 
-		RegisterHandler(MsgID.StandID, 			DummyHandler);
-		RegisterHandler(MsgID.MoveID, 			CovertToGameMsg);
-		RegisterHandler(MsgID.StolenID,			CovertToGameMsg);
-		RegisterHandler(MsgID.CrossOverID,		DummyHandler);
-		RegisterHandler(MsgID.AttackID,			CovertToGameMsg);
-		RegisterHandler(MsgID.PrepareToShootID,	DummyHandler);
-		RegisterHandler(MsgID.DownID,			DummyHandler);
-		RegisterHandler(MsgID.InputID,			DummyHandler);
-
-		RegisterHandler(MsgID.BackToBackID,		CovertToGameMsg);
-		RegisterHandler(MsgID.BackBlockID,		CovertToGameMsg);
-		RegisterHandler(MsgID.BackToStandID,	CovertToGameMsg);
-		RegisterHandler(MsgID.BackCompeteID,	CovertToGameMsg);
-		RegisterHandler(MsgID.BackTurnRunID,	CovertToGameMsg);
-
-		RegisterHandler(MsgID.ReboundID,		CovertToGameMsg);
-		RegisterHandler(MsgID.BodyThrowCatchID,	CovertToGameMsg);
-		RegisterHandler(MsgID.RequireBallID,	CovertToGameMsg);
-		RegisterHandler(MsgID.CutInID,			CovertToGameMsg);
-
-		RegisterHandler(MsgID.PickBallID,		CovertToGameMsg);
-
 		RegisterHandler(MsgID.InstructionReqID, GameMatch.HandleBroadcast);
         RegisterHandler(MsgID.ClientInputID, HandleClientInput);
         RegisterHandler(MsgID.FrameInfoID, HandleNewTurn);
         RegisterHandler(MsgID.GameBeginReqID, HandleGameBeginReq);
-	}
-
-	void DummyHandler(Pack pack)
-	{
-		//Logger.Log("dummy handler.");
-	}
-
-	public override void Update()
-	{
-		base.Update();
-		reboundHelper.Update();
-	}
-
-	void CovertToGameMsg(Pack pack)
-	{
-		GameMatch match = GameSystem.Instance.mClient.mCurMatch;
-		UBasketball ball = match.mCurScene.mBall;
-		GameMsg msg = new GameMsg();
-		msg.curTime = float.MinValue;
-		if( pack.MessageID == (uint)MsgID.PickBallID )
-		{
-			PickBall pickBall = Serializer.Deserialize<PickBall>(new MemoryStream(pack.buffer));
-			msg.senderID 	= pickBall.char_id;
-			msg.eStateType  = pickBall.actionType;
-			msg.pos 		= pickBall.pos;
-			msg.rotate		= pickBall.rotate;
-			msg.eState 		= CharacterState.ePickup;
-			msg.ballId		= pickBall.ball_id;
-
-			//Logger.Log("Handle msg: PickBall. Player Id: " + pickBall.char_id); 
-
-			Player playerToPickup = GameSystem.Instance.mClient.mPlayerManager.m_Players.Find( (Player player)=>{ return player.m_roomPosId == pickBall.char_id; });
-			ball = match.mCurScene.balls.Find((UBasketball inBall)=>{return inBall.m_id == pickBall.ball_id;});
-			if( ball == null )
-			{
-				Logger.Log("Can not find ball id: " + pickBall.ball_id);
-				return;
-			}
-
-			if(ball != null)
-			{
-				if( ball.m_owner != null )
-					msg.nSuccess = 0;
-				else if( ball.m_picker == null )
-				{
-					msg.nSuccess = 1;
-					ball.m_picker = playerToPickup;
-				}
-				else
-				{
-					if( ball.m_picker == playerToPickup )
-						msg.nSuccess = 1;
-					else
-						msg.nSuccess = 0;
-				}
-			}
-			else
-				msg.nSuccess = 0;
-
-			if( msg.nSuccess == 0 )
-				Logger.Log("Player: " + playerToPickup.m_id + " pickup failed.");
-			else
-				Logger.Log("Player: " + playerToPickup.m_id + " pickup success.");
-
-			SimulateCommand cmd = match.GetSmcCommandByGameMsg(playerToPickup, msg);
-			if( cmd != null && playerToPickup.m_smcManager != null )
-				playerToPickup.m_smcManager.AddCommand(cmd);
-		}
-		else if( pack.MessageID == (uint)MsgID.ReboundID )
-		{
-			Logger.Log("handle rebound.");
-
-			Rebound rebound = Serializer.Deserialize<Rebound>(new MemoryStream(pack.buffer));
-			if (rebound.success == 1)
-				reboundHelper.AddRebounder(rebound);
-
-			//Player playerToRebound = GameSystem.Instance.mClient.mPlayerManager.m_Players.Find( (Player player)=>{ return player.m_roomPosId == rebound.char_id; });
-			//ball = match.mCurScene.mBall;
-			//if(ball != null && msg.nSuccess == 1)
-			//{
-			//	if( ball.m_owner != null )
-			//		msg.nSuccess = 0;
-			//	else if( ball.m_picker == null )
-			//	{
-			//		msg.nSuccess = 1;
-			//		ball.m_picker = playerToRebound;
-			//	}
-			//	else
-			//	{
-			//		if( ball.m_picker == playerToRebound )
-			//			msg.nSuccess = 1;
-			//		else
-			//			msg.nSuccess = 0;
-			//	}
-			//}
-			//else
-			//	msg.nSuccess = 0;
-			//if( msg.nSuccess == 0 )
-			//	Logger.Log("Player: " + playerToRebound.m_id + " rebound failed.");
-			//else
-			//	Logger.Log("Player: " + playerToRebound.m_id + " rebound success.");
-		}
-		else if( pack.MessageID == (uint)MsgID.BodyThrowCatchID )
-		{
-			BodyThrowCatch bodyThrowCatch = Serializer.Deserialize<BodyThrowCatch>(new MemoryStream(pack.buffer));
-			msg.senderID 	= bodyThrowCatch.char_id;
-			msg.eStateType  = bodyThrowCatch.actionType;
-			msg.pos 		= bodyThrowCatch.pos;
-			msg.rotate		= bodyThrowCatch.rotate;
-			msg.eState 		= CharacterState.eBodyThrowCatch;
-			msg.velocity	= bodyThrowCatch.velocity;
-			msg.nSuccess	= bodyThrowCatch.success;
-			
-			Player playerToAct = GameSystem.Instance.mClient.mPlayerManager.m_Players.Find( (Player player)=>{ return player.m_roomPosId == bodyThrowCatch.char_id; });
-			ball = match.mCurScene.mBall;
-			if(ball != null && msg.nSuccess == 1 )
-			{
-				if( ball.m_owner != null )
-					msg.nSuccess = 0;
-				else if( ball.m_picker == null )
-				{
-					msg.nSuccess = 1;
-					ball.m_picker = playerToAct;
-				}
-				else
-				{
-					if( ball.m_picker == playerToAct )
-						msg.nSuccess = 1;
-					else
-						msg.nSuccess = 0;
-				}
-			}
-			else
-				msg.nSuccess = 0;
-			
-			if( msg.nSuccess == 0 )
-				Logger.Log("Player: " + playerToAct.m_id + " body throw catch failed.");
-			else
-				Logger.Log("Player: " + playerToAct.m_id + " body throw catch success.");
-
-			SimulateCommand cmd = match.GetSmcCommandByGameMsg(playerToAct, msg);
-			if( cmd != null && playerToAct.m_smcManager != null )
-				playerToAct.m_smcManager.AddCommand(cmd);
-		}
 	}
 
     //For virtual game server

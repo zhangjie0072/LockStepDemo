@@ -40,7 +40,7 @@ public class ScrollViewAsyncLoadItem : MonoBehaviour
             if (OnCreateItem == null)
             {
                 break;
-            }
+            }          
 
             //调用回调函数中的逻辑，填充控件内容
             GameObject item = OnCreateItem(index, grid.transform);

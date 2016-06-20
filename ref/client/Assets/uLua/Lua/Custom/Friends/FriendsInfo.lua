@@ -24,7 +24,7 @@ FriendsInfo =  {
     uiLabCorps,
 
     --match info
-    uiRegularMatchGO,
+    uiqualifying_newerMatchGO,
     uiRankingMatchGO,
     uiLadderMatchGO,
     uiGridMatch,
@@ -48,7 +48,7 @@ function FriendsInfo:Awake()
     self.uiBtnClose = createUI('ButtonClose', self.transform:FindChild('Window/Top/ButtonClose'))
 
     self.match_data = { }
-    self.regular_data = { }
+    self.qualifying_newer_data = { }
 
     self.uiLeft = {}
     self.uiLeft[1] = getComponentInChild(self.transform, "Window/Left/TogBase", 'UIToggle')
@@ -77,13 +77,13 @@ function FriendsInfo:Awake()
 
     --match
     local modellogGrid = getComponentInChild(self.uiRight[2].transform, "modellogGrid", "UIGrid")
-    self.uiRegularMatchGO = createUI("FriendsModelLog", modellogGrid.transform)
-    self.uiRegularMatchGO.name = "uiRegularMatchGO"
+    self.uiqualifying_newerMatchGO = createUI("FriendsModelLog", modellogGrid.transform)
+    self.uiqualifying_newerMatchGO.name = "uiqualifying_newerMatchGO"
     self.uiRankingMatchGO = createUI("FriendsModelLog", modellogGrid.transform)
     self.uiRankingMatchGO.name = "uiRankingMatchGO"
     self.uiLadderMatchGO = createUI("FriendsModelLog", modellogGrid.transform)
     self.uiLadderMatchGO.name = "uiLadderMatchGO"
-    NGUITools.SetActive(self.uiRegularMatchGO, true)
+    NGUITools.SetActive(self.uiqualifying_newerMatchGO, true)
     NGUITools.SetActive(self.uiRankingMatchGO, true)
     NGUITools.SetActive(self.uiLadderMatchGO, true)
     modellogGrid:Reposition()
@@ -131,11 +131,11 @@ function FriendsInfo:Start()
 
     self.uiGridHotRole.onInitializeItem = self:OnUpdateHotRoleItem()
 
-    local regularTog = self.uiRegularMatchGO:GetComponent("UIToggle")
+    local qualifying_newerTog = self.uiqualifying_newerMatchGO:GetComponent("UIToggle")
     local rankTog = self.uiRankingMatchGO:GetComponent("UIToggle")
     local ladderTog = self.uiLadderMatchGO:GetComponent("UIToggle")
-    regularTog.value = true
-    EventDelegate.Add(regularTog.onChange, LuaHelper.Callback(self:onMatchTypeChange()))
+    qualifying_newerTog.value = true
+    EventDelegate.Add(qualifying_newerTog.onChange, LuaHelper.Callback(self:onMatchTypeChange()))
     EventDelegate.Add(rankTog.onChange, LuaHelper.Callback(self:onMatchTypeChange()))
     EventDelegate.Add(ladderTog.onChange, LuaHelper.Callback(self:onMatchTypeChange()))
 
@@ -197,8 +197,8 @@ end
 function FriendsInfo:onMatchTypeChange()
     return function()
         if UIToggle.current.value then
-            if UIToggle.current.name == self.uiRegularMatchGO.name then
-                self:RefreshMatchList(self.match_data['regular'])
+            if UIToggle.current.name == self.uiqualifying_newerMatchGO.name then
+                self:RefreshMatchList(self.match_data['qualifying_newer'])
             elseif UIToggle.current.name == self.uiRankingMatchGO.name then
                 self:RefreshMatchList(self.match_data['ranking'])
             elseif UIToggle.current.name == self.uiLadderMatchGO.name then
@@ -241,10 +241,12 @@ function FriendsInfo:setData(resp) --QueryFriendInfoResp
     else
         self.uiLabCorps.text = resp.team_name
     end
-
+    warning('ladder '..resp.pvp_ladder_score)
     local ladderLv = GameSystem.Instance.ladderConfig:GetLevelByScore(resp.pvp_ladder_score)
-    self.uiLadderIcon.spriteName = ladderLv.iconSmall
-    self.uiLadderLabel.text = ladderLv.name
+    if ladderLv then 
+        self.uiLadderIcon.spriteName = ladderLv.iconSmall
+        self.uiLadderLabel.text = ladderLv.name
+    end
 
     local grade = GameSystem.Instance.qualifyingNewConfig:GetGrade(resp.qualifying_new.score)
 
@@ -252,18 +254,18 @@ function FriendsInfo:setData(resp) --QueryFriendInfoResp
     self.uiQualifyingName.text = grade.title
 
     --对战资料
-    local reg_script = getLuaComponent(self.uiRegularMatchGO)
-    reg_script:setRegularData(resp.regular)
+    local reg_script = getLuaComponent(self.uiqualifying_newerMatchGO)
+    reg_script:setqualifying_newerData(resp.qualifying_newer)
     local rank_script = getLuaComponent(self.uiRankingMatchGO)
     rank_script:setRankingData(resp.qualifying_new)
     local ladder_script = getLuaComponent(self.uiLadderMatchGO)
     ladder_script:setLadderData(resp.pvp_ladder)
 
-    self.match_data['regular'] = self:MakeRegularTable(resp.regular, 'regular')
-    self.match_data['ranking'] = self:MakeRegularTable(resp.qualifying_new, 'ranking')
-    self.match_data['ladder'] = self:MakeRegularTable(resp.pvp_ladder, 'ladder')
+    self.match_data['qualifying_newer'] = self:Makequalifying_newerTable(resp.qualifying_newer, 'qualifying_newer')
+    self.match_data['ranking'] = self:Makequalifying_newerTable(resp.qualifying_new, 'ranking')
+    self.match_data['ladder'] = self:Makequalifying_newerTable(resp.pvp_ladder, 'ladder')
 
-    self:RefreshMatchList(self.match_data['regular'])
+    self:RefreshMatchList(self.match_data['qualifying_newer'])
 
     --常用球员
     self.role_data = resp.role_data
@@ -274,10 +276,10 @@ end
 --     return a.num < b.num
 -- end
 
-function FriendsInfo:MakeRegularTable(match, match_type)
+function FriendsInfo:Makequalifying_newerTable(match, match_type)
     local datas = {}
 
-    if match_type == 'ladder' then
+    if match_type == 'ladder' or match_type == 'qualifying_newer' then
         table.insert(datas, { ['str'] = getCommonStr("STR_FRIENDS_MVP_TIEMS"),          ['num'] = match.mvp_times           ,['icon'] = 'tencent_info_02'})         --MVP次数
     end
 
@@ -345,7 +347,7 @@ function FriendsInfo:OnUpdateHotRoleItem()
     return function(obj, index, realIndex)
         local i = math.abs(realIndex) + 1
 
-        if self.role_data == nil then
+        if not self.role_data then
             do return end
         end
 

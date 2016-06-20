@@ -42,38 +42,34 @@ public class PlayerState_Catch: PlayerState
 			if( requireBallState.m_animType == AnimType.N_TYPE_1 )
 				bRunning = true;
 		}
-		if( !m_player.m_bSimulator )
-		{
-			m_animType = AnimType.N_TYPE_0;
 
-			if( m_player.m_catchHelper.catchType == CatchHelper.CatchType.eChestCatch )
-			{
-				if( bRunning )
-					m_animType = AnimType.N_TYPE_1;
-				else
-					m_animType = AnimType.N_TYPE_0;
-			}
-			else if( m_player.m_catchHelper.catchType == CatchHelper.CatchType.eRightCatch )
-			{
-				if( bRunning )
-					m_animType = AnimType.N_TYPE_2;
-				else
-					m_animType = AnimType.N_TYPE_3;
-			}
-			else if( m_player.m_catchHelper.catchType == CatchHelper.CatchType.eMissCatch )
-			{
-				if( bRunning )
-					m_animType = AnimType.N_TYPE_4;
-				else
-					m_animType = AnimType.N_TYPE_3;
-			}
-			if(!bRunning)
-				m_player.FaceTo(m_ball.position);
-			else
-				m_isRunning = true;
+        m_animType = AnimType.N_TYPE_0;
 
-			GameMsgSender.SendCatch(m_player, m_curExecSkill, m_animType);
-		}
+        if( m_player.m_catchHelper.catchType == CatchHelper.CatchType.eChestCatch )
+        {
+            if( bRunning )
+                m_animType = AnimType.N_TYPE_1;
+            else
+                m_animType = AnimType.N_TYPE_0;
+        }
+        else if( m_player.m_catchHelper.catchType == CatchHelper.CatchType.eRightCatch )
+        {
+            if( bRunning )
+                m_animType = AnimType.N_TYPE_2;
+            else
+                m_animType = AnimType.N_TYPE_3;
+        }
+        else if( m_player.m_catchHelper.catchType == CatchHelper.CatchType.eMissCatch )
+        {
+            if( bRunning )
+                m_animType = AnimType.N_TYPE_4;
+            else
+                m_animType = AnimType.N_TYPE_3;
+        }
+        if(!bRunning)
+            m_player.FaceTo(m_ball.position);
+        else
+            m_isRunning = true;
 
 		m_isRunning = bRunning;
 		m_curAction = m_mapAnimType[m_animType];

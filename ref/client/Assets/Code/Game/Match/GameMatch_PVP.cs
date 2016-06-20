@@ -146,11 +146,6 @@ public class GameMatch_PVP
             player.m_aiMgr.m_enable = false;
             player.m_aiMgr = null;
 
-			if( m_config.type == Type.ePVP_3On3 )
-				player.m_bSimulator = (player != m_mainRole);
-			else
-				player.m_bSimulator = (player.m_team != m_mainTeam);
-
             player.DropBall(mCurScene.mBall);
 
             Logger.Log("1927 - reset player's AI player player.m_roleInfo.id=" + 
@@ -387,12 +382,6 @@ public class GameMatch_PVP
 					player.m_aiMgr.m_enable = true;
 				}
 			}
-
-			if( m_config.type == Type.ePVP_3On3 )
-				player.m_bSimulator = (player != m_mainRole);
-			else
-				player.m_bSimulator = (player.m_team != m_mainTeam);
-
 		}
 
 		if( m_config.type == Type.ePVP_3On3 )

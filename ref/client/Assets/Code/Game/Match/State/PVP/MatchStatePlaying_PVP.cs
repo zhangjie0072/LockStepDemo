@@ -70,8 +70,6 @@ public class MatchStatePlaying_PVP : MatchStatePlaying, GameMatch.Count24Listene
 				player.m_aiMgr.IsPvp = true;
 			}
 
-			player.m_bSimulator = false;
-
 			if( !player.m_aiMgr.m_enable )
 				player.m_aiMgr.m_enable = true;
 

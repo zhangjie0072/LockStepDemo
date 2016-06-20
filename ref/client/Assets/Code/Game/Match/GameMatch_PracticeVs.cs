@@ -91,20 +91,25 @@ public class GameMatch_PracticeVs
 		//_CreateGUI();
         //m_uiMatch.VisibleScoreBoardUI(false);
         m_mainTeam = m_mainRole.m_team;
-        if (m_config.needPlayPlot)
-        {
-            m_stateMachine.SetState(MatchState.State.ePlotBegin);
-        }
-        else
-        {
-			m_stateMachine.SetState(MatchState.State.eOpening);
-        }
+      
         //m_stateMachine.SetState(MatchState.State.eBegin);
 
        // mCurScene.mBasket.onGoal = OnGoal;
-        initDone = true;
 	}
+	protected override void OnLoadingComplete ()
+	{
+		base.OnLoadingComplete ();
+		initDone = true;
 
+		if (m_config.needPlayPlot)
+		{
+			m_stateMachine.SetState(MatchState.State.ePlotBegin);
+		}
+		else
+		{
+			m_stateMachine.SetState(MatchState.State.eOpening);
+		}
+	}
     public override void HandleGameBegin(Pack pack)
     {
         m_stateMachine.SetState(MatchState.State.eTipOff);

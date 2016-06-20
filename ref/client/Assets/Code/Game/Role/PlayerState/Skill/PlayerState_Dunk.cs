@@ -140,9 +140,6 @@ public class PlayerState_Dunk : PlayerState_Skill
 
 		m_player.animMgr.Play(m_curAction, !m_bMoving);
 
-		if( !m_player.m_bSimulator )
-			GameMsgSender.SendDunk(m_player, m_curExecSkill, m_skillArea);
-
 		bool defended = m_player.IsDefended();
 		if (m_skillArea == Area.eNear)
 		{
@@ -294,7 +291,7 @@ public class PlayerState_Dunk : PlayerState_Skill
         m_turningSpeed = IM.Number.zero;
 		m_bRateFixed = true;
 
-		if( !m_player.m_bSimulator && m_player.m_bWithBall )
+		if(m_player.m_bWithBall )
 		{
 			IM.Number prob = IM.Random.value;
 			m_dunkRate = m_match.AdjustShootRate(m_player, m_dunkRate);
@@ -351,7 +348,6 @@ public class PlayerState_Dunk : PlayerState_Skill
 				}
 			}
 
-            GameMsgSender.SendDunkShoot(m_player, uBallId, (float)m_dunkRate, m_skillArea, bGoal, (Vector3)m_basket.m_vShootTarget, (Vector3)vBallVel, bOpen);
 			m_player.mStatistics.SkillUsageSuccess(m_curExecSkill.skill.id, bGoal);
 			
 			curBall.OnDunk(bGoal, vBallVel, m_basket.m_vShootTarget, m_player);

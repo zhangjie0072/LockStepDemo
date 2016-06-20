@@ -89,18 +89,23 @@ public class GameMatch_LadderAI
         
 		m_mainTeam = m_mainRole.m_team;
 
-        if (m_config.needPlayPlot)
-        {
-            m_stateMachine.SetState(MatchState.State.ePlotBegin);
-        }
-        else
-        {
-			m_stateMachine.SetState(MatchState.State.eOpening);
-        }
-
-		initDone = true;
 		m_needTipOff = true;
     }
+
+	protected override void OnLoadingComplete ()
+	{
+		base.OnLoadingComplete ();
+		initDone = true;
+
+		if (m_config.needPlayPlot)
+		{
+			m_stateMachine.SetState(MatchState.State.ePlotBegin);
+		}
+		else
+		{
+			m_stateMachine.SetState(MatchState.State.eOpening);
+		}
+	}
 
     public override void HandleGameBegin(Pack pack)
     {

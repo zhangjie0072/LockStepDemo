@@ -88,29 +88,13 @@ namespace IM
             this.z = z;
         }
 
-#if IM_UNITY_COMPATIBLE
-        public Vector3(UnityEngine.Vector3 vec)
+#if UNITY_EDITOR
+        public static Vector3 FromUnity(UnityEngine.Vector3 vec)
         {
-            x = new Number(vec.x);
-            y = new Number(vec.y);
-            z = new Number(vec.z);
-        }
-        public UnityEngine.Vector3 ToUnity()
-        {
-            return (UnityEngine.Vector3)this;
-        }
-#endif
-#if IM_UNITY_COMPATIBLE2
-        public static Vector3 ToIMVector3(UnityEngine.Vector3 vec)
-        {
-            Number x = Number.ToIMNumber(vec.x);
-            Number y = Number.ToIMNumber(vec.y);
-            Number z = Number.ToIMNumber(vec.z);
+            Number x = Number.FromUnity(vec.x);
+            Number y = Number.FromUnity(vec.y);
+            Number z = Number.FromUnity(vec.z);
             return new Vector3(x,y,z);
-        }
-        public UnityEngine.Vector3 ToUnity2()
-        {
-            return (UnityEngine.Vector3)this;
         }
 #endif
 

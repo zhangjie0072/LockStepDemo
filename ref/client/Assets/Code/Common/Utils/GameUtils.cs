@@ -41,17 +41,6 @@ public class GameUtils{
 		return vec.magnitude; 
 	}
 
-    //static public Vector3 Convert(SVector3 val)
-    //{
-    //    return new Vector3((float)val.x, (float)val.y, (float)val.z);
-    //}
-
-    static public IM.Vector3 Convert(SVector3 val)
-    {
-        return new IM.Vector3(IM.Number.ToIMNumber((float)val.x), IM.Number.ToIMNumber((float)val.y), IM.Number.ToIMNumber((float)val.z));
-    }
-
-
 	static public SVector3 Convert(Vector3 val)
 	{
 		SVector3 ret = new SVector3();
@@ -163,7 +152,14 @@ public class GameUtils{
  
         return null;
 	}
-	
+
+	static public void SetRenderQueue( GameObject go, int renderQueue)
+	{
+		Renderer[] renderers = go.GetComponentsInChildren<Renderer>();
+		foreach( Renderer renderer in renderers )
+			renderer.material.renderQueue = renderQueue;
+	}
+
 	static public void SetLayerRecursive( Transform tr, int iLayer )
 	{
  		if( tr == null )
