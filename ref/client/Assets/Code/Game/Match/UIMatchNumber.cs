@@ -40,12 +40,12 @@ public class UIMatchNumber
 	{
 		m_NumberRoot = GameObject.FindGameObjectWithTag ("Number");
 		if (m_NumberRoot == null)
-			Logger.LogError ("UI Root is null");
+			Debug.LogError ("UI Root is null");
 		
 		if( m_resNumber == null ){
             m_resNumber = ResourceLoadManager.Instance.LoadPrefab("Prefab/GUI/Number") as GameObject;
 			if (m_resNumber == null)
-				Logger.LogError ("Can not find the number resource");
+				Debug.LogError ("Can not find the number resource");
 		}
 		
 		m_SpringNumbers = new ArrayList ();

@@ -28,9 +28,11 @@ public class MatchStateOpening
 
 		foreach( Player player in GameSystem.Instance.mClient.mPlayerManager )
 		{
-			player.Show( !(m_match is GameMatch_PVP) );
+			//player.Show( !(m_match is GameMatch_PVP) );
+			player.Show(true);
             player.m_applyLogicPostion = false;
 			player.model.EnableGrey(false);
+			//player.m_characterCtrl.enabled = false;
 			
 			player.m_enableAction = false;
 			if( player.m_catchHelper != null )
@@ -44,9 +46,6 @@ public class MatchStateOpening
 				player.m_InfoVisualizer.SetActive(false);
 			  
 			player.HideIndicator();
-			
-			if( player.m_aiMgr != null )
-				player.m_aiMgr.m_enable = false;
 
 			//set quality
 			/*
@@ -79,7 +78,7 @@ public class MatchStateOpening
 		GameObject resOpening = ResourceLoadManager.Instance.LoadPrefab("Prefab/Camera/Opening");
 		GameObject goOpening = GameObject.Instantiate(resOpening) as GameObject;
 		if( goOpening == null )
-			Logger.LogError("can not find opening prefab.");
+			Debug.LogError("can not find opening prefab.");
 
 		m_trackPlayer.LoadTrack(goOpening);
 		m_trackPlayer.Play();
@@ -90,9 +89,9 @@ public class MatchStateOpening
 		m_timer.stop = false;
 	}
 
-	override public void Update (float deltaTime)
+	override public void ViewUpdate (float deltaTime)
 	{
-		base.Update(deltaTime);
+		base.ViewUpdate(deltaTime);
 
 		m_timer.Update(deltaTime);
         
@@ -111,6 +110,9 @@ public class MatchStateOpening
 		curMatch.m_camFollowPath.Stop();
 		curMatch.m_camFollowPath.enabled = false;
 		curMatch.m_cam.enabled = true;
+
+        //foreach( Player player in GameSystem.Instance.mClient.mPlayerManager )
+        //    player.m_characterCtrl.enabled = true;
 
 		GameSystem.Instance.mClient.mInputManager.RemoveListener(this);
 

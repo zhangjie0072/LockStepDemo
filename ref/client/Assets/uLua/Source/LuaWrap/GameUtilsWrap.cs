@@ -471,10 +471,10 @@ public class GameUtilsWrap
 		else if (count == 3 && LuaScriptMgr.CheckTypes(L, 1, typeof(IM.Number), null, null))
 		{
 			IM.Number arg0 = (IM.Number)LuaScriptMgr.GetLuaObject(L, 1);
-			IM.Number arg1;
+			int arg1;
 			IM.Vector3 arg2;
 			GameUtils.AngleToDir(arg0,out arg1,out arg2);
-			LuaScriptMgr.PushValue(L, arg1);
+			LuaScriptMgr.Push(L, arg1);
 			LuaScriptMgr.PushValue(L, arg2);
 			return 2;
 		}

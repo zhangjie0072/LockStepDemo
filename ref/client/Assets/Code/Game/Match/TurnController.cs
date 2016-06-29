@@ -6,8 +6,9 @@ public class TurnController : Singleton<TurnController>
 {
     //时间单位：毫秒
     public const int TURN_LENGTH = 100;        //回合间隔
-    const int GAME_UPDATE_PER_TURN = 3; //每回合逻辑帧数
+    public const int GAME_UPDATE_PER_TURN = 3; //每回合逻辑帧数
     public const int GAME_UPDATE_LENGTH = TURN_LENGTH / GAME_UPDATE_PER_TURN;  //定义逻辑帧间隔
+    public static IM.Number deltaTime = IM.Number.Raw(TurnController.GAME_UPDATE_LENGTH * IM.Math.FACTOR / 1000);
     const int PURSUE_GAME_UPDATE_NUM = GAME_UPDATE_PER_TURN * 20;   //追赶需要的逻辑帧数
     const int PURSUE_TIME_LENGTH = PURSUE_GAME_UPDATE_NUM * GAME_UPDATE_LENGTH; //追赶需要的时长
     int pendingGameUpdateNum = 0;   //待执行的逻辑帧数量
@@ -30,7 +31,7 @@ public class TurnController : Singleton<TurnController>
 
     public TurnController()
     {
-        minGameUpdateLength = Time.fixedDeltaTime * 1000;
+        minGameUpdateLength = 33;
     }
 
     public void Update(float deltaTime)
@@ -46,14 +47,14 @@ public class TurnController : Singleton<TurnController>
             ++gameUpdateIndexInTurnServer;
         }
 
-        //如果预测平均回合间隔将大于定义回合间隔，则可能出现等回合。通过减慢逻辑帧速度，平滑等帧的卡顿
-        float turnInterval = match.turnManager.averageTurnInterval;
-        if (turnInterval > ((float)TURN_LENGTH / 1000 + 0.2f))
-        {
-            float factor = turnInterval / ((float)TURN_LENGTH / 1000);
-            //Logger.Log("Scale exactGameUpdateLength: " + factor);
-            exactGameUpdateLength = exactGameUpdateLength * factor;
-        }
+        //如果预测平均回合间隔将大于定义回合间隔，则可能出现等回合。通过减慢逻辑帧速度，平滑等帧的卡顿(TODO:先注释，因在比赛中如果虚拟服务器手动停止，消息turn之间的间隔过大，下面的运算会让excatGameUpdateLength变成无穷大，影响正常的业务逻辑）
+        //float turnInterval = match.turnManager.averageTurnInterval;
+        //if (turnInterval > ((float)TURN_LENGTH / 1000 + 0.2f))
+        //{
+        //    float factor = turnInterval / ((float)TURN_LENGTH / 1000);
+        //    //Debug.Log("Scale exactGameUpdateLength: " + factor);
+        //    exactGameUpdateLength = exactGameUpdateLength * factor;
+        //}
         //执行逻辑帧
         acumulativeTime += deltaTime * 1000;
         if (acumulativeTime >= exactGameUpdateLength)
@@ -72,20 +73,19 @@ public class TurnController : Singleton<TurnController>
                     FrameInfo nextTurn = match.turnManager.NextTurn();
                     if (nextTurn == null)   //等回合，不执行逻辑帧
                         break;
-                    match.ProcessTurn(nextTurn, IM.Number.Raw(TURN_LENGTH * IM.Math.FACTOR / 1000));
+                    match.ProcessTurn(nextTurn, TurnController.deltaTime);
                 }
 
-                //Logger.Log("Turn:" + match.turnManager.CurTurnID + " GameUpdateIndex:" + indexInTurn +
+                //Debug.Log("Turn:" + match.turnManager.CurTurnID + " GameUpdateIndex:" + indexInTurn +
                 //    " PendingGameUpdateNum:" + pendingGameUpdateNum);
                 //执行逻辑帧
-                IM.Number dt = IM.Number.Raw(GAME_UPDATE_LENGTH * IM.Math.FACTOR / 1000);
-                match.Update(dt);
-                match.LateUpdate(dt);
-                /*
+                match.GameUpdate(TurnController.deltaTime);
+                match.GameLateUpdate(TurnController.deltaTime);
+                //*
                 //发送关键数据校验
-                if (toProcessTurn)
-                    GameMsgSender.SendTurnValidate(Game.Instance.playerInfos);
-                */
+                if (toProcessTurn && match is GameMatch_PVP)
+                    match.turnManager.SendTurnCheckData();
+                //*/
 
                 --pendingGameUpdateNum;
             }
@@ -102,8 +102,8 @@ public class TurnController : Singleton<TurnController>
         //gameUpdateSpeedUpLevel = Mathf.CeilToInt((float)pendingGameUpdateNum / GAME_UPDATE_PER_TURN);
         //if (gameUpdateSpeedUpLevel != 1)
         //{
-        //    Logger.Log("GameUpdateSpeedUpLevel: " + gameUpdateSpeedUpLevel);
-        //    Logger.Log("Turn:" + TurnManager.Instance.CurTurnID + " ServerTurn:" + TurnManager.Instance.ServerTurnID
+        //    Debug.Log("GameUpdateSpeedUpLevel: " + gameUpdateSpeedUpLevel);
+        //    Debug.Log("Turn:" + TurnManager.Instance.CurTurnID + " ServerTurn:" + TurnManager.Instance.ServerTurnID
         //        + " GameUpdate:" + Game.Instance.CurFrame + " PendingGameUpdateNum:" + pendingGameUpdateNum);
         //    //Pause = true;
         //}

@@ -15,7 +15,6 @@ MailDetailContent = MailDetailContent or
 	uiAwardBtn,
 	uiContent,
 	uiAttachment,
-	uiGoodsList,
 	uiGoodsGrid,
 	uiSender,
 }
@@ -40,8 +39,7 @@ function MailDetailContent:Awake( ... )
 	--
 	self.uiAttachment = transform:FindChild('Window/MailContent/Bottom')
 
-	self.uiGoodsList = transform:FindChild('Window/MailContent/Bottom/GoodsList'):GetComponent('UIScrollView')
-	self.uiGoodsGrid = transform:FindChild('Window/MailContent/Bottom/GoodsList/Grid'):GetComponent('UIGrid')
+	self.uiGoodsGrid = transform:FindChild('Window/MailContent/Bottom/Grid'):GetComponent('UIGrid')
 	--
 	self.uiSender = transform:FindChild('Window/MailContent/Content/Addresser'):GetComponent('UILabel')
 	self.uiCloseBtn = createUI('ButtonClose', transform:FindChild('Window/ButtonClose'))
@@ -125,11 +123,11 @@ function MailDetailContent:InitAttachment()
 		goodsIcon.num = v.value
 		goodsIcon.hideLevel = true
 		goodsIcon.hideNum = false
+		goodsIcon.hideNeed = true
 	end
 
 
 	self.uiGoodsGrid.repositionNow = true
-	self.uiGoodsList:ResetPosition()
 end
 
 --

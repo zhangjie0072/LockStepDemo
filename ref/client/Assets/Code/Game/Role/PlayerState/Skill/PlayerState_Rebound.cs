@@ -32,7 +32,7 @@ public class PlayerState_Rebound : PlayerState_Skill
 
 		tooLate = false;
 
-		//Logger.Log("rebound action is: " + m_curAction );
+		//Debug.Log("rebound action is: " + m_curAction );
 
         m_heightScale = IM.Number.one;
         m_success = true;
@@ -47,24 +47,24 @@ public class PlayerState_Rebound : PlayerState_Skill
         Dictionary<string, uint> data = m_player.m_finalAttrs;
         if( data == null )
         {
-            Logger.LogError("Can not find data.");
+				Debug.LogError("Can not find data.");
             m_success = false;
         }
         if( !m_match.m_ruler.CanRebound() || m_ball.m_owner != null )
         {
             m_success = false;
             tooLate = false;
-            Logger.Log(m_player.m_name + " Rebound failed, ball haven't been reached the highest position or ball has owner");
+				Debug.Log(m_player.m_name + " Rebound failed, ball haven't been reached the highest position or ball has owner");
         }
 
-        //Logger.Log("Rebound distance:" + m_player.m_fReboundDist);
+			//Debug.Log("Rebound distance:" + m_player.m_fReboundDist);
         IM.Number fDistPlayer2Ball = GameUtils.HorizonalDistance(m_player.position, m_ball.position);
 
         IM.Number reboundDist = PlayerState_Rebound.GetMaxDist(m_player);
         if( fDistPlayer2Ball > reboundDist)
         {
             m_success = false;
-            Logger.Log("player to ball distance: " + fDistPlayer2Ball + " farther than rebound distance: " + reboundDist);
+				Debug.Log("player to ball distance: " + fDistPlayer2Ball + " farther than rebound distance: " + reboundDist);
         }
 
         IM.Number minHeight, maxHeight;
@@ -81,7 +81,7 @@ public class PlayerState_Rebound : PlayerState_Skill
             {
                 m_success = false;
                 tooLate = false;
-                Logger.Log("Rebound failed, ball not in falling.");
+					Debug.Log("Rebound failed, ball not in falling.");
             }
             else if( m_ball.GetPositionInAir( (fCurTime + fEventTime), out vBallPosRebound) )
             {
@@ -100,20 +100,20 @@ public class PlayerState_Rebound : PlayerState_Skill
                     IM.Number fDistPlayerToReboundPos = GameUtils.HorizonalDistance(vBallPosRebound - root2Ball, m_player.position);
                     IM.Number fDistOrigReboundPos = GameUtils.HorizonalDistance(root, m_player.position);
                     rootMotionScale = fDistPlayerToReboundPos / fDistOrigReboundPos;
-                    //Logger.Log("root motion scale: " + m_player.m_rootMotion.m_scale);
+						//Debug.Log("root motion scale: " + m_player.m_rootMotion.m_scale);
                 }
                 else
                 {
                     m_success = false;
                     tooLate = vBallPosRebound.y <= minHeight;
-                    Logger.Log("Rebound failed, ball height: " + m_ball.transform.position.y + " height range: min: " + minHeight + " ,max: " + maxHeight);
+						Debug.Log("Rebound failed, ball height: " + m_ball.transform.position.y + " height range: min: " + minHeight + " ,max: " + maxHeight);
                 }
             }
             else
             {
                 m_success = false;
                 tooLate = true;
-                Logger.Log("reboundTime out of the curve, too slow");
+					Debug.Log("reboundTime out of the curve, too slow");
             }
         }
         else
@@ -124,8 +124,8 @@ public class PlayerState_Rebound : PlayerState_Skill
 
         uint skillValue = 0;
         m_player.m_skillSystem.HegdingToValue("addn_rebound", ref skillValue);
-
-        m_match.reboundHelper.AddRebounder(m_player, m_curExecSkill);
+        if(m_success)
+            m_match.reboundHelper.AddRebounder(m_player, m_curExecSkill);
 
         ++m_player.mStatistics.data.rebound_times;
         if (m_success)
@@ -190,7 +190,7 @@ public class PlayerState_Rebound : PlayerState_Skill
 		PlaySoundManager.Instance.PlaySound(MatchSoundEvent.GrabBall);
 		m_player.eventHandler.NotifyAllListeners(PlayerActionEventHandler.AnimEvent.eRebound);
 
-		Logger.Log( m_player.m_id + " rebound success and grab ball" );
+		Debug.Log( m_player.m_id + " rebound success and grab ball" );
 		m_toReboundBall = false;
 	}
 
@@ -212,14 +212,14 @@ public class PlayerState_Rebound : PlayerState_Skill
 		PlayerAnimAttribute.AnimAttr attr = null;
 		if( !rebounds.TryGetValue(originAction, out attr) )
 		{
-			Logger.LogError("Can not find AnimAttr in clip: " + originAction);
+			Debug.LogError("Can not find AnimAttr in clip: " + originAction);
 			return IM.Number.zero;
 		}
 
 		PlayerAnimAttribute.KeyFrame reboundFrame = attr.GetKeyFrame("OnRebound");
 		if( reboundFrame == null )
 		{
-			Logger.LogError("Can not find OnRebound key in clip: " + originAction);
+			Debug.LogError("Can not find OnRebound key in clip: " + originAction);
 			return IM.Number.zero;
 		}
 		int reboundKey = reboundFrame.frame;

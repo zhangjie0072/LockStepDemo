@@ -47,37 +47,38 @@ FriendsList =  {
 	friendsPrefabs,  --好友列表预制体
 }
 
+FirstWinCD =  GameSystem.Instance.CommonConfig:GetUInt("gFirstWinLastTime")
 function FriendsList:Awake()
 	local transform = self.transform
 	local find = function( struct )
 		return transform:FindChild(struct)
 	end
 
-	self.btnBack = createUI("ButtonBack", self.transform:FindChild('Top/ButtonBack'))
+	self.btnBack = createUI("ButtonBack", self.transform:FindChild('TopLeft/ButtonBack'))
 
-	self.uiBtnFriendsList = find("Left/Friends"):GetComponent('UIToggle')
-	self.uiBtnApplyList = find("Left/Apply"):GetComponent("UIToggle")
-	self.uiBtnBlackList = find("Left/BlackList"):GetComponent("UIToggle")
-	self.uiBtnNearList = find("Left/Nearby"):GetComponent("UIToggle")
-	self.uiBtnGiftList = find("Left/Gift"):GetComponent("UIToggle")
+	self.uiBtnFriendsList = find("Left/Position/Friends"):GetComponent('UIToggle')
+	self.uiBtnApplyList = find("Left/Position/Apply"):GetComponent("UIToggle")
+	self.uiBtnBlackList = find("Left/Position/BlackList"):GetComponent("UIToggle")
+	self.uiBtnNearList = find("Left/Position/Nearby"):GetComponent("UIToggle")
+	self.uiBtnGiftList = find("Left/Position/Gift"):GetComponent("UIToggle")
 
-	self.uiEmptyText = find("Right/EmptyText"):GetComponent("UILabel")
-    self.uiReceive = find("Right/ReceiveNum"):GetComponent("UILabel")
+	self.uiEmptyText = find("Middle/EmptyText"):GetComponent("UILabel")
+    self.uiReceive = find("Middle/ReceiveNum"):GetComponent("UILabel")
 
-    self.uiTxtListNum = getComponentInChild(self.transform, "Right/ReceiveNum/Num", "UILabel")
-    self.uiBtnFriendsAdd = getComponentInChild(self.transform, "Right/ButtonChange", "UIButton")
+    self.uiTxtListNum = getComponentInChild(self.transform, "Middle/ReceiveNum/Num", "UILabel")
+    self.uiBtnFriendsAdd = getComponentInChild(self.transform, "Middle/ButtonChange", "UIButton")
 
-    self.uiBtnQuickGive = getComponentInChild(self.transform, "Right/BtnQuickGive", "UIButton")
-    self.uiBtnQuickGet = getComponentInChild(self.transform, "Right/BtnQuickGet", "UIButton")
+    self.uiBtnQuickGive = getComponentInChild(self.transform, "Middle/BtnQuickGive", "UIButton")
+    self.uiBtnQuickGet = getComponentInChild(self.transform, "Middle/BtnQuickGet", "UIButton")
 
-	self.uiApplyRedDotGameObj = getChildGameObject(self.transform, "Left/Apply/RedDot")
-	self.uiGiftRedDotGameObj = getChildGameObject(self.transform, "Left/Gift/RedDot")
+	self.uiApplyRedDotGameObj = getChildGameObject(self.transform, "Left/Position/Apply/RedDot")
+	self.uiGiftRedDotGameObj = getChildGameObject(self.transform, "Left/Position/Gift/RedDot")
 
     self.scroll = {}
     self.grid = {}
     self.friendsPrefabs = {}
     for i=1, 5 do
-        self.scroll[i] = getComponentInChild(self.transform, "Right/Wear/ScrollView"..i, "UIScrollView")
+        self.scroll[i] = getComponentInChild(self.transform, "Middle/Wear/ScrollView"..i, "UIScrollView")
         self.grid[i] = getComponentInChild(self.scroll[i].transform, "Grid", "UIWrapContent")
         local perfabName = "FriendsListItem"
         if i == 5 then
@@ -89,6 +90,7 @@ function FriendsList:Awake()
         	if i == 1 then
 	            local lua = getLuaComponent(Item)
 	            lua.tfFriendsList = self.transform
+	            lua.parent = self
 	            self.friendsPrefabs[j] = Item
 	        end
         end
@@ -104,11 +106,19 @@ function FriendsList:Awake()
     self.gSearchPoolFriendLevelDiff = GameSystem.Instance.CommonConfig:GetUInt("gSearchPoolFriendLevelDiff")
 
     self.friendChangedFunc = FriendData.FriendListChangedDelegate(self:RefreshListData())
+    self.FriendInfoChangeEvent = self:RefreshListData()
     FriendData.Instance:RegisterOnListChanged(self.friendChangedFunc)
 
     self.last_sysn_time = os.time()
 end
-
+function FriendsList:OnEnable( ... )
+	-- body
+	Friends.FriendInfoChangeEvent = self:RefreshListData()
+end
+function FriendsList:OnDisable( ... )
+	-- body
+	Friends.FriendInfoChangeEvent = nil
+end
 function FriendsList:Start()
 	EventDelegate.Add(self.uiBtnFriendsList.onChange, LuaHelper.Callback(self:onToggleChange()))
 	EventDelegate.Add(self.uiBtnApplyList.onChange, LuaHelper.Callback(self:onToggleChange()))
@@ -144,26 +154,27 @@ end
 function FriendsList:Refresh()
 	self:RefreshRedDot()
 	--每大于5分钟时，刷新一次数据
-	local time = os.time()
-	if time - self.last_sysn_time > 300 then
-		print("req server data list")
-		self.last_sysn_time = time
+	-- local time = os.time()
+	-- if time - self.last_sysn_time > 300 then
+	-- 	print("req server data list")
+	-- 	self.last_sysn_time = time
 
-		--刷新好友
-		local req = { type = 'FOT_QUERY', }
-		local buf = protobuf.encode("fogs.proto.msg.FriendOperationReq", req)
-		LuaHelper.SendPlatMsgFromLua(MsgID.FriendOperationReqID, buf)
-		--刷新申请列表
-		local req = { type = 'FOT_QUERY_APPLY', }
-		local buf = protobuf.encode("fogs.proto.msg.FriendOperationReq", req)
-		LuaHelper.SendPlatMsgFromLua(MsgID.FriendOperationReqID, buf)
-		--刷新黑名单
-		local req = { type = 'FOT_QUERY_BLACK', }
-		local buf = protobuf.encode("fogs.proto.msg.FriendOperationReq", req)
-		LuaHelper.SendPlatMsgFromLua(MsgID.FriendOperationReqID, buf)
+	-- 	--刷新好友
+	-- 	--好友信息变动服务器会自动推送好友信息，不再手动请求
+	-- 	-- local req = { type = 'FOT_QUERY', }
+	-- 	-- local buf = protobuf.encode("fogs.proto.msg.FriendOperationReq", req)
+	-- 	-- LuaHelper.SendPlatMsgFromLua(MsgID.FriendOperationReqID, buf)
+	-- 	--刷新申请列表
+	-- 	local req = { type = 'FOT_QUERY_APPLY', }
+	-- 	local buf = protobuf.encode("fogs.proto.msg.FriendOperationReq", req)
+	-- 	LuaHelper.SendPlatMsgFromLua(MsgID.FriendOperationReqID, buf)
+	-- 	--刷新黑名单
+	-- 	local req = { type = 'FOT_QUERY_BLACK', }
+	-- 	local buf = protobuf.encode("fogs.proto.msg.FriendOperationReq", req)
+	-- 	LuaHelper.SendPlatMsgFromLua(MsgID.FriendOperationReqID, buf)
 
-		self.isSysn = true
-	end
+	-- 	self.isSysn = true
+	-- end
 	self.uiBtnFriendsList.value = true
 end
 
@@ -179,13 +190,6 @@ function FriendsList:RefreshRedDot()
 	NGUITools.SetActive(self.uiGiftRedDotGameObj, gift_count > 0 and FriendData.Instance.get_gift_times < self.gFriendGetGiftTimes)
 end
 
-function FriendsList:Update()
-
-end
-
-function FriendsList:FixedUpdate()
-
-end
 
 function FriendsList:OnDestroy()
 	FriendData.Instance:UnRegisterOnListChanged(self.friendChangedFunc)
@@ -345,7 +349,12 @@ function FriendsList:RefreshListData()
         end
 
 		self.listType = lst
-		self.datas[self.listType] = FriendData.Instance:GetList(self.listType)
+
+        if self.listType == fogs.proto.msg.FriendOperationType.FOT_QUERY then
+        	self.datas[self.listType] = Friends.FriendList
+	    else
+			self.datas[self.listType] = FriendData.Instance:GetList(self.listType)
+	    end
         local listdata = self.datas[self.listType]
         local max = table.getn(listdata)
 
@@ -544,5 +553,15 @@ function FriendsList:isCurrTogType(lst)
        return uiIndex, false
    end
 end
+function FriendsList:ChatToFriend( id )
+	-- body
+	self.nextShowUI = "UIHall"
+	self.nextShowUIParams = {
+		forceShow = 'uiChat',
+		acc_id = id,
 
+	}
+	self:OnClose()
+
+end
 return FriendsList

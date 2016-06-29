@@ -59,12 +59,12 @@ public class SignConfig
             return;
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
         ReadDaySign();
-		Logger.ConfigEnd(name1);
-		Logger.ConfigBegin(name2);
+		
+		Debug.Log("Config reading " + name2);
 		ReadMonthSign();
-		Logger.ConfigEnd(name2);
+		
     }
 
     void ReadDaySign()
@@ -72,7 +72,7 @@ public class SignConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         
@@ -154,7 +154,7 @@ public class SignConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
         

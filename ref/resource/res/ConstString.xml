@@ -1,4 +1,4 @@
-<Data Count="1389">
+<Data Count="1394">
   <Line>
     <switch>
     </switch>
@@ -929,13 +929,13 @@
     <switch>
     </switch>
     <name>MATCH_TYPE_NAME_eReboundStorm</name>
-    <info>篮板风暴</info>
+    <info>板爷</info>
   </Line>
   <Line>
     <switch>
     </switch>
     <name>MATCH_TYPE_NAME_eBlockStorm</name>
-    <info>密不透风</info>
+    <info>请你吃火锅</info>
   </Line>
   <Line>
     <switch>
@@ -953,13 +953,13 @@
     <switch>
     </switch>
     <name>MATCH_TYPE_NAME_eGrabZone</name>
-    <info>你争我夺</info>
+    <info>我的地盘</info>
   </Line>
   <Line>
     <switch>
     </switch>
     <name>MATCH_TYPE_NAME_eGrabPoint</name>
-    <info>速度与激情</info>
+    <info>飙分王</info>
   </Line>
   <Line>
     <switch>
@@ -6991,7 +6991,7 @@
     <switch>
     </switch>
     <name>STR_FIELD_PROMPT21</name>
-    <info>可通过以下方式获得：</info>
+    <info>球员获得方式</info>
   </Line>
   <Line>
     <switch>
@@ -7484,13 +7484,13 @@
     <switch>
     </switch>
     <name>STR_FIRST_WIN_AWARD1</name>
-    <info>[00FF00](首胜：%d)[-]</info>
+    <info>首胜：%d</info>
   </Line>
   <Line>
     <switch>
     </switch>
     <name>STR_FIRST_WIN_AWARD2</name>
-    <info>[00FF00](首胜：%d)[-]</info>
+    <info>首胜：%d</info>
   </Line>
   <Line>
     <switch>
@@ -7743,7 +7743,7 @@
     <switch>
     </switch>
     <name>STR_FIELD_PROMPT43</name>
-    <info>输入[FF9000]礼包码[-]兑换[FF9000]奖励[-]</info>
+    <info>输入礼包码兑换奖励</info>
   </Line>
   <Line>
     <switch>
@@ -8162,7 +8162,7 @@
     <switch>
     </switch>
     <name>STR_FIELD_Traildes</name>
-    <info>兑换球员的可乐不足可以立即花费一定钻石收买；\n也可以将可乐兑换成球员碎片</info>
+    <info>未集齐20瓶可乐，无法直接兑换球员</info>
   </Line>
   <Line>
     <switch>
@@ -8174,7 +8174,7 @@
     <switch>
     </switch>
     <name>STR_FIELD_Trailbutton01</name>
-    <info>获得碎片</info>
+    <info>提取碎片</info>
   </Line>
   <Line>
     <switch>
@@ -8186,13 +8186,13 @@
     <switch>
     </switch>
     <name>STR_FIELD_Trailbutton02</name>
-    <info>%s收买</info>
+    <info>%s补足</info>
   </Line>
   <Line>
     <switch>
     </switch>
     <name>STR_NEED_COLA</name>
-    <info>还差%d个可乐</info>
+    <info>%d/20</info>
   </Line>
   <Line>
     <switch>
@@ -8409,5 +8409,35 @@
     </switch>
     <name>PARTTEN_OFFLINE</name>
     <info>队伍中有玩家掉线</info>
+  </Line>
+  <Line>
+    <switch>#</switch>
+    <name>1.0.4.1新增好友字段</name>
+    <info>
+    </info>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <name>CANT_TALK_TO_STRANGER</name>
+    <info>对方还不是你的好友</info>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <name>FRIEND_IS_OFFLINE</name>
+    <info>对方已下线无法聊天</info>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <name>CHAT_TO_ME</name>
+    <info>[%s]对[我]说:</info>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <name>ME_CHAT_TO</name>
+    <info>[我]对[%s]说:</info>
   </Line>
 </Data>

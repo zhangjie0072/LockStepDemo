@@ -48,42 +48,42 @@ NewRoleDetail =  {
 }
 
 function NewRoleDetail:Awake()
-    self.uiBackBtn = getChildGameObject(self.transform, "Top/ButtonBack")
-    self.uiAttGrid = getComponentInChild(self.transform, "Right/Grid", "UIGrid")
+    self.uiBackBtn = getChildGameObject(self.transform, "TopLeft/ButtonBack")
+    self.uiAttGrid = getComponentInChild(self.transform, "Right/Right/Grid", "UIGrid")
 
-    self.uiPostion = getComponentInChild(self.transform, "Left/Icon", "UISprite")
-    self.uiPositionName = getComponentInChild(self.transform, "Left/Icon/PositionName", "UILabel")
-    self.uiRoleName = getComponentInChild(self.transform, "Left/Icon/Name", "UILabel")
-    self.uiRoleDesc = getComponentInChild(self.transform, "Right/Describe", "UILabel")
-    self.uiRoleModel = getComponentInChild(self.transform, "Left/Model", "ModelShowItem")
+    self.uiPostion = getComponentInChild(self.transform, "Left/Left/Icon", "UISprite")
+    self.uiPositionName = getComponentInChild(self.transform, "Left/Left/Icon/PositionName", "UILabel")
+    self.uiRoleName = getComponentInChild(self.transform, "Left/Left/Icon/Name", "UILabel")
+    self.uiRoleDesc = getComponentInChild(self.transform, "Right/Right/Describe", "UILabel")
+    self.uiRoleModel = getComponentInChild(self.transform, "Left/Left/Model", "ModelShowItem")
 
-    self.uiTalentIcon = getComponentInChild(self.transform, "Right/Talent/Icon/Sprite", "UISprite")
-    self.uiTalentName = getComponentInChild(self.transform, "Right/Talent/Name", "UILabel")
-    self.uiTalentDesc = getComponentInChild(self.transform, "Right/Talent/Describe", "UILabel")
+    self.uiTalentIcon = getComponentInChild(self.transform, "Right/Right/Talent/Icon/Sprite", "UISprite")
+    self.uiTalentName = getComponentInChild(self.transform, "Right/Right/Talent/Name", "UILabel")
+    self.uiTalentDesc = getComponentInChild(self.transform, "Right/Right/Talent/Describe", "UILabel")
 
-    self.uiSkillGrid = getComponentInChild(self.transform, "Right/Skill/Grid", "UIGrid")
-    self.uiBtnChangeSkill = getChildGameObject(self.transform, "Right/Skill/BtnChangeSkill")
+    self.uiSkillGrid = getComponentInChild(self.transform, "Right/Right/Skill/Grid", "UIGrid")
+    self.uiBtnChangeSkill = getChildGameObject(self.transform, "Right/Right/Skill/BtnChangeSkill")
 
-    self.uiBtnLeft = getChildGameObject(self.transform, "Left/Left")
-    self.uiBtnRight = getChildGameObject(self.transform, "Left/Right")
+    self.uiBtnLeft = getChildGameObject(self.transform, "Left/Left/Left")
+    self.uiBtnRight = getChildGameObject(self.transform, "Left/Left/Right")
 
-    self.uiSkillRoot = getChildGameObject(self.transform, "Right/Skill")
-    self.uiBuyRoot = getChildGameObject(self.transform, "Right/Buy")
+    self.uiSkillRoot = getChildGameObject(self.transform, "Right/Right/Skill")
+    self.uiBuyRoot = getChildGameObject(self.transform, "Right/Right/Buy")
 
-	self.uiBuyGoldRoot = getChildGameObject(self.transform, "Right/Buy/BgGold")
-	self.uiBuyDiamondRoot = getChildGameObject(self.transform, "Right/Buy/BgDiamond")
+	self.uiBuyGoldRoot = getChildGameObject(self.transform, "Right/Right/Buy/BgGold")
+	self.uiBuyDiamondRoot = getChildGameObject(self.transform, "Right/Right/Buy/BgDiamond")
 
-    local buyGold = getChildGameObject(self.transform, "Right/Buy/BgGold/GameObject")
-    local buyDiamond = getChildGameObject(self.transform, "Right/Buy/BgDiamond/GameObject")
+    local buyGold = getChildGameObject(self.transform, "Right/Right/Buy/BgGold/GameObject")
+    local buyDiamond = getChildGameObject(self.transform, "Right/Right/Buy/BgDiamond/GameObject")
     local gold = createUI("GoodsIconConsume", buyGold.transform)
     self.uiBuyGold = getLuaComponent(gold)
 	self.uiBuyGold.isAdd = false
     local diamond = createUI("GoodsIconConsume", buyDiamond.transform)
     self.uiBuyDiamond = getLuaComponent(diamond)
 	self.uiBuyDiamond.isAdd = false
-	self.uiGetDesc = getComponentInChild(self.transform, "Right/Buy/GetDesc", "UILabel")
+	self.uiGetDesc = getComponentInChild(self.transform, "Right/Right/Buy/GetDesc", "UILabel")
 
-    self.uiBuyButton = getChildGameObject(self.transform, "Right/Buy/ButtonOK1")
+    self.uiBuyButton = getChildGameObject(self.transform, "Right/Right/Buy/ButtonOK1")
 
     --八项属性
     self.uiAttTable = {}
@@ -135,6 +135,8 @@ end
 
 function NewRoleDetail:OnBuy()
     return function (go)
+        if not FunctionSwitchData.CheckSwith(FSID.players_btn) then return end
+
         if not self.uiBuyWindow then
 			self.uiBuyWindow = createUI("NewRoleBuy")
 			local s = getLuaComponent(self.uiBuyWindow)

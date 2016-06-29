@@ -42,7 +42,7 @@ public class AI_PractisePass_Idle : AIState
 		}
 
 		if ( m_player.m_bWithBall && 
-			(!behaviour.in_tutorial || m_match.m_mainRole.m_StateMachine.m_curState.m_eState == PlayerState.State.eRequireBall))
+			(!behaviour.in_tutorial || m_match.mainRole.m_StateMachine.m_curState.m_eState == PlayerState.State.eRequireBall))
 			m_system.SetTransaction(AIState.Type.ePractisePass_Pass);
 		
 		m_timer.Update(fDeltaTime);

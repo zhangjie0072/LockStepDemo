@@ -1,4 +1,4 @@
-<Data Count="182">
+<Data Count="184">
   <Line>
     <switch>#</switch>
     <id>技能ID</id>
@@ -520,7 +520,7 @@
     </position>
     <type>1</type>
     <subtype>1</subtype>
-    <actions>71000</actions>
+    <actions>71000/71001</actions>
     <actiontype>3</actiontype>
     <use_area>3&amp;4</use_area>
     <condition>1</condition>
@@ -541,7 +541,7 @@
     </position>
     <type>1</type>
     <subtype>1</subtype>
-    <actions>71010</actions>
+    <actions>71010/71011</actions>
     <actiontype>3</actiontype>
     <use_area>2</use_area>
     <condition>1</condition>
@@ -1141,7 +1141,7 @@
     <subtype>2</subtype>
     <actions>30060/30061</actions>
     <actiontype>1</actiontype>
-    <use_area>2</use_area>
+    <use_area>1&amp;2</use_area>
     <condition>1</condition>
     <attrange>0</attrange>
   </Line>
@@ -1317,7 +1317,7 @@
     <position>1&amp;3</position>
     <type>1</type>
     <subtype>2</subtype>
-    <actions>32020</actions>
+    <actions>32020/32021</actions>
     <actiontype>3</actiontype>
     <use_area>2</use_area>
     <condition>1</condition>
@@ -1351,7 +1351,7 @@
     <position>1&amp;3</position>
     <type>1</type>
     <subtype>2</subtype>
-    <actions>32040</actions>
+    <actions>32040/32041</actions>
     <actiontype>3</actiontype>
     <use_area>3</use_area>
     <condition>1</condition>
@@ -1422,7 +1422,7 @@
     <position>2&amp;5</position>
     <type>1</type>
     <subtype>2</subtype>
-    <actions>32080</actions>
+    <actions>32080/32081</actions>
     <actiontype>3</actiontype>
     <use_area>2</use_area>
     <condition>1</condition>
@@ -1874,11 +1874,47 @@
     <name>盖帽抓球</name>
     <icon>icon_skill_3600</icon>
     <intro>盖帽时，直接将球抓到手中，打击对方士气。</intro>
-    <cast>盖帽成功时几率触发</cast>
+    <cast>对方身前盖帽成功时几率触发</cast>
     <position>1&amp;3</position>
     <type>1</type>
     <subtype>2</subtype>
     <actions>36000</actions>
+    <actiontype>4</actiontype>
+    <use_area>1&amp;2&amp;3</use_area>
+    <condition>2</condition>
+    <attrange>0</attrange>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <name>强力盖帽</name>
+    <icon>
+    </icon>
+    <intro>增加盖帽的起跳高度和距离，强力将对方的球盖下。</intro>
+    <cast>对方身前盖帽成功时几率触发</cast>
+    <position>1&amp;3</position>
+    <type>1</type>
+    <subtype>2</subtype>
+    <actions>36010</actions>
+    <actiontype>4</actiontype>
+    <use_area>1&amp;2&amp;3</use_area>
+    <condition>2</condition>
+    <attrange>0</attrange>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <name>飞身盖帽</name>
+    <icon>
+    </icon>
+    <intro>飞身起跳，从对方球员的身后将球盖下。</intro>
+    <cast>对方身后盖帽成功时几率触发</cast>
+    <position>1&amp;2&amp;3</position>
+    <type>1</type>
+    <subtype>2</subtype>
+    <actions>36020</actions>
     <actiontype>4</actiontype>
     <use_area>1&amp;2&amp;3</use_area>
     <condition>2</condition>

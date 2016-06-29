@@ -96,12 +96,13 @@ public class MatchSoundConfig
 
     public void ReadConfig()
 	{
-		Logger.ConfigBegin(name1);
 		try
 		{
 	        if (isLoadFinish == false)
 	            return;
-	        isLoadFinish = false;
+
+            Debug.Log("Config reading " + name1);
+            isLoadFinish = false;
 	        lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
 	        string text = ResourceLoadManager.Instance.GetConfigText(name1);
@@ -157,8 +158,8 @@ public class MatchSoundConfig
 		}
 		catch( XmlException exp )
 		{
-			Logger.Log("MatchSound config failed: " + exp.Message );
+			Debug.Log("MatchSound config failed: " + exp.Message );
 		}
-		Logger.ConfigEnd(name1);
+		
     }
 }

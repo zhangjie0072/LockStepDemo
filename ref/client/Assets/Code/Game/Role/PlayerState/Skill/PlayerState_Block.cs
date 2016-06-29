@@ -72,7 +72,7 @@ public class PlayerState_Block : PlayerState_Skill
 
 		if (shooter == null)
 		{
-			Logger.Log("Block failed, shooter is null.");
+			Debug.Log("Block failed, shooter is null.");
 			m_failReason = FailReason.NoShooter;
 			return false;
 		}
@@ -120,7 +120,7 @@ public class PlayerState_Block : PlayerState_Skill
         IM.Number fShootEclipseTime = shooter.animMgr.curPlayInfo.time;
 		if (fShootEclipseTime > fEventShootOutTime)
 		{
-			Logger.Log("PlayerState_Block: block failed, ball has been shot.");
+			Debug.Log("PlayerState_Block: block failed, ball has been shot.");
 			m_failReason = FailReason.InvalidBallShotState;
 			return false;
 		}
@@ -128,7 +128,7 @@ public class PlayerState_Block : PlayerState_Skill
 		IM.Number fBallFlyTime = fEventBlockTime - (fEventShootOutTime - fShootEclipseTime);
 		if (fBallFlyTime < IM.Number.zero)
 		{
-			Logger.Log("PlayerState_Block: block failed, ball will not be shot when block time.");
+			Debug.Log("PlayerState_Block: block failed, ball will not be shot when block time.");
 			m_failReason = FailReason.InvalidBallShotState;
 			return false;
 		}
@@ -136,7 +136,7 @@ public class PlayerState_Block : PlayerState_Skill
         IM.Number fSideEffect = IM.Number.one;
 		SkillSideEffect effect;
 		if( !m_curExecSkill.skill.side_effects.TryGetValue((int)SkillSideEffect.Type.eBlockRate, out effect) )
-			Logger.Log("No side effect data.");
+			Debug.Log("No side effect data.");
 		else
             fSideEffect = effect.value;
 
@@ -191,13 +191,13 @@ public class PlayerState_Block : PlayerState_Skill
 
 		if( shooterSkill.curAction.block_key != null )
 		{
-			Logger.Log("m_curExecSkill.curInput.moveDir: " + m_curExecSkill.curInput.moveDir);
-			Logger.Log("shooterSkill.curAction.block_key.moveDir: " + shooterSkill.curAction.block_key.moveDir);
+			Debug.Log("m_curExecSkill.curInput.moveDir: " + m_curExecSkill.curInput.moveDir);
+			Debug.Log("shooterSkill.curAction.block_key.moveDir: " + shooterSkill.curAction.block_key.moveDir);
 
 			if( m_curExecSkill.curInput.moveDir == shooterSkill.curAction.block_key.moveDir )
 			{
 				fBlockRate *= GlobalConst.MATCHED_KEY_BLOCK_RATE_ADJUST;
-				Logger.Log("Match block key.");
+				Debug.Log("Match block key.");
 			}
 		}
 
@@ -222,7 +222,7 @@ public class PlayerState_Block : PlayerState_Skill
 		/*
 		if( m_ball.m_shootSolution.m_bSuccess )
 		{
-			Logger.LogError("block shoot success, but ball goals in.");
+			Debug.LogError("block shoot success, but ball goals in.");
 			return;
 		}
 		*/
@@ -280,7 +280,7 @@ public class PlayerState_Block : PlayerState_Skill
 		}
 		else
 		{
-			Logger.LogError("reboundTime out of the curve, too slow");
+			Debug.LogError("reboundTime out of the curve, too slow");
 			return;
 		}
 	}
@@ -306,7 +306,7 @@ public class PlayerState_Block : PlayerState_Skill
 		if( !shooter.m_blockable.blockable )
 		{
 			Debugger.Instance.m_steamer.message = "Out of block range.";
-			Logger.Log("Out of block range.");
+			Debug.Log("Out of block range.");
 			if (shooter.m_blockable.tooEarly)
 				m_failReason = FailReason.TooEarly;
 			else if (shooter.m_blockable.tooLate)
@@ -338,7 +338,7 @@ public class PlayerState_Block : PlayerState_Skill
         IM.Number fSideEffect = IM.Number.zero;
 		SkillSideEffect effect;
 		if( !m_curExecSkill.skill.side_effects.TryGetValue((int)SkillSideEffect.Type.eBlockRate, out effect) )
-			Logger.Log("No side effect data.");
+			Debug.Log("No side effect data.");
 		else
 			fSideEffect = effect.value;
 		
@@ -542,7 +542,7 @@ public class PlayerState_Block : PlayerState_Skill
         IM.Number fSideEffect = IM.Number.zero;
 		SkillSideEffect effect;
 		if( !m_curExecSkill.skill.side_effects.TryGetValue((int)SkillSideEffect.Type.eBlockRate, out effect) )
-			Logger.Log("No side effect data.");
+			Debug.Log("No side effect data.");
 		else
 			fSideEffect = effect.value;
 
@@ -685,7 +685,7 @@ public class PlayerState_Block : PlayerState_Skill
             //shooter is blocked.. set a ball solution to him
             m_failedShootSolution = GameSystem.Instance.shootSolutionManager.GetShootSolution(m_basket.m_vShootTarget, attacker.position, false);
             if( m_failedShootSolution == null )
-                Logger.LogError("No shoot solution can be set to block.");
+					Debug.LogError("No shoot solution can be set to block.");
 
             m_bMoveForward 	= false;
             m_speed 		= IM.Vector3.zero;
@@ -718,23 +718,23 @@ public class PlayerState_Block : PlayerState_Skill
                     }
                     else
                     {
-                        Logger.Log("Block failed, cur attacker state: " + attacker.m_StateMachine.m_curState.m_eState);
+							Debug.Log("Block failed, cur attacker state: " + attacker.m_StateMachine.m_curState.m_eState);
                         m_success = false;
                     }
                     string rateLog = "Block rate: " + fBlockRate + " value: " + fBlockValue;
                     Debugger.Instance.m_steamer.message = rateLog;
-                    Logger.Log(rateLog);
-                    Logger.Log("block success: " + m_success);
-                    Logger.Log("block ball pos: " + vBallPos + ", vel: " + vBallVel);
+						Debug.Log(rateLog);
+						Debug.Log("block success: " + m_success);
+						Debug.Log("block ball pos: " + vBallPos + ", vel: " + vBallVel);
                     if (!m_success)
-                        Logger.Log("Block fail reason: " + m_failReason);
+                            Debug.Log("Block fail reason: " + m_failReason);
 
                     m_player.mStatistics.SkillUsageSuccess(m_curExecSkill.skill.id, m_success);
                 }
                 else 
                 {
                     m_success = false;
-                    Logger.Log("496 failed.");
+						Debug.Log("496 failed.");
                     m_failReason = FailReason.TooLate;
                 }
             }//if( !m_ball.m_bBlockSuccess )
@@ -769,7 +769,7 @@ public class PlayerState_Block : PlayerState_Skill
             bool bBlockPass = false;
             if( m_curExecSkill.skill.id == idBlockPassBall )
             {
-                int value = Random.Range(0,2);
+                int value = IM.Random.Range(0,2);
                 bBlockPass = true;
                 if(value == 0)
                 {
@@ -862,7 +862,7 @@ public class PlayerState_Block : PlayerState_Skill
         IM.Number angle = IM.Random.value < new IM.Number(0, 300) ? IM.Random.Range(-new IM.Number(135), new IM.Number(135)) : IM.Random.Range(new IM.Number(135), new IM.Number(225));
 		IM.Vector3 dir = IM.Quaternion.AngleAxis(angle, IM.Vector3.up) * m_player.forward;
 		dir.y = IM.Number.half;
-		Logger.Log("Block velocity: power:" + power + " angle:" + angle);
+		Debug.Log("Block velocity: power:" + power + " angle:" + angle);
 		return dir * power;
 	}
 
@@ -885,7 +885,7 @@ public class PlayerState_Block : PlayerState_Skill
 		if( bPassBall )
 		{
 			m_player.eventHandler.OnPassBall();
-			Logger.Log("block On pass");
+			Debug.Log("block On pass");
 		}
 		else
 		{

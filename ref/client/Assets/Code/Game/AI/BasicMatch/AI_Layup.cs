@@ -16,7 +16,7 @@ public class AI_Layup
 	{
 		m_player.m_toSkillInstance = m_player.m_skillSystem.GetValidSkillInMatch(Command.Layup, true);
 		if (m_player.m_toSkillInstance == null)
-			Logger.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI Layup");
+			Debug.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI Layup");
 	}
 	
 	override public void Update (IM.Number fDeltaTime)

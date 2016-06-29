@@ -34,7 +34,7 @@ public class FashionShopConfigItem
         }
         else
         {
-            Logger.LogError("cannot find  the gender by fashionId:" + fashionID);
+            Debug.LogError("cannot find  the gender by fashionId:" + fashionID);
         }
 
         return gener;
@@ -244,7 +244,7 @@ public class FashionShopConfigItem
         List<Goods> goods = MainPlayer.Instance.GetGoodsList(GoodsCategory.GC_FASHION, _fashionID);
         if (goods.Count != 1)
         {
-            Logger.LogError("goods Count should be one!!");
+            Debug.LogError("goods Count should be one!!");
         }
 
         Goods good = goods[0];
@@ -312,7 +312,7 @@ public class FashionItemDisplay : FashionShopConfigItem
     //    List<Goods> goods = MainPlayer.Instance.GetGoods(GoodsCategory.GC_FASHION, _fashionID);
     //    if (goods.Count != 1)
     //    {
-    //        Logger.LogError("goods Count should be one!!");
+    //        Debug.LogError("goods Count should be one!!");
     //    }
 
     //    Goods good = goods[0];
@@ -470,7 +470,7 @@ public class FashionShopConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            Debug.LogError("LoadConfig failed: " + name);
             return;
         }
 

@@ -69,12 +69,12 @@ public class UIManager
             System.DateTime time = System.DateTime.Now;
             m_resRoot = ResourceLoadManager.Instance.LoadPrefab("Prefab/GUI/UIRoot") as GameObject;
             if (m_resRoot == null)
-                Logger.LogError("load Prefab/GUI/UIRoot error!!!");
+                Debug.LogError("load Prefab/GUI/UIRoot error!!!");
 
             UIRoot uiRoot = m_resRoot.GetComponent<UIRoot>();
             AdaptiveUI(uiRoot);
 
-            Logger.Log("【Time】Client>>>UIManager>>>Load Prefab/GUI/UIRoot=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+            Debug.Log("【Time】Client>>>UIManager>>>Load Prefab/GUI/UIRoot=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
         }
 
         m_UICache = new Dictionary<string, Object>();
@@ -226,10 +226,10 @@ public class UIManager
          * 宽高比支持的极端比例 4:3  16:9 
          * 按宽高比进行缩放，宽高各占权重50%
          * *****************************/
-        //float manualHeight = DesignHeight + (DesignWidth / width * height - DesignHeight) * 0.5f;
-        //uiRoot.manualHeight = (int)manualHeight;
+        float manualHeight = DesignHeight + (DesignWidth / width * height - DesignHeight) * 0.5f;
+        uiRoot.manualHeight = (int)manualHeight;
         #endregion
-
+		/*
         bool result = height / width > DesignHeight / DesignWidth;
         if (result)
         {
@@ -241,7 +241,8 @@ public class UIManager
             uiRoot.manualHeight = (int)DesignHeight;
         }
 
-        Logger.Log(string.Format("----------AdaptiveUI() height={0} width={1} manualHeight={2}", Screen.height, Screen.width, uiRoot.manualHeight));
+        Debug.Log(string.Format("----------AdaptiveUI() height={0} width={1} manualHeight={2}", Screen.height, Screen.width, uiRoot.manualHeight));
+*/
     }
 
     public GameObject CreateUI(string strResPath, Transform parent = null)
@@ -568,7 +569,7 @@ public class UIManager
     {
         if (panel.GetComponent<UIScrollView>() != null)
         {
-            //Logger.LogWarning("Don't register a UIScrollView as a ManagedPanel. " + panel.gameObject.name);
+            //Debug.LogWarning("Don't register a UIScrollView as a ManagedPanel. " + panel.gameObject.name);
             return;
         }
         UIPanel[] panels = panel.GetComponentsInChildren<UIPanel>(true);
@@ -598,13 +599,13 @@ public class UIManager
         UIManagedPanel panel = go.GetComponent<UIManagedPanel>();
         if (panel == null)
         {
-            Logger.LogError("BringPanelForward: Can not use BringPanelForward without UIManagedPanel. Name: " + go.name);
+            Debug.LogError("BringPanelForward: Can not use BringPanelForward without UIManagedPanel. Name: " + go.name);
             return;
         }
         /*
         if (!panelList.Contains(panel))
         {
-            Logger.LogError("BringPanelForward: The panel is not managed, check whether it's top level panel parent has component UIManagedPanel. Name: " + go.name);
+            Debug.LogError("BringPanelForward: The panel is not managed, check whether it's top level panel parent has component UIManagedPanel. Name: " + go.name);
             return;
         }
         */
@@ -616,13 +617,13 @@ public class UIManager
     {
         if (go.GetComponent<UIPanel>() != null)
         {
-            Logger.LogError("BringWidgetForward: Can not use BringWidgetForward with UIPanel. Name: " + go.name);
+            Debug.LogError("BringWidgetForward: Can not use BringWidgetForward with UIPanel. Name: " + go.name);
             return;
         }
         UIWidget widget = go.GetComponent<UIWidget>();
         if (widget == null)
         {
-            Logger.LogError("BringWidgetForward: Can not use BringWidgetForward without UIWidget. Name: " + go.name);
+            Debug.LogError("BringWidgetForward: Can not use BringWidgetForward without UIWidget. Name: " + go.name);
             return;
         }
         AdjustDepth(go, 1000);
@@ -646,7 +647,7 @@ public class UIManager
         }
         else
         {
-            Logger.LogError("UIManager.AdjustDepth: Only support widget");
+            Debug.LogError("UIManager.AdjustDepth: Only support widget");
         }
     }
 

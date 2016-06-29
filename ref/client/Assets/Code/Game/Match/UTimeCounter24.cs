@@ -70,6 +70,7 @@ public class UTimeCounter24
 				{
 					s2_e.spriteName = "gameInterface_figure_white" + Convert.ToString(iS2);
 					s2_e.MakePixelPerfect();
+                    s2_e.GetComponent<Animation>()["Counter24"].speed = 4f;
 					s2_e.GetComponent<Animation>().Rewind();
 					s2_e.GetComponent<Animation>().Play();
 				}

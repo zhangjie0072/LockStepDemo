@@ -14,10 +14,10 @@ using fogs.proto.config;
 
 public static class WrapFile
 {
-	//自定义生成wrap列表
-	public static BindType[] CustomBinds = new BindType[]
-	{
-		_GT(typeof(Util)),
+    //自定义生成wrap列表
+    public static BindType[] CustomBinds = new BindType[]
+    {
+		_GT(typeof(ParticleSystemRenderer)),
 	};
     public static BindType[] binds = new BindType[]
     {
@@ -74,6 +74,7 @@ public static class WrapFile
         _GT(typeof(ParticleEmitter)),
         _GT(typeof(ParticleRenderer)),
         _GT(typeof(ParticleSystem)),
+        _GT(typeof(ParticleSystemRenderer)),
         _GT(typeof(Physics)),
         _GT(typeof(PlayMode)),
         _GT(typeof(PlaySoundManager)),
@@ -297,6 +298,7 @@ public static class WrapFile
         _GT(typeof(AttrData)),
         _GT(typeof(AttrNameData)),
         _GT(typeof(AttributeType)),
+        _GT(typeof(AsyncItem)),
         _GT(typeof(BadgeSystemInfo)),
         _GT(typeof(Blockable)),
         _GT(typeof(BullFightLevel)),
@@ -351,6 +353,7 @@ public static class WrapFile
         _GT(typeof(PractiseData)),
         _GT(typeof(PracticePveData)),
         _GT(typeof(PractiseData.Type)),
+        _GT(typeof(ParticleSystemRenderer)),
         _GT(typeof(QualifyingAwardsData)),
         _GT(typeof(Recharge)),
         _GT(typeof(ResourceLoadManager)),
@@ -433,6 +436,7 @@ public static class WrapFile
         _GT(typeof(PlayerState_Shoot)),
         _GT(typeof(PlayerState_Stand)),
         _GT(typeof(PlayerState_Steal)),
+        _GT(typeof(PlayerState_Stolen)),
         _GT(typeof(PlayerState_Skill)),
         _GT(typeof(PlayerState_FallGround)),
         _GT(typeof(PlayerState_Disturb)),

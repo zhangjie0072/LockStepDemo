@@ -121,11 +121,11 @@ public class FashionConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
 
@@ -177,13 +177,13 @@ public class FashionConfig
             configs.Add(data.fashion_id, data);
         }
 
-		Logger.ConfigEnd(name1);
-		Logger.ConfigBegin(name2);
+		
+		Debug.Log("Config reading " + name2);
 
         text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
 
@@ -198,12 +198,12 @@ public class FashionConfig
 			mapHideParts.Add(data.hide_id, data);
 		}
 
-		Logger.ConfigEnd(name2);
-		Logger.ConfigBegin(name3);
+		
+		Debug.Log("Config reading " + name3);
         text = ResourceLoadManager.Instance.GetConfigText(name3);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name3);
+            Debug.LogError("LoadConfig failed: " + name3);
             return;
         }
 
@@ -226,12 +226,12 @@ public class FashionConfig
                 fashionAttrs.Add(fashionAttr.attr_id, fashionAttr);
         }
 
-		Logger.ConfigEnd(name3);
-		Logger.ConfigBegin(name4);
+		
+		Debug.Log("Config reading " + name4);
         text = ResourceLoadManager.Instance.GetConfigText(name4);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name4);
+            Debug.LogError("LoadConfig failed: " + name4);
             return;
         }
 
@@ -253,6 +253,6 @@ public class FashionConfig
             if (!fashionDatas.ContainsKey(fashionData.fashion_id))
                 fashionDatas.Add(fashionData.fashion_id, fashionData);
 		}
-		Logger.ConfigEnd(name4);
+		
 	}
 }

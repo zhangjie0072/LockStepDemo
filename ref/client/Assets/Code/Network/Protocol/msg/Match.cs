@@ -1323,6 +1323,14 @@ namespace fogs.proto.msg
       get { return _aver_time; }
       set { _aver_time = value; }
     }
+    private uint _team_flag = default(uint);
+    [global::ProtoBuf.ProtoMember(11, IsRequired = false, Name=@"team_flag", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint team_flag
+    {
+      get { return _team_flag; }
+      set { _team_flag = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -1377,6 +1385,22 @@ namespace fogs.proto.msg
     {
       get { return _session_id; }
       set { _session_id = value; }
+    }
+    private uint _team_flag = default(uint);
+    [global::ProtoBuf.ProtoMember(7, IsRequired = false, Name=@"team_flag", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint team_flag
+    {
+      get { return _team_flag; }
+      set { _team_flag = value; }
+    }
+    private uint _grade = default(uint);
+    [global::ProtoBuf.ProtoMember(8, IsRequired = false, Name=@"grade", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint grade
+    {
+      get { return _grade; }
+      set { _grade = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -1622,6 +1646,14 @@ namespace fogs.proto.msg
     {
       get { return _flag; }
       set { _flag = value; }
+    }
+    private uint _team_flag = default(uint);
+    [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"team_flag", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint team_flag
+    {
+      get { return _team_flag; }
+      set { _team_flag = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -3666,6 +3698,13 @@ namespace fogs.proto.msg
       get { return _off_name; }
       set { _off_name = value; }
     }
+    private readonly global::System.Collections.Generic.List<uint> _user_acc_id = new global::System.Collections.Generic.List<uint>();
+    [global::ProtoBuf.ProtoMember(24, Name=@"user_acc_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public global::System.Collections.Generic.List<uint> user_acc_id
+    {
+      get { return _user_acc_id; }
+    }
+  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -4326,6 +4365,37 @@ namespace fogs.proto.msg
       get { return _qualifying_newer; }
       set { _qualifying_newer = value; }
     }
+    private readonly global::System.Collections.Generic.List<fogs.proto.msg.KeyValueData> _assist_awards = new global::System.Collections.Generic.List<fogs.proto.msg.KeyValueData>();
+    [global::ProtoBuf.ProtoMember(19, Name=@"assist_awards", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<fogs.proto.msg.KeyValueData> assist_awards
+    {
+      get { return _assist_awards; }
+    }
+  
+    private uint _shiwakan_percent = default(uint);
+    [global::ProtoBuf.ProtoMember(20, IsRequired = false, Name=@"shiwakan_percent", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint shiwakan_percent
+    {
+      get { return _shiwakan_percent; }
+      set { _shiwakan_percent = value; }
+    }
+    private uint _assist_first_win_times = default(uint);
+    [global::ProtoBuf.ProtoMember(21, IsRequired = false, Name=@"assist_first_win_times", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint assist_first_win_times
+    {
+      get { return _assist_first_win_times; }
+      set { _assist_first_win_times = value; }
+		}
+	private uint _assist_num = default(uint);
+	[global::ProtoBuf.ProtoMember(22, IsRequired = false, Name=@"assist_num", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+	[global::System.ComponentModel.DefaultValue(default(uint))]
+	public uint assist_num
+	{
+			get { return _assist_num; }
+			set { _assist_num = value; }
+	}
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }

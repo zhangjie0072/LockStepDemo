@@ -23,9 +23,9 @@ public class FrameAnimation : MonoBehaviour
     {
         sprite = GetComponent<UISprite>();
         if (sprite == null)
-            Logger.LogError("The frame animation component rely on UISpite.");
+            Debug.LogError("The frame animation component rely on UISpite.");
         if (endFrame < beginFrame)
-            Logger.LogError("End frame must larger than begin frame.");
+            Debug.LogError("End frame must larger than begin frame.");
 
         duration = (endFrame - beginFrame + 1) / frameRate;
     }

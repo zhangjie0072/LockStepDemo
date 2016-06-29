@@ -232,7 +232,6 @@ public class GlobalConstWrap
 			new LuaField("OPEN_SHOOT_CYCLE_RADIUS", get_OPEN_SHOOT_CYCLE_RADIUS, set_OPEN_SHOOT_CYCLE_RADIUS),
 			new LuaField("OPEN_SHOOT_FAN_RADIUS", get_OPEN_SHOOT_FAN_RADIUS, set_OPEN_SHOOT_FAN_RADIUS),
 			new LuaField("OPEN_SHOOT_FAN_ANGLE", get_OPEN_SHOOT_FAN_ANGLE, set_OPEN_SHOOT_FAN_ANGLE),
-			new LuaField("ROTATE_ANGLE_SEC", get_ROTATE_ANGLE_SEC, set_ROTATE_ANGLE_SEC),
 			new LuaField("PVP_VALID_LATENCY", get_PVP_VALID_LATENCY, set_PVP_VALID_LATENCY),
 			new LuaField("ALL_HEDGING_ID", get_ALL_HEDGING_ID, set_ALL_HEDGING_ID),
 			new LuaField("MATCHED_KEY_BLOCK_RATE_ADJUST", get_MATCHED_KEY_BLOCK_RATE_ADJUST, set_MATCHED_KEY_BLOCK_RATE_ADJUST),
@@ -1787,13 +1786,6 @@ public class GlobalConstWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_ROTATE_ANGLE_SEC(IntPtr L)
-	{
-		LuaScriptMgr.PushValue(L, GlobalConst.ROTATE_ANGLE_SEC);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int get_PVP_VALID_LATENCY(IntPtr L)
 	{
 		LuaScriptMgr.Push(L, GlobalConst.PVP_VALID_LATENCY);
@@ -2070,13 +2062,6 @@ public class GlobalConstWrap
 	static int set_OPEN_SHOOT_FAN_ANGLE(IntPtr L)
 	{
 		GlobalConst.OPEN_SHOOT_FAN_ANGLE = (IM.Number)LuaScriptMgr.GetNetObject(L, 3, typeof(IM.Number));
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_ROTATE_ANGLE_SEC(IntPtr L)
-	{
-		GlobalConst.ROTATE_ANGLE_SEC = (IM.Number)LuaScriptMgr.GetNetObject(L, 3, typeof(IM.Number));
 		return 0;
 	}
 

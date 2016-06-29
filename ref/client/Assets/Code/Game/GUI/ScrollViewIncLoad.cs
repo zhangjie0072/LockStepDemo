@@ -42,7 +42,7 @@ public class ScrollViewIncLoad : MonoBehaviour
 		scroll = GetComponent<UIScrollView>();
 		UIGrid[] grids = GetComponentsInChildren<UIGrid>(true);
 		if (grids == null || grids.Length == 0)
-			Logger.LogError("ScrollViewIncLoad requires UIGrid.");
+			Debug.LogError("ScrollViewIncLoad requires UIGrid.");
 		grid = grids[0];
 		maxPerLine = grid.maxPerLine;
 		if (maxPerLine == 0)
@@ -90,14 +90,14 @@ public class ScrollViewIncLoad : MonoBehaviour
 			grid.Reposition();
 			scroll.InvalidateBounds();
 			float offsetAfter = GetConstrainOffset();
-			//Logger.Log("ScrollViewIncLoad, offset after: " + offsetAfter);
+			//Debug.Log("ScrollViewIncLoad, offset after: " + offsetAfter);
 			if (Mathf.Abs(offsetAfter) < 2.0f)	// No need to bounce back
 			{
 				scroll.DisableSpring();
 				scroll.currentMomentum = Vector3.zero;
 			}
 		}
-		//Logger.Log("ScrollViewIncLoad, grid child count: " + grid.transform.childCount);
+		//Debug.Log("ScrollViewIncLoad, grid child count: " + grid.transform.childCount);
 	}
 
 	float GetConstrainOffset()
@@ -111,8 +111,8 @@ public class ScrollViewIncLoad : MonoBehaviour
 		int loadLineNum = Mathf.CeilToInt(totalSpace / itemSize);
 		loadLineNum += preloadLineNum;
 		if (loadLineNum > maxLineNum)
-			Logger.LogError("ScrollViewIncLoad, num of line to load is larger than max line.");
-		Logger.Log("ScrollViewIncLoad, load line num: " + loadLineNum + " totalSpace:" + totalSpace + " itemSize:" + itemSize);
+			Debug.LogError("ScrollViewIncLoad, num of line to load is larger than max line.");
+		Debug.Log("ScrollViewIncLoad, load line num: " + loadLineNum + " totalSpace:" + totalSpace + " itemSize:" + itemSize);
 		int loadNum = loadLineNum * maxPerLine;
 		if (onAcquireItem != null)
 		{
@@ -123,7 +123,7 @@ public class ScrollViewIncLoad : MonoBehaviour
 					items.Add(null);
 				for (; endIndex < newEndIndex; ++endIndex)
 				{
-					//Logger.Log("ScrollViewIncLoad, acquire next index: " + endIndex);
+					//Debug.Log("ScrollViewIncLoad, acquire next index: " + endIndex);
 					GameObject item = onAcquireItem(endIndex, grid.transform);
 					if (item == null)
 						break;
@@ -137,7 +137,7 @@ public class ScrollViewIncLoad : MonoBehaviour
 				int realLoadLineNum = (startIndex - newStartIndex) / maxPerLine;
 				for (; startIndex > newStartIndex; --startIndex)
 				{
-					//Logger.Log("ScrollViewIncLoad, acquire prev index: " + (startIndex - 1));
+					//Debug.Log("ScrollViewIncLoad, acquire prev index: " + (startIndex - 1));
 					GameObject item = onAcquireItem(startIndex - 1, grid.transform);
 					if (item == null)
 						break;
@@ -155,13 +155,13 @@ public class ScrollViewIncLoad : MonoBehaviour
 		if (isDestroyFront)
 		{
 			int destroyNum = (Mathf.CeilToInt((float)curItemNum / maxPerLine) - maxLineNum) * maxPerLine;
-			Logger.Log("ScrollViewIncLoad, destroy front num: " + destroyNum);
+			Debug.Log("ScrollViewIncLoad, destroy front num: " + destroyNum);
 			if (destroyNum > 0)
 			{
 				int newStartIndex = startIndex + destroyNum;
 				for (; startIndex < newStartIndex; ++startIndex)
 				{
-					//Logger.Log("ScrollViewIncLoad, destroy front index: " + startIndex);
+					//Debug.Log("ScrollViewIncLoad, destroy front index: " + startIndex);
 					GameObject itemToDestroy = items[startIndex];
 					if (onDestroyItem != null)
 						onDestroyItem(startIndex, itemToDestroy);
@@ -180,20 +180,20 @@ public class ScrollViewIncLoad : MonoBehaviour
 				scroll.MoveRelative(isHorizontal ?
 					new Vector3(-destroyLineNum * grid.cellWidth, 0, 0) :
 					new Vector3(0, -destroyLineNum * grid.cellHeight, 0));
-				//Logger.Log("ScrollViewIncLoad, scroll pos: " + scroll.transform.localPosition);
+				//Debug.Log("ScrollViewIncLoad, scroll pos: " + scroll.transform.localPosition);
 			}
 		}
 		else
 		{
 			int destroyNum = curItemNum - maxLineNum * maxPerLine;
-			Logger.Log("ScrollViewIncLoad, destroy end num: " + destroyNum);
+			Debug.Log("ScrollViewIncLoad, destroy end num: " + destroyNum);
 			if (destroyNum > 0)
 			{
 				int newEndIndex = endIndex - destroyNum;
 				newEndIndex = Mathf.Max(newEndIndex, 0);
 				for (; endIndex > newEndIndex; --endIndex)
 				{
-					//Logger.Log("ScrollViewIncLoad, destroy end index: " + (endIndex - 1));
+					//Debug.Log("ScrollViewIncLoad, destroy end index: " + (endIndex - 1));
 					GameObject itemToDestroy = items[endIndex - 1];
 					if (onDestroyItem != null)
 						onDestroyItem(endIndex - 1, itemToDestroy);

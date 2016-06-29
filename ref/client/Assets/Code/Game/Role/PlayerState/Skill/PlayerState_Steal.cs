@@ -28,7 +28,12 @@ public class PlayerState_Steal : PlayerState_Skill
 		if ( (m_match.GetMatchType() == GameMatch.Type.ePVP_1PLUS || m_match.GetMatchType() == GameMatch.Type.ePVP_3On3)
 		    && m_player != m_match.m_mainRole)
 			return true;
-
+        */
+        //TODO 找刘云飞确认
+        /*
+        if (m_player != m_match.m_mainRole)
+            return true;
+        */
 		if (!forcedByAI && !InStealPosition(m_player, m_ball) && InAutoPosition(m_player, m_ball))
 		{
 			m_stateMachine.assistAI.Enable(AIState.Type.eAssistSteal);
@@ -36,7 +41,7 @@ public class PlayerState_Steal : PlayerState_Skill
 			return false;
 		}
 		forcedByAI = false;
-		*/
+		
 		return true;
 	}
 
@@ -76,7 +81,7 @@ public class PlayerState_Steal : PlayerState_Skill
             {
                 stealTarget.m_lostBallContext.vInitPos 	 = m_ball.position;
                 stealTarget.m_lostBallContext.vInitPos.y = IM.Math.Max(m_ball.position.y, m_player.position.y + new IM.Number(0,300));
-                stealTarget.m_lostBallContext.vInitPos = m_player.right.normalized;
+                stealTarget.m_lostBallContext.vInitVel = m_player.right.normalized;
             }
 
             PlayerState_Stolen stolen = stealTarget.m_StateMachine.GetState(State.eStolen) as PlayerState_Stolen;
@@ -137,8 +142,8 @@ public class PlayerState_Steal : PlayerState_Skill
 
 	Vector3 GenerateDropPoint()
 	{
-		Vector3 dir = Quaternion.AngleAxis(Random.Range(0f, 180f), Vector3.up) * stealTarget.forward;
-		float dist = Random.Range(0.8f, 2f);
+		Vector3 dir = Quaternion.AngleAxis(IM.Random.Range(0f, 180f), Vector3.up) * stealTarget.forward;
+		float dist = IM.Random.Range(0.8f, 2f);
 		Vector3 point = stealTarget.position + dir * dist;
 		point.y = 0f;
 		return point;
@@ -164,7 +169,13 @@ public class PlayerState_Steal : PlayerState_Skill
 
 	public static bool InAutoPosition(Player player, UBasketball ball)
 	{
-        return InFrontOfBallOwner(player, ball, new IM.Number(3));
+        if (ball.m_owner == null)
+            return false;
+
+        if (ball.m_owner.m_AOD.m_zone != AOD.Zone.eInvalid)
+            return true;
+
+        return false;
 	}
 
 	static bool InFrontOfBallOwner(Player player, UBasketball ball, IM.Number distThreshold)
@@ -176,7 +187,7 @@ public class PlayerState_Steal : PlayerState_Skill
 		IM.Number dist = GameUtils.HorizonalDistance(player.position, ball.position);
 		if (dist > distThreshold)
 		{
-			Logger.Log("Steal distance: " + dist + " greater than " + distThreshold);
+			Debug.Log("Steal distance: " + dist + " greater than " + distThreshold);
 			return false;
 		}
 
@@ -186,7 +197,7 @@ public class PlayerState_Steal : PlayerState_Skill
 		IM.Number angle = IM.Vector3.Angle(ball.m_owner.forward, dir);
 		if (angle > new IM.Number(90))
 		{
-			Logger.Log("Steal angle " + angle);
+			Debug.Log("Steal angle " + angle);
 			return false;
 		}
 
@@ -211,7 +222,7 @@ public class PlayerState_Steal : PlayerState_Skill
 		ratio = GameSystem.Instance.StealConfig.GetRatio(ps);
 		if (ratio == IM.Number.zero)
 		{
-			Logger.Log("Steal failed, state: " + ps);
+			Debug.Log("Steal failed, state: " + ps);
 			return false;
 		}
 
@@ -219,10 +230,26 @@ public class PlayerState_Steal : PlayerState_Skill
 			return false;
 		Dictionary<string, uint> targetData = stealTarget.m_finalAttrs;
 		Dictionary<string, uint> playerData = m_player.m_finalAttrs;
-		
-		if (!InStealPosition(m_player, m_ball))
+
+        //if (m_ball.m_owner == stealTarget)
+        //{
+        //    //ÔÚÉÈÐÎÇøÓòÄÚÀ­½üµ½³ÖÇòÕßÉíÇ°
+        //    AOD.Zone zone = stealTarget.m_AOD.GetStateByPos(m_player.position);
+        //    if (zone != AOD.Zone.eInvalid)
+        //    {
+        //        //Vector3 newPos = new Vector3(stealTarget.position.x,stealTarget.position.y,stealTarget.position.z);               
+        //        //Vector3 newPos;
+        //        //newPos.x = stealTarget.position.x + 1.5f * stealTarget.forward.normalized.x;
+        //        //newPos.y = stealTarget.position.y + 1.5f * stealTarget.forward.normalized.y;
+        //        //newPos.z = stealTarget.position.z + 1.5f * stealTarget.forward.normalized.z;
+        //        //m_player.position = newPos;
+        //        m_player.m_moveHelper.MoveTo(stealTarget.position);
+        //    }         
+        //}
+        
+        if (!InStealPosition(m_player, m_ball))
 		{
-			Logger.Log("Steal failed.");
+			Debug.Log("Steal failed.");
 			return false;
 		}
 

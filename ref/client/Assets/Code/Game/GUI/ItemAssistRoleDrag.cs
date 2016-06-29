@@ -32,7 +32,7 @@ public class ItemAssistRoleDrag : UIDragDropItem
         }
         else
         {
-            Logger.Log("position error: no set position");
+            Debug.Log("position error: no set position");
             return;
         }
 

@@ -10,7 +10,18 @@ public class InputReader : Singleton<InputReader>
     public const float ANGLE_PER_DIR = 360 / DIR_NUM;
 
     public List<Command> validCmdList = new List<Command>();
-    public bool enabled = true;
+    private bool _enabled = true;
+    public bool enabled
+    {
+        get { return _enabled; }
+        set
+        {
+            _enabled = value; 
+            //如果禁用，立即向服务器告知
+            if (!value)
+                GameMsgSender.SendInput(InputDirection.None, Command.None);
+        }
+    }
     public Player player;
 
     public void Update(GameMatch match)
@@ -25,6 +36,8 @@ public class InputReader : Singleton<InputReader>
         InputDirection dir = ConvertToDirection(GameSystem.Instance.mClient.mInputManager.mHVDirection);
 
         Command cmd = Command.None;
+        if (match.m_uiController == null)
+            return;
 		if( GameSystem.Instance.mClient.mInputManager.m_CmdBtn1Click && 
             match.m_uiController.m_btns[0].cmd != Command.None)
 		{

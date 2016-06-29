@@ -8,7 +8,7 @@ public class MatchStateFoulWrap
 		LuaMethod[] regs = new LuaMethod[]
 		{
 			new LuaMethod("OnEnter", OnEnter),
-			new LuaMethod("Update", Update),
+			new LuaMethod("GameUpdate", GameUpdate),
 			new LuaMethod("OnExit", OnExit),
 			new LuaMethod("IsCommandValid", IsCommandValid),
 			new LuaMethod("New", _CreateMatchStateFoul),
@@ -62,12 +62,12 @@ public class MatchStateFoulWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int Update(IntPtr L)
+	static int GameUpdate(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		MatchStateFoul obj = (MatchStateFoul)LuaScriptMgr.GetNetObjectSelf(L, 1, "MatchStateFoul");
 		IM.Number arg0 = (IM.Number)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Number));
-		obj.Update(arg0);
+		obj.GameUpdate(arg0);
 		return 0;
 	}
 

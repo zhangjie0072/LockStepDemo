@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using System.Collections.Generic;
 using fogs.proto.msg;
@@ -9,6 +8,13 @@ using fogs.proto.config;
 public class MatchStateOver
 	: MatchState
 {
+	public struct FirstWinAssist
+	{
+		public List<KeyValueData> assist_awards ;
+		public uint shiwakan_percent ;
+		public uint assist_first_win_times ;
+		public uint assist_num ;
+	}
 	private Team	m_winTeam;
 	private Team	m_loseTeam;
 
@@ -28,8 +34,10 @@ public class MatchStateOver
     private EndShootResp shootResp;
     private PVPEndChallengePlusResp challengePlusResp;
     private PVPEndChallengeExResp challengeExResp;
-    private PVPEndQualifyingNewerResp qualifyingNewerResp;
+	private PVPEndQualifyingNewerResp qualifyingNewerResp;
+	private FirstWinAssist qualifyingNewerAssist;
 	private PVPEndRegularResp regularResp;
+	private FirstWinAssist regularAssist;
 	private PVPEndQualifyingResp qualifyingNewEndResp;
     private EndPracticePveResp endPracticePveResp;
     private int qualifyingScoreDelta;
@@ -70,16 +78,12 @@ public class MatchStateOver
 		{
 			player.model.EnableGrey(false);
 
-			player.m_enableAction = false;
 			if( player.m_catchHelper != null )
 				player.m_catchHelper.enabled = false;
 
 			player.m_enablePickupDetector = false;
 			player.m_enableMovement = false;
 			player.m_enableAction = false;
-
-			if( player.m_aiMgr != null )
-				player.m_aiMgr.m_enable = false;
 		}
 
 		if( m_match.m_uiMatch != null )
@@ -100,17 +104,15 @@ public class MatchStateOver
 			}
 		}
 
-		GameMatch.Type type = m_match.GetMatchType();
-		if( ( type == GameMatch.Type.e3On3 || type == GameMatch.Type.eCareer3On3 || type == GameMatch.Type.e3AIOn3AI || type == GameMatch.Type.eAsynPVP3On3 || type == GameMatch.Type.eQualifyingNewerAI || type == GameMatch.Type.eLadderAI)
-		   && m_match.IsDraw() )
+		if( m_match is GameMatch_MultiPlayer && m_match.IsDraw() )
 		{
 			m_stateMachine.SetState(State.eOverTime);
 			return;
 		}
 
-		bool isWin = (m_match.m_mainRole.m_team == m_winTeam);
+		bool isWin = (m_match.mainRole.m_team == m_winTeam);
 		List<GameScene.Ending> endings = m_match.mCurScene.m_endings;
-		m_ending = endings[UnityEngine.Random.Range(0, endings.Count)];
+		m_ending = endings[Random.Range(0, endings.Count)];
 	
 		_TeamPos(m_winTeam, true);
 		_TeamPos(m_loseTeam, false);
@@ -118,15 +120,15 @@ public class MatchStateOver
 		m_matchResultCamCtrl = new MatchResultCameraControl(m_match, m_ending, isWin);
 
       
-		Debugger.Instance.m_steamer.message  = "Main role " 	+ m_match.m_mainRole.m_id 					+ " statistics: \n";
-		Debugger.Instance.m_steamer.message += "rebound: " 		+ m_match.m_mainRole.mStatistics.success_rebound_times 	+ " \n";
-		Debugger.Instance.m_steamer.message += "block: " 		+ m_match.m_mainRole.mStatistics.success_block_times 	+ " \n";
-		Debugger.Instance.m_steamer.message += "steal: " 		+ m_match.m_mainRole.mStatistics.success_steal_times 	+ " \n";
-		Debugger.Instance.m_steamer.message += "assist: " 		+ m_match.m_mainRole.mStatistics.secondary_attack 	+ " \n";
-		Debugger.Instance.m_steamer.message += "skill: " 		+ m_match.m_mainRole.mStatistics.skill 	+ " \n";
-		Debugger.Instance.m_steamer.message += "shoot near: " 	+ m_match.m_mainRole.mStatistics.near_score + " \n";
-		Debugger.Instance.m_steamer.message += "shoot middle: " + m_match.m_mainRole.mStatistics.mid_score + " \n";
-		Debugger.Instance.m_steamer.message += "shoot far: " 	+ m_match.m_mainRole.mStatistics.far_score + " \n";
+		Debugger.Instance.m_steamer.message  = "Main role " 	+ m_match.mainRole.m_id 					+ " statistics: \n";
+		Debugger.Instance.m_steamer.message += "rebound: " 		+ m_match.mainRole.mStatistics.success_rebound_times 	+ " \n";
+		Debugger.Instance.m_steamer.message += "block: " 		+ m_match.mainRole.mStatistics.success_block_times 	+ " \n";
+		Debugger.Instance.m_steamer.message += "steal: " 		+ m_match.mainRole.mStatistics.success_steal_times 	+ " \n";
+		Debugger.Instance.m_steamer.message += "assist: " 		+ m_match.mainRole.mStatistics.secondary_attack 	+ " \n";
+		Debugger.Instance.m_steamer.message += "skill: " 		+ m_match.mainRole.mStatistics.skill 	+ " \n";
+		Debugger.Instance.m_steamer.message += "shoot near: " 	+ m_match.mainRole.mStatistics.near_score + " \n";
+		Debugger.Instance.m_steamer.message += "shoot middle: " + m_match.mainRole.mStatistics.mid_score + " \n";
+		Debugger.Instance.m_steamer.message += "shoot far: " 	+ m_match.mainRole.mStatistics.far_score + " \n";
 
 		PlaySoundManager.Instance.PlaySound(MatchSoundEvent.MatchOverPose);
 		PlaySoundManager.Instance.PlaySound(MatchSoundEvent.GameOver);
@@ -225,7 +227,7 @@ public class MatchStateOver
 		}
 	}
 
-	override public void Update (float deltaTime)
+	override public void ViewUpdate (float deltaTime)
 	{
 		if (m_matchResultCamCtrl.m_finished &&
 			!GameSystem.Instance.mNetworkManager.connPlat &&
@@ -252,7 +254,7 @@ public class MatchStateOver
 
 	void OnEnd()
 	{
-		bool isWin = (m_winTeam == m_match.m_mainRole.m_team);
+		bool isWin = (m_winTeam == m_match.mainRole.m_team);
 		if (m_match.m_config.needPlayPlot && isWin)
 		{
 			m_stateMachine.SetState(MatchState.State.ePlotEnd);
@@ -473,7 +475,7 @@ public class MatchStateOver
         TourEndReq tour = new TourEndReq();
 		tour.direct_clear = 0u;
 		tour.session_id = m_match.m_config.session_id;
-		tour.succeed = (m_winTeam == m_match.m_mainRole.m_team) ? 1u : 0u;
+		tour.succeed = (m_winTeam == m_match.mainRole.m_team) ? 1u : 0u;
 
         ExitGameReq req = new ExitGameReq();
         req.acc_id = MainPlayer.Instance.AccountID;
@@ -520,13 +522,11 @@ public class MatchStateOver
 		req.exit_type = ExitMatchType.EMT_END;
 		req.regular = regular;
 		PlatNetwork.Instance.SendExitGameReq(req);
-		Logger.Log("SendRegular1V1Result");
+		Debug.Log("SendRegular1V1Result");
 	}
 
 	private void SendQualifyingNewResult()
 	{
-		if (m_match.GetMatchType() == GameMatch.Type.ePVP_1PLUS)
-			return;
 		PVPEndQualifyingReq qualifying_new = new PVPEndQualifyingReq();
 		qualifying_new.score_home = (uint)m_match.m_homeScore;
 		qualifying_new.score_away = (uint)m_match.m_awayScore;
@@ -560,7 +560,7 @@ public class MatchStateOver
 		req.exit_type = ExitMatchType.EMT_END;
 		req.qualifying_new = qualifying_new;
 		PlatNetwork.Instance.SendExitGameReq(req);
-		Logger.Log("SendQualifyingNewResult");
+		Debug.Log("SendQualifyingNewResult");
 	}
 
 
@@ -600,7 +600,7 @@ public class MatchStateOver
         req.exit_type = ExitMatchType.EMT_END;
         req.qualifying_newer = qualifying_new;
         PlatNetwork.Instance.SendExitGameReq(req);
-        Logger.Log("Send QualifyingNewer");
+        Debug.Log("Send QualifyingNewer");
     }
 
     private void SendLadderResult()
@@ -638,7 +638,7 @@ public class MatchStateOver
         req.exit_type = ExitMatchType.EMT_END;
         req.challenge_ex = chellengeEx;
         PlatNetwork.Instance.SendExitGameReq(req);
-        Logger.Log("Send challenge_ex");
+        Debug.Log("Send challenge_ex");
     }
 
 
@@ -710,7 +710,7 @@ public class MatchStateOver
     {
         if (m_origSessionID == 0)
         {
-            Logger.LogWarning("origSessionID is zero in MatchStateOver");
+            Debug.LogWarning("origSessionID is zero in MatchStateOver");
             return;
         }
         GameSystem.Instance.mNetworkManager.m_platConn.SendPack(0, req, MsgID.EnterGameReqID);
@@ -721,11 +721,11 @@ public class MatchStateOver
     {
         if( m_origSessionID == 0 )
         {
-            Logger.LogWarning("origSessionID is zero in MatchStateOver");
+            Debug.LogWarning("origSessionID is zero in MatchStateOver");
             return;
         }
 
-        Logger.Log("SendEnterGame, type =" + type);
+        Debug.Log("SendEnterGame, type =" + type);
 
         EnterGameReq req = new EnterGameReq();
         req.acc_id = MainPlayer.Instance.AccountID;
@@ -744,7 +744,7 @@ public class MatchStateOver
 		}
 		else
 		{
-			Logger.Log("Complete tour error: " + ((ErrorID)resp.result).ToString());
+			Debug.Log("Complete tour error: " + ((ErrorID)resp.result).ToString());
 			CommonFunction.ShowErrorMsg((ErrorID)resp.result);
 		}
 		m_serverResponsed = true;
@@ -759,7 +759,7 @@ public class MatchStateOver
 		}
 		else
 		{
-			Logger.Log("Complete qualifying error: " + ((ErrorID)resp.result).ToString());
+			Debug.Log("Complete qualifying error: " + ((ErrorID)resp.result).ToString());
 			CommonFunction.ShowErrorMsg((ErrorID)resp.result);
 		}
 		m_serverResponsed = true;
@@ -775,7 +775,7 @@ public class MatchStateOver
         }
         else
         {
-            Logger.Log("Complete qualifying error: " + ((ErrorID)resp.result).ToString());
+            Debug.Log("Complete qualifying error: " + ((ErrorID)resp.result).ToString());
             CommonFunction.ShowErrorMsg((ErrorID)resp.result);
         }
 		m_serverResponsed = true;
@@ -790,7 +790,7 @@ public class MatchStateOver
         }
         else
         {
-            Logger.Log("Complete qualifying error: " + ((ErrorID)resp.result).ToString());
+            Debug.Log("Complete qualifying error: " + ((ErrorID)resp.result).ToString());
             CommonFunction.ShowErrorMsg((ErrorID)resp.result);
         }
 		m_serverResponsed = true;
@@ -805,7 +805,7 @@ public class MatchStateOver
         }
         else
         {
-            Logger.Log("Complete challengePlusResp error: " + ((ErrorID)resp.result).ToString());
+            Debug.Log("Complete challengePlusResp error: " + ((ErrorID)resp.result).ToString());
             CommonFunction.ShowErrorMsg((ErrorID)resp.result);
         }
 		m_serverResponsed = true;
@@ -815,31 +815,48 @@ public class MatchStateOver
     {
         maxDaliyIncomeData = maxIncomeData;
         ErrorID err = (ErrorID)resp.result;
-        Logger.Log("1927 ChallengeExCompleteHandler err=" + err);
+        Debug.Log("1927 ChallengeExCompleteHandler err=" + err);
         if (err == ErrorID.SUCCESS || err == ErrorID.MATCH_LOSE)
         {
             challengeExResp = resp;
         }
         else
         {
-            Logger.Log("Complete challengeExResp error: " + ((ErrorID)resp.result).ToString());
+            Debug.Log("Complete challengeExResp error: " + ((ErrorID)resp.result).ToString());
             CommonFunction.ShowErrorMsg((ErrorID)resp.result);
         }
 		m_serverResponsed = true;
     }
 
-    public void QualifyingNewerCompleteHandler(PVPEndQualifyingNewerResp resp, List<KeyValueData> maxIncomeData = null)
+	public void QualifyingNewerCompleteHandler(PVPEndQualifyingNewerResp resp, List<KeyValueData> maxIncomeData = null,List<KeyValueData> assist_awards = null,uint shiwakan_percent = 0,uint assist_first_win_times = 0,uint assist_num = 0)
     {
         maxDaliyIncomeData = maxIncomeData;
         ErrorID err = (ErrorID)resp.result;
-        Logger.Log("1927 ChallengeExCompleteHandler err=" + err);
+        Debug.Log("1927 ChallengeExCompleteHandler err=" + err);
         if (err == ErrorID.SUCCESS || err == ErrorID.MATCH_LOSE)
         {
             qualifyingNewerResp = resp;
+
+			if (err == ErrorID.SUCCESS)
+			{
+				qualifyingNewerAssist = new FirstWinAssist();
+				qualifyingNewerAssist.assist_awards = assist_awards;
+				qualifyingNewerAssist.assist_first_win_times = assist_first_win_times;
+				qualifyingNewerAssist.shiwakan_percent = shiwakan_percent;
+				qualifyingNewerAssist.assist_num = assist_num;
+				Debug.Log("qualifyingNewerAssist.assist_first_win_times "+qualifyingNewerAssist.assist_first_win_times);
+				Debug.Log("qualifyingNewerAssist.shiwakan_percent "+qualifyingNewerAssist.shiwakan_percent);
+				Debug.Log("qualifyingNewerAssist.assist_num "+qualifyingNewerAssist.assist_num);
+				foreach(KeyValueData i in assist_awards)
+				{
+					Debug.Log("qualifyingNewerAssist.assist_awards id "+i.id+",value "+i.value);
+				}
+			}
+//			Logger.
         }
         else
         {
-            Logger.Log("Complete QualifyingNewer error: " + ((ErrorID)resp.result).ToString());
+            Debug.Log("Complete QualifyingNewer error: " + ((ErrorID)resp.result).ToString());
             CommonFunction.ShowErrorMsg((ErrorID)resp.result);
         }
 		m_serverResponsed = true;
@@ -874,7 +891,7 @@ public class MatchStateOver
 		}
 		else
 		{
-			Logger.Log("Complete section error: " + ((ErrorID)resp.result).ToString());
+			Debug.Log("Complete section error: " + ((ErrorID)resp.result).ToString());
 			CommonFunction.ShowErrorMsg((ErrorID)resp.result);
 		}
 		m_serverResponsed = true;
@@ -888,7 +905,7 @@ public class MatchStateOver
         }
         else
         {
-            Logger.Log("Complete section error: " + ((ErrorID)resp.result).ToString());
+            Debug.Log("Complete section error: " + ((ErrorID)resp.result).ToString());
             CommonFunction.ShowErrorMsg((ErrorID)resp.result);
         }
         m_serverResponsed = true;
@@ -1073,7 +1090,7 @@ public class MatchStateOver
         ErrorID err = (ErrorID)resp.result;
         int upRank = 0;
         if ((err == ErrorID.SUCCESS) && MainPlayer.Instance.QualifyingRanking == 0)
-            upRank = (int)UnityEngine.Random.Range((float)(20000 - resp.cur_ranking), (float)(20000 - resp.cur_ranking + 1000));
+            upRank = (int)Random.Range((float)(20000 - resp.cur_ranking), (float)(20000 - resp.cur_ranking + 1000));
         else
             upRank = (int)(MainPlayer.Instance.QualifyingRanking - resp.cur_ranking);
         MainPlayer.Instance.QualifyingRanking = resp.cur_ranking;
@@ -1215,7 +1232,7 @@ public class MatchStateOver
         uint homeScore = resp.main_score;
         uint awayScore = resp.away_score;
         uint challengeScore = resp.score;
-        if ((uint)m_match.m_mainRole.m_team.m_side == (uint)Team.Side.eAway)
+        if ((uint)m_match.mainRole.m_team.m_side == (uint)Team.Side.eAway)
         {
             homeGrid = loseGrid;
             awayGrid = winGrid;
@@ -1232,7 +1249,7 @@ public class MatchStateOver
             go.transform,
             isWin,
             m_match.GetConfig().session_id,
-            (uint)m_match.m_mainRole.m_team.m_side,
+            (uint)m_match.mainRole.m_team.m_side,
             homeName,
             homeScore,
             awayName,
@@ -1325,7 +1342,7 @@ public class MatchStateOver
     }
     public void HandleQualifyingNewerComplete()
     {
-        //Logger.Log("1927 HHandleQualifyingNewerComplete called m_resultShowing= " + m_resultShowing + " qualifyingNewerResp=" + qualifyingNewerResp);
+        //Debug.Log("1927 HHandleQualifyingNewerComplete called m_resultShowing= " + m_resultShowing + " qualifyingNewerResp=" + qualifyingNewerResp);
 
         int index = 1;
         if (m_resultShowing) return;
@@ -1360,9 +1377,9 @@ public class MatchStateOver
 
 
         // Log
-        Logger.Log("MainPlayer.Instance.QualifyingNewerInfo.league_awards_flag = " + MainPlayer.Instance.QualifyingNewerInfo.league_awards_flag);
-        Logger.Log("MainPlayer.Instance.QualifyingNewerInfo.grade_awards= " + MainPlayer.Instance.QualifyingNewerInfo.grade_awards);
-        Logger.Log("MainPlayer.Instance.QualifyingNewerInfo.grade_awards_flag= " + MainPlayer.Instance.QualifyingNewerInfo.grade_awards_flag);
+        Debug.Log("MainPlayer.Instance.QualifyingNewerInfo.league_awards_flag = " + MainPlayer.Instance.QualifyingNewerInfo.league_awards_flag);
+        Debug.Log("MainPlayer.Instance.QualifyingNewerInfo.grade_awards= " + MainPlayer.Instance.QualifyingNewerInfo.grade_awards);
+        Debug.Log("MainPlayer.Instance.QualifyingNewerInfo.grade_awards_flag= " + MainPlayer.Instance.QualifyingNewerInfo.grade_awards_flag);
 
         
         int num = 0;
@@ -1400,7 +1417,7 @@ public class MatchStateOver
        // MainPlayer.Instance.pvpLadderInfo.league_info = resp.league_info;
 
         PlayerManager pm = GameSystem.Instance.mClient.mPlayerManager;
-        if ((uint)m_match.m_mainRole.m_team.m_side == (uint)Team.Side.eAway)
+        if ((uint)m_match.mainRole.m_team.m_side == (uint)Team.Side.eAway)
         {
             //homeGrid = loseGrid;
             //awayGrid = winGrid;
@@ -1413,7 +1430,7 @@ public class MatchStateOver
             homeName = resp.away_data;
             awayName = resp.main_data;
         }
-        Logger.Log("isWin =" + isWin);
+        Debug.Log("isWin =" + isWin);
         luaCom.table.Set("isWin", isWin);
         // sessionID
         luaCom.table.Set("homeName", CommonFunction.GetConstString("STR_HOME"));
@@ -1422,6 +1439,21 @@ public class MatchStateOver
         luaCom.table.Set("awayScore", awayScore);
         luaCom.table.Set("awards", homeAwards);
         luaCom.table.Set("leagueType", GameMatch.LeagueType.eQualifyingNewer);
+		//°ïÖúºÃÓÑÄÃÊ×Ê¤
+		if ((qualifyingNewerAssist.assist_awards!=null && qualifyingNewerAssist.assist_awards.Count>0) || qualifyingNewerAssist.assist_first_win_times>0 || qualifyingNewerAssist.shiwakan_percent>0)
+		{
+			luaCom.table.Set("assist_awards",qualifyingNewerAssist.assist_awards);
+			luaCom.table.Set("assist_first_win_times",qualifyingNewerAssist.assist_first_win_times);
+			luaCom.table.Set("shiwakan_percent",qualifyingNewerAssist.shiwakan_percent);
+			luaCom.table.Set("assist_num",qualifyingNewerAssist.assist_num);
+		}
+		else
+		{
+			luaCom.table.Set("assist_awards",null);
+			luaCom.table.Set("assist_first_win_times",0);
+			luaCom.table.Set("shiwakan_percent",0);
+			luaCom.table.Set("assist_num",0);
+		}
         int curScore = (int)MainPlayer.Instance.QualifyingNewerScore;
 
 
@@ -1542,7 +1574,7 @@ public class MatchStateOver
 
     public void HandleChallengeExComplete()
     {
-        //Logger.Log("1927 HandleChallengeExComplete called m_resultShowing= " + m_resultShowing + " challengeExResp =" + challengeExResp);
+        //Debug.Log("1927 HandleChallengeExComplete called m_resultShowing= " + m_resultShowing + " challengeExResp =" + challengeExResp);
         int index = 1;
         if (m_resultShowing) return;
         PVPEndChallengeExResp resp = challengeExResp;
@@ -1607,7 +1639,7 @@ public class MatchStateOver
        // MainPlayer.Instance.pvpLadderInfo.league_info = resp.league_info;
 
         PlayerManager pm = GameSystem.Instance.mClient.mPlayerManager;
-        if ((uint)m_match.m_mainRole.m_team.m_side == (uint)Team.Side.eAway)
+        if ((uint)m_match.mainRole.m_team.m_side == (uint)Team.Side.eAway)
         {
             //homeGrid = loseGrid;
             //awayGrid = winGrid;
@@ -1620,7 +1652,7 @@ public class MatchStateOver
             homeName = resp.away_data;
             awayName = resp.main_data;
         }
-        Logger.Log("isWin =" + isWin);
+        Debug.Log("isWin =" + isWin);
         luaCom.table.Set("isWin", isWin);
         // sessionID
         luaCom.table.Set("homeName", CommonFunction.GetConstString("STR_HOME"));
@@ -1741,7 +1773,7 @@ public class MatchStateOver
             ++index;
         }
     }
-	public void RegularCompleteHandler(PVPEndRegularResp resp,List<KeyValueData> maxIncomeData = null)
+	public void RegularCompleteHandler(PVPEndRegularResp resp,List<KeyValueData> maxIncomeData = null,List<KeyValueData> assist_awards = null,uint shiwakan_percent = 0,uint assist_first_win_times = 0,uint assist_num = 0)
 	{
         maxDaliyIncomeData = maxIncomeData;
 		ErrorID err = (ErrorID)resp.result;
@@ -1749,11 +1781,19 @@ public class MatchStateOver
 		{
 			regularResp = resp;
 			MainPlayer.Instance.pvp_regular.score = resp.score;
-			Logger.Log("RegularCompleteHandler, score: " + resp.score);
+			if (err == ErrorID.SUCCESS)
+			{
+				regularAssist = new FirstWinAssist();
+				regularAssist.assist_awards = assist_awards;
+				regularAssist.assist_first_win_times = assist_first_win_times;
+				regularAssist.shiwakan_percent = shiwakan_percent;
+				regularAssist.assist_num = assist_num;
+			}
+			Debug.Log("RegularCompleteHandler, score: " + resp.score);
 		}
 		else
 		{
-			Logger.Log("Complete section error: " + ((ErrorID)resp.result).ToString());
+			Debug.Log("Complete section error: " + ((ErrorID)resp.result).ToString());
 			CommonFunction.ShowErrorMsg((ErrorID)resp.result);
 		}
 		m_serverResponsed = true;
@@ -1797,7 +1837,7 @@ public class MatchStateOver
 		}
         uint homeScore = resp.main_score;
         uint awayScore = resp.away_score;
-        if ((uint)m_match.m_mainRole.m_team.m_side == (uint)Team.Side.eAway)
+        if ((uint)m_match.mainRole.m_team.m_side == (uint)Team.Side.eAway)
         {
             homeAwards = resp.away_awards;
             awayAwards = resp.home_awards;
@@ -1822,7 +1862,21 @@ public class MatchStateOver
 		luaCom.table.Set("awayName", awayName);
 		luaCom.table.Set("awards", homeAwards);
         luaCom.table.Set("maxDailyIncomeData", maxDaliyIncomeData);
-
+		//°ïÖúºÃÓÑÄÃÊ×Ê¤
+		if ((regularAssist.assist_awards!=null && regularAssist.assist_awards.Count>0) || regularAssist.assist_first_win_times>0 || regularAssist.shiwakan_percent>0)
+		{
+			luaCom.table.Set("assist_awards",regularAssist.assist_awards);
+			luaCom.table.Set("assist_first_win_times",regularAssist.assist_first_win_times);
+			luaCom.table.Set("shiwakan_percent",regularAssist.shiwakan_percent);
+			luaCom.table.Set("assist_num",regularAssist.assist_num);
+		}
+		else
+		{
+			luaCom.table.Set("assist_awards",null);
+			luaCom.table.Set("assist_first_win_times",0);
+			luaCom.table.Set("shiwakan_percent",0);
+			luaCom.table.Set("assist_num",0);
+		}
         PlayerManager pm = GameSystem.Instance.mClient.mPlayerManager;
         for (int i =0; i < resp.main_data.Count; ++i)
         {
@@ -1862,7 +1916,7 @@ public class MatchStateOver
 		}
 		else
 		{
-			Logger.Log("Complete section error: " + ((ErrorID)resp.result).ToString());
+			Debug.Log("Complete section error: " + ((ErrorID)resp.result).ToString());
 			CommonFunction.ShowErrorMsg((ErrorID)resp.result);
 		}
 		m_serverResponsed = true;
@@ -1906,7 +1960,7 @@ public class MatchStateOver
 		}
         uint homeScore = resp.main_score;
         uint awayScore = resp.away_score;
-        if ((uint)m_match.m_mainRole.m_team.m_side == (uint)Team.Side.eAway)
+        if ((uint)m_match.mainRole.m_team.m_side == (uint)Team.Side.eAway)
         {
             homeAwards = resp.away_awards;
             awayAwards = resp.home_awards;

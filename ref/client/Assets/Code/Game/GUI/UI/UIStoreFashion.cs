@@ -92,7 +92,7 @@ public class UIStoreFashion
     {
         //for(int i = 0; i < 4; i++)
         //{
-        //    Logger.Log( "_dDressInfo=" + i+" : " + _dDressInfo.getDataByIndex(i) );
+        //    Debug.Log( "_dDressInfo=" + i+" : " + _dDressInfo.getDataByIndex(i) );
         //}
     }
  
@@ -112,7 +112,7 @@ public class UIStoreFashion
         {
             if( _datas[index] != 0 )
             {
-                Logger.LogWarning("setValue failed for index=" + index + " _datas[index]=" + _datas[index]);
+                Debug.LogWarning("setValue failed for index=" + index + " _datas[index]=" + _datas[index]);
                 return false;
             }
 
@@ -163,7 +163,7 @@ public class UIStoreFashion
             List<uint> ret = new List<uint>();
             if( _isOrigianl )
             {
-                Logger.LogError("original should not call getByTypes");
+                Debug.LogError("original should not call getByTypes");
                 return ret;
             }
 
@@ -212,7 +212,7 @@ public class UIStoreFashion
         }
         else
         {
-            Logger.LogError("_btnmap should be null, please check!");
+            Debug.LogError("_btnmap should be null, please check!");
         }
     }
 
@@ -249,7 +249,7 @@ public class UIStoreFashion
                 }
                 else
                 {
-                    Logger.LogError("set Fashion ID failed id is:" +  value);
+                    Debug.LogError("set Fashion ID failed id is:" +  value);
                 }
             }
 
@@ -347,7 +347,7 @@ public class UIStoreFashion
             List<Goods> goodList = MainPlayer.Instance.GetGoodsList(GoodsCategory.GC_FASHION, fashionID );
             if (goodList.Count != 1)
             {
-               // Logger.LogError("WardrobeUpdate dressUpdate error for the goodList.Count=" + goodList.Count);
+               // Debug.LogError("WardrobeUpdate dressUpdate error for the goodList.Count=" + goodList.Count);
                 return;
             }
 
@@ -360,7 +360,7 @@ public class UIStoreFashion
                     FashionShopConfigItem fsci = GameSystem.Instance.FashionShopConfig.GetConfig(fashionId);
                     if( fsci.getFashionType().Count == 1 )
                     {
-                        Logger.LogError("dressUpdateList should count fashionType().Count==1, fashionId=" + fashionId);
+                        Debug.LogError("dressUpdateList should count fashionType().Count==1, fashionId=" + fashionId);
                     }
                 }
                 else
@@ -400,7 +400,7 @@ public class UIStoreFashion
 
                     if (!oriFashion.IsEquip())
                     {
-                        Logger.LogWarning("sendChanges uneqip but fashion id=" + oriFashion.GetID() + " is not equip, so skip");
+                        Debug.LogWarning("sendChanges uneqip but fashion id=" + oriFashion.GetID() + " is not equip, so skip");
                         continue;
                     }
 
@@ -430,7 +430,7 @@ public class UIStoreFashion
 
                     if (newFashion.IsEquip())
                     {
-                        Logger.LogWarning("sendChanges equip but fashion id=" + newFashion.GetID() + " is  equip, so skip");
+                        Debug.LogWarning("sendChanges equip but fashion id=" + newFashion.GetID() + " is  equip, so skip");
                         continue;
                     }
 
@@ -553,7 +553,7 @@ public class UIStoreFashion
             
             if( item == null )
             {
-                Logger.LogError("error in");
+                Debug.LogError("error in");
                 return;
             }
             _sprites[index].spriteName = item.getSpriteName();
@@ -782,7 +782,7 @@ public class UIStoreFashion
 
         if( index<0 )
         {
-            Logger.LogError("leftBtnClick can't local the click!!");
+            Debug.LogError("leftBtnClick can't local the click!!");
             return;
         }
 
@@ -926,7 +926,7 @@ public class UIStoreFashion
             }
         }
 
-        Logger.Log("OnTabClick index=" + _selectTabIndex + " state=" + _state);
+        Debug.Log("OnTabClick index=" + _selectTabIndex + " state=" + _state);
 
 
         UIButton btn = go.transform.GetComponent<UIButton>();
@@ -1005,7 +1005,7 @@ public class UIStoreFashion
         SendDressWhenLevelMyWardrobe();
         covertToState(state.fashionShop);
 
-        Logger.Log("FashionShipItem.cs called OnFashionShopClick");
+        Debug.Log("FashionShipItem.cs called OnFashionShopClick");
     }
 
 
@@ -1080,7 +1080,7 @@ public class UIStoreFashion
           // if (_selectScrollView.RestrictWithinBounds(false,false,true) )
             {
                 Increase();
-               //Logger.Log("UIStoreFashion OnDragFinished() value=");
+               //Debug.Log("UIStoreFashion OnDragFinished() value=");
             }
             
            
@@ -1229,7 +1229,7 @@ public class UIStoreFashion
     //{
     //    if (_state == state.wardrobe)
     //    {
-    //        Logger.Log("covertToState wardrobe");
+    //        Debug.Log("covertToState wardrobe");
     //        _wardrobeUpdate.clearBoth();
 
     //        for (int i = 0; i < 4; i++)
@@ -1256,7 +1256,7 @@ public class UIStoreFashion
     //    else
     //    {
     //        _wardrobeUpdate.clearBoth();
-    //        Logger.Log("covertToState fashionShop");
+    //        Debug.Log("covertToState fashionShop");
     //        _FDItemMgr.setAllNotTry();
 
     //        for (int i = 0; i < 4; i++)
@@ -1283,7 +1283,7 @@ public class UIStoreFashion
     {
         if (st == state.wardrobe)
         {
-            Logger.Log("covertToState wardrobe");
+            Debug.Log("covertToState wardrobe");
             _wardrobeUpdate.clearBoth();
 
             for (int i = 0; i < 4; i++)
@@ -1295,13 +1295,13 @@ public class UIStoreFashion
                     DressOnUpdate(fashionId, false);
                 }
 
-                Logger.Log("to Wardrobe _tDressInfo try clear fashionId=" + fashionId);
+                Debug.Log("to Wardrobe _tDressInfo try clear fashionId=" + fashionId);
                 _tDressInfo.clearValueByFashionID(fashionId);
             }
 
             for (int i = 0; i < 4; i++)
             {
-                Logger.Log("to Wardrobe _tDressInfo index=" + i + "fashionId=" + _tDressInfo.getDataByIndex(i));
+                Debug.Log("to Wardrobe _tDressInfo index=" + i + "fashionId=" + _tDressInfo.getDataByIndex(i));
             }
 
             for (int i = 0; i < 4; i++)
@@ -1327,7 +1327,7 @@ public class UIStoreFashion
         }
         else
         {
-            Logger.Log("covertToState fashionShop");
+            Debug.Log("covertToState fashionShop");
 
             _wardrobeUpdate.clearBoth();
             _FDItemMgr.setAllNotTry();
@@ -1368,7 +1368,7 @@ public class UIStoreFashion
     }
     public void OnFashionOperation( FashionOperationResp resp )
     {
-        Logger.Log("OnFashionOperation called");
+        Debug.Log("OnFashionOperation called");
      
         if( _isGoBack )
         {
@@ -1381,7 +1381,7 @@ public class UIStoreFashion
             MainPlayer.Instance.FashionGoodsList.TryGetValue(info.uuid, out good );
 
             string[] typeStr = new string[4]{"equipment","unequip","renew","delete"};
-            Logger.Log(GameSystem.Instance.GoodsConfigData.GetgoodsAttrConfig(good.GetID()).name + "is for " + typeStr[info.type - 1]);
+            Debug.Log(GameSystem.Instance.GoodsConfigData.GetgoodsAttrConfig(good.GetID()).name + "is for " + typeStr[info.type - 1]);
         }
 
 
@@ -1392,7 +1392,7 @@ public class UIStoreFashion
 
             if( good == null )
             {
-                Logger.LogError("OnFashionOperation error for cannot find good for uuid=" + info.uuid);
+                Debug.LogError("OnFashionOperation error for cannot find good for uuid=" + info.uuid);
                 continue;
             }
 
@@ -1502,7 +1502,7 @@ public class UIStoreFashion
             uint pos = rInfo._pos - 1;
             if (pos >= GameSystem.Instance.FashionShopConfig.configsSort.Count)
             {
-                Logger.LogError("@DressOnAfterBuy pos >= GameSystem.Instance.FashionShopConfig.configsSort.Count pos =" + pos);
+                Debug.LogError("@DressOnAfterBuy pos >= GameSystem.Instance.FashionShopConfig.configsSort.Count pos =" + pos);
                 continue;
             }
             uint fashionID = GameSystem.Instance.FashionShopConfig.configsSort[(int)pos]._fashionID;
@@ -1510,7 +1510,7 @@ public class UIStoreFashion
             List<Goods> good = MainPlayer.Instance.GetGoodsList(GoodsCategory.GC_FASHION, fashionID);
             if (good.Count != 1)
             {
-                Logger.LogError("@DressOnAfterBuy good.Count=" + good.Count + " for fashion id=" + fashionID);
+                Debug.LogError("@DressOnAfterBuy good.Count=" + good.Count + " for fashion id=" + fashionID);
                 continue;
             }
 
@@ -1545,7 +1545,7 @@ public class UIStoreFashion
             uint pos = rInfo._pos -1;
             if( pos >= GameSystem.Instance.FashionShopConfig.configsSort.Count )
             {
-                Logger.LogError("@DressOnAfterBuy pos >= GameSystem.Instance.FashionShopConfig.configsSort.Count pos ="+ pos);
+                Debug.LogError("@DressOnAfterBuy pos >= GameSystem.Instance.FashionShopConfig.configsSort.Count pos ="+ pos);
                 continue;
             }
             uint fashionID = GameSystem.Instance.FashionShopConfig.configsSort[(int)pos]._fashionID;
@@ -1555,7 +1555,7 @@ public class UIStoreFashion
             List<Goods> good = MainPlayer.Instance.GetGoodsList(GoodsCategory.GC_FASHION, fashionID);
             if( good.Count != 1 )
             {
-                Logger.LogError("@DressOnAfterBuy good.Count=" + good.Count + " for fashion id=" + fashionID);
+                Debug.LogError("@DressOnAfterBuy good.Count=" + good.Count + " for fashion id=" + fashionID);
                 continue;
             }
             info.uuid = good[0].GetUUID();
@@ -1599,7 +1599,7 @@ public class UIStoreFashion
     {
         if( _oneSBuyIndex >= GameSystem.Instance.FashionShopConfig.configsSort.Count )
         {
-            Logger.LogError("index out of range local index=" + _oneSBuyIndex + " local type=" + _oneSBuySelect);
+            Debug.LogError("index out of range local index=" + _oneSBuyIndex + " local type=" + _oneSBuySelect);
             return;
         }
 
@@ -1626,7 +1626,7 @@ public class UIStoreFashion
         }
         else
         {
-            Logger.LogError("cost type is not 1 or 2, is"+ costType);
+            Debug.LogError("cost type is not 1 or 2, is"+ costType);
             return;
         }
 
@@ -1713,7 +1713,7 @@ public class UIStoreFashion
             }
             else
             {
-                Logger.LogError("the cost type is not right @OnSBuyOne");
+                Debug.LogError("the cost type is not right @OnSBuyOne");
             }
         }
         else
@@ -1737,7 +1737,7 @@ public class UIStoreFashion
             }
             else
             {
-                Logger.LogError("the cost type is not right @OnSBuyOne");
+                Debug.LogError("the cost type is not right @OnSBuyOne");
             }
         }
 
@@ -1773,7 +1773,7 @@ public class UIStoreFashion
             info._type = resp.info[i].type;
             _respInfo.Add(info);
 
-            Logger.LogWarning(msg);
+            Debug.LogWarning(msg);
         }
 
         _fashionSelected.ClearOwned();
@@ -1892,7 +1892,7 @@ public class UIStoreFashion
 
                 // debug info
                 {
-                    Logger.Log("_btnMap" + _btnMap);
+                    Debug.Log("_btnMap" + _btnMap);
                 }
 
 
@@ -2010,7 +2010,7 @@ public class UIStoreFashion
         FashionShopConfigItem fItem = getFItem(fashionID);
         if( fItem == null )
         {
-            Logger.LogError("@DressOnUpdate failed for cannot find fashionID=" + fashionID );
+            Debug.LogError("@DressOnUpdate failed for cannot find fashionID=" + fashionID );
             return;
         }
 
@@ -2112,11 +2112,11 @@ public class UIStoreFashion
         }
 
 
-       Logger.Log("after dressUp action fahionid=" + fashionID + " isActionDressOn=" + isActionDressOn);
+       Debug.Log("after dressUp action fahionid=" + fashionID + " isActionDressOn=" + isActionDressOn);
 
        for (int i = 0; i < 4; i++)
        {
-           Logger.Log("tDressInfo[" + i + "]=" + _tDressInfo.getDataByIndex(i));
+           Debug.Log("tDressInfo[" + i + "]=" + _tDressInfo.getDataByIndex(i));
        }
 
     }
@@ -2128,7 +2128,7 @@ public class UIStoreFashion
         FashionShopConfigItem fItem = getFItem(fashionID);
         if (fItem == null)
         {
-            Logger.LogError("@dressDown failed for cannot find fashionID=" + fashionID);
+            Debug.LogError("@dressDown failed for cannot find fashionID=" + fashionID);
             return;
         }
 
@@ -2224,11 +2224,11 @@ public class UIStoreFashion
             //if( _state == state.fashionShop )
             //{
 
-            Logger.Log("clearTag error!!!!--not find in tDress for dress down fashionID=" + fashionID);
+            Debug.Log("clearTag error!!!!--not find in tDress for dress down fashionID=" + fashionID);
 
             for (int i = 0; i < 4;i++ )
             {
-                Logger.Log("tDressInfo[" + i + "]=" + _tDressInfo.getDataByIndex(i));
+                Debug.Log("tDressInfo[" + i + "]=" + _tDressInfo.getDataByIndex(i));
             }
 
 
@@ -2245,10 +2245,10 @@ public class UIStoreFashion
 
         if (!clearTag)
         {
-            Logger.LogError("clearTag error!!!!");
+            Debug.LogError("clearTag error!!!!");
             for (int i = 0; i < 4;i++ )
             {
-                Logger.LogError("_dDressInfo[" + i + "]=" + _dDressInfo.getDataByIndex(i));
+                Debug.LogError("_dDressInfo[" + i + "]=" + _dDressInfo.getDataByIndex(i));
             }
         }
     }

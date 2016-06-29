@@ -43,7 +43,7 @@ public class NetworkManager : NetworkConn.Listener
 	{
 		if (m_loginConn == null)
 		{
-			Logger.Log("Get login conn.");
+			Debug.Log("Get login conn.");
 			m_loginConn = new NetworkConn(m_loginMsgHandler, "Login", NetworkConn.Type.eLoginServer, 5);
 			m_loginConn.AddEventListener(this);
 			LoginNetwork.Instance.ConnectToLS();
@@ -57,7 +57,7 @@ public class NetworkManager : NetworkConn.Listener
 
         if (m_loginConn == null)
 		{
-			Logger.Log("New login conn.");
+			Debug.Log("New login conn.");
             m_loginConn = new NetworkConn(m_loginMsgHandler, "Login", NetworkConn.Type.eLoginServer, 6);
             m_loginConn.AddEventListener(this);
 		}
@@ -81,6 +81,7 @@ public class NetworkManager : NetworkConn.Listener
 */
 			int timeout = 6;
 			m_platConn = new NetworkConn(m_platMsgHandler, "Plat", NetworkConn.Type.ePlatformServer, timeout);
+			CheatingDeath.Instance.mAntiSpeedUp.SetWatchTarget(m_platConn);
             m_platConn.AddEventListener(this);
 		}
         m_platConn.Connect(ip, port);
@@ -110,15 +111,16 @@ public class NetworkManager : NetworkConn.Listener
 		}
 		else
 		{
-			m_gameConn = new VirtualNetworkConnSimple(new VirtualGameMsgHandler());
+			m_gameConn = new VirtualNetworkConnSimple(m_gameMsgHandler);
 			m_gameConn.AddEventListener(this);
+            VirtualGameServer.Instance = new VirtualGameServer();
 		}
 		m_gameConn.Connect(ip, port);
 	}
 
     public void CloseLoginConn()
     {
-		Logger.Log("Close login conn.");
+		Debug.Log("Close login conn.");
         if (m_loginConn != null)
             m_loginConn.Close();
 
@@ -196,7 +198,7 @@ public class NetworkManager : NetworkConn.Listener
 
     public void OnEvent(NetworkConn.NetworkEvent nEvent, NetworkConn sender)
     {
-		Logger.Log("Network Event -- sender.m_type: " + sender.m_type + " nEvent: " + nEvent);
+		Debug.Log("Network Event -- sender.m_type: " + sender.m_type + " nEvent: " + nEvent);
 
         switch (sender.m_type)
         {
@@ -218,14 +220,14 @@ public class NetworkManager : NetworkConn.Listener
 							if( onServerConnected != null )
 								onServerConnected(NetworkConn.Type.eLoginServer);
 #if IOS_SDK || ANDROID_SDK
-							Logger.Log("IsReconnecting: " + isReconnecting);
-                            Logger.Log("MainPlayer.Instance.SDkLogin +" + MainPlayer.Instance.SDKLogin);
-                            Logger.Log("LoginNetwork.Instance.isVerifySDK =" + LoginNetwork.Instance.isVerifySDK );
+							Debug.Log("IsReconnecting: " + isReconnecting);
+                            Debug.Log("MainPlayer.Instance.SDkLogin +" + MainPlayer.Instance.SDKLogin);
+                            Debug.Log("LoginNetwork.Instance.isVerifySDK =" + LoginNetwork.Instance.isVerifySDK );
 							if (isReconnecting)
 								LoginNetwork.Instance.VerifyCDKeyReq();
                             else if( MainPlayer.Instance.SDKLogin && !LoginNetwork.Instance.isVerifySDK )
                             {
-                                Logger.Log("VerifySDK in NetworkManger");
+                                Debug.Log("VerifySDK in NetworkManger");
                                 LoginNetwork.Instance.isVerifySDK = true;
                                 LoginNetwork.Instance.VerifySDKReq();
                             }
@@ -261,7 +263,7 @@ public class NetworkManager : NetworkConn.Listener
             case NetworkConn.Type.ePlatformServer:
                 {
 					UIWait.StopWait();
-					Logger.Log("connPlat:" + connPlat);
+					Debug.Log("connPlat:" + connPlat);
                     if (nEvent == NetworkConn.NetworkEvent.disconnected)
                     {
                         if (connPlat)
@@ -283,7 +285,7 @@ public class NetworkManager : NetworkConn.Listener
                         }
                         else
                         {
-                            Logger.Log("Warning: Platform server already connected.");
+                            Debug.Log("Warning: Platform server already connected.");
                         }
                     }
                     else if (nEvent == NetworkConn.NetworkEvent.connectFail)
@@ -298,7 +300,7 @@ public class NetworkManager : NetworkConn.Listener
 			case NetworkConn.Type.eGameServer:
                 {
 					UIWait.StopWait();
-					Logger.Log("connGS:" + connGS);
+					Debug.Log("connGS:" + connGS);
 					if (nEvent == NetworkConn.NetworkEvent.disconnected)
 					{
 						if (connGS)
@@ -316,7 +318,7 @@ public class NetworkManager : NetworkConn.Listener
 						}
 						else
 						{
-							Logger.Log("Warning: GameServer server already connected.");
+							Debug.Log("Warning: GameServer server already connected.");
 						}
 					}
 					else if (nEvent == NetworkConn.NetworkEvent.connectFail)
@@ -336,14 +338,14 @@ public class NetworkManager : NetworkConn.Listener
 
 	void OnConnectFailed(NetworkConn conn)
 	{
-		Logger.Log("OnConnectFailed, isReconnecting:" + isReconnecting);
+		Debug.Log("OnConnectFailed, isReconnecting:" + isReconnecting);
 		if (isReconnecting)
 		{
 			if (CanAutoReconn())
 			{
 				autoReconn = true;
 				connFailTime = DateTime.Now.Ticks;
-				Logger.Log("connFailTime:" + connFailTime);
+				Debug.Log("connFailTime:" + connFailTime);
 			}
 		}
 		else if (CanAutoReconn())
@@ -375,13 +377,13 @@ public class NetworkManager : NetworkConn.Listener
             return false;
         }
         
-		Logger.Log("CanAutoReconn, " + isPushedOut + isWaittingReLogin + isKickOut);
+		Debug.Log("CanAutoReconn, " + isPushedOut + isWaittingReLogin + isKickOut);
         return !isPushedOut && !isWaittingReLogin && !isKickOut; 
 	}
 
 	public bool InNormalState()
 	{
-		Logger.Log("InNormalState, " + isReconnecting + isPushedOut + isKickOut + isWaittingReLogin + autoReconn);
+		Debug.Log("InNormalState, " + isReconnecting + isPushedOut + isKickOut + isWaittingReLogin + autoReconn);
 		return !isReconnecting && !isPushedOut && !isKickOut && !isWaittingReLogin && !autoReconn;
 	}
 
@@ -394,7 +396,7 @@ public class NetworkManager : NetworkConn.Listener
 
 	public void ReconnectPrompt(string tip)
 	{
-		Logger.Log("ReconnectPrompt, tip:" + tip);
+		Debug.Log("ReconnectPrompt, tip:" + tip);
 		autoReconn = false;
 		isReconnecting = false;
         GameSystem.Instance.mClient.pause = true;
@@ -410,7 +412,7 @@ public class NetworkManager : NetworkConn.Listener
 
 	public void DisconnectPrompt(string tip)
 	{
-		Logger.Log("DisconnectPrompt, tip:" + tip);
+		Debug.Log("DisconnectPrompt, tip:" + tip);
 		autoReconn = false;
 		isReconnecting = false;
         GameSystem.Instance.mClient.pause = true;
@@ -425,7 +427,7 @@ public class NetworkManager : NetworkConn.Listener
         {
             isDisplayReconnect = false;
         }
-		Logger.Log("Reconnect to LoginServer");
+		Debug.Log("Reconnect to LoginServer");
 		if (isPushedOut)
 		{
 			NetLoading.Instance.isReLogin = true;

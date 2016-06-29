@@ -61,11 +61,11 @@ public class PushConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            Debug.LogError("LoadConfig failed: " + name);
             return;
         }
 
-		Logger.ConfigBegin(name);
+		Debug.Log("Config reading " + name);
         _items.Clear();
         //读取以及处理XML文本的类
         XmlDocument xmlDoc = CommonFunction.LoadXmlConfig(GlobalConst.DIR_XML_PUSH, text);
@@ -134,7 +134,7 @@ public class PushConfig
 
             }
         }
-		Logger.ConfigEnd(name);
+		
     }
 
     public void SetConfigForPhoneSys()
@@ -197,9 +197,9 @@ public class PushConfig
 //						int id = (int)item.id;
 //						int type = (int)item.type;
 //						int online = (int)item.online;
-//						Logger.Log("PushConfig recvPush Start called");
+//						Debug.Log("PushConfig recvPush Start called");
 //						recvPush(id, type, item.date,item.time,online,item.content );
-//						Logger.Log("PushConfig SetLocalPush End called");
+//						Debug.Log("PushConfig SetLocalPush End called");
 						#endif
 
 					}
@@ -234,9 +234,9 @@ public class PushConfig
 					int id = (int)item.id;
 					int type = (int)item.type;
 					int online = (int)item.online;
-					Logger.Log("PushConfig recvPush Start called");
+					Debug.Log("PushConfig recvPush Start called");
 					recvPush(id, type, item.date,item.time,online,item.content );
-					Logger.Log("PushConfig recvPush End called");
+					Debug.Log("PushConfig recvPush End called");
 					if( type == 4)
 					{
 					_hpStr = item.content;
@@ -324,9 +324,9 @@ public class PushConfig
 		}
 	#endif
 	#if IOS_SDK
-//		Logger.Log("PushConfig recvPush Start called");
+//		Debug.Log("PushConfig recvPush Start called");
 //		recvPush(id, type, s_date,time,online,content );
-//		Logger.Log("PushConfig recvPush End called");
+//		Debug.Log("PushConfig recvPush End called");
 //		if( type == 4)
 //		{
 //			_hpStr = content;

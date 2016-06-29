@@ -31,13 +31,21 @@ namespace fogs.proto.msg
       get { return _content; }
       set { _content = value; }
     }
-    private string _target_name = "";
-    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"target_name", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string target_name
+    private uint _acc_id = default(uint);
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"acc_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint acc_id
     {
-      get { return _target_name; }
-      set { _target_name = value; }
+      get { return _acc_id; }
+      set { _acc_id = value; }
+    }
+    private uint _time = default(uint);
+    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint time
+    {
+      get { return _time; }
+      set { _time = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -56,6 +64,29 @@ namespace fogs.proto.msg
     {
       get { return _result; }
       set { _result = value; }
+    }
+    private uint _type;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public uint type
+    {
+      get { return _type; }
+      set { _type = value; }
+    }
+    private string _content = "";
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"content", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string content
+    {
+      get { return _content; }
+      set { _content = value; }
+    }
+    private uint _time = default(uint);
+    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint time
+    {
+      get { return _time; }
+      set { _time = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -123,6 +154,14 @@ namespace fogs.proto.msg
     {
       get { return _info; }
       set { _info = value; }
+    }
+    private uint _time = default(uint);
+    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint time
+    {
+      get { return _time; }
+      set { _time = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -261,7 +300,16 @@ namespace fogs.proto.msg
       CCT_LEAGUE = 3,
             
       [global::ProtoBuf.ProtoEnum(Name=@"CCT_TEAM", Value=4)]
-      CCT_TEAM = 4
+      CCT_TEAM = 4,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"CCT_ROOM", Value=5)]
+      CCT_ROOM = 5,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"CCT_GAME", Value=6)]
+      CCT_GAME = 6,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"CCT_PRIVATE", Value=7)]
+      CCT_PRIVATE = 7
     }
   
 }

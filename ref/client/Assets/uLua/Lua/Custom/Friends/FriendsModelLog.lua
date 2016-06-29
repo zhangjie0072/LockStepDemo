@@ -39,11 +39,11 @@ function FriendsModelLog:OnClose()
 end
 
 function FriendsModelLog:setqualifying_newerData(reg)
-    self.uiLabNum.text = string.format(getCommonStr("STR_FRIENDS_NUM_SECOND1"), reg.race_times)
-    if reg.race_times == 0 then
+    self.uiLabNum.text = string.format(getCommonStr("STR_FRIENDS_NUM_SECOND1"), reg.total_race_times)
+    if reg.total_race_times == 0 then
         self.uiLabWinPer.text = ""
     else
-        local per = math.ceil( (reg.win_times / reg.race_times) * 100 )
+        local per = math.ceil( (reg.total_win_times / reg.total_race_times) * 100 )
         self.uiLabWinPer.text = string.format(getCommonStr("STR_FRIENDS_NUM_WINPER"), per)
     end
     self.uiLabTitle.text = getCommonStr("STR_REGULAR_MATCH")

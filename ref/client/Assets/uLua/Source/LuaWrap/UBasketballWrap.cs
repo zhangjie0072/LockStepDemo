@@ -23,7 +23,9 @@ public class UBasketballWrap
 			new LuaMethod("OnGrab", OnGrab),
 			new LuaMethod("Reset", Reset),
 			new LuaMethod("CompleteLastCurve", CompleteLastCurve),
-			new LuaMethod("Update", Update),
+			new LuaMethod("ViewUpdate", ViewUpdate),
+			new LuaMethod("GameUpdate", GameUpdate),
+			new LuaMethod("ViewLateUpdate", ViewLateUpdate),
 			new LuaMethod("New", _CreateUBasketball),
 			new LuaMethod("GetClassType", GetClassType),
 			new LuaMethod("__eq", Lua_Eq),
@@ -72,6 +74,7 @@ public class UBasketballWrap
 			new LuaField("m_shootSolution", get_m_shootSolution, set_m_shootSolution),
 			new LuaField("m_isLayup", get_m_isLayup, null),
 			new LuaField("m_isDunk", get_m_isDunk, null),
+			new LuaField("_position", get__position, set__position),
 			new LuaField("position", get_position, set_position),
 			new LuaField("initPos", get_initPos, set_initPos),
 		};
@@ -1076,6 +1079,30 @@ public class UBasketballWrap
 		}
 
 		LuaScriptMgr.Push(L, obj.m_isDunk);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get__position(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		UBasketball obj = (UBasketball)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name _position");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index _position on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushValue(L, obj._position);
 		return 1;
 	}
 
@@ -2137,6 +2164,30 @@ public class UBasketballWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set__position(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		UBasketball obj = (UBasketball)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name _position");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index _position on a nil value");
+			}
+		}
+
+		obj._position = (IM.Vector3)LuaScriptMgr.GetNetObject(L, 3, typeof(IM.Vector3));
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_position(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -2334,12 +2385,30 @@ public class UBasketballWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int Update(IntPtr L)
+	static int ViewUpdate(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		UBasketball obj = (UBasketball)LuaScriptMgr.GetUnityObjectSelf(L, 1, "UBasketball");
+		obj.ViewUpdate();
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GameUpdate(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		UBasketball obj = (UBasketball)LuaScriptMgr.GetUnityObjectSelf(L, 1, "UBasketball");
 		IM.Number arg0 = (IM.Number)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Number));
-		obj.Update(arg0);
+		obj.GameUpdate(arg0);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int ViewLateUpdate(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		UBasketball obj = (UBasketball)LuaScriptMgr.GetUnityObjectSelf(L, 1, "UBasketball");
+		obj.ViewLateUpdate();
 		return 0;
 	}
 

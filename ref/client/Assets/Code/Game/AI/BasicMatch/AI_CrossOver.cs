@@ -45,7 +45,7 @@ public class AI_CrossOver
 				if (0 < dist23PT && dist23PT < new IM.Number(0,700))
 				{
 					skillID = SG_SPECIAL_SKILL_ID;
-					actionID = Random.value < 0.5f ? SG_SPECIAL_LEFT_ACTION_ID : SG_SPECIAL_RIGHT_ACTION_ID;
+					actionID = IM.Random.value < IM.Number.half ? SG_SPECIAL_LEFT_ACTION_ID : SG_SPECIAL_RIGHT_ACTION_ID;
 				}
 			}
 		}
@@ -95,7 +95,7 @@ public class AI_CrossOver
 		if (m_player.m_toSkillInstance != null)
 		{
 			if (m_player.m_toSkillInstance.skill.id == FAKE_CROSS_OVER_ID)
-				Logger.LogError("Fake cross over can't be casted by AI, expected skill: " + skillID + " player:" + m_player.m_id);
+				Debug.LogError("Fake cross over can't be casted by AI, expected skill: " + skillID + " player:" + m_player.m_id);
 			if (actionID != 0)
 				m_player.m_toSkillInstance.curActionId = actionID;
 		}
@@ -114,7 +114,7 @@ public class AI_CrossOver
 				m_player.m_toSkillInstance.curActionId = actionID;
 			}
 			else
-				Logger.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI CrossOver");
+				Debug.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI CrossOver");
 		}
 	}
 
@@ -126,11 +126,11 @@ public class AI_CrossOver
 			PlayerState_CrossOver stateCross = m_player.m_StateMachine.GetState(PlayerState.State.eCrossOver) as PlayerState_CrossOver;
 			if (stateCross.crossed)	// Cross over succeed.
 			{
-				if (Random.value < 0.3f)	// Attack unreasoningly
+				if (IM.Random.value < new IM.Number(0, 300))	// Attack unreasoningly
 				{
 					AI_Positioning aiPositioning = m_system.GetState(Type.ePositioning) as AI_Positioning;
 					aiPositioning.unreasonable = true;
-					Logger.Log("Attack unreasonable.");
+					Debug.Log("Attack unreasonable.");
 				}
 				else
 				{

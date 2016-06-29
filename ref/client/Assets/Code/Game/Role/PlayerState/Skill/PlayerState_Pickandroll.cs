@@ -108,7 +108,7 @@ public class PlayerState_PickAndRoll : PlayerState_Skill
 		base.OnExit ();
 
 		m_player.model.RestoreMaterial();
-		m_player.model.EnableGrey(m_player.m_team != m_match.m_mainRole.m_team );
+		m_player.model.EnableGrey(m_player.m_team != m_match.mainRole.m_team );
 		m_player.m_stamina.m_bEnableRecover = true;
 	}
 }

@@ -44,7 +44,7 @@ public class AI_GrabZone_Positioning : AIState
 		{
 			if (match.level == GameMatch.Level.Easy)
 			{
-				targetZone = list[Random.Range(0, list.Count - 1)].Key;
+				targetZone = list[IM.Random.Range(0, list.Count - 1)].Key;
 			}
 			else if (match.level == GameMatch.Level.Normal)
 			{
@@ -90,7 +90,7 @@ public class AI_GrabZone_Positioning : AIState
 	public override void OnPlayerCollided(Player colPlayer)
 	{
 		base.OnPlayerCollided(colPlayer);
-		Logger.Log("AI_GrabZone_Positioning.OnPlayerCollided.");
+		Debug.Log("AI_GrabZone_Positioning.OnPlayerCollided.");
 		m_system.SetTransaction(AIState.Type.eGrabZone_AvoidDefender);
 	}
 }

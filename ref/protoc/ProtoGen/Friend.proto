@@ -87,16 +87,18 @@ message QueryFriendInfoResp
 	optional uint32 level				= 3;
 	optional uint32 vip_level			= 4;
 	optional string icon				= 5;
-	optional PvpRegularInfo regular		= 6; //常规赛数据
+	//optional PvpRegularInfo regular		= 6; //常规赛数据
+    optional QualifyingNewerInfo qualifying_newer = 6; //排位赛数据
 	repeated RoleMatchResData role_data	= 7; //球员数据
 	optional uint32 result				= 8;
 	optional uint32 role_count			= 9;
 	optional uint32 fashion_count		= 10;
 	optional string guild_name			= 11;
 	optional string team_name			= 12;
-	optional QualifyingNewInfo qualifying_new = 13;
-	optional PvpLadderInfo pvp_ladder	= 14;
+	optional QualifyingNewInfo qualifying_new = 13; //巡回赛数据
+	optional PvpLadderInfo pvp_ladder	= 14; //常规赛数据
 	optional uint32 pvp_ladder_score	= 15;
+    optional uint32 qualifying_newer_score = 16;
 }
 
 message RoleMatchResData

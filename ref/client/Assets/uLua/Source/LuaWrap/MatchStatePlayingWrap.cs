@@ -10,7 +10,7 @@ public class MatchStatePlayingWrap
 			new LuaMethod("OnEnter", OnEnter),
 			new LuaMethod("OnMatchTimeUp", OnMatchTimeUp),
 			new LuaMethod("OnEvent", OnEvent),
-			new LuaMethod("Update", Update),
+			new LuaMethod("GameUpdate", GameUpdate),
 			new LuaMethod("OnExit", OnExit),
 			new LuaMethod("New", _CreateMatchStatePlaying),
 			new LuaMethod("GetClassType", GetClassType),
@@ -84,12 +84,12 @@ public class MatchStatePlayingWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int Update(IntPtr L)
+	static int GameUpdate(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		MatchStatePlaying obj = (MatchStatePlaying)LuaScriptMgr.GetNetObjectSelf(L, 1, "MatchStatePlaying");
 		IM.Number arg0 = (IM.Number)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Number));
-		obj.Update(arg0);
+		obj.GameUpdate(arg0);
 		return 0;
 	}
 

@@ -54,7 +54,7 @@ public class AISystem_Assist : AISystem
 	protected override void _BuildAIState()
 	{
 		m_arStateList[(int)AIState.Type.eAssistInit] = new AI_Assist_Init(this);
-		//m_arStateList[(int)AIState.Type.eAssistSteal] = new AI_Assist_Steal(this);
+        m_arStateList[(int)AIState.Type.eAssistSteal] = new AI_Assist_Steal(this);
 		m_arStateList[(int)AIState.Type.eAssistDefense] = new AI_Assist_Defense(this);
 		m_arStateList[(int)AIState.Type.eAssistTraceBall] = new AI_Assist_TraceBall(this);
 	}

@@ -361,6 +361,14 @@ namespace fogs.proto.msg
       get { return _badge_book_id; }
       set { _badge_book_id = value; }
     }
+    private fogs.proto.msg.MatchRoleData _qualifying_newer_data = null;
+    [global::ProtoBuf.ProtoMember(17, IsRequired = false, Name=@"qualifying_newer_data", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public fogs.proto.msg.MatchRoleData qualifying_newer_data
+    {
+      get { return _qualifying_newer_data; }
+      set { _qualifying_newer_data = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -1337,6 +1345,14 @@ namespace fogs.proto.msg
       get { return _daily_income; }
       set { _daily_income = value; }
     }
+    private uint _assist_first_win_times = default(uint);
+    [global::ProtoBuf.ProtoMember(53, IsRequired = false, Name=@"assist_first_win_times", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint assist_first_win_times
+    {
+      get { return _assist_first_win_times; }
+      set { _assist_first_win_times = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -1974,6 +1990,14 @@ namespace fogs.proto.msg
       get { return _league_awards_flag; }
       set { _league_awards_flag = value; }
     }
+    private uint _assist_first_win_times = default(uint);
+    [global::ProtoBuf.ProtoMember(19, IsRequired = false, Name=@"assist_first_win_times", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint assist_first_win_times
+    {
+      get { return _assist_first_win_times; }
+      set { _assist_first_win_times = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -2180,10 +2204,10 @@ namespace fogs.proto.msg
       get { return _level_award_state; }
     }
   
-    private MainActivityInfo _activity_info = null;
+    private fogs.proto.msg.MainActivityInfo _activity_info = null;
     [global::ProtoBuf.ProtoMember(27, IsRequired = false, Name=@"activity_info", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public MainActivityInfo activity_info
+    public fogs.proto.msg.MainActivityInfo activity_info
     {
       get { return _activity_info; }
       set { _activity_info = value; }

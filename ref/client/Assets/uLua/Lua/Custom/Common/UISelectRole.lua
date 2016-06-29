@@ -2,9 +2,8 @@ UISelectRole = {
     uiName = "UISelectRole",
 
     -- uiPart.
-    labelNoPlayer,
+    --labelNoPlayer,
     uiTattoo,
-    uiTitle,
     uiBadgeList,
     uiBadgeBtnArrow,
     uiBadgeCheckPropBtn,
@@ -67,35 +66,34 @@ UISelectRole = {
 }
 
 function UISelectRole:Awake()
-    self.uiTitle =getComponentInChild(self.transform, "Top/Title", "MultiLabel")
-    self.scrollRoleList = getComponentInChild(self.transform, "Left/Scroll", "UIScrollView")
-    self.gridRoleList = getComponentInChild(self.transform, "Left/Scroll/Grid", "UIGrid")
-    self.gridSelectedRole = getComponentInChild(self.transform, "Right/HeadGrid", "UIGrid")
-    self.gridSkill = getComponentInChild(self.transform, "Middle/Skill", "UIGrid")
-    self.tmBGIcon = self.transform:FindChild("Right/BgIcon")
-    self.spritePosition = getComponentInChild(self.transform, "Middle/Player/Position", "UISprite")
-    self.uiPositionName = self.transform:FindChild("Middle/Player/PositionName"):GetComponent("UILabel")
-    self.labelName = getComponentInChild(self.transform, "Middle/Player/Name", "UILabel")
-    self.btnStart = self.transform:FindChild("Right/ButtonOK").gameObject
-    self.labelNoPlayer = getComponentInChild(self.transform, "Middle/NoPlayerLabel", "UILabel")
-    self.uiTattoo = self.transform:FindChild("Middle/Player/Tattoo")
-    self.uiBadgeList = self.transform:FindChild("Middle/Player/Tattoo/DropDown")
-    self.uiBadgeBtnArrow = self.transform:FindChild("Middle/Player/Tattoo/Arrow")
-    self.uiBadgeCheckPropBtn = self.transform:FindChild("Middle/Player/Tattoo/Eye")
-    self.uiBadgeBookSelectItem = getLuaComponent(createUI("DropDownListItem",self.transform:FindChild("Middle/Player/Tattoo/SelectNode").transform))
+    self.scrollRoleList = getComponentInChild(self.transform, "Left/Left/Scroll", "UIScrollView")
+    self.gridRoleList = getComponentInChild(self.transform, "Left/Left/Scroll/Grid", "UIGrid")
+    self.gridSelectedRole = getComponentInChild(self.transform, "Right/Right/HeadGrid", "UIGrid")
+    self.gridSkill = getComponentInChild(self.transform, "Right/Skill", "UIGrid")
+    self.tmBGIcon = self.transform:FindChild("Right/Right/BgIcon")
+    self.spritePosition = getComponentInChild(self.transform, "TopLeft/Player/Position", "UISprite")
+    self.uiPositionName = self.transform:FindChild("TopLeft/Player/PositionName"):GetComponent("UILabel")
+    self.labelName = getComponentInChild(self.transform, "TopLeft/Player/Name", "UILabel")
+    self.btnStart = self.transform:FindChild("Right/Right/ButtonOK").gameObject
+    --self.labelNoPlayer = getComponentInChild(self.transform, "Middle/NoPlayerLabel", "UILabel")
+    self.uiTattoo = self.transform:FindChild("TopLeft/Player/Tattoo")
+    self.uiBadgeList = self.transform:FindChild("TopLeft/Player/Tattoo/DropDown")
+    self.uiBadgeBtnArrow = self.transform:FindChild("TopLeft/Player/Tattoo/Arrow")
+    self.uiBadgeCheckPropBtn = self.transform:FindChild("TopLeft/Player/Tattoo/Eye")
+    self.uiBadgeBookSelectItem = getLuaComponent(createUI("DropDownListItem",self.transform:FindChild("TopLeft/Player/Tattoo/SelectNode").transform))
     self.uiBadgeBookSelectItem.transform:GetComponent("BoxCollider").enabled = false
-    self.uiTalent = self.transform:FindChild("Middle/Talent")
-    self.uiTalentIcon = getComponentInChild(self.transform, "Middle/Talent/Icon/Sprite", "UISprite")
-    self.uiTalentName = getComponentInChild(self.transform, "Middle/Talent/Name", "UILabel")
-    self.uiTalentDesc = getComponentInChild(self.transform, "Middle/Talent/Describe", "UILabel")
-    self.uiMask = self.transform:FindChild("Middle/Player/Tattoo/DropDown/Mask")
-    self.uiGridChatMsgPops = self.transform:FindChild("Middle/ChatMsgPopsGroup/Grid"):GetComponent("UIGrid")
-    self.uiChatModuleNode = self.transform:FindChild("Middle/ChatModuleNode")
+    self.uiTalent = self.transform:FindChild("Right/Talent")
+    self.uiTalentIcon = getComponentInChild(self.transform, "Right/Talent/Icon/Sprite", "UISprite")
+    self.uiTalentName = getComponentInChild(self.transform, "Right/Talent/Name", "UILabel")
+    self.uiTalentDesc = getComponentInChild(self.transform, "Right/Talent/Describe", "UILabel")
+    self.uiMask = self.transform:FindChild("TopLeft/Player/Tattoo/DropDown/Mask")
+    self.uiGridChatMsgPops = self.transform:FindChild("Right/ChatMsgPopsGroup/Grid"):GetComponent("UIGrid")
+    self.uiChatModuleNode = self.transform:FindChild("Bottom/ChatModuleNode")
     self.uiGameChatModule = getLuaComponent(createUI("UIGameChat",self.uiChatModuleNode.transform))
-    self.uiRoleSkillsTipsNode = self.transform:FindChild("Middle/SkillDetailTipsNode")
-    self.uiLeftTimeLabel = self.transform:FindChild("Middle/LeftTimeLabel"):GetComponent("UILabel")
-    self.uiSpecialityInfo = self.transform:FindChild("Middle/Player/SpecialityInfo"):GetComponent("UILabel")
-    self.uiInfinityIcon = self.transform:FindChild("Middle/LeftTimeLabel/InfinityIcon")
+    self.uiRoleSkillsTipsNode = self.transform:FindChild("Right/SkillDetailTipsNode")
+    self.uiLeftTimeLabel = self.transform:FindChild("TopRight/LeftTimeLabel"):GetComponent("UILabel")
+    self.uiSpecialityInfo = self.transform:FindChild("TopLeft/Player/SpecialityInfo"):GetComponent("UILabel")
+    self.uiInfinityIcon = self.transform:FindChild("TopRight/LeftTimeLabel/InfinityIcon")
     -- self.uiMinTimeEScore = self.transform:FindChild("Middle/LeftTimeLabel/E_Score1/min"):GetComponent("UScore")
     -- self.uiSecTimeEScore = self.transform:FindChild("Middle/LeftTimeLabel/E_Score2/sec"):GetComponent("UScore")
 
@@ -108,9 +106,9 @@ function UISelectRole:Awake()
     --UIEventListener.Get(self.uiBadgeCheckPropBtn.gameObject).onPress = LuaHelper.BoolDelegate(self:OnPress())
     ----
     self.model = self.transform:FindChild("Middle/Model"):GetComponent("ModelShowItem")
-    self.uiLeftTime = self.transform:FindChild("Middle/LeftTimeLabel/LeftTime"):GetComponent("UILabel")
+    self.uiLeftTime = self.transform:FindChild("TopRight/LeftTimeLabel/LeftTime"):GetComponent("UILabel")
     NGUITools.SetActive(self.model.gameObject, false)
-    self.btnBack = getLuaComponent(createUI("ButtonBack", self.transform:FindChild("Top/ButtonBack")))
+    self.btnBack = getLuaComponent(createUI("ButtonBack", self.transform:FindChild("TopLeft/ButtonBack")))
     self.btnBack.onClick = self:MakeOnClose()
     NGUITools.SetActive(self.uiTalent.gameObject, false)
     NGUITools.SetActive(self.uiTattoo.gameObject, false)
@@ -119,7 +117,7 @@ function UISelectRole:Awake()
     self.roleIconNodes = {}
     self.rightRolePlaceIcons = {}
     for i = 1, 3 do
-        local node =  self.transform:FindChild("Right/BgIcon/Icon"..i)
+        local node =  self.transform:FindChild("Right/Right/BgIcon/Icon"..i)
         local placeIcon = getLuaComponent(createUI("RoleSelectedIcon",node))
         placeIcon.Index = i
         placeIcon.ClickCallback = self:OnPlaceRoleIconClickHanlder()
@@ -134,7 +132,7 @@ function UISelectRole:Awake()
     --add chatMsgPopItems
     self.chatMsgPopItems = {}
     for k = 1, 3 do
-        table.insert(self.chatMsgPopItems,getLuaComponent(createUI("ChatMsgPopItem",self.transform:FindChild("Middle/ChatMsgPopsGroup/Grid/item"..k))))
+        table.insert(self.chatMsgPopItems,getLuaComponent(createUI("ChatMsgPopItem",self.transform:FindChild("Right/ChatMsgPopsGroup/Grid/item"..k))))
     end
     self.uiGridChatMsgPops:Reposition()
     for m = 1,3 do
@@ -238,7 +236,7 @@ function UISelectRole:Refresh()
                 -- break
             else
                 self.rightRolePlaceIcons[i].ClickAble = false
-                self.rightRolePlaceIcons[i]:SetPressAnabled(true,self:ShowRoleDetailSkillTip())
+                --self.rightRolePlaceIcons[i]:SetPressAnabled(true,self:ShowRoleDetailSkillTip())
             end
             local nameGo = self.rightRolePlaceIcons[i].transform:FindChild("Name")
             nameGo.gameObject:SetActive(true)
@@ -272,12 +270,9 @@ function UISelectRole:Refresh()
     self.ownedRoleIcons = {}
     self.selectedRoleIcons = {}
     self.selectedRoleIDs = {}
-    if self.title then
-        self.uiTitle:SetText(self.title)
-    end
-    if self.noPlayerText then
-        self.labelNoPlayer.text = self.noPlayerText
-    end
+    --if self.noPlayerText then
+    --    self.labelNoPlayer.text = self.noPlayerText
+    --end
 
     self:RefreshRoleList()
     --目前好像没有使用

@@ -45,30 +45,29 @@ public class GameMatch_BlockStorm : GameMatch, PlayerActionEventHandler.Listener
 		GameSystem.Instance.mNetworkManager.ConnectToGS(config.type, "", 1);
 	}
 
-	override public void OnSceneComplete()
+	protected override void _OnLoadingCompleteImp ()
 	{
-		base.OnSceneComplete();
-
+		base._OnLoadingCompleteImp ();
 		if (m_config == null)
 		{
-			Logger.LogError("Match config file loading failed.");
+			Debug.LogError("Match config file loading failed.");
 			return;
 		}
 
+        //TODO 针对PVP修改
 		PlayerManager pm = GameSystem.Instance.mClient.mPlayerManager;
-		m_mainRole = pm.GetPlayerById( uint.Parse(m_config.MainRole.id) );
+		mainRole = pm.GetPlayerById( uint.Parse(m_config.MainRole.id) );
 
-		//m_mainRole.m_inputDispatcher = new InputDispatcher(m_mainRole);
-		//m_mainRole.m_inputDispatcher.m_enable = false;
+		//mainRole.m_inputDispatcher = new InputDispatcher(mainRole);
+		//mainRole.m_inputDispatcher.m_enable = false;
 
-		m_mainRole.m_catchHelper = new CatchHelper(m_mainRole);
-		m_mainRole.m_catchHelper.ExtractBallLocomotion();
-		m_mainRole.m_StateMachine.SetState(PlayerState.State.eStand, true);
-		m_mainRole.m_InfoVisualizer.CreateStrengthBar();
-		m_mainRole.m_InfoVisualizer.ShowStaminaBar (true);
-		m_mainRole.m_team.m_role = GameMatch.MatchRole.eDefense;
-		m_mainRole.m_alwaysForbiddenPickup = true;
-		m_mainRole.eventHandler.AddEventListener(this);
+		mainRole.m_catchHelper = new CatchHelper(mainRole);
+		mainRole.m_catchHelper.ExtractBallLocomotion();
+		mainRole.m_StateMachine.SetState(PlayerState.State.eStand, true);
+		mainRole.m_InfoVisualizer.ShowStaminaBar (true);
+		mainRole.m_team.m_role = GameMatch.MatchRole.eDefense;
+		mainRole.m_alwaysForbiddenPickup = true;
+		mainRole.eventHandler.AddEventListener(this);
 		
 		//npc
 		npc = pm.GetPlayerById( uint.Parse(m_config.NPCs[0].id) );
@@ -76,18 +75,23 @@ public class GameMatch_BlockStorm : GameMatch, PlayerActionEventHandler.Listener
 		if (npc.model != null)
 			npc.model.EnableGrey();
 
-		npc.m_aiMgr = new AISystem_BlockStorm(this, npc, AIState.Type.eBlockStorm_Idle, m_config.NPCs[0].AIID);
+        npc.operMode = Player.OperMode.AI;
 		npc.m_team.m_role = GameMatch.MatchRole.eOffense;
 
 		npc.m_alwaysForbiddenPickup = true;
 
 		AssumeDefenseTarget();
-		_UpdateCamera(m_mainRole);
+		_UpdateCamera(mainRole);
 
 		//对手分数不变，当己方得分达到1星分数时达成胜利条件
 		m_awayScore = oneStarScore - 1;
 
 	}
+
+    public override AISystem CreateAISystem(Player player)
+    {
+		return new AISystem_BlockStorm(this, player, AIState.Type.eBlockStorm_Idle, m_config.NPCs[0].AIID);
+    }
 
 	protected override void OnLoadingComplete ()
 	{
@@ -95,7 +99,7 @@ public class GameMatch_BlockStorm : GameMatch, PlayerActionEventHandler.Listener
 		m_stateMachine.SetState(m_config.needPlayPlot ? MatchState.State.ePlotBegin : MatchState.State.eShowRule);
 	}
     
-    public override void HandleGameBegin(Pack pack)
+    public override void OnGameBegin(GameBeginResp resp)
     {
         m_stateMachine.SetState(MatchState.State.eBegin);
     }
@@ -143,14 +147,15 @@ public class GameMatch_BlockStorm : GameMatch, PlayerActionEventHandler.Listener
 
 	public override void ResetPlayerPos()
 	{
+        //TODO 针对PVP修改
         IM.Vector3 basketCenter = mCurScene.mBasket.m_vShootTarget;
 		basketCenter.y = IM.Number.zero;
-		m_mainRole.position = basketCenter;
-		m_mainRole.forward = -IM.Vector3.forward;
+		mainRole.position = basketCenter;
+		mainRole.forward = -IM.Vector3.forward;
         ResetNPC(GameSystem.Instance.MatchPointsConfig.BlockStormPos.npc_transforms[2]);
 
-		if (m_mainRole.m_bWithBall)
-			m_mainRole.DropBall(m_mainRole.m_ball);
+		if (mainRole.m_bWithBall)
+			mainRole.DropBall(mainRole.m_ball);
 		if (npc.m_bWithBall)
 			npc.DropBall(npc.m_ball);
 	}
@@ -177,9 +182,9 @@ public class GameMatch_BlockStorm : GameMatch, PlayerActionEventHandler.Listener
 			return base.IsCommandValid(command);
 	}
 
-    public override IM.BigNumber AdjustShootRate(Player shooter, IM.BigNumber rate)
+    public override IM.PrecNumber AdjustShootRate(Player shooter, IM.PrecNumber rate)
 	{
-        return IM.BigNumber.one;
+        return IM.PrecNumber.one;
 	}
 
 	protected override void CreateCustomGUI()
@@ -188,6 +193,7 @@ public class GameMatch_BlockStorm : GameMatch, PlayerActionEventHandler.Listener
 		uiMatch = CommonFunction.InstantiateObject(prefab, UIManager.Instance.m_uiRootBasePanel.transform).GetComponent<UIMatchBlockStorm>();
 		uiMatch.maxScore = oneStarScore;
         gameMatchTime = new IM.Number((int)gameMode.time);
+        uiMatch.timerBoard.isChronograph = true;
         uiMatch.timerBoard.SetVisible(m_gameMathCountEnable);
         uiMatch.timerBoard.UpdateTime((float)gameMatchTime);
         m_gameMatchCountStop = true;
@@ -195,7 +201,9 @@ public class GameMatch_BlockStorm : GameMatch, PlayerActionEventHandler.Listener
         {
             if (m_gameMathCountTimer == null)
             {
-                m_gameMathCountTimer = new GameUtils.Timer(gameMatchTime, () => { m_stateMachine.SetState(MatchState.State.eOver); });
+                m_gameMathCountTimer = new GameUtils.Timer(gameMatchTime, () => { m_stateMachine.SetState(MatchState.State.eOver);
+                uiMatch.timerBoard.UpdateTime(0f);
+                });
             }
             else
             {
@@ -204,9 +212,9 @@ public class GameMatch_BlockStorm : GameMatch, PlayerActionEventHandler.Listener
         }
 	}
 
-	public override void Update(IM.Number deltaTime)
+	public override void GameUpdate(IM.Number deltaTime)
 	{
-		base.Update(deltaTime);
+		base.GameUpdate(deltaTime);
 
 		if (uiMatch != null) {
             if (m_stateMachine.m_curState != null && m_stateMachine.m_curState.m_eState == MatchState.State.ePlaying)
@@ -240,6 +248,15 @@ public class GameMatch_BlockStorm : GameMatch, PlayerActionEventHandler.Listener
 
 		if (m_stateMachine.m_curState != null && m_stateMachine.m_curState.m_eState == MatchState.State.eOver)
 			NGUITools.SetActive(ballConveyor, false);
+
+        //添加倒计时相关的代码
+        if (m_gameMathCountTimer != null && !m_gameMatchCountStop && m_gameMathCountEnable)
+        {
+            if (uiMatch != null)
+            {
+                uiMatch.timerBoard.UpdateTime((float)m_gameMathCountTimer.Remaining());
+            }
+        }
 	}
 
     public override void FixedUpdate()
@@ -336,7 +353,7 @@ public class GameMatch_BlockStorm : GameMatch, PlayerActionEventHandler.Listener
 	private void OnGrab(UBasketball ball)
 	{
 		//block grab ball
-		if( m_mainRole.m_StateMachine.m_curState.m_eState == PlayerState.State.eBlock )
+		if( mainRole.m_StateMachine.m_curState.m_eState == PlayerState.State.eBlock )
 			OnHitGround(ball);
 	}
 
@@ -351,19 +368,19 @@ public class GameMatch_BlockStorm : GameMatch, PlayerActionEventHandler.Listener
 			return;
 		//ResetPlayerPos();
         List<IM.Transform> npcPos = GameSystem.Instance.MatchPointsConfig.BlockStormPos.npc_transforms;
-		ResetNPC(npcPos[Random.Range(0, npcPos.Count - 1)]);
+		ResetNPC(npcPos[IM.Random.Range(0, npcPos.Count - 1)]);
 		FetchBall(npc);
 	}
 
 	public void OnEvent( PlayerActionEventHandler.AnimEvent animEvent, Player sender, System.Object context)
 	{
-		if (sender == m_mainRole && animEvent == PlayerActionEventHandler.AnimEvent.eBlock)
+		if (sender == mainRole && animEvent == PlayerActionEventHandler.AnimEvent.eBlock)
 		{
 			int score = currBall.m_special ? specialBallScore : normalBallScore;
 			++myCombo;
 			float bonusRatio = GameSystem.Instance.GameModeConfig.GetComboBonus(GetMatchType(), myCombo);
 			m_homeScore += (int)(score * (1 + bonusRatio));
-			m_mainRole.mStatistics.success_block_times = (uint)m_homeScore;
+			mainRole.mStatistics.success_block_times = (uint)m_homeScore;
 			uiMatch.score = m_homeScore;
 			if (m_homeScore >= threeStarScore)
 			{

@@ -53,6 +53,8 @@ end
 function Close(self)
     if self.uiAnimator then
         self.uiAnimator:SetTrigger("Close")
+    else
+        NGUITools.Destroy(self.gameObject)
     end
 end
 

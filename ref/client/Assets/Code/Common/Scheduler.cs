@@ -109,9 +109,15 @@ public sealed class Scheduler
 		for (var i = 0; i < _timeSchedulers.Count; )
 		{
 			TimeScheduler obj = _timeSchedulers[i];
+
 			if (obj.RealTime <= Time.time)
 			{
-				obj.Callback();
+				if(obj.Callback!=null)
+					obj.Callback();
+				else{
+					_timeSchedulers.RemoveAt(i);
+					continue;
+				}
 				if (obj.IsLoop)
 				{
 					obj.RealTime += obj.Time;

@@ -1130,17 +1130,26 @@ namespace fogs.proto.msg
       [global::ProtoBuf.ProtoEnum(Name=@"InstructionBroadcastID", Value=9569)]
       InstructionBroadcastID = 9569,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"ClientInputID", Value=9584)]
-      ClientInputID = 9584,
+      [global::ProtoBuf.ProtoEnum(Name=@"ClientInputID", Value=9570)]
+      ClientInputID = 9570,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"FrameInfoID", Value=9585)]
-      FrameInfoID = 9585,
+      [global::ProtoBuf.ProtoEnum(Name=@"MissFrameReqID", Value=9571)]
+      MissFrameReqID = 9571,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"CheckFrameID", Value=9586)]
-      CheckFrameID = 9586,
+      [global::ProtoBuf.ProtoEnum(Name=@"PlayFrameID", Value=9572)]
+      PlayFrameID = 9572,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"NotifyUnsyncID", Value=9587)]
-      NotifyUnsyncID = 9587,
+      [global::ProtoBuf.ProtoEnum(Name=@"CheckFrameID", Value=9573)]
+      CheckFrameID = 9573,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"NotifyOutSyncID", Value=9574)]
+      NotifyOutSyncID = 9574,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"TeamMatchDataID", Value=9575)]
+      TeamMatchDataID = 9575,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"TeamMatchDataRespID", Value=9576)]
+      TeamMatchDataRespID = 9576,
             
       [global::ProtoBuf.ProtoEnum(Name=@"GMCommondExcuID", Value=12288)]
       GMCommondExcuID = 12288,

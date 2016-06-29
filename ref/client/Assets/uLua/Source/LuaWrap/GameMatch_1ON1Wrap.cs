@@ -7,9 +7,8 @@ public class GameMatch_1ON1Wrap
 	{
 		LuaMethod[] regs = new LuaMethod[]
 		{
-			new LuaMethod("OnSceneComplete", OnSceneComplete),
-			new LuaMethod("HandleGameBegin", HandleGameBegin),
-			new LuaMethod("Update", Update),
+			new LuaMethod("OnGameBegin", OnGameBegin),
+			new LuaMethod("GameUpdate", GameUpdate),
 			new LuaMethod("EnableMatchAchievement", EnableMatchAchievement),
 			new LuaMethod("EnableMatchTips", EnableMatchTips),
 			new LuaMethod("EnablePlayerTips", EnablePlayerTips),
@@ -58,31 +57,22 @@ public class GameMatch_1ON1Wrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int OnSceneComplete(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 1);
-		GameMatch_1ON1 obj = (GameMatch_1ON1)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch_1ON1");
-		obj.OnSceneComplete();
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int HandleGameBegin(IntPtr L)
+	static int OnGameBegin(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		GameMatch_1ON1 obj = (GameMatch_1ON1)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch_1ON1");
-		Pack arg0 = (Pack)LuaScriptMgr.GetNetObject(L, 2, typeof(Pack));
-		obj.HandleGameBegin(arg0);
+		fogs.proto.msg.GameBeginResp arg0 = (fogs.proto.msg.GameBeginResp)LuaScriptMgr.GetNetObject(L, 2, typeof(fogs.proto.msg.GameBeginResp));
+		obj.OnGameBegin(arg0);
 		return 0;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int Update(IntPtr L)
+	static int GameUpdate(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		GameMatch_1ON1 obj = (GameMatch_1ON1)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch_1ON1");
 		IM.Number arg0 = (IM.Number)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Number));
-		obj.Update(arg0);
+		obj.GameUpdate(arg0);
 		return 0;
 	}
 

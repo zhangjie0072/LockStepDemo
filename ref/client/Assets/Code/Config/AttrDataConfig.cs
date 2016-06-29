@@ -75,11 +75,11 @@ public class ReboundAttrConfig
         isLoadFinish = false;
         lock (LockObject){ GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name);
+		Debug.Log("Config reading " + name);
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            Debug.LogError("LoadConfig failed: " + name);
             return;
         }
         reboundAttrs.Clear();
@@ -99,7 +99,7 @@ public class ReboundAttrConfig
 			data.ballHeightScale = IM.Number.Parse(xe.SelectSingleNode("ball_height_scale").InnerText);
 			reboundAttrs.Add(position, data);
 		}
-		Logger.ConfigEnd(name);
+		
 	}
 
 	public ReboundAttr GetReboundAttr(PositionType position)
@@ -139,7 +139,7 @@ public class DunkRateConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            Debug.LogError("LoadConfig failed: " + name);
             return;
         }
         
@@ -223,7 +223,7 @@ public class AttrDataConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         captainAttrDatas.Clear();
@@ -269,7 +269,7 @@ public class AttrDataConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
         roleAttrDatas.Clear();
@@ -314,7 +314,7 @@ public class AttrDataConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name3);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name3);
+            Debug.LogError("LoadConfig failed: " + name3);
             return;
         }
         robotAttrDatas.Clear();
@@ -385,7 +385,7 @@ public class AttrDataConfig
             }
             else
             {
-                Logger.LogError(string.Format("Robot attr config repeating. min_level:{0} max_level:{1} winning_streak:{2} position:{3}",
+                Debug.LogError(string.Format("Robot attr config repeating. min_level:{0} max_level:{1} winning_streak:{2} position:{3}",
                     data.min_level, data.max_level, data.winning_streak, data.position));
             }
         }

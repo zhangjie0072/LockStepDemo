@@ -99,7 +99,7 @@ public static class LuaHelper {
     /// <param name="func"></param>
     public static void OnCallLuaFunc(LuaStringBuffer data, LuaFunction func) {
         byte[] buffer = data.buffer;
-        Logger.LogWarning("OnCallLuaFunc buffer:>>" + buffer + " lenght:>>" + buffer.Length);
+        Debug.LogWarning("OnCallLuaFunc buffer:>>" + buffer + " lenght:>>" + buffer.Length);
         if (func == null) return;
         /*
          * 调用此函数需要获取Luastate的指针(mgr.lua.L)，根据自身项目修改此处。
@@ -195,7 +195,7 @@ public static class LuaHelper {
 		Dictionary<uint, MsgHandler.Handle> msgMap = null;
 		if (!msgHandlers.TryGetValue(uiName, out msgMap))
 		{
-            Logger.LogError("No msg handlers for UI: " + uiName);
+            Debug.LogError("No msg handlers for UI: " + uiName);
         }
 		MsgHandler.Handle handler;
 		if (msgMap.TryGetValue(msgID, out handler))
@@ -230,7 +230,7 @@ public static class LuaHelper {
 		Dictionary<uint, MsgHandler.Handle> msgMap = null;
 		if (!msgHandlers.TryGetValue(uiName, out msgMap))
 		{
-			Logger.LogError("Need to pass the right uiName");
+			Debug.LogError("Need to pass the right uiName");
 		}
 		MsgHandler.Handle handler;
 		if (msgMap.TryGetValue(msgID, out handler))
@@ -248,7 +248,7 @@ public static class LuaHelper {
     /// <param name="data"></param>
     /// <param name="func"></param>
     public static void OnJsonCallFunc(string data, LuaFunction func) {
-        Logger.LogWarning("OnJsonCallback data:>>" + data + " lenght:>>" + data.Length);
+        Debug.LogWarning("OnJsonCallback data:>>" + data + " lenght:>>" + data.Length);
         if (func != null) func.Call(data);
     }
 }

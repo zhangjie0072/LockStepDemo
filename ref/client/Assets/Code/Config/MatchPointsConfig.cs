@@ -180,7 +180,7 @@ public class MatchPointsConfig {
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig Failed:" + name1);
+            Debug.LogError("LoadConfig Failed:" + name1);
             return;
         }
 
@@ -197,7 +197,7 @@ public class MatchPointsConfig {
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig Failed:" + name2);
+            Debug.LogError("LoadConfig Failed:" + name2);
             return;
         }
 
@@ -236,7 +236,7 @@ public class MatchPointsConfig {
         string text = ResourceLoadManager.Instance.GetConfigText(name3);
         if (text == null)
         {
-            Logger.LogError("LoadConfig Failed:" + name3);
+            Debug.LogError("LoadConfig Failed:" + name3);
             return;
         }
 
@@ -262,7 +262,7 @@ public class MatchPointsConfig {
         string text = ResourceLoadManager.Instance.GetConfigText(name4);
         if (text == null)
         {
-            Logger.LogError("LoadConfig Failed:" + name4);
+            Debug.LogError("LoadConfig Failed:" + name4);
             return;
         }
 
@@ -278,7 +278,7 @@ public class MatchPointsConfig {
         string text = ResourceLoadManager.Instance.GetConfigText(name5);
         if (text == null)
         {
-            Logger.LogError("LoadConfig Failed:" + name5);
+            Debug.LogError("LoadConfig Failed:" + name5);
             return;
         }
 
@@ -301,7 +301,7 @@ public class MatchPointsConfig {
         string text = ResourceLoadManager.Instance.GetConfigText(name6);
         if (text == null)
         {
-            Logger.LogError("LoadConfig Failed:" + name6);
+            Debug.LogError("LoadConfig Failed:" + name6);
             return;
         }
 
@@ -351,7 +351,7 @@ public class MatchPointsConfig {
         string text = ResourceLoadManager.Instance.GetConfigText(name7);
         if (text == null)
         {
-            Logger.LogError("LoadConfig Failed:" + name7);
+            Debug.LogError("LoadConfig Failed:" + name7);
             return;
         }
 
@@ -373,7 +373,7 @@ public class MatchPointsConfig {
         string text = ResourceLoadManager.Instance.GetConfigText(name9);
         if (text == null)
         {
-            Logger.LogError("LoadConfig Failed:" + name9);
+            Debug.LogError("LoadConfig Failed:" + name9);
             return;
         }
 
@@ -410,7 +410,7 @@ public class MatchPointsConfig {
         string text = ResourceLoadManager.Instance.GetConfigText(name10);
         if (text == null)
         {
-            Logger.LogError("LoadConfig Failed:" + name10);
+            Debug.LogError("LoadConfig Failed:" + name10);
             return; 
         }
 
@@ -444,7 +444,7 @@ public class MatchPointsConfig {
         string text = ResourceLoadManager.Instance.GetConfigText(name11);
         if (text == null)
         {
-            Logger.LogError("LoadConfig Failed:" + name11);
+            Debug.LogError("LoadConfig Failed:" + name11);
             return;
         }
 
@@ -489,7 +489,7 @@ public class MatchPointsConfig {
         string text = ResourceLoadManager.Instance.GetConfigText(name12);
         if (text == null)
         {
-            Logger.LogError("LoadConfig Failed:" + name12);
+            Debug.LogError("LoadConfig Failed:" + name12);
             return;
         }
 

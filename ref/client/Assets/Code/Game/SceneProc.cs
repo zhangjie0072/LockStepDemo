@@ -19,8 +19,6 @@ public class SceneProc : MonoSingleton<SceneProc>
     void Start()
     {
         Initialize();
-
-        DynamicStringManager.Instance.Init();
     }
 
     void Update()

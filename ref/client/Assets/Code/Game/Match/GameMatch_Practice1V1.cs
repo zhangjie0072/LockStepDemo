@@ -13,7 +13,7 @@ public class GameMatch_Practice1V1 : GameMatch, MatchStateMachine.Listener
     LuaFunction funcUpdate;
     LuaFunction funcOnMatchStateChange;
 
-    Player rival { get { return m_mainRole.m_defenseTarget; } }
+    Player rival { get { return mainRole.m_defenseTarget; } }
 
 
     public GameMatch_Practice1V1(Config config)
@@ -22,16 +22,16 @@ public class GameMatch_Practice1V1 : GameMatch, MatchStateMachine.Listener
         GameSystem.Instance.mNetworkManager.ConnectToGS(config.type, "", 1);
     }
 
-    override public void OnSceneComplete()
-    {
-        base.OnSceneComplete();
+	protected override void _OnLoadingCompleteImp ()
+        {
+		base._OnLoadingCompleteImp ();
         mCurScene.CreateBall();
 
         m_needTipOff = true;
 
         if (m_config == null)
         {
-            Logger.LogError("Match config file loading failed.");
+                Debug.LogError("Match config file loading failed.");
             return;
         }
 
@@ -40,20 +40,16 @@ public class GameMatch_Practice1V1 : GameMatch, MatchStateMachine.Listener
         {
             Player player = pm.m_Players[idx];
 
-            player.m_aiMgr = new AISystem_Basic(this, player, AIState.Type.eInit, player.m_config.AIID);
-            player.m_aiMgr.m_enable = true;
+            player.operMode = Player.OperMode.AI;
 
             player.m_catchHelper = new CatchHelper(player);
             player.m_catchHelper.ExtractBallLocomotion();
             player.m_StateMachine.SetState(PlayerState.State.eStand, true);
-            player.m_InfoVisualizer.CreateStrengthBar();
-            player.m_InfoVisualizer.ShowStaminaBar(false);
         }
 
-        m_mainRole = pm.GetPlayerById(uint.Parse(m_config.MainRole.id));
-        m_mainRole.m_aiMgr.m_enable = false;
-        m_mainRole.m_InfoVisualizer.ShowStaminaBar(true);
-        m_mainRole.m_inputDispatcher = new InputDispatcher(this, m_mainRole);
+        Player mainRole;
+        mainRole = pm.GetPlayerById(uint.Parse(m_config.MainRole.id));
+        mainRole.operMode = Player.OperMode.Input;
 
         AssumeDefenseTarget();
 
@@ -66,13 +62,11 @@ public class GameMatch_Practice1V1 : GameMatch, MatchStateMachine.Listener
             rival.m_enableMovement = false;
         }
 
-        m_mainRole.m_team.m_role = GameMatch.MatchRole.eOffense;
+        mainRole.m_team.m_role = GameMatch.MatchRole.eOffense;
         if (rival != null)
             rival.m_team.m_role = GameMatch.MatchRole.eDefense;
 
-        _UpdateCamera(m_mainRole);
-
-        m_mainTeam = m_mainRole.m_team;
+        _UpdateCamera(mainRole);
 
         LoadLua();
         m_stateMachine.m_matchStateListeners.Add(this);
@@ -86,7 +80,7 @@ public class GameMatch_Practice1V1 : GameMatch, MatchStateMachine.Listener
         }
     }
 
-    public override void HandleGameBegin(Pack pack)
+    public override void OnGameBegin(GameBeginResp resp)
     {
         m_stateMachine.SetState(MatchState.State.eTipOff);
     }
@@ -106,9 +100,9 @@ public class GameMatch_Practice1V1 : GameMatch, MatchStateMachine.Listener
     }
 
 
-    public override void Update(IM.Number deltaTime)
+    public override void GameUpdate(IM.Number deltaTime)
     {
-        base.Update(deltaTime);
+        base.GameUpdate(deltaTime);
         _RefreshAOD();
 
         UBasketball ball = mCurScene.mBall;
@@ -119,7 +113,7 @@ public class GameMatch_Practice1V1 : GameMatch, MatchStateMachine.Listener
                 m_uiMatch.leftBall.SetActive(false);
                 m_uiMatch.rightBall.SetActive(false);
             }
-            else if (ball.m_owner.m_team == m_mainRole.m_team)
+            else if (ball.m_owner.m_team == mainRole.m_team)
             {
                 m_uiMatch.leftBall.SetActive(true);
                 m_uiMatch.rightBall.SetActive(false);
@@ -163,7 +157,7 @@ public class GameMatch_Practice1V1 : GameMatch, MatchStateMachine.Listener
 
     public override bool EnableEnhanceAttr()
     {
-        return true;
+            return false;
     }
 
 

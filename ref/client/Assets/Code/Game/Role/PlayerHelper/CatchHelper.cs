@@ -43,7 +43,7 @@ public class CatchHelper
 
             IM.Vector3 pos;
             if (!AnimationManager.GetNodePosition(SampleNode.Ball, clipName, frame, out pos))
-                Logger.LogError(string.Format("CatchHelper, can't get ball pos at frame: {0} of clip:{1}", frame, clipName));
+                Debug.LogError(string.Format("CatchHelper, can't get ball pos at frame: {0} of clip:{1}", frame, clipName));
 
             _dictAnimBallSLocalPos.Add(item.Key, pos);
         }
@@ -72,7 +72,7 @@ public class CatchHelper
         Dictionary<string, uint> data = passer.m_attrData.attrs;
 		if( data == null )
 		{
-			Logger.LogError("Can not find data.");
+			Debug.LogError("Can not find data.");
 			return;
 		}
 		

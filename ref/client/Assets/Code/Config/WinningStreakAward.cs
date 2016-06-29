@@ -26,13 +26,13 @@ public class WinningStreakAwardConfig
         if (isLoadFinish == false)
             return;
         isLoadFinish = false;
-		Logger.ConfigBegin(name);
+		Debug.Log("Config reading " + name);
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            Debug.LogError("LoadConfig failed: " + name);
             return;
         }
         award_config.Clear();
@@ -61,7 +61,7 @@ public class WinningStreakAwardConfig
             }
             award_config.Add(winning_streak, award_pack_id);
         }
-		Logger.ConfigEnd(name);
+		
     }
 
     public uint GetAwardPackID(uint winning_streak)

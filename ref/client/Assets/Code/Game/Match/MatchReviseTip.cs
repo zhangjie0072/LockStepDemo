@@ -27,9 +27,9 @@ public class MatchReviseTip
 
 	public void Update(float deltaTime)
 	{
-		Player defenseTarget = match.m_mainRole.m_defenseTarget;
+		Player defenseTarget = match.mainRole.m_defenseTarget;
 		if (defenseTarget != null && defenseTarget.m_bWithBall &&
-			defenseTarget.m_AOD.GetStateByPos(match.m_mainRole.position) == AOD.Zone.eInvalid)
+			defenseTarget.m_AOD.GetStateByPos(match.mainRole.position) == AOD.Zone.eInvalid)
 		{
 			if (!revisingDefense)
 			{
@@ -40,32 +40,32 @@ public class MatchReviseTip
 		else
 			revisingDefense = false;
 
-		PlayerState curState = match.m_mainRole.m_StateMachine.m_curState;
+		PlayerState curState = match.mainRole.m_StateMachine.m_curState;
 		if (lastMainRoleState != PlayerState.State.eRebound && curState.m_eState == PlayerState.State.eRebound)
 		{
-			IM.Number curDist = GameUtils.HorizonalDistance(match.m_mainRole.position, match.mCurScene.mBall.position);
-			if (curDist > match.m_mainRole.m_fReboundDist)
+			IM.Number curDist = GameUtils.HorizonalDistance(match.mainRole.position, match.mCurScene.mBall.position);
+			if (curDist > match.mainRole.m_fReboundDist)
 				ShowTip(CommonFunction.GetConstString("MATCH_GUIDE_ReviseDistance"));
 			else if (!(curState as PlayerState_Rebound).m_success)
 				ShowTip(CommonFunction.GetConstString("MATCH_GUIDE_ReviseRebound"));
 		}
 		else if (lastMainRoleState != PlayerState.State.eSteal && curState.m_eState == PlayerState.State.eSteal)
 		{
-			if (defenseTarget.m_AOD.GetStateByPos(match.m_mainRole.position) == AOD.Zone.eInvalid)
+			if (defenseTarget.m_AOD.GetStateByPos(match.mainRole.position) == AOD.Zone.eInvalid)
 				ShowTip(CommonFunction.GetConstString("MATCH_GUIDE_ReviseDistance"));
 		}
 		else if (lastMainRoleState != PlayerState.State.eBlock && curState.m_eState == PlayerState.State.eBlock)
 		{
-			IM.Number curDist = GameUtils.HorizonalDistance(match.m_mainRole.position, match.mCurScene.mBall.position);
+			IM.Number curDist = GameUtils.HorizonalDistance(match.mainRole.position, match.mCurScene.mBall.position);
 			if (curDist < IM.Number.one || curDist > new IM.Number(5))
 				ShowTip(CommonFunction.GetConstString("MATCH_GUIDE_ReviseDistance"));
-			else if (!match.m_mainRole.m_defenseTarget.m_blockable.blockable)
+			else if (!match.mainRole.m_defenseTarget.m_blockable.blockable)
 				ShowTip(CommonFunction.GetConstString("MATCH_GUIDE_ReviseBlockTimming"));
 		}
 		else if (lastMainRoleState != PlayerState.State.eBodyThrowCatch && curState.m_eState == PlayerState.State.eBodyThrowCatch)
 		{
-			IM.Number maxDist = PlayerState_BodyThrowCatch.GetMaxDistance(match.m_mainRole);
-			IM.Number curDist = GameUtils.HorizonalDistance(match.m_mainRole.position, match.mCurScene.mBall.position);
+			IM.Number maxDist = PlayerState_BodyThrowCatch.GetMaxDistance(match.mainRole);
+			IM.Number curDist = GameUtils.HorizonalDistance(match.mainRole.position, match.mCurScene.mBall.position);
 			if (curDist > maxDist)
 				ShowTip(CommonFunction.GetConstString("MATCH_GUIDE_ReviseDistance"));
 		}
@@ -75,9 +75,9 @@ public class MatchReviseTip
 
 	void OnShoot(UBasketball ball)
 	{
-		if (ball.m_actor == match.m_mainRole && !ball.m_isLayup)
+		if (ball.m_actor == match.mainRole && !ball.m_isLayup)
 		{
-            IM.Number distToBasket = GameUtils.HorizonalDistance(match.m_mainRole.position, match.mCurScene.mBasket.m_vShootTarget);
+            IM.Number distToBasket = GameUtils.HorizonalDistance(match.mainRole.position, match.mCurScene.mBasket.m_vShootTarget);
 			if (distToBasket >new IM.Number(9,150))
 				ShowTip(CommonFunction.GetConstString("MATCH_GUIDE_ReviseShootDist"));
 			//else

@@ -15,7 +15,7 @@ public class UINumberBeatEffector : UINumberEffector
 		:base(target,listener)
 	{
 		if (target == null)
-			Logger.LogError ("GUINumberBeatEffector: target is null ");
+			Debug.LogError ("GUINumberBeatEffector: target is null ");
 		
 		m_Curve = curve;
 		m_fCurveEndTime = m_Curve.keys[m_Curve.length - 1].time;

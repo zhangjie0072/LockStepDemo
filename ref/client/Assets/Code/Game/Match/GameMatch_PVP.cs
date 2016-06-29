@@ -26,22 +26,20 @@ public class StartPositionInfo
 }
 
 /// <summary>
-/// ��2���淨��
-/// 1+2VS1+2 ��2�����ˣ�
-/// 3VS3 ��6�����ˣ�
+/// 【2种玩法】
+/// 1+2VS1+2 （2个真人）
+/// 3VS3 （6个真人）
 /// </summary>
 public class GameMatch_PVP
 	:GameMatch_MultiPlayer
 {
-	public bool	m_bPlayerBuildDone{get; private set;}
-	public delegate void OnAllPlayerConnected( List<PlayerData> lstPlayerData );
-	public OnAllPlayerConnected onPlayerConnected;
     public List<Player> m_PlayersToControl = new List<Player>();
+    public List<uint> droppedAccount = new List<uint>();    //掉线玩家账号
 	public GameUtils.Timer m_overTimer{get; private set;}
 
-	private bool m_bSceneBuild = false;
+	public bool m_bPlayerDataReady = false;
+
 	private List<PlayerData>	m_playerToBuild = new List<PlayerData>();
-	private List<StartPositionInfo>	m_posInfo = new List<StartPositionInfo>();
 
 	public GameMatch_PVP(Config config)
 		:base(config)
@@ -51,16 +49,9 @@ public class GameMatch_PVP
 		GameSystem.Instance.mNetworkManager.ConnectToGS(config.type, config.ip, config.port);
 
 		NetworkManager mgr = GameSystem.Instance.mNetworkManager;
-		mgr.m_gameMsgHandler.RegisterHandler(MsgID.EnterGameSrvRespID, 	OnEnterGameSrv);
-		mgr.m_gameMsgHandler.RegisterHandler(MsgID.EnterGameRespID, 	OnEnterGame);
-		
-		mgr.m_gameMsgHandler.RegisterHandler(MsgID.GameFaulID, 			HandleGameFaul);
-		mgr.m_gameMsgHandler.RegisterHandler(MsgID.GameOverID, 			HandleGameOver);
-
-		mgr.m_gameMsgHandler.RegisterHandler(MsgID.BeginTipOffRespID, 	HandleTipOffBegin);
+		mgr.m_gameMsgHandler.RegisterHandler(MsgID.EnterGameSrvRespID, 	OnEnterGameSrv);    //进入游戏服务器
+		mgr.m_gameMsgHandler.RegisterHandler(MsgID.EnterGameRespID, 	OnEnterGame);   //加入玩家
 		mgr.m_gameMsgHandler.RegisterHandler(MsgID.InstructionBroadcastID, 	HandleBroadcast);
-
-		m_bPlayerBuildDone = false;
 
 		mgr.m_gameConn.m_profiler.BeginRecordDataUsage();
 
@@ -74,17 +65,16 @@ public class GameMatch_PVP
 		m_overTimer.stop = true;
 	}
 
-	override public void OnSceneComplete ()
+	protected override void _OnLoadingCompleteImp ()
 	{
-		base.OnSceneComplete();
+		base._OnLoadingCompleteImp ();
 		UBasketball ball = mCurScene.CreateBall();
 		
 		if( m_config == null )
 		{
-			Logger.LogError("Match config file loading failed.");
+			Debug.LogError("Match config file loading failed.");
 			return;
 		}
-		m_bSceneBuild = true;
 		m_needTipOff = true;
 		
 		m_overTimer.stop = true;
@@ -103,26 +93,6 @@ public class GameMatch_PVP
 	{
 	}
 
-	static public void HandleTipOffBegin(Pack pack)
-	{
-		GameMatch curMatch = GameSystem.Instance.mClient.mCurMatch;
-		MatchStateTipOff_PVP tipOff = curMatch.m_stateMachine.m_curState as MatchStateTipOff_PVP;
-		if( tipOff == null )
-			return;
-		tipOff.BeginTipOff();
-	}
-
-	static public void HandleGameOver(Pack pack)
-	{
-		GameOver resp = Serializer.Deserialize<GameOver>(new MemoryStream(pack.buffer));
-		GameResult result = resp.result;
-
-		Logger.Log("pvp game over");
-		GameMatch_PVP curMatch = GameSystem.Instance.mClient.mCurMatch as GameMatch_PVP;
-		if( result == GameResult.GR_DRAW )
-			curMatch.m_stateMachine.SetState(MatchState.State.eOverTime);
-	}
-
 	protected override void OnRimCollision (UBasket basket, UBasketball ball)
 	{
         m_count24Time = gameMatchTime;
@@ -130,25 +100,18 @@ public class GameMatch_PVP
 		m_b24TimeUp = false;
 	}
 
-	static public void HandleGameFaul(Pack pack)
+    //帧同步以后，这个消息只在开局发一次，中途不再发
+	public override void OnGameBegin(GameBeginResp resp)
 	{
-		GameFaul resp = Serializer.Deserialize<GameFaul>(new MemoryStream(pack.buffer));
-		GameMatch curMatch = GameSystem.Instance.mClient.mCurMatch;
-		Logger.Log("pvp game faul");
-		curMatch.m_stateMachine.SetState(MatchState.State.eFoul);
-	}
-
-	public override void HandleGameBegin(Pack pack)
-	{
-		Logger.Log("pvp game begin");
+		Debug.Log("pvp game begin");
+        //重连后拿回控制权
         foreach( Player player in m_PlayersToControl)
         {
-            player.m_aiMgr.m_enable = false;
-            player.m_aiMgr = null;
+            player.operMode = Player.OperMode.Input;
 
             player.DropBall(mCurScene.mBall);
 
-            Logger.Log("1927 - reset player's AI player player.m_roleInfo.id=" + 
+            Debug.Log("1927 - reset player's AI player player.m_roleInfo.id=" + 
                 player.m_roleInfo.id
                 + ", index=" + player.m_roleInfo.index);
         }
@@ -156,15 +119,14 @@ public class GameMatch_PVP
 
         if( MainPlayer.Instance.inPvpJoining )
         {
-            Logger.Log("1927 - To Set inPvapJoint to false");
+            Debug.Log("1927 - To Set inPvapJoint to false");
             MainPlayer.Instance.inPvpJoining = false;
         }
 
-		GameBeginResp resp = Serializer.Deserialize<GameBeginResp>(new MemoryStream(pack.buffer));
 		if( resp.on_ball == TeamType.TT_HOME )
-			Logger.Log("home team");
+			Debug.Log("home team");
 		else
-			Logger.Log("away team");
+			Debug.Log("away team");
 
 		if( resp.tip_off == 0 || MainPlayer.Instance.inPvpJoining)
 			_GameBegin(resp);
@@ -177,6 +139,7 @@ public class GameMatch_PVP
 		if( m_uiMatch == null )
 			CreateUI();
 
+        /*
 		//reposition player
 		System.Action<bool> set_position = (isHome) =>
 		{
@@ -188,7 +151,7 @@ public class GameMatch_PVP
   
                 List<IM.Transform> posList = isOffense ? beginPos.offenses_transform : beginPos.defenses_transform;
 
-                //TODO: ���ԣ���ʱ����ִ��󣬴�ӡ�����
+                //TODO: 测试：有时候出现错误，打印输出。
                 Logger.Log("1927 fightRole.status - 1=" + (int)(fightRole.status - 1));
                 Logger.Log("1927 isHome=" + isHome + ", posList.Count=" + posList.Count);
                 for (int i = 0; i < posList.Count; i++ )
@@ -211,17 +174,15 @@ public class GameMatch_PVP
 		};
 		set_position(true);
 		set_position(false);
+        */
 
-		m_homeTeam.SortMember(true);
-		m_awayTeam.SortMember(true);
-
-		AssumeDefenseTarget();
-		
+        /*
 		foreach( Player player in GameSystem.Instance.mClient.mPlayerManager )
 		{
 			if( player.m_defenseTarget != null )
 				player.FaceTo(player.m_defenseTarget.position);
 		}
+        */
 
         if (!m_bOverTime)
             gameMatchTime = new IM.Number((int)resp.total_time);
@@ -229,18 +190,19 @@ public class GameMatch_PVP
             m_gameMathCountEnable = false;
 		
 		m_homeScore	= (int)resp.home_score;
-		Logger.Log("home score: " + resp.home_score);
+		Debug.Log("home score: " + resp.home_score);
 		
 		m_awayScore	= (int)resp.away_score;
-		Logger.Log("away score: " + resp.away_score);
+		Debug.Log("away score: " + resp.away_score);
 		
-		_UpdateCamera(m_mainRole);
+		_UpdateCamera(mainRole);
 
 		m_stateMachine.SetState(MatchState.State.eTipOff);
 	}
 
 	void _GameBegin(GameBeginResp resp)
 	{
+        /*
 		//reposition player
 		System.Action<bool> set_position = (isHome) =>
 		{
@@ -270,6 +232,7 @@ public class GameMatch_PVP
 			if( player.m_defenseTarget != null )
 				player.FaceTo(player.m_defenseTarget.position);
 		}
+        */
 
         if( m_uiMatch == null )
         {
@@ -295,12 +258,12 @@ public class GameMatch_PVP
          
 		
 		m_homeScore	= (int)resp.home_score;
-		Logger.Log("home score: " + resp.home_score);
+		Debug.Log("home score: " + resp.home_score);
 		
 		m_awayScore	= (int)resp.away_score;
-		Logger.Log("away score: " + resp.away_score);
+		Debug.Log("away score: " + resp.away_score);
 		
-		_UpdateCamera(m_mainRole);
+		_UpdateCamera(mainRole);
 		m_stateMachine.SetState(MatchState.State.eBegin);
 	}
 
@@ -313,7 +276,8 @@ public class GameMatch_PVP
 				break;
 
 			Player player = m_homeTeam.GetMember(idx);
-			Player defender = m_awayTeam.members.Find( (Player member)=>{ return member.m_startPos == player.m_startPos;} );
+			//Player defender = m_awayTeam.members.Find( (Player member)=>{ return member.m_startPos == player.m_startPos;} );
+            Player defender = m_awayTeam.GetMember(idx);
 			if( defender == null )
 				continue;
 			player.m_defenseTarget = defender;
@@ -329,21 +293,7 @@ public class GameMatch_PVP
 		}
 
 		foreach( Player player in GameSystem.Instance.mClient.mPlayerManager )
-			Logger.Log("Player: " + player.m_id + " , defense target: " + player.m_defenseTarget.m_id );
-	}
-
-	public void OnNotifyRoomUserExit(NotifyRoomUser resp)
-	{
-	}
-
-	public void SetPlayerPos(TeamType type, FightRole fightRole)
-	{
-		StartPositionInfo posInfo = new StartPositionInfo();
-		posInfo.teamType = type;
-		posInfo.fightRole = fightRole;
-		m_posInfo.Add(posInfo);
-
-		Logger.Log("Add player position: " + fightRole.role_id + " team type: " + type);
+			Debug.Log("Player: " + player.m_id + " , defense target: " + player.m_defenseTarget.m_id );
 	}
 
 	protected override Player _GenerateTeamMember (Config.TeamMember member, string name)
@@ -352,125 +302,85 @@ public class GameMatch_PVP
 		Player player = GameSystem.Instance.mClient.mPlayerManager.CreatePlayer(member.roleInfo, team);
 		player.m_config = member;
 
-        Logger.Log("1927 - GameMatch_PVP GenerateTeamMember player.m_roleInfo.index = " + player.m_roleInfo.index);
+        Debug.Log("1927 - GameMatch_PVP GenerateTeamMember player.m_roleInfo.index = " + player.m_roleInfo.index);
 
 		return player;
-	}
-
-	public override void ResetPlayerPos ()
-	{
-	}
-
-	public override void InitBallHolder ()
-	{
 	}
 
 	public void OnInitPlayer()
 	{
 		foreach( Player player in GameSystem.Instance.mClient.mPlayerManager)
 		{
-			if (player.m_InfoVisualizer != null)
-				player.m_InfoVisualizer.ShowStaminaBar(false);
-
-
-			if( m_config.type != Type.ePVP_3On3 )
-			{
-				if( player.m_team == m_mainTeam )
-				{
-					player.m_InfoVisualizer.CreateStrengthBar();
-					player.m_aiMgr = new AISystem_Basic(this, player, AIState.Type.eInit);
-					player.m_aiMgr.m_enable = true;
-				}
-			}
+            if (GetMatchType() == Type.ePVP_1PLUS)  //所有人有AI
+            {
+                if (IsMainRole(player))
+                    player.operMode = Player.OperMode.Input;
+                else
+                    player.operMode = Player.OperMode.AI;
+            }
+            else if (GetMatchType() == Type.ePVP_3On3)
+            {
+                player.operMode = Player.OperMode.Input;
+            }
 		}
-
-		if( m_config.type == Type.ePVP_3On3 )
-			m_mainRole.m_InfoVisualizer.CreateStrengthBar();
-
-		m_mainRole.m_inputDispatcher = new InputDispatcher(this, m_mainRole);
-		m_mainRole.m_InfoVisualizer.ShowStaminaBar(true);
-		if( m_mainRole.m_aiMgr != null )
-			m_mainRole.m_aiMgr.m_enable = false;
 	}
 
-	public override void Update(IM.Number deltaTime)
+	public void LoadPlayers()
 	{
-		base.Update(deltaTime);
+		if( (m_config.type == Type.ePVP_1PLUS && m_playerToBuild.Count == 2)
+			|| (m_config.type == Type.ePVP_3On3 && m_playerToBuild.Count == 6)
+		)
+		{
+			foreach( PlayerData playerData in m_playerToBuild )
+				_CreateRoomUser(playerData);
+
+            m_homeTeam.SortMember();
+            m_awayTeam.SortMember();
+
+            AssumeDefenseTarget();
+
+            if (m_config.type == Type.ePVP_1PLUS)   //设置每队第一个为mainrole
+            {
+                Player p = m_homeTeam.members[0];
+                SwitchMainrole(p);
+                p = m_awayTeam.members[0];
+                SwitchMainrole(p);
+            }
+            else if (m_config.type == Type.e3On3)   //每个人都是mainrole
+            {
+                foreach (Player player in m_homeTeam)
+                    SwitchMainrole(player);
+                foreach (Player player in m_awayTeam)
+                    SwitchMainrole(player);
+            }
+
+			m_playerToBuild.Clear();
+		}
+	}
+	public void GetUIList(out List<string> lst_uiNames)
+	{
+		lst_uiNames = new List<string>();
+		lst_uiNames.Add("Prefab/GUI/MatchTipAnim");
+		lst_uiNames.Add("Prefab/GUI/MatchTipScoreDiff");
+		lst_uiNames.Add("Prefab/GUI/PlayerTip");
+		lst_uiNames.Add("Prefab/GUI/circle");
+		lst_uiNames.Add("Prefab/GUI/GroundDown");
+		lst_uiNames.Add("Prefab/GUI/Hit_1");
+		lst_uiNames.Add("Prefab/GUI/pre_3pt");
+		lst_uiNames.Add("Prefab/GUI/RebPlacement");
+	}
+
+	protected override void _OnSceneComplete ()
+	{
+	}
+
+	public override void GameUpdate(IM.Number deltaTime)
+	{
+		base.GameUpdate(deltaTime);
 
 		m_overTimer.Update(deltaTime);
-
-		if( m_bSceneBuild )
-		{
-			if( (m_config.type == Type.ePVP_1PLUS && m_playerToBuild.Count == 2)
-				|| (m_config.type == Type.ePVP_3On3 && m_playerToBuild.Count == 6)
-			)
-			{
-				foreach( PlayerData playerData in m_playerToBuild )
-					_CreateRoomUser(playerData);
-				m_playerToBuild.Clear();
-				m_bPlayerBuildDone = true;
-			}
-		}
-
-		UBasketball ball = mCurScene.mBall;
-		if( ball == null )
-			return;
-
-		if( m_uiMatch != null )
-		{
-			if (ball.m_owner == null)
-			{
-				m_uiMatch.leftBall.SetActive(false);
-				m_uiMatch.rightBall.SetActive(false);
-			}
-			else if (ball.m_owner.m_team == m_mainRole.m_team)
-			{
-				m_uiMatch.leftBall.SetActive(true);
-				m_uiMatch.rightBall.SetActive(false);
-			}
-			else
-			{
-				m_uiMatch.leftBall.SetActive(false);
-				m_uiMatch.rightBall.SetActive(true);
-			}
-		}
-	}
+    }
 	
-	override public void SwitchMainrole( Player target )
-	{
-
-		if( target == null )
-			return;
-
-		if( m_stateMachine.m_curState.m_eState == MatchState.State.eOver )
-			return;
-
-		if( m_mainRole == target || m_mainTeam != target.m_team )
-			return;
-
-		target.m_inputDispatcher = new InputDispatcher(this, target);
-		target.m_inputDispatcher.TransmitUncontrolInfo(m_mainRole.m_inputDispatcher);
-		m_mainRole.m_inputDispatcher = null;
-		
-		if( m_mainRole.m_aiMgr != null )
-			m_mainRole.m_aiMgr.m_enable = Debugger.Instance.m_bEnableAI;
-		if (target.m_team.m_role == MatchRole.eDefense)
-			target.m_inputDispatcher.disableAIOnAction = true;
-		else
-			if (target.m_aiMgr != null)
-				target.m_aiMgr.m_enable = false;
-		
-		m_mainRole.m_InfoVisualizer.ShowStaminaBar(false);
-
-		target.m_InfoVisualizer.ShowStaminaBar(true);
-		
-		m_mainRole = target;
-		_UpdateCamera(m_mainRole);
-		InputReader.Instance.player = m_mainRole;
-		
-		//Logger.Log("current main role: " + m_mainRole.m_id);
-	}
-
 	public void AddPlayerData(PlayerData playerData)
 	{
 		PlayerManager playerMgr = GameSystem.Instance.mClient.mPlayerManager;
@@ -514,14 +424,14 @@ public class GameMatch_PVP
 
 	public override bool EnableEnhanceAttr()
 	{
-		return true;
+		return false;
 	}
 
 	private void OnGameServerConn(NetworkConn.Type type)
 	{
 		if (type == NetworkConn.Type.eGameServer)
 		{
-			Logger.Log("OnGameServerConn");
+			Debug.Log("OnGameServerConn");
 
 			EnterGameSrv req = new EnterGameSrv();
 			req.acc_id = MainPlayer.Instance.AccountID;
@@ -566,11 +476,11 @@ public class GameMatch_PVP
 
 	private void OnEnterGameSrv(Pack pack)
 	{
-		Logger.Log( "enter game srv resp" );
+		Debug.Log( "enter game srv resp" );
 		EnterGameSrv resp = Serializer.Deserialize<EnterGameSrv>(new MemoryStream(pack.buffer));
 		if( resp == null )
 		{
-			Logger.LogError("no EnterGameSrv resp");
+			Debug.LogError("no EnterGameSrv resp");
 			return;
 		}
 
@@ -586,30 +496,19 @@ public class GameMatch_PVP
 			
 	private void OnEnterGame(Pack pack)
 	{
-		Logger.Log("on enter game");
+		Debug.Log("on enter game");
 		NetworkManager mgr = GameSystem.Instance.mNetworkManager;
 		mgr.m_gameMsgHandler.UnregisterHandler(MsgID.EnterGameRespID, OnEnterGame);
 
 		EnterGameResp resp = Serializer.Deserialize<EnterGameResp>(new MemoryStream(pack.buffer));
 		if( resp == null )
 		{
-			Logger.LogError("EnterGameResp error");
+			Debug.LogError("EnterGameResp error");
 			return;
 		}
 		foreach( PlayerData playerData in resp.challenge.rival_data )
-        {
 			AddPlayerData(playerData);
-
-            // TODO: make log for debug
-            //Logger.Log("make log for debug--------------");
-            //foreach( RoleInfo roleInfo in playerData.roles)
-            //{
-            //    Logger.Log("1927 roleInfo.index=" + roleInfo.index);
-            //}
-        }
-
-		//if( onPlayerConnected != null )
-		//	onPlayerConnected(m_playerToBuild);
+		m_bPlayerDataReady = true;
 	}
 
 	public override void OnDestroy()
@@ -617,4 +516,34 @@ public class GameMatch_PVP
 		base.OnDestroy();
 		GameSystem.Instance.mNetworkManager.onServerConnected -= OnGameServerConn;
 	}
+
+    public override void ProcessTurn(FrameInfo turn, IM.Number deltaTime)
+    {
+        base.ProcessTurn(turn, deltaTime);
+
+        foreach (ClientStateChanged state in turn.client_state_list)
+        {
+            if (state.state == 1)  //掉线
+                droppedAccount.Add(state.acc_id);
+        }
+    }
+
+    public override void SwitchMainrole(Player target)
+    {
+        Player prevMainRole = GetMainRole(target.m_roleInfo.acc_id);
+        base.SwitchMainrole(target);
+        Player curMainRole = GetMainRole(target.m_roleInfo.acc_id);
+
+        //转移掉线托管状态
+        if (prevMainRole != null && prevMainRole.m_takingOver && prevMainRole != curMainRole)
+        {
+            prevMainRole.m_takingOver = false;
+            prevMainRole.operMode = Player.OperMode.AI;
+            prevMainRole.m_aiMgr.IsPvp = false;
+
+            curMainRole.m_takingOver = true;
+            curMainRole.operMode = Player.OperMode.AI;
+            curMainRole.m_aiMgr.IsPvp = true;
+        }
+    }
 }

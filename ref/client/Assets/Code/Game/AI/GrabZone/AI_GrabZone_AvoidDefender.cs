@@ -24,8 +24,9 @@ public class AI_GrabZone_AvoidDefender : AIState
 
 	private IM.Vector3 SeekMoveTarget()
 	{
+        //TODO 针对PVP修改
 		IM.Vector3 moveTarget;
-		Player defender = m_match.m_mainRole;
+		Player defender = m_match.mainRole;
 		IM.Vector3 dirPlayer2Target = GameUtils.HorizonalNormalized(m_moveTarget, m_player.position);
 		IM.Vector3 dirPlayer2Defender = GameUtils.HorizonalNormalized(defender.position,m_player.position);
 		IM.Vector3 dirPlayer2TargetRight = IM.Quaternion.AngleAxis(new IM.Number(90), IM.Vector3.up) * dirPlayer2Target;

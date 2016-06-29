@@ -19,13 +19,9 @@ public class MatchStatePlaying_PVP : MatchStatePlaying, GameMatch.Count24Listene
         m_eState = MatchState.State.ePlaying;
     }
 
-	protected override void _OnTimeUp ()
+	public override void GameUpdate (IM.Number fDeltaTime)
 	{
-	}
-
-	public override void Update (IM.Number fDeltaTime)
-	{
-		base.Update (fDeltaTime);
+		base.GameUpdate (fDeltaTime);
 
 		UBasketball ball = m_match.mCurScene.mBall;
 		if( ball == null )
@@ -47,35 +43,29 @@ public class MatchStatePlaying_PVP : MatchStatePlaying, GameMatch.Count24Listene
 				}
 				else
 				{
-					if( interceptor.m_team == m_match.m_mainRole.m_team )
-						pvpMatch.SwitchMainrole(interceptor);
-					else if( interceptor.m_defenseTarget != null )
-						pvpMatch.SwitchMainrole(interceptor.m_defenseTarget);
+                    pvpMatch.SwitchMainrole(interceptor);
+                    pvpMatch.SwitchMainrole(interceptor.m_defenseTarget);
 				}
 			}
 			else if( ball.m_ballState == BallState.eUseBall )
 			{
-				if( ball.m_owner.m_team == m_match.m_mainRole.m_team )
-					pvpMatch.SwitchMainrole(ball.m_owner);
+                pvpMatch.SwitchMainrole(ball.m_owner);
 			}
 		}
-		foreach(Player player in GameSystem.Instance.mClient.mPlayerManager )
+        //处理掉线托管的玩家
+        GameMatch_PVP match = m_match as GameMatch_PVP;
+		foreach(uint acc_id in match.droppedAccount)
 		{
-			if( !player.m_toTakeOver )
-				continue;
-
-			if( player.m_aiMgr == null )
-			{
-				player.m_aiMgr = new AISystem_Basic(m_match, player, AIState.Type.eInit);
-				player.m_aiMgr.IsPvp = true;
-			}
-
-			if( !player.m_aiMgr.m_enable )
-				player.m_aiMgr.m_enable = true;
-
-			player.m_toTakeOver = false;
-			player.m_takingOver = true;
+            Player mainRole = match.GetMainRole(acc_id);
+            if (mainRole != null)
+            {
+                mainRole.operMode = Player.OperMode.AI;
+                mainRole.m_aiMgr.IsPvp = true;
+                mainRole.m_takingOver = true;
+                Debug.Log(string.Format("PVP player taking over, {0} {1}", mainRole.m_team.m_side, mainRole.m_id));
+            }
 		}
+        match.droppedAccount.Clear();
 	}
 }
 

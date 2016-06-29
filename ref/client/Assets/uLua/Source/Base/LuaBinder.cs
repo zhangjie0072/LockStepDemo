@@ -23,6 +23,7 @@ public static class LuaBinder
 			case "AnnouncementItemWrap": AnnouncementItemWrap.Register(L); break;
 			case "ApplicationWrap": ApplicationWrap.Register(L); break;
 			case "AssetBundleWrap": AssetBundleWrap.Register(L); break;
+			case "AsyncItemWrap": AsyncItemWrap.Register(L); break;
 			case "AsyncOperationWrap": AsyncOperationWrap.Register(L); break;
 			case "AttrDataWrap": AttrDataWrap.Register(L); break;
 			case "AttributeTypeWrap": AttributeTypeWrap.Register(L); break;
@@ -321,6 +322,7 @@ public static class LuaBinder
 			case "PlayerState_StandWrap": PlayerState_StandWrap.Register(L); break;
 			case "PlayerState_StateWrap": PlayerState_StateWrap.Register(L); break;
 			case "PlayerState_StealWrap": PlayerState_StealWrap.Register(L); break;
+			case "PlayerState_StolenWrap": PlayerState_StolenWrap.Register(L); break;
 			case "PlayerWrap": PlayerWrap.Register(L); break;
 			case "PlayModeWrap": PlayModeWrap.Register(L); break;
 			case "PlaySoundManagerWrap": PlaySoundManagerWrap.Register(L); break;
@@ -447,6 +449,7 @@ public static class LuaBinder
 			case "UICameraWrap": UICameraWrap.Register(L); break;
 			case "UICenterOnChildWrap": UICenterOnChildWrap.Register(L); break;
 			case "UIChallengeLoadingWrap": UIChallengeLoadingWrap.Register(L); break;
+			case "UICloseOnClickWrap": UICloseOnClickWrap.Register(L); break;
 			case "UIDragDropItemEventWrap": UIDragDropItemEventWrap.Register(L); break;
 			case "UIDragDropItemWrap": UIDragDropItemWrap.Register(L); break;
 			case "UIDragScrollViewWrap": UIDragScrollViewWrap.Register(L); break;

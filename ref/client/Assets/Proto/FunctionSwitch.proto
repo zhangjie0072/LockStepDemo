@@ -1,19 +1,19 @@
 package fogs.proto.msg;
 
-//åŠŸèƒ½çŠ¶æ€
+//¹¦ÄÜ×´Ì¬
 message FunctionSwitch
 {
 	optional string id = 1;
 	optional uint32 opened = 2;
 }
 
-//åŠŸèƒ½çŠ¶æ€åˆ—è¡¨
+//¹¦ÄÜ×´Ì¬ÁĞ±í
 message FunctionSwitchList
 {
 	repeated FunctionSwitch switches = 1;
 }
 
-//åŠŸèƒ½å…³é—­
+//¹¦ÄÜ¹Ø±Õ
 message FunctionClosed
 {
 	optional string id = 1;

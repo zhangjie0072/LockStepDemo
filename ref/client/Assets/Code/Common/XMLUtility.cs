@@ -202,7 +202,7 @@ public class XMLUtility : MonoBehaviour
         string text = ResourceLoadManager.Instance.GetConfigText(dir_xml);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + dir_xml);
+            Debug.LogError("LoadConfig failed: " + dir_xml);
             return null;
         }
         //从文件读取xml的内容
@@ -224,7 +224,7 @@ public class XMLUtility : MonoBehaviour
             uint ID = 0;
             if (!(comment != null && uint.TryParse(comment.InnerText, out ID)))
             {
-                Logger.LogError(string.Format("LoadXml Error : {0} ID={1}",
+                Debug.LogError(string.Format("LoadXml Error : {0} ID={1}",
                         itemType.Name, comment.InnerText ));
                 continue;
             }
@@ -238,7 +238,7 @@ public class XMLUtility : MonoBehaviour
                 comment = Node.SelectSingleNode(filed.Name);
                 if (comment == null)
                 {
-                    Logger.LogError(string.Format("LoadXml Error : {0} not find filed {1} type {2}",
+                    Debug.LogError(string.Format("LoadXml Error : {0} not find filed {1} type {2}",
                             itemType.Name, filed.Name, filed.FieldType.ToString()));
                 }
 

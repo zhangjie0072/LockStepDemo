@@ -25,19 +25,19 @@ public class PractiseBehaviourLayupDunk : PractiseBehaviour, PlayerActionEventHa
 		return AIState.Type.ePractiseLayupDunk_Defense;
 	}
 
-    public override IM.BigNumber AdjustShootRate(Player shooter, IM.BigNumber rate)
+    public override IM.PrecNumber AdjustShootRate(Player shooter, IM.PrecNumber rate)
 	{
 		if (shooter.m_StateMachine.m_curState.m_eState == PlayerState.State.eLayup ||
 			shooter.m_StateMachine.m_curState.m_eState == PlayerState.State.eDunk)
-			return IM.BigNumber.one;
+			return IM.PrecNumber.one;
 		else
-            return IM.BigNumber.zero;
+            return IM.PrecNumber.zero;
 	}
 
 	protected override void OnMatchSetted()
 	{
-		match.m_mainRole.eventHandler.AddEventListener(this);
-		match.m_mainRole.m_alwaysForbiddenPickup = true;
+		match.mainRole.eventHandler.AddEventListener(this);
+		match.mainRole.m_alwaysForbiddenPickup = true;
 		defenser = match.m_awayTeam.GetMember(0);
 		defenser.eventHandler.AddEventListener(this);
 		defenser.m_StateMachine.ReplaceState(new PlayerState_PractiseLayupDunk_Stand(defenser.m_StateMachine, match));
@@ -49,20 +49,20 @@ public class PractiseBehaviourLayupDunk : PractiseBehaviour, PlayerActionEventHa
 	{
 		IM.Number angle = IM.Random.Range(new IM.Number(90), new IM.Number(270));
 		IM.Vector3 dir = IM.Quaternion.AngleAxis(angle, IM.Vector3.up) * IM.Vector3.forward;
-        match.m_mainRole.position = GameSystem.Instance.MatchPointsConfig.ThreePTCenter.transform.position + dir * IM.Number.two;
+        match.mainRole.position = GameSystem.Instance.MatchPointsConfig.ThreePTCenter.transform.position + dir * IM.Number.two;
 		basketCenter = match.mCurScene.mBasket.m_vShootTarget;
 		basketCenter.y = IM.Number.zero;
-		dir = match.m_mainRole.position - basketCenter;
+		dir = match.mainRole.position - basketCenter;
 		dir.Normalize();
 		defenser.position = basketCenter + dir * IM.Number.two;
 		defenser.forward = dir;
-		match.m_mainRole.forward = -dir;
+		match.mainRole.forward = -dir;
 		return true;
 	}
 
 	public override bool IsCommandValid(Command command)
 	{
-		return command == Command.Shoot && (!in_tutorial || step == Step.Tip1) && match.m_mainRole.m_bWithBall;
+		return command == Command.Shoot && (!in_tutorial || step == Step.Tip1) && match.mainRole.m_bWithBall;
 	}
 
 	protected override void OnStart()
@@ -81,9 +81,9 @@ public class PractiseBehaviourLayupDunk : PractiseBehaviour, PlayerActionEventHa
 		}
 	}
 
-	protected override void OnUpdate()
+	public override void GameUpdate(IM.Number deltaTime)
 	{
-		base.OnUpdate();
+		base.GameUpdate(deltaTime);
 
 		match.HighlightButton(0, in_tutorial && IsCommandValid(Command.Shoot));
 	}
@@ -104,11 +104,11 @@ public class PractiseBehaviourLayupDunk : PractiseBehaviour, PlayerActionEventHa
 
 	public void OnEvent(PlayerActionEventHandler.AnimEvent animEvent, Player sender, System.Object context)
 	{
-		if (sender == match.m_mainRole &&
+		if (sender == match.mainRole &&
 			(animEvent == PlayerActionEventHandler.AnimEvent.eLayup ||
 			 animEvent == PlayerActionEventHandler.AnimEvent.eDunk))
 			OnLayupDunk();
-		else if (animEvent == PlayerActionEventHandler.AnimEvent.eShoot && sender == match.m_mainRole)
+		else if (animEvent == PlayerActionEventHandler.AnimEvent.eShoot && sender == match.mainRole)
 			OnShoot();
 	}
 
@@ -154,16 +154,17 @@ public class PractiseBehaviourLayupDunk : PractiseBehaviour, PlayerActionEventHa
 		match.ShowGuideTip();
 		match.ShowTipArrow();
 		match.tip = practise.tips[0];
-		match.m_mainRole.m_inputDispatcher.m_enable = false;
+		match.mainRole.m_inputDispatcher.m_enable = false;
 	}
 
 	private void Run()
 	{
 		step = Step.Run;
 		match.HideGuideTip();
-		match.m_mainRole.m_inputDispatcher.m_enable = false;
-		match.m_mainRole.m_aiMgr = new AISystem_PractiseLayupDunk(match, match.m_mainRole, AIState.Type.ePractiseLayupDunk_Positioning);
-		AI_PractiseLayupDunk_Positioning state = match.m_mainRole.m_aiMgr.GetState(AIState.Type.ePractiseLayupDunk_Positioning) as AI_PractiseLayupDunk_Positioning;
+		match.mainRole.m_inputDispatcher.m_enable = false;
+        match.mainRole.operMode = Player.OperMode.AI;
+        match.mainRole.m_aiMgr.SetTransaction(AIState.Type.ePractiseLayupDunk_Positioning);
+		AI_PractiseLayupDunk_Positioning state = match.mainRole.m_aiMgr.GetState(AIState.Type.ePractiseLayupDunk_Positioning) as AI_PractiseLayupDunk_Positioning;
 		state.onEnterLayupArea = Tip1;
 	}
 
@@ -173,8 +174,7 @@ public class PractiseBehaviourLayupDunk : PractiseBehaviour, PlayerActionEventHa
 		match.ShowGuideTip();
 		match.HideTipArrow();
 		match.tip = practise.tips[1];
-		match.m_mainRole.m_inputDispatcher.m_enable = true;
-		match.m_mainRole.m_aiMgr = null;
+        match.mainRole.operMode = Player.OperMode.Input;
 		GameObject prefab = ResourceLoadManager.Instance.LoadPrefab("Prefab/Indicator/LayupArea") as GameObject;
 		layupArea = GameObject.Instantiate(prefab) as GameObject;
 		layupArea.transform.localPosition = (Vector3)basketCenter;
@@ -188,7 +188,7 @@ public class PractiseBehaviourLayupDunk : PractiseBehaviour, PlayerActionEventHa
 		match.ShowTipArrow();
 		match.tip = practise.tips[2];
 		match.ShowIconTip(false);
-		match.m_mainRole.m_inputDispatcher.m_enable = false;
+		match.mainRole.m_inputDispatcher.m_enable = false;
 		match.HideTouchGuide();
 		Object.Destroy(layupArea);
 		layupArea = null;
@@ -211,7 +211,7 @@ public class PractiseBehaviourLayupDunk : PractiseBehaviour, PlayerActionEventHa
 				Run();
 				break;
 			case Step.Tip2:
-				match.m_mainRole.m_inputDispatcher.m_enable = true;
+				match.mainRole.m_inputDispatcher.m_enable = true;
 				match.HideGuideTip();
 				FinishObjective(true);
 				ShowNPC();

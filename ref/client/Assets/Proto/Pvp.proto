@@ -1,0 +1,95 @@
+package fogs.proto.msg;
+
+import "Base.proto";
+import "Player.proto";
+
+// 客户端输入
+message ClientInput
+{
+    optional uint32 dir = 1;
+    optional uint32 cmd = 2;
+    optional uint32 acc_id = 3;
+}
+
+// 客户端状态改变
+message ClientStateChanged
+{
+    optional uint32 acc_id = 1;
+    optional uint32 state = 2; // 1掉线，2上线
+}
+
+// 一帧数据
+message FrameInfo
+{
+    repeated ClientInput info = 1; //帧信息
+    optional uint32 frameNum = 2; //帧编号
+    optional double time = 3;
+    repeated ClientStateChanged client_state_list = 4; //玩家状态变化
+}
+
+// 报告丢帧
+message MissFrameReq
+{
+    optional uint32 acc_id = 1;
+    repeated uint32 frame_num = 2;
+}
+
+// 播报帧
+message PlayFrame
+{
+    repeated FrameInfo frames = 1;
+}
+
+//帧校验
+message CheckFrame
+{
+    required uint32 frameNum = 1;               //帧编号
+    repeated RoleKeyState roleDatas = 2;    //玩家数据
+    repeated BallKeyState ballDatas = 3;        //球状态
+}
+
+//玩家关键数据
+message RoleKeyState
+{
+    required uint32 index = 1;          //索引
+    required SVector3 position = 2;     //位置
+    required int32 hori_angle  = 3;     //水平角度
+    required int32 state = 4;          //玩家状态
+}
+
+//球关键数据
+message BallKeyState
+{
+    required uint32 index = 1;          //索引
+    required SVector3 position = 2;     //位置
+    required int32 state =3;            //状态
+}
+
+//通知状态不同步
+message NotifyOutSync
+{
+    required uint32 frameNum = 1;       //帧编号
+}
+
+//玩家独有的比赛数据
+message PlayerMatchData
+{
+    required uint32 acc_id = 1;
+    required ExitMatchType exit_type = 2 [default=EMT_END];
+}
+
+//队伍比赛数据
+message TeamMatchData
+{
+    required uint32 acc_id = 1;
+    optional uint32 race_time = 2; //比赛花费时间
+    repeated PlayerMatchData player_data = 3;
+    repeated MatchRoleData role_data = 4; //比赛数据
+}
+
+//队伍比赛数据
+message TeamMatchDataResp
+{
+    required uint32 acc_id = 1;
+    required uint32 result = 2;
+}

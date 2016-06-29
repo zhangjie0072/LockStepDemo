@@ -54,12 +54,12 @@ public class QualifyingNewerConfig
         isLoadFinish = false;
         GameSystem.Instance.readConfigCnt += 1;
 
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
 		ReadQualifyingNewData();
-		Logger.ConfigEnd(name1);
-		Logger.ConfigBegin(name2);
+		
+		Debug.Log("Config reading " + name2);
 		ReadSeasonData();
-		Logger.ConfigEnd(name2);
+		
     }
 
 	public QualifyingNewerGrade GetGrade(uint score)
@@ -135,7 +135,7 @@ public class QualifyingNewerConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         
@@ -190,7 +190,7 @@ public class QualifyingNewerConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
         

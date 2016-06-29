@@ -145,18 +145,22 @@ public class PlatMsgHandler:MsgHandler
     Queue<RoomActionResp> invitesList = new Queue<RoomActionResp>();
     public void RoomActionHandler(Pack pack)
     {
-        Logger.Log("1927 RoomAction Resp --> Handler");
+        Debug.Log("1927 RoomAction Resp --> Handler");
         RoomActionResp resp = Serializer.Deserialize<RoomActionResp>(new MemoryStream(pack.buffer));
-        Logger.Log("1927 resp.result= " + resp.result);
+        Debug.Log("1927 resp.result= " + resp.result);
         if( resp.result != 0 )
         {
             string str = string.Format("Room Action Type:{0} Error:{1} ", resp.type, resp.result);
-            Logger.Log(str);
+            Debug.Log(str);
             return;
         }
         if (resp.type == RoomActionType.RAT_NOTIFY_INVITE)
         {
             if(invitesList.Count >= GameSystem.Instance.CommonConfig.GetUInt("gPVPLadderMaxInviteTimes"))
+            {
+                return;
+            }
+            if( GameObject.Find("UIChallengeResult(Clone)") || GameObject.Find("inGameInfoPanel"))
             {
                 return;
             }
@@ -208,7 +212,7 @@ public class PlatMsgHandler:MsgHandler
                         joinRoomReq.acc_id = resp.user_info.acc_id;
                         joinRoomReq.type = resp.match_type;
                         //joinRoomReq.plat_id = 
-                        Logger.Log("1927 Invite accept acc_id = " + joinRoomReq.acc_id);
+                        Debug.Log("1927 Invite accept acc_id = " + joinRoomReq.acc_id);
                         GameSystem.Instance.mNetworkManager.m_platConn.SendPack<JoinRoomReq>(0, joinRoomReq, MsgID.JoinRoomReqID);
                         invitesList.Clear();
                         FriendData.Instance.UnRegisterOnListChanged(listChanged);
@@ -235,9 +239,9 @@ public class PlatMsgHandler:MsgHandler
 
     public void JoinRoomHandler(Pack pack)
     {
-        Logger.Log("1927  Join Room RoomAction --> Handler");
+        Debug.Log("1927  Join Room RoomAction --> Handler");
         JoinRoomResp resp = Serializer.Deserialize<JoinRoomResp>(new MemoryStream(pack.buffer));
-        Logger.Log("1927 resp.result= " + resp.result);
+        Debug.Log("1927 resp.result= " + resp.result);
 
         if( (ErrorID)resp.result == ErrorID.INVITE_OUT_DUE )
         {
@@ -254,8 +258,8 @@ public class PlatMsgHandler:MsgHandler
         MatchType type = resp.type;
         RoomInfo roomInfo = resp.info;
 
-        Logger.Log("1927 type =" + type);
-        Logger.Log("1927 roomInfo.id =" + roomInfo.id + "roomInfo.type=" + roomInfo.type + "roomInfo.master=" + roomInfo.master);
+        Debug.Log("1927 type =" + type);
+        Debug.Log("1927 roomInfo.id =" + roomInfo.id + "roomInfo.type=" + roomInfo.type + "roomInfo.master=" + roomInfo.master);
 
         LuaInterface.LuaTable table = LuaScriptMgr.Instance.lua.NewTable();
 
@@ -275,11 +279,11 @@ public class PlatMsgHandler:MsgHandler
 
     public void GameStartHandler(Pack pack)
     {
-       Logger.Log("1927  GameStartHandler");
+       Debug.Log("1927  GameStartHandler");
        NotifyGameStart notifyGameStart = Serializer.Deserialize<NotifyGameStart>(new MemoryStream(pack.buffer));
        if (notifyGameStart.rejoin != 1)
        {
-           Logger.Log("1927 -  not rejoin game reteurn.");
+           Debug.Log("1927 -  not rejoin game reteurn.");
            return;
        }
 
@@ -339,11 +343,11 @@ public class PlatMsgHandler:MsgHandler
 
 	public void LogoutRespHandle(Pack pack)
 	{
-		Logger.Log("---------------------LogoutRespHandle");
+		Debug.Log("---------------------LogoutRespHandle");
 		
 		LogoutResp resp = Serializer.Deserialize<LogoutResp>(new MemoryStream(pack.buffer));
 		ErrorID err = (ErrorID)resp.result;
-		Logger.Log("result:" + err + " type:" + resp.type);
+		Debug.Log("result:" + err + " type:" + resp.type);
 		if (err == ErrorID.LOGIN_ANOTHER_PLAYER)
 		{
             // Ignore this message if server sends.
@@ -353,7 +357,7 @@ public class PlatMsgHandler:MsgHandler
             //{
             //    if (!GameSystem.Instance.mNetworkManager.isPushedOut)
             //    {
-            //        Logger.Log("LOGIN_ANOTHER_PLAYER");
+            //        Debug.Log("LOGIN_ANOTHER_PLAYER");
             //        GameSystem.Instance.mNetworkManager.isPushedOut = true;
             //        GameSystem.Instance.mNetworkManager.ReconnectPrompt(CommonFunction.GetConstString("LOGIN_ANOTHER_DEVICE"));
             //    }
@@ -374,7 +378,7 @@ public class PlatMsgHandler:MsgHandler
 		}
 		else if (err != ErrorID.SUCCESS)
 		{
-			Logger.Log("Error -- LogoutResp returns error: " + err);
+			Debug.Log("Error -- LogoutResp returns error: " + err);
 		}
 
 
@@ -394,12 +398,12 @@ public class PlatMsgHandler:MsgHandler
 	//Ñ¡ÔñÇòÔ±ÇëÇó»Ø¸´ÏûÏ¢´¦Àí
 	public void ChooseRoleRespHandle(Pack pack)
 	{
-		Logger.Log("---------------------ChooseRoleRespHandle");
+		Debug.Log("---------------------ChooseRoleRespHandle");
 		
 		ChooseRoleResp resp = Serializer.Deserialize<ChooseRoleResp>(new MemoryStream(pack.buffer));
 		if (resp.result != 0)
 		{
-			Logger.Log("Error -- ChooseRoleResp returns error: " + resp.result);
+			Debug.Log("Error -- ChooseRoleResp returns error: " + resp.result);
 			
 			//TODO: add process here.
 			return;
@@ -408,7 +412,7 @@ public class PlatMsgHandler:MsgHandler
 
     public void UpdateVipInfoHandle(Pack pack)
     {
-        Logger.Log("---------------------UpdateVipInfoHandle");
+        Debug.Log("---------------------UpdateVipInfoHandle");
         UpdateVipInfo info = Serializer.Deserialize<UpdateVipInfo>(new MemoryStream(pack.buffer));
         MainPlayer.Instance.VipGifts.Clear();
         foreach (giftInfo item in info.info.gift)
@@ -421,14 +425,14 @@ public class PlatMsgHandler:MsgHandler
 
     public void UpdatePlayerDataHandle(Pack pack)
     {
-        Logger.Log("---------------------UpdatePlayerDataHandle");
+        Debug.Log("---------------------UpdatePlayerDataHandle");
 
         UpdatePlayerData dataInfo = Serializer.Deserialize<UpdatePlayerData>(new MemoryStream(pack.buffer));
         for (int i = 0; i < dataInfo.player_data.Count; ++i)
         {
             DataInfo.DataType dataType = (DataInfo.DataType)dataInfo.player_data[i].name;
 
-            Logger.Log("UpdatePlayerDataHandle : " + dataType.ToString());
+            Debug.Log("UpdatePlayerDataHandle : " + dataType.ToString());
             switch (dataType)
             {
                 case DataInfo.DataType.DIAMOND_FREE:
@@ -613,7 +617,7 @@ public class PlatMsgHandler:MsgHandler
 	//¸üÐÂÎïÆ·ÐÅÏ¢
 	public void UpdateGoodsHandle(Pack pack)
 	{
-		Logger.Log("---------------------UpdateGoodsHandle");
+		Debug.Log("---------------------UpdateGoodsHandle");
 		
 		UpdateGoods msg = Serializer.Deserialize<UpdateGoods>(new MemoryStream(pack.buffer));
         bool operaGoods = false; uint newFashionType = 0;
@@ -755,7 +759,7 @@ public class PlatMsgHandler:MsgHandler
 	//¹Ø¿¨±ÈÈü¿ªÊ¼ÇëÇó»Ø¸´ÏûÏ¢´¦Àí
 	public void StartSectionMatchRespHandle(Pack pack)
 	{
-		Logger.Log("---------------------StartSectionRespHandle");
+		Debug.Log("---------------------StartSectionRespHandle");
 		
 		CommonFunction.HideWaitMask();
 		StartSectionMatchResp resp = Serializer.Deserialize<StartSectionMatchResp>(new MemoryStream(pack.buffer));
@@ -766,7 +770,7 @@ public class PlatMsgHandler:MsgHandler
 		}
 		else
 		{
-			Logger.Log("Error -- StartSectionMatchResp returns error: " + resp.result);
+			Debug.Log("Error -- StartSectionMatchResp returns error: " + resp.result);
 			CommonFunction.ShowErrorMsg(err);
 		}
 	}
@@ -774,10 +778,10 @@ public class PlatMsgHandler:MsgHandler
 	//¹Ø¿¨±ÈÈü½áÊøÇëÇó»Ø¸´ÏûÏ¢´¦Àí
 	//public void EndSectionMatchRespHandle(Pack pack)
 	//{
-	//    Logger.Log("---------------------EndSectionMatchRespHandle");
+	//    Debug.Log("---------------------EndSectionMatchRespHandle");
 	
 	//    EndSectionMatchResp resp = Serializer.Deserialize<EndSectionMatchResp>(new MemoryStream(pack.buffer));
-	//    Logger.Log("----result " + resp.result);
+	//    Debug.Log("----result " + resp.result);
 	//    if (resp.result == 0)
 	//    {
 	//        MainPlayer.Instance.ChangeChaptersData(resp.chapters);
@@ -792,7 +796,7 @@ public class PlatMsgHandler:MsgHandler
 	
 	public void EndSectionMatchRespHandle(EndSectionMatchResp resp)
 	{
-		Logger.Log("----result " + resp.result);
+		Debug.Log("----result " + resp.result);
 		if (resp.result == 0)
 		{
 			MainPlayer.Instance.ChangeChaptersData(resp.chapters);
@@ -807,7 +811,7 @@ public class PlatMsgHandler:MsgHandler
 
     public void EndEndPracticePveRespHandle(EndPracticePveResp resp)
     {
-        Logger.Log("----result " + resp.result);
+        Debug.Log("----result " + resp.result);
 
  
         if (GameSystem.Instance.mClient.mCurMatch != null)
@@ -820,7 +824,7 @@ public class PlatMsgHandler:MsgHandler
     //¹Ø¿¨É¨µ´ÇëÇó»Ø¸´ÏûÏ¢´¦Àí
     public void SweepSectionRespHandle(Pack pack)
 	{
-		Logger.Log("---------------------SweepSectionRespHandle");
+		Debug.Log("---------------------SweepSectionRespHandle");
 		
 		SweepSectionResp resp = Serializer.Deserialize<SweepSectionResp>(new MemoryStream(pack.buffer));
 		if (resp.result == 0 || resp.result == 314 || resp.result == 315)
@@ -917,18 +921,12 @@ public class PlatMsgHandler:MsgHandler
 	
 	private void ExitGameRespHandler(Pack pack)
 	{
-		Logger.Log("---------------------ExitGameRespHandler");
+		Debug.Log("---------------------ExitGameRespHandler");
 
 		GameSystem.Instance.mNetworkManager.CloseGameServerConn();
 		NetworkManager mgr = GameSystem.Instance.mNetworkManager;
 		if( mgr.m_gameConn != null )
 		{
-			if( !(mgr.m_gameConn is VirtualNetworkConn) )
-			{
-				mgr.m_gameMsgHandler.UnregisterHandler(MsgID.GameOverID, GameMatch_PVP.HandleGameOver);
-				mgr.m_gameMsgHandler.UnregisterHandler(MsgID.GameFaulID, GameMatch_PVP.HandleGameFaul);
-				mgr.m_gameMsgHandler.UnregisterHandler(MsgID.BeginTipOffRespID, GameMatch_PVP.HandleTipOffBegin);
-			}
 			mgr.m_gameMsgHandler.UnregisterHandler(MsgID.InstructionBroadcastID, GameMatch.HandleBroadcast);
 		}
 		ExitGameResp resp = Serializer.Deserialize<ExitGameResp>(new MemoryStream(pack.buffer));
@@ -1100,16 +1098,16 @@ public class PlatMsgHandler:MsgHandler
 					
 
 				MatchStateOver match = curMatch.m_stateMachine.GetState(MatchState.State.eOver) as MatchStateOver;
-				match.RegularCompleteHandler(resp.regular,resp.max_income);
+				match.RegularCompleteHandler(resp.regular,resp.max_income,resp.assist_awards,resp.shiwakan_percent,resp.assist_first_win_times,resp.assist_num);
 			}
 			else if( resp.exit_type == ExitMatchType.EMT_OPTION )
 			{
-				Logger.Log("Self exit");
+				Debug.Log("Self exit");
 				//totalTimes And winTimes add one
 				MainPlayer.Instance.pvp_regular.race_times += 1;
-				Logger.Log("race time:" + MainPlayer.Instance.pvp_regular.race_times);
+				Debug.Log("race time:" + MainPlayer.Instance.pvp_regular.race_times);
 				MainPlayer.Instance.pvp_regular.score = resp.regular.score;
-				Logger.Log("score:" + MainPlayer.Instance.pvp_regular.score);
+				Debug.Log("score:" + MainPlayer.Instance.pvp_regular.score);
 				
 				LuaScriptMgr.Instance.CallLuaFunction("jumpToUI", "UIHall");
 			}
@@ -1127,7 +1125,7 @@ public class PlatMsgHandler:MsgHandler
 					{
 						GameSystem.Instance.mClient.mCurMatch.m_stateMachine.SetState(MatchState.State.eOver);
 						MatchStateOver matchOver = GameSystem.Instance.mClient.mCurMatch.m_stateMachine.GetState(MatchState.State.eOver) as MatchStateOver;
-						matchOver.RegularCompleteHandler(resp.regular,resp.max_income);
+						matchOver.RegularCompleteHandler(resp.regular,resp.max_income,resp.assist_awards,resp.shiwakan_percent,resp.assist_first_win_times,resp.assist_num);
 					};
 					CommonFunction.ShowPopupMsg(string.Format(CommonFunction.GetConstString("STR_PVP_DISCONNECT"), resp.regular.off_name), UIManager.Instance.m_uiRootBasePanel.transform, onConfirmExit);
 				}
@@ -1150,7 +1148,7 @@ public class PlatMsgHandler:MsgHandler
 //			{
 //				qualifying.grade_awards.Add(it);
 //			}
-			Logger.Log("QualifyingNew score:" + resp.qualifying_new.score + " ranking:" + resp.qualifying_new.ranking);
+			Debug.Log("QualifyingNew score:" + resp.qualifying_new.score + " ranking:" + resp.qualifying_new.ranking);
 
 			if( resp.exit_type == ExitMatchType.EMT_END )
 			{
@@ -1176,7 +1174,7 @@ public class PlatMsgHandler:MsgHandler
 			}
 			else if( resp.exit_type == ExitMatchType.EMT_OPTION )
 			{
-				Logger.Log("Self exit");
+				Debug.Log("Self exit");
 				LuaScriptMgr.Instance.CallLuaFunction("jumpToUI", "UIQualifyingNew");
 			}
 			else
@@ -1225,10 +1223,10 @@ public class PlatMsgHandler:MsgHandler
 			}
 			else if( resp.exit_type == ExitMatchType.EMT_OPTION )
 			{
-				Logger.Log("Self exit");
+				Debug.Log("Self exit");
 				//totalTimes And winTimes add one
 				MainPlayer.Instance.PvpPlusInfo.race_times += 1;
-				Logger.Log("race time:" + MainPlayer.Instance.PvpPlusInfo.race_times);
+				Debug.Log("race time:" + MainPlayer.Instance.PvpPlusInfo.race_times);
 				//update challenge score
 				MainPlayer.Instance.PvpPlusInfo.score = resp.challenge_plus.score;
 				
@@ -1255,7 +1253,7 @@ public class PlatMsgHandler:MsgHandler
 					CommonFunction.ShowPopupMsg(string.Format(CommonFunction.GetConstString("STR_PVP_DISCONNECT"), resp.challenge_plus.off_name), UIManager.Instance.m_uiRootBasePanel.transform, onConfirmExit);
 				}
 			}
-			Logger.Log("pvp data costs: " + GameSystem.Instance.mNetworkManager.m_gameConn.m_profiler.m_dataUsage );
+			Debug.Log("pvp data costs: " + GameSystem.Instance.mNetworkManager.m_gameConn.m_profiler.m_dataUsage );
 			GameSystem.Instance.mNetworkManager.m_gameConn.m_profiler.EndRecordDataUsage();
 		}
 		else if (resp.type == MatchType.MT_PVP_3V3)
@@ -1293,7 +1291,7 @@ public class PlatMsgHandler:MsgHandler
 			}
 			else if (resp.exit_type == ExitMatchType.EMT_OPTION)
 			{
-				Logger.Log("Self exit");
+				Debug.Log("Self exit");
 			}
 			else
 			{
@@ -1317,12 +1315,12 @@ public class PlatMsgHandler:MsgHandler
             if(GameSystem.Instance.mNetworkManager.m_gameConn != null
                 && GameSystem.Instance.mNetworkManager.m_gameConn.m_profiler != null)
             {
-                Logger.Log("pvp data costs: " + GameSystem.Instance.mNetworkManager.m_gameConn.m_profiler.m_dataUsage);
+                Debug.Log("pvp data costs: " + GameSystem.Instance.mNetworkManager.m_gameConn.m_profiler.m_dataUsage);
                 GameSystem.Instance.mNetworkManager.m_gameConn.m_profiler.EndRecordDataUsage();
             }
             else
             {
-                Logger.LogWarning("m_profiler is null, please check");
+                Debug.LogWarning("m_profiler is null, please check");
             }
 		}		
 		else if (resp.type == MatchType.MT_QUALIFYING_NEWER)
@@ -1356,11 +1354,11 @@ public class PlatMsgHandler:MsgHandler
 				}
 				
 				MatchStateOver match = curMatch.m_stateMachine.GetState(MatchState.State.eOver) as MatchStateOver;
-				match.QualifyingNewerCompleteHandler(resp.qualifying_newer,resp.max_income);
+				match.QualifyingNewerCompleteHandler(resp.qualifying_newer,resp.max_income,resp.assist_awards,resp.shiwakan_percent,resp.assist_first_win_times,resp.assist_num);
 			}
 			else if (resp.exit_type == ExitMatchType.EMT_OPTION)
 			{
-				Logger.Log("Self exit");
+				Debug.Log("Self exit");
 			}
 			else
 			{
@@ -1376,7 +1374,7 @@ public class PlatMsgHandler:MsgHandler
 					{
 						GameSystem.Instance.mClient.mCurMatch.m_stateMachine.SetState(MatchState.State.eOver);
 						MatchStateOver matchOver = GameSystem.Instance.mClient.mCurMatch.m_stateMachine.GetState(MatchState.State.eOver) as MatchStateOver;
-						matchOver.QualifyingNewerCompleteHandler(resp.qualifying_newer,resp.max_income);
+						matchOver.QualifyingNewerCompleteHandler(resp.qualifying_newer,resp.max_income,resp.assist_awards,resp.shiwakan_percent,resp.assist_first_win_times,resp.assist_num);
 					};
 					CommonFunction.ShowPopupMsg(string.Format(CommonFunction.GetConstString("STR_PVP_DISCONNECT"), resp.qualifying_newer.off_name), UIManager.Instance.m_uiRootBasePanel.transform, onConfirmExit);
 				}
@@ -1384,12 +1382,12 @@ public class PlatMsgHandler:MsgHandler
             if(GameSystem.Instance.mNetworkManager.m_gameConn != null
                 && GameSystem.Instance.mNetworkManager.m_gameConn.m_profiler != null)
             {
-                Logger.Log("pvp data costs: " + GameSystem.Instance.mNetworkManager.m_gameConn.m_profiler.m_dataUsage);
+                Debug.Log("pvp data costs: " + GameSystem.Instance.mNetworkManager.m_gameConn.m_profiler.m_dataUsage);
                 GameSystem.Instance.mNetworkManager.m_gameConn.m_profiler.EndRecordDataUsage();
             }
             else
             {
-                Logger.LogWarning("m_profiler is null, please check");
+                Debug.LogWarning("m_profiler is null, please check");
             }
 		}		
 		else
@@ -1401,7 +1399,7 @@ public class PlatMsgHandler:MsgHandler
 	//ÁìÈ¡ÕÂ½ÚÐÇ¼¶½±ÀøÇëÇó»Ø¸´ÏûÏ¢´¦Àí
 	public void GetChapterStarAwardRespHandle(Pack pack)
 	{
-		Logger.Log("---------------------GetChapterStarAwardRespHandle");
+		Debug.Log("---------------------GetChapterStarAwardRespHandle");
 		
 		GetChapterStarAwardResp resp = Serializer.Deserialize<GetChapterStarAwardResp>(new MemoryStream(pack.buffer));
 		//GameSystem.Instance.mClient.mUIManager.CareerCtrl.GetStarAwardResp(resp);
@@ -1423,7 +1421,7 @@ public class PlatMsgHandler:MsgHandler
 	/// <param name="go"></param>
 	public void InvitePlayerRespHandler(Pack pack)
     {
-        Logger.Log("---------------------InvitePlayerRespHandler");
+        Debug.Log("---------------------InvitePlayerRespHandler");
 		
 		InviteRoleResp resp = Serializer.Deserialize<InviteRoleResp>(new MemoryStream(pack.buffer));
 		
@@ -1553,7 +1551,7 @@ public class PlatMsgHandler:MsgHandler
 	public void OpenStoreRespHandler(Pack pack)
 	{
 		//OpenStoreResp openStoreResp = Serializer.Deserialize<OpenStoreResp>(new MemoryStream(pack.buffer));
-		//Logger.Log("-----openstoreResp()");
+		//Debug.Log("-----openstoreResp()");
 		//GameSystem.Instance.mClient.mUIManager.StoreCtrl.GetOpenStoreResp(openStoreResp);
 		//GameSystem.Instance.mClient.mUIManager.StoreCtrl.ShowUIForm();
 	}
@@ -1634,7 +1632,7 @@ public class PlatMsgHandler:MsgHandler
 	/// <param name="pack"></param>
 	//public void TaskInfoHandler(Pack pack)
 	//{
-	//    Logger.Log("-----TaskInfoResp");
+	//    Debug.Log("-----TaskInfoResp");
 	//    TaskInfoResp taskInfoResp = Serializer.Deserialize<TaskInfoResp>(new MemoryStream(pack.buffer));
 	//    GameSystem.Instance.mClient.mUIManager.TaskCtrl.GetTaskInfoResp(taskInfoResp);
 	//}
@@ -1644,7 +1642,7 @@ public class PlatMsgHandler:MsgHandler
 	/// <param name="pack"></param>
 	//public void GetTaskAwardHandler(Pack pack)
 	//{
-	//    Logger.Log("-----GetTaskAwardResp");
+	//    Debug.Log("-----GetTaskAwardResp");
 	//    GetTaskAwardResp getTaskAwardResp = Serializer.Deserialize<GetTaskAwardResp>(new MemoryStream(pack.buffer));
 	//    if (getTaskAwardResp.result == 0)
 	//    {
@@ -1652,7 +1650,7 @@ public class PlatMsgHandler:MsgHandler
 	//    }
 	//    else
 	//    {
-	//        Logger.Log("getTaskAward error:result " + getTaskAwardResp.result);
+	//        Debug.Log("getTaskAward error:result " + getTaskAwardResp.result);
 	//    }
 	//}
 	/// <summary>
@@ -1661,7 +1659,7 @@ public class PlatMsgHandler:MsgHandler
 	/// <param name="pack"></param>
     //public void UnclaimedTaskNumNotifyHandler(Pack pack)
     //{
-        //Logger.Log("-----UnclaimedTaskNumNotifyResp");
+        //Debug.Log("-----UnclaimedTaskNumNotifyResp");
         //UnclaimedTaskNumNotify resp = Serializer.Deserialize<UnclaimedTaskNumNotify>(new MemoryStream(pack.buffer));
         //bool showTips = resp.num > 0 ? true : false;
         //MainPlayer.Instance.unclaimedTaskID = resp.task_id;
@@ -1705,7 +1703,7 @@ public class PlatMsgHandler:MsgHandler
 	/// <param name="pack"></param>
 	public void StartTrainingHandler(Pack pack)
 	{
-		Logger.Log("-----StartTrainingResp");
+		Debug.Log("-----StartTrainingResp");
 		StartTrainingResp resp = Serializer.Deserialize<StartTrainingResp>(new MemoryStream(pack.buffer));
 		//GameSystem.Instance.mClient.mUIManager.TrainingCtrl.OnStartTrainingResp(resp);
 	}
@@ -1716,7 +1714,7 @@ public class PlatMsgHandler:MsgHandler
 	/// <param name="pack"></param>
 	public void TrainingUpConfirmRespHandler(Pack pack)
 	{
-		Logger.Log("-----TrainingUpConfirmResp");
+		Debug.Log("-----TrainingUpConfirmResp");
 		//TrainingUpConfirmResp resp = Serializer.Deserialize<TrainingUpConfirmResp>(new MemoryStream(pack.buffer));
 		//GameSystem.Instance.mClient.mUIManager.TrainingCtrl.OnTrainingUpConfirmResp(resp);
 	}
@@ -1727,7 +1725,7 @@ public class PlatMsgHandler:MsgHandler
 	/// <param name="pack"></param>
 	public void NotifyTrainingInfoHandler(Pack pack)
 	{
-		Logger.Log("-----NotifyTrainingInfoResp");
+		Debug.Log("-----NotifyTrainingInfoResp");
 		NotifyTrainingInfo resp = Serializer.Deserialize<NotifyTrainingInfo>(new MemoryStream(pack.buffer));
 		//GameSystem.Instance.mClient.mUIManager.TrainingCtrl.OnNotifyTrainingInfo(resp);
 	}
@@ -1736,7 +1734,7 @@ public class PlatMsgHandler:MsgHandler
 	{
 
         // NOT USE TRAINING.
-        //Logger.Log("-----OpenTrainingResp");
+        //Debug.Log("-----OpenTrainingResp");
         //OpenTrainingResp resp = Serializer.Deserialize<OpenTrainingResp>(new MemoryStream(pack.buffer));
         //if ((ErrorID)resp.result == ErrorID.SUCCESS)
         //{
@@ -1759,14 +1757,14 @@ public class PlatMsgHandler:MsgHandler
 	
 	public void TattooOperationRespHandler(Pack pack)
 	{
-		Logger.Log("-----TattooOperationResp");
+		Debug.Log("-----TattooOperationResp");
 		TattooOperationResp resp = Serializer.Deserialize<TattooOperationResp>(new MemoryStream(pack.buffer));
 		//GameSystem.Instance.mClient.mUIManager.TattooCtrl.OnTattooOperationResp(resp);
 	}
 	
 	public void DecomposeGoodsRespHandler(Pack pack)
 	{
-		Logger.Log("-----DecomposeGoodsResp");
+		Debug.Log("-----DecomposeGoodsResp");
 		DecomposeGoodsResp resp = Serializer.Deserialize<DecomposeGoodsResp>(new MemoryStream(pack.buffer));
 		//GameSystem.Instance.mClient.mUIManager.TattooCtrl.OnDecomposeGoodsResp(resp);
 	}
@@ -1791,7 +1789,7 @@ public class PlatMsgHandler:MsgHandler
 	//    }
 	//    else
 	//    {
-	//        Logger.LogError("Enter race error: " + ((ErrorID)resp.result).ToString());
+	//        Debug.LogError("Enter race error: " + ((ErrorID)resp.result).ToString());
 	//        CommonFunction.ShowErrorMsg((ErrorID)resp.result);
 	//    }
 	//}
@@ -1799,7 +1797,7 @@ public class PlatMsgHandler:MsgHandler
 	//private void BuyRaceTimesHandler(Pack pack)
 	//{
 	//    BuyRaceTimesResp resp = Serializer.Deserialize<BuyRaceTimesResp>(new MemoryStream(pack.buffer));
-	//    Logger.Log("------buyraceTimes");
+	//    Debug.Log("------buyraceTimes");
 	//    if ((ErrorID)resp.result == ErrorID.SUCCESS)
 	//    {
 	//        if (resp.type == MatchType.MT_REGULAR)
@@ -1811,7 +1809,7 @@ public class PlatMsgHandler:MsgHandler
 	//    }
 	//    else
 	//    {
-	//        Logger.LogError("Buy race times error: " + ((ErrorID)resp.result).ToString());
+	//        Debug.LogError("Buy race times error: " + ((ErrorID)resp.result).ToString());
 	//        CommonFunction.ShowErrorMsg((ErrorID)resp.result);
 	//    }
 	//}
@@ -1828,7 +1826,7 @@ public class PlatMsgHandler:MsgHandler
 	//    }
 	//    else
 	//    {
-	//        Logger.LogError("Enter room error: " + ((ErrorID)resp.result).ToString());
+	//        Debug.LogError("Enter room error: " + ((ErrorID)resp.result).ToString());
 	//        CommonFunction.ShowErrorMsg((ErrorID)resp.result);
 	//    }
 	//}
@@ -1852,7 +1850,7 @@ public class PlatMsgHandler:MsgHandler
 	//    }
 	//    else
 	//    {
-	//        Logger.LogError("Rank list update error:" + ((ErrorID)resp.result).ToString());
+	//        Debug.LogError("Rank list update error:" + ((ErrorID)resp.result).ToString());
 	//        CommonFunction.ShowErrorMsg((ErrorID)resp.result);
 	//    }
 	//}
@@ -1868,7 +1866,7 @@ public class PlatMsgHandler:MsgHandler
         }
         else
         {
-            Logger.LogError("MailInfoNotify returns error: " + notify.result);
+            Debug.LogError("MailInfoNotify returns error: " + notify.result);
         }
     }
 	
@@ -1898,7 +1896,7 @@ public class PlatMsgHandler:MsgHandler
 	//    }
 	//    else
 	//    {
-	//        Logger.LogError("ReadMailHandle returns error: " + resp.result);
+	//        Debug.LogError("ReadMailHandle returns error: " + resp.result);
 	//    }
 	//}
 	
@@ -1913,7 +1911,7 @@ public class PlatMsgHandler:MsgHandler
 	//    }
 	//    else
 	//    {
-	//        Logger.LogError("GetAttachmentHandle returns error: " + resp.result);
+	//        Debug.LogError("GetAttachmentHandle returns error: " + resp.result);
 	//        CommonFunction.ShowErrorMsg((ErrorID)resp.result);
 	//    }
 	//}
@@ -1928,7 +1926,7 @@ public class PlatMsgHandler:MsgHandler
 	//    }
 	//    else
 	//    {
-	//        Logger.LogError("Begin practise error: " + resp.result);
+	//        Debug.LogError("Begin practise error: " + resp.result);
 	//        CommonFunction.ShowErrorMsg((ErrorID)resp.result);
 	//    }
 	//}
@@ -2061,6 +2059,7 @@ public class PlatMsgHandler:MsgHandler
 		//Ìí¼ÓÐÂ¶Ó³¤ÐÅÏ¢
 		RoleInfo newCaptain = new RoleInfo();
 		newCaptain.id = resp.id;
+        newCaptain.acc_id = MainPlayer.Instance.AccountID;
 		//newCaptain.bias = resp.bias;
 		newCaptain.quality = (uint)QualityType.QT_NONE;
 		for (int i = 0; i < resp.skill_slot_info.Count; ++i)
@@ -2128,7 +2127,7 @@ public class PlatMsgHandler:MsgHandler
     //公告
     private void AnnounceMentHandler(Pack pack) 
     {
-        Logger.Log("AnnounceMentHandler ---------------------- >>>>>");
+        Debug.Log("AnnounceMentHandler ---------------------- >>>>>");
         NoticeToClient resp = Serializer.Deserialize<NoticeToClient>(new MemoryStream(pack.buffer));
         if (resp == null)
             return;
@@ -2179,11 +2178,41 @@ public class PlatMsgHandler:MsgHandler
             return;
         if (chatBroadCast.info.content != null && chatBroadCast.info.content != "")
         {
-            MainPlayer.Instance.WorldChatList.Add(chatBroadCast);
-            if (MainPlayer.Instance.WorldChatList.Count > 100)
-                MainPlayer.Instance.WorldChatList.Remove(MainPlayer.Instance.WorldChatList[0]);
-            if (MainPlayer.Instance.onNewChatMessage != null)
-                MainPlayer.Instance.onNewChatMessage();
+			chatBroadCast.time = (uint)(Time.realtimeSinceStartup*10);
+			//好友聊天和其他聊天分开处理
+			if(chatBroadCast.type == (uint)ChatChannelType.CCT_PRIVATE)
+			{
+				MainPlayer.Instance.FriendChatMessage = chatBroadCast;
+				if(MainPlayer.Instance.onFriendChatMessage!=null)
+				{
+					MainPlayer.Instance.onFriendChatMessage();
+				}
+			}
+			//队伍聊天
+			else if(chatBroadCast.type == (uint)ChatChannelType.CCT_TEAM)
+			{
+				MainPlayer.Instance.TeamChatMessage = chatBroadCast;
+				if(MainPlayer.Instance.OnTeamChatMessage!=null)
+				{
+					MainPlayer.Instance.OnTeamChatMessage();
+				}
+			}
+			//联盟频道
+			else if(chatBroadCast.type == (uint)ChatChannelType.CCT_LEAGUE)
+			{
+				MainPlayer.Instance.LeagueChatMessage = chatBroadCast;
+				if(MainPlayer.Instance.OnLeagueChatMessage!=null)
+				{
+					MainPlayer.Instance.OnLeagueChatMessage();
+				}
+			}
+			else{
+				MainPlayer.Instance.WorldChatList.Add(chatBroadCast);
+				if (MainPlayer.Instance.WorldChatList.Count > 100)
+					MainPlayer.Instance.WorldChatList.Remove(MainPlayer.Instance.WorldChatList[0]);
+				if (MainPlayer.Instance.onNewChatMessage != null)
+					MainPlayer.Instance.onNewChatMessage();
+			}
         }
     }
 
@@ -2259,7 +2288,7 @@ public class PlatMsgHandler:MsgHandler
 	}
 	private void HandleRefreshQualifyingNewerInfo(Pack pack)
 	{
-        Logger.Log("HandleRefreshQualifyingNewerInfo c#"); 
+        Debug.Log("HandleRefreshQualifyingNewerInfo c#"); 
 		RefreshQualifyingNewerInfo info = Serializer.Deserialize<RefreshQualifyingNewerInfo>(new MemoryStream(pack.buffer));
 		MainPlayer.Instance.QualifyingNewerInfo = info.info;
         MainPlayer.Instance.QualifyingNewerScore = info.qualifying_newer_score;

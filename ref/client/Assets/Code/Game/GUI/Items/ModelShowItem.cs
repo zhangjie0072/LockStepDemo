@@ -190,6 +190,7 @@ public class ModelShowItem : MonoBehaviour
                 newRoleInfo.id = _modelID;
                 newRoleInfo.level = 1;
                 newRoleInfo.quality = (uint)QualityType.QT_NONE;
+                newRoleInfo.acc_id = MainPlayer.Instance.AccountID;
                 _player = new Player(newRoleInfo, new Team(Team.Side.eNone));
             }
 
@@ -206,7 +207,7 @@ public class ModelShowItem : MonoBehaviour
             RoleBaseData2 roleBaseData2 = GameSystem.Instance.RoleBaseConfigData2.GetConfigData(_modelID);
             if (roleBaseData2 == null )
             {
-                Logger.LogError("No shape found!shapeID=" + shapeID);
+                Debug.LogError("No shape found!shapeID=" + shapeID);
              //   _playerModel.Init((uint)shapeID);
             }
             else
@@ -214,7 +215,7 @@ public class ModelShowItem : MonoBehaviour
                 RoleShape roleShape = GameSystem.Instance.RoleShapeConfig.GetConfig((uint)shapeID);
                 if (roleShape == null)
                 {
-                    Logger.LogError("No role shape data found for player: " + shapeID);
+                    Debug.LogError("No role shape data found for player: " + shapeID);
                     return;
                 }
 

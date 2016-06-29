@@ -26,7 +26,7 @@ public class UpdateVersionTipsScript : MonoBehaviour
 
     private void OnOk(GameObject go)
     {
-        Logger.Log("ok");
+        Debug.Log("ok");
 
         switch (messageType)
         {
@@ -49,7 +49,7 @@ public class UpdateVersionTipsScript : MonoBehaviour
 
     private void OnCancel(GameObject go)
     {
-        Logger.Log("cancel");
+        Debug.Log("cancel");
         Application.Quit();
     }
 

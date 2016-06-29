@@ -46,13 +46,14 @@ public class PlayerState_Pass : PlayerState_Skill
 
         m_player.FaceTo(passTarget.position);
 
+			//Debug.Log("Send pass, player id: " + m_player.m_id + " to player: " + passTarget.m_id );
         //find the players out between passer and catchers
         Player defenseTarget = m_player.m_defenseTarget;
         if( defenseTarget != null )
         {
             List<Player> defensers = defenseTarget.m_team.GetSortedPlayersByDistance(m_player, true);
             foreach( Player defenser in defensers )
-                Logger.Log("defenser: " + defenser.m_id);
+					Debug.Log("defenser: " + defenser.m_id);
 
             foreach( Player defenser in defensers )
             {
@@ -76,12 +77,12 @@ public class PlayerState_Pass : PlayerState_Skill
 
                 //防守者在传球者身后
                 IM.Vector3 dirPasserToDef = GameUtils.HorizonalNormalized(defenser.position, m_player.position);
-                IM.Number proj = IM.Vector3.DotForNumber(dirPasserToDef, dirPasserToTarget);
+                IM.Number proj = IM.Vector3.Dot(dirPasserToDef, dirPasserToTarget);
                 if( proj < IM.Number.zero )
                     continue;
                 //防守者在接球者身后
                 IM.Vector3 dirTargetToDef = GameUtils.HorizonalNormalized(defenser.position,passTarget.position);
-                proj = IM.Vector3.DotForNumber(dirTargetToDef, -dirPasserToTarget);
+                proj = IM.Vector3.Dot(dirTargetToDef, -dirPasserToTarget);
                 if( proj < IM.Number.zero )
                     continue;
 
@@ -92,7 +93,7 @@ public class PlayerState_Pass : PlayerState_Skill
 
                 SkillSpec skillParam = defenser.GetSkillSpecialAttribute(SkillSpecParam.eInterception_dist, interceptionSkill);
                 IM.Number fInterceptionRate = IM.Number.zero;
-                Logger.Log("Player id: " + m_player.m_id + " distance to plane: " + fVDist);
+					Debug.Log("Player id: " + m_player.m_id + " distance to plane: " + fVDist);
 
                 if( fVDist > skillParam.value )
                     continue;
@@ -108,7 +109,7 @@ public class PlayerState_Pass : PlayerState_Skill
 
                 fInterceptionRate = passHedging.Calc(new IM.Number((int)(defenserData["interception"] + skillInterceptionValue)),new IM.Number((int)(passTargetData["pass"] + skillPassValue)));
 
-                Logger.Log("Interception rate: " + fInterceptionRate);
+					Debug.Log("Interception rate: " + fInterceptionRate);
 
                 if( IM.Random.value < fInterceptionRate )
                 {

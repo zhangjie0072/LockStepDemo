@@ -25,6 +25,7 @@ teamNames = nil
 enemyNames = nil
 matchType = nil
 
+
 function Init()
     -- nameList =  {}
     -- randomMin =
@@ -42,7 +43,6 @@ function StartAIMatch(u, sess)
     myRoleId = 0
     -- enemyGameModeId = 0
     session = sess
-
 
     local preRoomInfo = ChatDataCenter.GetChatContentsByRoomId(0)
     print("1927 - <QualifyingNewerAI>  preRoomInfo=",preRoomInfo)
@@ -62,7 +62,7 @@ function StartAIMatch(u, sess)
     Scheduler.Instance:AddTimer(GenRandom(), false, prepareActionDel)
 end
 
-function CreateNPC(t)
+function CreateNPC(t, grade)
     matchType = t
     print("1927 - <QualifyingNewerAI> CreateNPC matchType=",matchType)
     if matchType == "MT_PVP_3V3" then
@@ -79,7 +79,8 @@ function CreateNPC(t)
     if matchType == "MT_QUALIFYING_NEWER" then
         -- Get GameMode.
         local qScore = MainPlayer.Instance.QualifyingNewerScore
-        local qGrade = GameSystem.Instance.qualifyingNewerConfig:GetGrade(qScore)
+        local qGrade = GameSystem.Instance.qualifyingNewerConfig:GetFirstSubGrade(grade)
+
         print("1927 - <QualifyingNewerAI>  qScore, qGrade=",qScore, qGrade)
         print("1927 - <QualifyingNewerAI>  qGrade.team_ai, qGrade.enemy_ai=",qGrade.team_ai, qGrade.enemy_ai)
         teamGameMode = GameSystem.Instance.GameModeConfig:GetGameMode(qGrade.team_ai)
@@ -284,7 +285,7 @@ end
 function GenName()
     print("1927 - <QualifyingNewerAI> GenName called")
     nameList =  {}
-    math.randomseed(os.time())
+
 
 
     if nameCount == 0 and  aName == nil then
@@ -302,6 +303,7 @@ function GenName()
     end
 
     for i = 1, 5 do
+        math.randomseed(os.time())
         local r = math.random(1, #t)
         local name = aName[t[r]]
         print("1927 - <QualifyingNewerAI> genName r, t[r], name=",r, t[r], name)

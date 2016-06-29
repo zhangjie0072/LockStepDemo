@@ -15,7 +15,7 @@ public class U3DSingleton<T> : MonoBehaviour where T : MonoBehaviour
  
             if (instance == null)
             {
-               Logger.LogError("An instance of " + typeof(T) + 
+               Debug.LogError("An instance of " + typeof(T) + 
                   " is needed in the scene, but there is none.");
             }
          }

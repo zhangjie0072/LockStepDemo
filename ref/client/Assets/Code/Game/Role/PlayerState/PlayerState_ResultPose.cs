@@ -31,7 +31,7 @@ public class PlayerState_ResultPose : PlayerState
 		if(string.IsNullOrEmpty(m_curAction))
 			m_stateMachine.SetState(State.eStand);
 		else
-			m_player.animMgr.Play(m_curAction, true).rootMotion.Reset();
+			m_player.animMgr.Play(m_curAction, false);
 	}
 
 	public override void Update (IM.Number fDeltaTime)

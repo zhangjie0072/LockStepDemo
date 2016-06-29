@@ -34,7 +34,7 @@ public class AI_Steal
 			{
 				m_player.m_toSkillInstance = m_player.m_skillSystem.GetValidSkillInMatch(Command.Steal, true);
 				if (m_player.m_toSkillInstance == null)
-					Logger.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI Steal");
+					Debug.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI Steal");
 				(m_player.m_StateMachine.GetState(PlayerState.State.eSteal) as PlayerState_Steal).forcedByAI = true;
 				stealed = true;
 			}

@@ -2,16 +2,17 @@ using System;
 using UnityEngine;
 using fogs.proto.msg;
 
-public class MatchStateOverTime
-	: MatchState, InputManager.Listener
-{	
+public class MatchStateOverTime : MatchState
+{
+    static IM.Number DURATION = new IM.Number(2, 500) + new IM.Number(2, 667);
+
 	public TrackPlayer m_trackPlayer = new TrackPlayer();
 	//private GameUtils.Timer		m_timer;
 	private GameObject			m_uiOverTime;
 	private bool				m_bPlayOverTime = false;
-	private bool				m_bSendGameBegin = false;
 
 	private	GameObject 			m_goDrawGameMsg;
+    private GameUtils.Timer _timer;
 
 	public MatchStateOverTime(MatchStateMachine owner)
 		:base(owner)
@@ -32,12 +33,13 @@ public class MatchStateOverTime
 		}
 
 		m_match.m_bOverTime = true;
-		m_bSendGameBegin = false;
 
 		m_goDrawGameMsg = UIManager.Instance.CreateUI("msg/Msg_DrawGame");
 		m_goDrawGameMsg.SetActive(false);
 
 		_OnPlayTrack();
+
+        _timer = new GameUtils.Timer(DURATION, OnOverTimeFinish);
 	}
 
 	void _ShowRule()
@@ -45,14 +47,10 @@ public class MatchStateOverTime
 		GameObject.Destroy(m_goDrawGameMsg);
 
 		m_uiOverTime = UIManager.Instance.CreateUI("UIOvertime");
-		UIFinishEvent finEvent = m_uiOverTime.GetComponent<UIFinishEvent>();
-		if( finEvent == null )
-			finEvent = m_uiOverTime.AddComponent<UIFinishEvent>();
-		finEvent.onFinish += _OnUIOverTimeFinish;
 		NGUITools.BringForward(m_uiOverTime);
 	}
 
-	void _OnUIOverTimeFinish()
+	void OnOverTimeFinish()
 	{
 		if( m_uiOverTime != null )
 		{
@@ -60,18 +58,7 @@ public class MatchStateOverTime
 			m_uiOverTime = null;
 		}
 
-		if( m_match.leagueType == GameMatch.LeagueType.ePVP || 
-			(m_match.leagueType == GameMatch.LeagueType.eRegular1V1 && m_match.GetMatchType() == GameMatch.Type.ePVP_1PLUS) ||
-			(m_match.leagueType == GameMatch.LeagueType.eQualifyingNew && m_match.GetMatchType() == GameMatch.Type.ePVP_1PLUS))
-		{
-			if( !m_bSendGameBegin )
-			{
-				GameMsgSender.SendGameBegin();
-				m_bSendGameBegin = true;
-			}
-		}
-		else
-			m_stateMachine.SetState(State.ePlayerCloseUp);
+        m_stateMachine.SetState(State.ePlayerCloseUp);
 	}
 
 	void _OnPlayTrack()
@@ -110,30 +97,25 @@ public class MatchStateOverTime
 		GameObject resOverTime = ResourceLoadManager.Instance.LoadPrefab("Prefab/Camera/OverTime");
 		GameObject goOverTime = GameObject.Instantiate(resOverTime) as GameObject;
 		if( goOverTime == null )
-			Logger.LogError("can not find goOverTime prefab.");
+			Debug.LogError("can not find goOverTime prefab.");
 
 		m_goDrawGameMsg.SetActive(true);
 		NGUITools.BringForward(m_goDrawGameMsg);
 
 		m_trackPlayer.LoadTrack(goOverTime);
-		m_trackPlayer.Play( m_match.m_mainRole.m_team.m_side == Team.Side.eHome ? 0 : 1);
+		m_trackPlayer.Play( m_match.mainRole.m_team.m_side == Team.Side.eHome ? 0 : 1);
 
 		PlaySoundManager.Instance.PlaySound(MatchSoundEvent.MatchOverTime);
 
 		GameObject.Destroy(m_uiOverTime);
 	}
-	
-	void OnTimer()
-	{
-		GameSystem.Instance.mClient.mInputManager.AddListener(this);
-	}
 
-	override public void Update (IM.Number fDeltaTime)
+	override public void ViewUpdate (float deltaTime)
 	{
-		base.Update(fDeltaTime);
+		base.ViewUpdate(deltaTime);
 
 		if( m_trackPlayer != null )
-			m_trackPlayer.Update((float)fDeltaTime);
+			m_trackPlayer.Update(deltaTime);
 		
 		if( m_trackPlayer.m_play )
 			return;
@@ -144,6 +126,12 @@ public class MatchStateOverTime
 			m_bPlayOverTime = true;
 		}
 	}
+
+    public override void GameUpdate(IM.Number fDeltaTime)
+    {
+        base.GameUpdate(fDeltaTime);
+        _timer.Update(fDeltaTime);
+    }
 	
 	override public void OnExit ()
 	{
@@ -158,21 +146,10 @@ public class MatchStateOverTime
 			GameObject.Destroy(m_uiOverTime);
 
 		m_match.m_needTipOff = true;
-	}
-
-	public void OnPress( int nTouchID, Vector2 vScreenPt, bool bDown, out bool bPassThrough )
-	{
-		bPassThrough = true;
-	}
-	public void OnClick( int nTouchID, Vector2 vScreenPt, out bool bPassThrough )
-	{
-		bPassThrough = false;
-	}
-	public void OnDrag( int nTouchID, Vector2 vScreenPtCur, Vector2 vScreenPtDelta, out bool bPassThrough )
-	{
-		bPassThrough = true;
-	}
-	public void OnDragEnd( int nTouchID )
-	{
+        PlayerManager pm = GameSystem.Instance.mClient.mPlayerManager;
+        foreach(Player player in pm)
+        {
+            player.m_applyLogicPostion = true;
+        }
 	}
 }

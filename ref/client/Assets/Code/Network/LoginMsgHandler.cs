@@ -20,11 +20,11 @@ public class LoginMsgHandler
 
 	void VerifySdkRespHandle( Pack pack )
 	{
-		Logger.Log("---------------------VerifySdkRespHandle");
+		Debug.Log("---------------------VerifySdkRespHandle");
 		VerifySdkResp resp = Serializer.Deserialize<VerifySdkResp>(new MemoryStream(pack.buffer));
 		if (resp.result != 0)
 		{
-			Logger.Log("Error -- VerifySdkRespHandle returns error: " + resp.result);
+			Debug.Log("Error -- VerifySdkRespHandle returns error: " + resp.result);
 
             //不知道服务器为什么会发送 104错误，+return后。客户端无法获取默认的服务信息选择
 			//return;
@@ -50,12 +50,12 @@ public class LoginMsgHandler
 	//CDKeyÑéÖ¤»Ø¸´ÏûÏ¢´¦Àí
 	void VerifyCDKeyRespHandle(Pack pack)
 	{
-		Logger.Log("---------------------VerifyCDKeyRespHandle");
+		Debug.Log("---------------------VerifyCDKeyRespHandle");
 		
 		VerifyCDKeyResp resp = Serializer.Deserialize<VerifyCDKeyResp>(new MemoryStream(pack.buffer));
 		if (resp.result != 0)
 		{
-			Logger.Log("Error -- VerifyCDKeyResp returns error: " + resp.result);
+			Debug.Log("Error -- VerifyCDKeyResp returns error: " + resp.result);
 			GameSystem.Instance.mNetworkManager.StopAutoReconn();
 
             if (resp.result == (uint)ErrorID.LOGIN_SERVER_CLOSED)
@@ -92,11 +92,11 @@ public class LoginMsgHandler
     void ServerInfoRespHandle(Pack pack) 
     {
 
-        Logger.Log("---------------------ServerInfoRespHandle");
+        Debug.Log("---------------------ServerInfoRespHandle");
         ServerInfoResp resp = Serializer.Deserialize<ServerInfoResp>(new MemoryStream(pack.buffer));
         if (resp.result != 0) 
         {
-            Logger.Log("Error -- ServerInfoResp returns error: " + resp.result);
+            Debug.Log("Error -- ServerInfoResp returns error: " + resp.result);
             GameSystem.Instance.mClient.mUIManager.LoginCtrl.SetErrorTips(CommonFunction.GetConstString("LOGIN_TIPS"));
             return;
         }

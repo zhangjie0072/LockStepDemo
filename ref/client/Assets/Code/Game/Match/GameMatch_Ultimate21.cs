@@ -47,9 +47,9 @@ public class GameMatch_Ultimate21 : GameMatch
 		
 	}
 
-	override public void OnSceneComplete()
+	protected override void _OnLoadingCompleteImp ()
 	{
-		base.OnSceneComplete();
+		base._OnLoadingCompleteImp ();
 		mCurScene.CreateBall();
 		mCurScene.mBall.onShootGoal += OnGoal;
 		mCurScene.mBall.onDunk += OnDunk;
@@ -57,31 +57,29 @@ public class GameMatch_Ultimate21 : GameMatch
 
 		if (m_config == null)
 		{
-			Logger.LogError("Match config file loading failed.");
+			Debug.LogError("Match config file loading failed.");
 			return;
 		}
 
+        //TODO 针对PVP修改
 		//main role
 		PlayerManager pm = GameSystem.Instance.mClient.mPlayerManager;
-		m_mainRole = pm.GetPlayerById( uint.Parse(m_config.MainRole.id) );
-		players[0] = m_mainRole;
-		m_mainRole.m_inputDispatcher = new InputDispatcher(this, m_mainRole);
-		m_mainRole.m_catchHelper = new CatchHelper(m_mainRole);
-		m_mainRole.m_catchHelper.ExtractBallLocomotion();
-		m_mainRole.m_StateMachine.SetState(PlayerState.State.eStand, true);
-		m_mainRole.m_InfoVisualizer.CreateStrengthBar();
-		m_mainRole.m_InfoVisualizer.ShowStaminaBar(true);
-		m_mainRole.m_team.m_role = GameMatch.MatchRole.eDefense;
-		m_mainRole.m_alwaysForbiddenPickup = false;
+		mainRole = pm.GetPlayerById( uint.Parse(m_config.MainRole.id) );
+		players[0] = mainRole;
+        mainRole.operMode = Player.OperMode.Input;
+		mainRole.m_catchHelper = new CatchHelper(mainRole);
+		mainRole.m_catchHelper.ExtractBallLocomotion();
+		mainRole.m_StateMachine.SetState(PlayerState.State.eStand, true);
+		mainRole.m_team.m_role = GameMatch.MatchRole.eDefense;
+		mainRole.m_alwaysForbiddenPickup = false;
 
 		//npc1
-		Team oppoTeam = m_mainRole.m_team.m_side == Team.Side.eAway ? m_homeTeam : m_awayTeam;
+		Team oppoTeam = mainRole.m_team.m_side == Team.Side.eAway ? m_homeTeam : m_awayTeam;
 		Player npc = oppoTeam.GetMember(0);
 		players[1] = npc;
 		if (npc.model != null)
 			npc.model.EnableGrey();
-		npc.m_aiMgr = new AISystem_Basic(this, npc, AIState.Type.eInit, m_config.NPCs[0].AIID);
-		npc.m_aiMgr.m_enable = false;
+        npc.operMode = Player.OperMode.AI;
 		npc.m_team.m_role = GameMatch.MatchRole.eOffense;
 		npc.m_alwaysForbiddenPickup = false;
 
@@ -90,11 +88,10 @@ public class GameMatch_Ultimate21 : GameMatch
 		players[2] = npc;
 		if (npc.model != null)
 			npc.model.EnableGrey();
-		npc.m_aiMgr = new AISystem_Basic(this, npc, AIState.Type.eInit, m_config.NPCs[1].AIID);
-		npc.m_aiMgr.m_enable = false;
+        npc.operMode = Player.OperMode.AI;
 		npc.m_team.m_role = GameMatch.MatchRole.eOffense;
 		npc.m_alwaysForbiddenPickup = false;
-		_UpdateCamera(m_mainRole);
+		_UpdateCamera(mainRole);
 		CreateUI ();
 
 
@@ -105,7 +102,7 @@ public class GameMatch_Ultimate21 : GameMatch
 		m_stateMachine.SetState(m_config.needPlayPlot ? MatchState.State.ePlotBegin : MatchState.State.eShowRule);
 	}
 
-    public override void HandleGameBegin(Pack pack)
+    public override void OnGameBegin(GameBeginResp resp)
     {
         m_stateMachine.SetState(MatchState.State.eBegin);
     }
@@ -189,9 +186,9 @@ public class GameMatch_Ultimate21 : GameMatch
 		ResetPlayerPos();
 	}
 
-	public override void Update(IM.Number deltaTime)
+	public override void GameUpdate(IM.Number deltaTime)
 	{
-		base.Update(deltaTime);
+		base.GameUpdate(deltaTime);
 
 		if (m_stateMachine.m_curState != null && m_stateMachine.m_curState.m_eState == MatchState.State.ePlaying)
             timerSwitchRole.Update(deltaTime);
@@ -344,7 +341,7 @@ public class GameMatch_Ultimate21 : GameMatch
 
 	private void AllocatePlayers()
 	{
-		bool mainRoleIsAttacker = (attacker == m_mainRole);
+		bool mainRoleIsAttacker = (attacker == mainRole);
 		m_homeTeam.m_role = mainRoleIsAttacker ? MatchRole.eOffense : MatchRole.eDefense;
 		m_awayTeam.m_role = mainRoleIsAttacker ? MatchRole.eDefense : MatchRole.eOffense;
 		m_homeTeam.Clear();
@@ -353,7 +350,7 @@ public class GameMatch_Ultimate21 : GameMatch
 		m_homeTeam.AddMember(players[0]);
 		foreach (Player player in players)
 		{
-			if (player == m_mainRole)
+			if (player == mainRole)
 				continue;
 			if (mainRoleIsAttacker || player == attacker)
 			{

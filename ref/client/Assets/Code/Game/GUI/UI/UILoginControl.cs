@@ -38,6 +38,7 @@ public class UILoginControl
 
 	private bool _isInput = false;
 	private bool _isLogin = false;
+	private short oncelogined = 0;	//0 为初始化，1-已经登录 2-已经显示公告
     public bool IsLogin
     {
         set
@@ -54,6 +55,7 @@ public class UILoginControl
         {
             _ui = new UILogin();
         }
+        DynamicStringManager.Instance.Init();
 
         goUI = GameSystem.Instance.mClient.mUIManager.CreateUI("Prefab/GUI/UILogin");
         _ui.Initialize(goUI);
@@ -105,7 +107,7 @@ public class UILoginControl
         {
             isConnect = true;
         }
-        Logger.Log("UILoginControl isConnect=" + isConnect); 
+        Debug.Log("UILoginControl isConnect=" + isConnect); 
 #else
 		LoginNetwork.Instance.authorizationCode = _ui.InputAccount.value;
 #endif
@@ -165,6 +167,22 @@ public class UILoginControl
             //NGUITools.SetActive(_ui.ButtonOK.gameObject, true);
 
         }
+		if(oncelogined == 1 
+			&& GameSystem.Instance.AnnouncementConfigData!=null 
+			&& GameSystem.Instance.AnnouncementConfigData.GetOpenItem()!=null
+			&& !string.IsNullOrEmpty(DynamicStringManager.Instance.NoticePopupString)
+		)
+		{
+			//如果本地version和公告version不一致，弹出公告界面
+			AnnouncementItem anc = GameSystem.Instance.AnnouncementConfigData.GetOpenItem();
+
+			if(anc!=null && LoginIDManager.GetAnnounceVersion() != anc.version)
+			{
+				showAnnounce();
+				LoginIDManager.SetAnnouceVersion(anc.version);
+			}
+			oncelogined = 2;
+		}
     }
 
     public void ShowUIForm(uint param = 0)
@@ -213,6 +231,8 @@ public class UILoginControl
         //UIEventListener.Get(_ui.goBg).onClick = onBgClick;
 		UIEventListener.Get(_ui.lblText.gameObject).onClick = onInputClick;
         UIEventListener.Get(_ui.goServer).onClick = onChangeServer;
+
+
     }
 
     public void ResetLoginConnect()
@@ -237,7 +257,7 @@ public class UILoginControl
     }
     public void OnSwitch(GameObject go)
     {
-        Logger.Log("1927 c# OnSwitch called");
+        Debug.Log("1927 c# OnSwitch called");
 #if IOS_SDK || ANDROID_SDK
         if( !MainPlayer.Instance.CanSwitchAccount)
         {
@@ -264,12 +284,12 @@ public class UILoginControl
     public void OnCancle(GameObject go)
     {
 		_isInput = false;
-        Logger.Log("1927 c# OnCancle is called");
+        Debug.Log("1927 c# OnCancle is called");
 #if ANDROID_SDK
        AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
        AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
        jo.Call("Logout");
-       Logger.Log("1927 c# called Logout");
+       Debug.Log("1927 c# called Logout");
 #endif
 
        _ui.ButtonSwitch.gameObject.SetActive(false);
@@ -310,7 +330,7 @@ public class UILoginControl
     {
         //if (!isLoadConfig)
         //{
-        //    Logger.LogWarning("Config is not Loading finish. return click action");
+        //    Debug.LogWarning("Config is not Loading finish. return click action");
         //    return;
         //}
           
@@ -369,10 +389,10 @@ public class UILoginControl
 		if(_isInput)
 			return;
 		_isInput = true;
-        Logger.Log("onInputClick called");
+        Debug.Log("onInputClick called");
         //if(!isLoadConfig)
         //{
-        //    Logger.LogWarning("Config is not Loading finish. return click action");
+        //    Debug.LogWarning("Config is not Loading finish. return click action");
         //    return;
         //}
 
@@ -421,7 +441,7 @@ public class UILoginControl
 			return;
         //if (!isLoadConfig)
         //{
-        //    Logger.LogWarning("Config is not Loading finish. return click action");
+        //    Debug.LogWarning("Config is not Loading finish. return click action");
         //    return;
         //}
 #if ANDROID_SDK
@@ -532,7 +552,7 @@ public class UILoginControl
 
 	public void SetAccount(string account )
 	{
-		Logger.Log ("UILoginControl SetAccount account =" + account);
+		Debug.Log ("UILoginControl SetAccount account =" + account);
 		Account = account;
 		
 		LoginIDManager.SetAccount(Account);
@@ -677,9 +697,9 @@ public class UILoginControl
         string lastServer = LoginIDManager.GetPlatServerName();
         uint lastServerLevel = LoginIDManager.GetLastLevel();
         //uint lastServerLoad = LoginIDManager.GetServerState();
-        Logger.Log("lastServerId = " + lastServerId);
-        Logger.Log("lastServer = " + lastServer);
-        Logger.Log("lastServerLevel = " + lastServerLevel);
+        Debug.Log("lastServerId = " + lastServerId);
+        Debug.Log("lastServer = " + lastServer);
+        Debug.Log("lastServerLevel = " + lastServerLevel);
         if (lastServerId > 0)
         {
             ServerListInfo lastInfo = serverLis.Find((ServerListInfo info) => { return info.server_id == lastServerId; });
@@ -731,9 +751,9 @@ public class UILoginControl
 	}
 	public void SetDefaultServer(List<ServerListInfo> infos, uint last_server_id)
 	{
-		Logger.Log("DefaultServer -------------");
+		Debug.Log("DefaultServer -------------");
 		if (infos == null)
-			Logger.LogError("info is null");
+			Debug.LogError("info is null");
 		if (infos.Count <= 0)
 			return;
 		
@@ -741,7 +761,7 @@ public class UILoginControl
 		ServerListInfo curServer = null;
 		foreach (var server in infos)
 		{
-			Logger.Log("Server name:" + server.name + " default:" + server.default_server);
+			Debug.Log("Server name:" + server.name + " default:" + server.default_server);
 			if (server.server_id == last_server_id)
 			{
 				curServer = server;
@@ -811,6 +831,8 @@ public class UILoginControl
 			_ui.lblText.text = "欢迎您，"+"[u]"+"[00ff00]"+ name+"[-]"+"[/u]";
 			//			_ui.lblText.text = "[u]"+_ui.lblText.text+"[/u]";
 		}
+		if(oncelogined == 0)
+			oncelogined = 1;
 	}
     public void OnLoginFailed()
     {

@@ -7,14 +7,54 @@ using ProtoBuf;
 
 using UnityEngine;
 
+public enum LoadingStep
+{
+	eInit,
+	eLoadingScene,
+	eLoadedScene,
+	eLoadingPlayers,
+	eLoadedPlayers,
+	eLoadingUI,
+	eLoadedUI,
+	eLoadingMisc,
+	eLoadedMisc,
+	eLoadingComplete
+}
+
+public class LoadingCommand
+{
+	public bool m_bDone = false;
+	public bool m_bFinalCmd = false;
+
+	private System.Action m_loadMethod;
+	public LoadingCommand(System.Action loadMethod, bool bFinalCmd = false)
+	{
+		m_loadMethod = loadMethod;
+		m_bFinalCmd = bFinalCmd;
+	}
+	public void Execute()
+	{
+		if( m_loadMethod != null )
+			m_loadMethod();
+	}
+}
+
+public class LoadingItem
+{
+	public uint percentage = 0;
+	public Transform transform;
+	public RoleInfo ri; // for pvp
+}
+
 public class UpdatePrec
 {
-    public Transform transform;
-    public int PrecValue;
-    public int PrecFrame;
-    public int NowFrame;
+	public LoadingItem loadingItem;
+    public float PrecValue;
+	public float targetTime;
+	public float curTime;
 }
-    public class UIChallengeLoading : MonoBehaviour
+
+public class UIChallengeLoading : MonoBehaviour
 {
 	private GameObject	SingleBaseBg;
 	private GameObject	MultiBaseBg;
@@ -31,10 +71,8 @@ public class UpdatePrec
 	private UILabel LblNarrowTip;
 	private UILabel LblMultiBaseTip;
     //private UIProgressBar Progress;
+	private List<LoadingItem> m_loadingItems = new List<LoadingItem>();
     
-	//private UIGrid MyTeamRoles;
-    //private UIGrid RivalTeamRoles;
-
     public float wait_seconds;
     public float wait_loading_seconds;
     
@@ -78,10 +116,7 @@ public class UpdatePrec
     public string rivalName;
 	public System.Action onComplete;
 
-	private bool loaded;
-    private bool isStartLoading = false;
-	private bool loadComplete = false;
-
+	public LoadingStep	m_curLoadingStep = LoadingStep.eInit;
 	public bool pvp = false;
     public bool disConnected = false;
     //public string offName;
@@ -100,15 +135,19 @@ public class UpdatePrec
     //private List<LuaComponent> m_delayLoadLua = null;
 
     private List<UpdatePrec> updatePreclist;
+	private Queue<LoadingCommand> m_loadingQueue = new Queue<LoadingCommand>();
+	private LoadingCommand m_curLoadingCmd;
 
+	//for PVP flat
+	private bool m_pvpLoadPlayer = false;
+	private bool m_pvpLoadUI = false;
+	private bool m_pvpLoadComplete = false;
 
 	void Awake()
     {
-
         updatePreclist = new List<UpdatePrec>();
         m_bInitHandler = false;
 
-		loadComplete = false;
 		GameMatch curMatch = GameSystem.Instance.mClient.mCurMatch;
 		if( curMatch != null && curMatch.leagueType != GameMatch.LeagueType.ePVP &&
 			(curMatch.leagueType != GameMatch.LeagueType.eRegular1V1 || curMatch.GetMatchType() == GameMatch.Type.eCareer3On3) &&
@@ -150,11 +189,44 @@ public class UpdatePrec
 			conn.EnableTimeout(false);
 
         GameSystem.Instance.mClient.mUIManager.isInMatchLoading = true;
+		m_curLoadingStep = LoadingStep.eInit;
     }
+
+	void _GenerateLoadingItem(bool bLeft, bool bSingle)
+	{
+		string strMark = bLeft? "Left" : "Right";
+		List<RoleInfo> roleLists = bLeft ? my_role_list : rival_list;
+
+		if( bSingle )
+		{
+			string strUI = string.Format("Window/Middle/{0}/Grid/{1}Item{2}/Challenge{3}Item", strMark, strMark, 2, strMark);
+			Transform trRoleItem = transform.FindChild(strUI);
+
+			LoadingItem item = new LoadingItem();
+			item.transform = trRoleItem;
+			if( roleLists.Count > 0 )
+				item.ri = roleLists[0];
+			m_loadingItems.Add(item);
+		}
+		else
+		{
+			for (int idx = 1; idx != 4; idx++)
+			{
+				string strUI = string.Format("Window/Middle/{0}/Grid/{1}Item{2}/Challenge{3}Item", strMark, strMark, idx, strMark);
+				Transform trRoleItem = transform.FindChild(strUI);
+
+				LoadingItem item = new LoadingItem();
+				item.transform = trRoleItem;
+				if( roleLists.Count >= 3 )
+					item.ri = roleLists[idx - 1];
+				m_loadingItems.Add(item);
+			}
+		}
+	}
 
 	void OnHandleMatchBeginTimer()
 	{
-		Logger.Log("match begin.");
+		Debug.Log("match begin.");
 		NetworkConn conn = GameSystem.Instance.mNetworkManager.m_gameConn;
 		if(conn == null || conn is VirtualNetworkConn || m_matchBeginPack == null)
 			return;
@@ -177,12 +249,8 @@ public class UpdatePrec
 
 		
 		GameMatch_PVP match = GameSystem.Instance.mClient.mCurMatch as GameMatch_PVP;
-		foreach( FightRole role in resp.home_position.fighters )
-			match.SetPlayerPos(TeamType.TT_HOME, role);
-		foreach( FightRole role in resp.away_position.fighters )
-			match.SetPlayerPos(TeamType.TT_AWAY, role);
-
 		match.OnInitPlayer();
+
         if (MainPlayer.Instance.inPvpJoining)
         {
             GameMsgSender.SendGameBegin();
@@ -203,6 +271,10 @@ public class UpdatePrec
 			SingleBaseBg.SetActive(single);
 			MultiBaseBg.SetActive(!single);
 		}
+
+		m_loadingItems.Clear();
+		_GenerateLoadingItem(true, single);
+		_GenerateLoadingItem(false, single);
 	}
 
 	void _InitGameMsgHandler()
@@ -223,7 +295,7 @@ public class UpdatePrec
     void HandleLoadProgress(Pack pack)
     {
         PVPLoadProgressBroadcast resp = Serializer.Deserialize<PVPLoadProgressBroadcast>(new MemoryStream(pack.buffer));
-        RefreshPlayerPercentagePVP((int)resp.progress,resp.acc_id);
+		_RefreshUIPercFunc((int)resp.acc_id, (int)resp.progress);
     }
 
     void HandleLoadComplete(Pack pack)
@@ -238,7 +310,7 @@ public class UpdatePrec
 			return;
 		}
 
-		Logger.Log("Player: " + resp.load_acc_id + " load complete.");
+		Debug.Log("Player: " + resp.load_acc_id + " load complete.");
 		
 		List<LuaComponent> items;
 		if( !mapPlayerIdLoadingState.TryGetValue( resp.load_acc_id, out items ) )
@@ -267,22 +339,49 @@ public class UpdatePrec
     {
         for (int i = updatePreclist.Count - 1; i >= 0; i--)
         {
-            updatePreclist[i].NowFrame++;
-            if (updatePreclist[i].NowFrame== updatePreclist[i].PrecFrame)
+			UpdatePrec up = updatePreclist[i];
+			up.curTime += Time.deltaTime;
+			if (up.curTime > updatePreclist[i].targetTime )
             {
-                updatePreclist[i].PrecValue--;
-                updatePreclist[i].NowFrame = 0;
-                RefreshLoadingUiPercentage(updatePreclist[i].transform, 1);
+				up.PrecValue--;
+				up.curTime = 0.0f;
+				up.loadingItem.percentage++;
+				LuaComponent loadingItem = up.loadingItem.transform.GetComponent<LuaComponent>();
+				if( loadingItem.table != null )
+					loadingItem.table.Set("loadingState", CommonFunction.GetConstString("STR_LOADING") + up.loadingItem.percentage + "%");
             }
-            if (updatePreclist[i].PrecValue == 0)
+			if (up.PrecValue == 0)
             {
+				if( m_curLoadingCmd != null )
+				{
+					if( up.loadingItem.ri != null )
+					{
+						if( up.loadingItem.ri.acc_id == MainPlayer.Instance.AccountID )
+							m_curLoadingCmd.m_bDone = true;
+					}
+					else
+						m_curLoadingCmd.m_bDone = true;
+				}
+
                 updatePreclist.RemoveAt(i);
             }
         }
 
 		_InitGameMsgHandler();
 
-        if (!isStartLoading)
+		//loading queue process
+		if( m_curLoadingCmd == null && m_loadingQueue.Count != 0 )
+		{
+			m_curLoadingCmd = m_loadingQueue.Dequeue();
+			m_curLoadingCmd.Execute();
+		}
+		if( m_curLoadingCmd != null && m_curLoadingCmd.m_bDone)
+		{
+			if( m_curLoadingCmd.m_bFinalCmd )
+				m_curLoadingStep = LoadingStep.eLoadingComplete;
+			m_curLoadingCmd = null;
+		}
+		if (m_curLoadingStep == LoadingStep.eInit)
 			return;
 
 		if (m_wait != null)
@@ -291,26 +390,36 @@ public class UpdatePrec
 		GameMatch_PVP match = GameSystem.Instance.mClient.mCurMatch as GameMatch_PVP;
 		if( match == null )
 		{
-			if (loaded)
+			if (m_curLoadingStep == LoadingStep.eLoadingComplete)
 			{
-				GameSystem.Instance.mClient.pause = false;
 				if( onComplete != null )
 					onComplete();
-				loadComplete = true;
 				Object.Destroy(gameObject);
 			}
 		}
 		else
 		{
-			if (loaded && match.m_bPlayerBuildDone && !loadComplete)
+			if (m_curLoadingStep == LoadingStep.eLoadedScene && match.m_bPlayerDataReady && !m_pvpLoadPlayer)
+			{
+				LoadCharacter(GameSystem.Instance.mClient.mPlayerManager, match);
+				m_pvpLoadPlayer = true;
+			}
+
+			if (m_curLoadingStep == LoadingStep.eLoadedPlayers && !m_pvpLoadUI)
+			{
+				LoadUI(match);
+				m_pvpLoadUI = true;
+			}
+
+			if (m_curLoadingStep == LoadingStep.eLoadingComplete && !m_pvpLoadComplete)
 			{
 				if( onComplete != null )
 					onComplete();
+				m_pvpLoadComplete = true;
 				GameMsgSender.SendLoadingComplete(match.GetMatchType());
-				loadComplete = true;
 			}
 
-			if (loaded && disConnected)
+			if (m_curLoadingStep == LoadingStep.eLoadingComplete && disConnected)
 			{
 				disConnected = false;
 				ShowOffLine();
@@ -331,28 +440,20 @@ public class UpdatePrec
             }
 		}
 	}
-	
-	void OnLevelWasLoaded(int level)
+
+	public void OnSceneLoaded()
 	{
-		Logger.Log("UIChallengeLoading.OnLevelWasLoaded:" + Application.loadedLevelName);
-		if (Application.loadedLevelName == scene_name) {
-            loaded = false;
-            if (pvp)
-            {
-                GameMsgSender.SendPVPLoadProgress(50);
-            }
-            else
-            {
-                RefreshUiPercentage(50);
-            }
-        }
+		if (pvp)
+			GameMsgSender.SendPVPLoadProgress(50);
 		else
-			Object.Destroy(gameObject);
+			_RefreshUIPercFunc(50);
+
+		m_curLoadingStep = LoadingStep.eLoadedScene;
 	}
 
 	void OnDestroy()
 	{
-		Logger.Log("UIChallengeLoading.OnDestroy");
+		Debug.Log("UIChallengeLoading.OnDestroy");
 		NetworkManager conn = GameSystem.Instance.mNetworkManager;
 		if(conn == null)
 			return;
@@ -406,8 +507,7 @@ public class UpdatePrec
 		BGSimple.gameObject.SetActive(true);
 		BGSimple.mainTexture = go as Texture;
 
-		StartCoroutine(StartLoading());
-		StartCoroutine(LoadScene());
+		LoadScene();
 	}
 
     public void Refresh(bool bOnlyPic)
@@ -439,7 +539,7 @@ public class UpdatePrec
 			Title.spriteName = curMatch.LeagueTypeToSpriteName();
 			Title.MakePixelPerfect ();
 	        
-			Logger.Log("Refresh team");
+			Debug.Log("Refresh team");
 			if( pvp )
 			{
 				if (myName != null && rivalName != null)
@@ -479,320 +579,112 @@ public class UpdatePrec
 	        SetRivalName();
             SetTeamMatesScore();
             SetRivalScore();
-			StartCoroutine(StartLoading());
-			StartCoroutine(LoadScene());
+
+			LoadScene();
 		}
     }
 
-    public void LoadResources(List<string> uiNames, PlayerManager pm)
+	public void LoadScene()
+	{
+		m_loadingQueue.Enqueue( new LoadingCommand(()=>{
+			Debug.Log("Loading scene");
+			m_curLoadingStep = LoadingStep.eLoadingScene;
+			StartCoroutine(_LoadScene());
+		}) );
+	}
+
+	public void LoadCharacter(PlayerManager pm, GameMatch match)
     {
-        StartCoroutine(LoadUi(uiNames, pm));
+		m_loadingQueue.Enqueue( new LoadingCommand(()=>{
+			Debug.Log("Loading character");
+			m_curLoadingStep = LoadingStep.eLoadingPlayers;
+			StartCoroutine(_LoadCharacters(pm, match));
+		}) );
     }
 
-    private IEnumerator LoadUi(List<string> uiNames, PlayerManager pm)
-    {
-        yield return new WaitForSeconds(2.5f);
-        foreach (Player player in pm)
-        {
-            //GameSystem.Instance.mClient.mCurMatch._CreateTeamMember(player);
-            if (!pvp)
-            {
-                RefreshPlayerPercentage(30, player.m_id);
-               
-            }
-            yield return new WaitForEndOfFrame();
-        }
-        if (pvp)
-        {
-            GameMsgSender.SendPVPLoadProgress(30);
-        }
+	public void LoadUI(GameMatch match)
+	{
+		List<string> uiList;
+		match.GetUIList(out uiList);
 
+		m_loadingQueue.Enqueue( new LoadingCommand(()=>{
+			Debug.Log("Loading ui");
+			m_curLoadingStep = LoadingStep.eLoadingUI;
+			StartCoroutine(_LoadUi(uiList));
+		}, true) );
+	}
+
+	private IEnumerator _LoadCharacters(PlayerManager pm, GameMatch match)
+	{
+		yield return new WaitForSeconds(1.5f);
+
+		if (pvp)
+		{
+			GameMatch_PVP match_pvp = match as GameMatch_PVP;
+			match_pvp.LoadPlayers();
+			GameMsgSender.SendPVPLoadProgress(30);
+		}
+		else
+		{
+			foreach (Player player in pm)
+				GameSystem.Instance.mClient.mCurMatch.CreateTeamMember(player);
+			_RefreshUIPercFunc(30);
+		}
+		m_curLoadingStep = LoadingStep.eLoadedPlayers;
+		Debug.Log("Load character.");
+	}
+
+    private IEnumerator _LoadUi(List<string> uiNames)
+    {
         yield return new WaitForSeconds(1.5f);
         for (int i = 0; i < uiNames.Count; i++)
         {
             ResourceLoadManager.Instance.LoadPrefab(uiNames[i]);
-          
-            yield return new WaitForEndOfFrame();
         }
+
         if (pvp)
         {
             GameMsgSender.SendPVPLoadProgress((uint)20);
         }
         else
         {
-            RefreshUiPercentage(20);
+			_RefreshUIPercFunc(20);
         }
-        yield return new WaitForSeconds(1f);
-        loaded = true;
+		m_curLoadingStep = LoadingStep.eLoadedUI;
+		Debug.Log("Load ui.");
     }
 
-    private void SetPrecValueAndTime(Transform transform,int addPerc)
+	private void _SetPrecValueAndTime(LoadingItem loadingItem, int addPerc)
     {
-        int time = 0;
-        if (addPerc==50)
-        {
-            time = 25;
-        }else if (addPerc==20)
-        {
-            time = 10;
-        }
-        else if (addPerc == 30)
-        {
-            time = 15;
-        }
+		float fTime = 2.0f / (float)50 * (float)addPerc;
+
         UpdatePrec up = new UpdatePrec();
-        up.PrecFrame = time * 3/ addPerc;
+		up.targetTime = fTime / (float)addPerc;
         up.PrecValue = addPerc;
-        up.transform = transform;
+		up.loadingItem = loadingItem;
         updatePreclist.Add(up);
     }
 
-    /// <summary>
-    /// PvP更新加载百分比
-    /// </summary>
-    /// <param name="addPerc"></param>
-    void RefreshPlayerPercentagePVP(int addPerc, uint id)
-    {
-        //直接刷新面板
-        if (my_role_list != null && my_role_list.Count > 0)
-        {
-            if (single)
-            {
-                string str = "LeftItem2";
-                Transform role = transform.FindChild("Window/Middle/Left/Grid/" + str + "/ChallengeLeftItem");
-                RoleInfo ri = my_role_list[0];
-                if (ri.acc_id == id)
-                {
-                    SetPrecValueAndTime(role,addPerc);
-                    return;
-                }
-            }
-            else
-            {
-                for (int k = 0; k < 3; k++)
-                {
-                    string str = "LeftItem" + (k + 1);
-                    Transform role = transform.FindChild("Window/Middle/Left/Grid/" + str + "/ChallengeLeftItem");
-                    if (k >= my_role_list.Count && role != null)
-                    {
-                        role.gameObject.SetActive(false);
-                        continue;
-                    }
-                    RoleInfo ri = my_role_list[k];
-                    if (ri.acc_id == id)
-                    {
-                        SetPrecValueAndTime(role, addPerc);
-                        return;
-                    }
-                }
-            }
-        }
-        if (rival_list != null && rival_list.Count > 0)
-        {
-            if (single)
-            {
-                string str = "RightItem2";
-                Transform role = transform.FindChild("Window/Middle/Right/Grid/" + str + "/ChallengeRightItem");
-                role.gameObject.SetActive(true);
-                RoleInfo ri = rival_list[0];
-                if (ri.acc_id == id)
-                {
-                    SetPrecValueAndTime(role, addPerc);
-                    return;
-                }
-            }
-            else
-            {
-                for (int k = 0; k < 3; k++)
-                {
-                    string str = "RightItem" + (k + 1);
-                    Transform role = transform.FindChild("Window/Middle/Right/Grid/" + str + "/ChallengeRightItem");
-                    if (k >= rival_list.Count && role != null)
-                    {
-                        role.gameObject.SetActive(false);
-                        continue;
-                    }
-                    role.gameObject.SetActive(true);
-                    RoleInfo ri = rival_list[k];
-                    if (ri.acc_id == id)
-                    {
-                        SetPrecValueAndTime(role, addPerc);
-                        return;
-                    }
-                }
-            }
-        }
-    }
+	void _RefreshUIPercFunc(int iAddPerc)
+	{
+		foreach( LoadingItem item in m_loadingItems )
+			_SetPrecValueAndTime(item, iAddPerc);
+	}
 
-    /// <summary>
-    /// pve更新加载百分比
-    /// </summary>
-    /// <param name="addPerc"></param>
-    void RefreshPlayerPercentage(int addPerc, uint id)
-    {
-        //直接刷新面板
-        if (my_role_player_list != null && my_role_player_list.Count > 0)
-        {
-            if (single)
-            {
-                string str = "LeftItem2";
-                Transform role = transform.FindChild("Window/Middle/Left/Grid/" + str + "/ChallengeLeftItem");
-                Player ri = my_role_player_list[0];
-                if (ri.m_id == id)
-                {
-                    SetPrecValueAndTime(role, addPerc);
-                    return;
-                }
-            }
-            else
-            {
-                for (int k = 0; k < 3; k++)
-                {
-                    string str = "LeftItem" + (k + 1);
-                    Transform role = transform.FindChild("Window/Middle/Left/Grid/" + str + "/ChallengeLeftItem");
-                    if (k >= my_role_player_list.Count && role != null)
-                    {
-                        role.gameObject.SetActive(false);
-                        continue;
-                    }
-                    Player ri = my_role_player_list[k];
-                    if (ri.m_id == id)
-                    {
-                        SetPrecValueAndTime(role, addPerc);
-                        return;
-                    }
-                }
-            }
-        }
-        if (rival_player_list != null && rival_player_list.Count > 0)
-        {
-            if (single)
-            {
-                string str = "RightItem2";
-                Transform role = transform.FindChild("Window/Middle/Right/Grid/" + str + "/ChallengeRightItem");
-                role.gameObject.SetActive(true);
-                Player ri = rival_player_list[0];
-                if (ri.m_id == id)
-                {
-                    SetPrecValueAndTime(role, addPerc);
-                    return;
-                }
-            }
-            else
-            {
-                for (int k = 0; k < 3; k++)
-                {
-                    string str = "RightItem" + (k + 1);
-                    Transform role = transform.FindChild("Window/Middle/Right/Grid/" + str + "/ChallengeRightItem");
-                    if (k >= rival_player_list.Count && role != null)
-                    {
-                        role.gameObject.SetActive(false);
-                        continue;
-                    }
-                    role.gameObject.SetActive(true);
-                    Player ri = rival_player_list[k];
-                    if (ri.m_id == id)
-                    {
-                        SetPrecValueAndTime(role, addPerc);
-                        return;
-                    }
-                }
-            }
-        }
-    }
-    /// <summary>
-    ///打电脑更新Ui加载百分比
-    /// </summary>
-    /// <param name="addPerc">百分比值</param>
-    void RefreshUiPercentage(int addPerc)
-    {
-        //直接刷新面板
-        if (my_role_player_list != null&& my_role_player_list.Count>0)
-        {
-            if (single)
-            {
-                string str = "LeftItem2";
-                Transform role = transform.FindChild("Window/Middle/Left/Grid/" + str + "/ChallengeLeftItem");
-                role.gameObject.SetActive(true);
-                Player ri = my_role_player_list[0];
-                SetPrecValueAndTime(role, addPerc);
-            }
-            else
-            {
-                for (int k = 0; k < 3; k++)
-                {
-                    string str = "LeftItem" + (k + 1);
-                    Transform role = transform.FindChild("Window/Middle/Left/Grid/" + str + "/ChallengeLeftItem");
-                    if (k >= my_role_player_list.Count && role != null)
-                    {
-                        role.gameObject.SetActive(false);
-                        continue;
-                    }
-                    role.gameObject.SetActive(true);
-                    Player ri = my_role_player_list[k];
-                    if (ri == null)
-                        continue;
-                    SetPrecValueAndTime(role, addPerc);
-                }
-            }
-        }
-        if (rival_player_list != null && rival_player_list.Count > 0)
-        {
+	void _RefreshUIPercFunc(int id, int iAddPerc)
+	{
+		List<LoadingItem> loadingItems = m_loadingItems.FindAll( (LoadingItem item)=>{ return item.ri.acc_id == id; } );
+		foreach( LoadingItem item in loadingItems )
+			_SetPrecValueAndTime(item, iAddPerc);
+	}
 
-            if (single)
-            {
-                string str = "RightItem2";
-                Transform role = transform.FindChild("Window/Middle/Right/Grid/" + str + "/ChallengeRightItem");
-                role.gameObject.SetActive(true);
-                Player ri = rival_player_list[0];
-                SetPrecValueAndTime(role, addPerc);
-            }
-            else
-            {
-                for (int k = 0; k < 3; k++)
-                {
-                    string str = "RightItem" + (k + 1);
-                    Transform role = transform.FindChild("Window/Middle/Right/Grid/" + str + "/ChallengeRightItem");
-                    if (k >= rival_player_list.Count && role != null)
-                    {
-                        role.gameObject.SetActive(false);
-                        continue;
-                    }
-                    role.gameObject.SetActive(true);
-                    Player ri = rival_player_list[k];
-                    if (ri == null)
-                        continue;
-                    SetPrecValueAndTime(role, addPerc);
-                }
-            }
-        }
-    }
-
-
-    void RefreshLoadingUiPercentage(Transform role,float Perc)
-    {
-        LuaComponent loadingItem = role.GetComponent<LuaComponent>();
-        if (loadingItem != null && loadingItem.table!=null)
-        {
-            string loadingState = loadingItem.table["loadingState"].ToString();
-            if (loadingState.Length>5) {
-                float ShowPerc = float.Parse(loadingState.Substring(4, loadingState.Length - 5)) + Perc;
-                if (ShowPerc > 100)
-                {
-                    ShowPerc = 100;
-                }
-                loadingItem.table.Set("loadingState", CommonFunction.GetConstString("STR_LOADING") + ShowPerc + "%");
-            }
-        }
-    }
-
-    private IEnumerator LoadScene()
+    private IEnumerator _LoadScene()
 	{
 		yield return new WaitForSeconds(wait_seconds);
 		uint sceneId = 0;
 		if( !uint.TryParse(scene_name, out sceneId) )
 		{
-			Logger.Log("UIChallengeLoading.LoadScene " + scene_name);
+			Debug.Log("UIChallengeLoading.LoadScene " + scene_name);
 			Application.LoadLevelAsync(scene_name);
 		}
 		else
@@ -802,7 +694,7 @@ public class UpdatePrec
             	Debug.LogError("Can not find scene info: " + scene.id);
 			else
 			{
-				Logger.Log("UIChallengeLoading.LoadScene " + scene.resourceId);
+				Debug.Log("UIChallengeLoading.LoadScene " + scene.resourceId);
                 Application.LoadLevelAsync(scene.resourceId);
 				scene_name = scene.resourceId;
 			}
@@ -1033,37 +925,6 @@ public class UpdatePrec
 		//TweenRivalTeamRoles();
 	}
 
-	//我的队伍角色
-	/*
-	private void TweenMyTeamRoles()
-    {
-        int x = 0;
-        int y = 0;
-        for (int i = 0; i < MyTeamRoles.transform.childCount; i++)
-        {
-            TweenPosition pos = MyTeamRoles.transform.GetChild(i).GetComponent<TweenPosition>();
-            pos.from = new Vector3(x, y);
-            pos.value = pos.from;
-            pos.to = new Vector3(x + 1450, y);
-            y -= 200;
-        }
-    }
-    //地方队伍角色
-    private void TweenRivalTeamRoles()
-    {
-        int x = 0;
-        int y = 0;
-        for (int i = 0; i < RivalTeamRoles.transform.childCount; i++)
-        {
-            TweenPosition pos = RivalTeamRoles.transform.GetChild(i).GetComponent<TweenPosition>();
-            pos.from = new Vector3(x, y);
-            pos.value = pos.from;
-            pos.to = new Vector3(x - 1450, y);
-            y -= 200;
-        }
-    }
-    */
-	
     private void SetTeamMatesName()
     {
         if (my_role_name_list.Count > 0)
@@ -1099,7 +960,7 @@ public class UpdatePrec
     private void SetTeamMatesScore()
     {
         GameMatch curMatch = GameSystem.Instance.mClient.mCurMatch;
-        Logger.Log("SetTeamMateScore curMatch.leagueType =" + curMatch.leagueType);
+        Debug.Log("SetTeamMateScore curMatch.leagueType =" + curMatch.leagueType);
 
 
         if (my_role_score_list.Count > 0 
@@ -1122,7 +983,7 @@ public class UpdatePrec
     private void SetRivalScore()
     {
         GameMatch curMatch = GameSystem.Instance.mClient.mCurMatch;
-        Logger.Log("SetRival MateScore curMatch.leagueType =" + curMatch.leagueType);
+        Debug.Log("SetRival MateScore curMatch.leagueType =" + curMatch.leagueType);
 
         if (rival_score_list.Count > 0 
             && curMatch != null 
@@ -1152,13 +1013,6 @@ public class UpdatePrec
         RoleBaseData2 data = GameSystem.Instance.RoleBaseConfigData2.GetConfigData(role_id);
         item.transform.FindChild("Name").GetComponent<UILabel>().text = data.name;
         item.transform.FindChild("Profession").GetComponent<UISprite>().spriteName = ((PositionType)data.position).ToString().Substring(3);  
-    }
-
-    private IEnumerator StartLoading()
-    {
-		Logger.Log("Wait for " + wait_loading_seconds + "seconds");
-        yield return new WaitForSeconds(wait_loading_seconds);
-        isStartLoading = true;
     }
 
     private void ShowOffLine()

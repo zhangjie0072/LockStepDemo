@@ -33,7 +33,7 @@ public class PlayerState_BackBlock : PlayerState
 		m_curAction = m_mapAnimType[m_animType];
 
 		isCompeteWin = (m_match.m_context.m_backToBackWinnerId == m_player.m_roomPosId);
-		Logger.Log("BackBlock: " + isCompeteWin + " m_match.m_context.m_backToBackWinnerId: " + m_match.m_context.m_backToBackWinnerId );
+		Debug.Log("BackBlock: " + isCompeteWin + " m_match.m_context.m_backToBackWinnerId: " + m_match.m_context.m_backToBackWinnerId );
 
         m_player.forward = -dirAttackerToBasket;
 		m_player.animMgr.CrossFade(m_curAction, false);

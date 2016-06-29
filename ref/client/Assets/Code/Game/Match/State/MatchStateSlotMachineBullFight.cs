@@ -22,7 +22,7 @@ public class MatchStateSlotMachineBullFight : MatchState
 	{
 		base.OnEnter(lastState);
 
-		m_match.m_mainRole.m_inputDispatcher.m_enable = false;
+		InputReader.Instance.enabled = false;
 		NGUITools.SetActive(match.slotMachine.gameObject, true);
 		NGUITools.BringForward(match.slotMachine.gameObject);
 		match.slotMachine.onCreateItem += OnCreateSlotMachineItem;
@@ -32,9 +32,9 @@ public class MatchStateSlotMachineBullFight : MatchState
 		timerBegin.stop = false;
 	}
 	
-	override public void Update (IM.Number fDeltaTime)
+	override public void GameUpdate (IM.Number fDeltaTime)
 	{
-		base.Update(fDeltaTime);
+		base.GameUpdate(fDeltaTime);
 
 		if (timerBegin != null)
 			timerBegin.Update(fDeltaTime);
@@ -44,7 +44,7 @@ public class MatchStateSlotMachineBullFight : MatchState
 
 	public override void OnExit()
 	{
-		m_match.m_mainRole.m_inputDispatcher.m_enable = true;
+		InputReader.Instance.enabled = true;
 	}
 
 	private void OnCreateSlotMachineItem(GameObject item, int index)
@@ -52,8 +52,8 @@ public class MatchStateSlotMachineBullFight : MatchState
 		items[index] = item;
 		if (index % 2 == 0)
 		{
-			item.transform.FindChild("Name").GetComponent<UILabel>().text = match.m_mainRole.m_name;
-			RoleBaseData2 data = GameSystem.Instance.RoleBaseConfigData2.GetConfigData(match.m_mainRole.m_roleInfo.id);
+			item.transform.FindChild("Name").GetComponent<UILabel>().text = match.mainRole.m_name;
+			RoleBaseData2 data = GameSystem.Instance.RoleBaseConfigData2.GetConfigData(match.mainRole.m_roleInfo.id);
 			item.transform.FindChild("Icon").GetComponent<UISprite>().spriteName = data.icon;
 			string position = ((PositionType)data.position).ToString();
 			item.transform.FindChild("Position").GetComponent<UISprite>().spriteName = position;

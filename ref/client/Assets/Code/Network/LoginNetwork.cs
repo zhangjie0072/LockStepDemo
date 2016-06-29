@@ -33,7 +33,7 @@ public class LoginNetwork : Singleton<LoginNetwork>
 
             //GameSystem.Instance.mClient.mUIManager.DisplayError("onChangeServer------7 " + port);
 
-            Logger.Log("--- Connecting to LoginServer: " + serverIP + " -- " + port);
+            Debug.Log("--- Connecting to LoginServer: " + serverIP + " -- " + port);
 
             GameSystem.Instance.mNetworkManager.ConnectToLS(serverIP, port);
         }
@@ -46,19 +46,19 @@ public class LoginNetwork : Singleton<LoginNetwork>
 
 	public void HandleSDKInfo(string str, char splitChar,bool isRefresh)
 	{
-        Logger.Log("HandleSDKInfo isRefresh =" + isRefresh);
+        Debug.Log("HandleSDKInfo isRefresh =" + isRefresh);
         UIManager.Instance.LoginCtrl.canSwitch = true;
         string[] items = str.Split(splitChar);
         SetSDKInfo(items[0], items[1], items[2], items[3], items[4], isRefresh);
 #if ANDROID_SDK || IOS_SDK
-        Logger.Log("HanldeSDKInfo - 1A");
+        Debug.Log("HanldeSDKInfo - 1A");
         MainPlayer.Instance.CanGoCenter = items[5].Equals("1");
         MainPlayer.Instance.CanSwitchAccount = items[6].Equals("1");
         MainPlayer.Instance.CanLogout = items[7].Equals("1");
 
-        Logger.Log("HandlerSDKInfo + CanGoCenter=" + MainPlayer.Instance.CanGoCenter);
-        Logger.Log("HandlerSDKInfo + CanSwitchAccount=" + MainPlayer.Instance.CanSwitchAccount);
-        Logger.Log("HandlerSDKInfo + CanLogout=" + MainPlayer.Instance.CanLogout);
+        Debug.Log("HandlerSDKInfo + CanGoCenter=" + MainPlayer.Instance.CanGoCenter);
+        Debug.Log("HandlerSDKInfo + CanSwitchAccount=" + MainPlayer.Instance.CanSwitchAccount);
+        Debug.Log("HandlerSDKInfo + CanLogout=" + MainPlayer.Instance.CanLogout);
         if( !MainPlayer.Instance.CanGoCenter )
         {
             UIManager.Instance.LoginCtrl._ui.lbSwitch.gameObject.SetActive(false);
@@ -66,13 +66,13 @@ public class LoginNetwork : Singleton<LoginNetwork>
 
         if( MainPlayer.Instance.CanSwitchAccount )
         {
-            Logger.Log("1927 - Set Login Switch gameObject true");
+            Debug.Log("1927 - Set Login Switch gameObject true");
             UIManager.Instance.LoginCtrl._ui.ButtonSwitch.gameObject.SetActive(true);
         }
 
         if( MainPlayer.Instance.CanLogout)
         {
-            Logger.Log("1927 - Set Login Logout gameObject true");
+            Debug.Log("1927 - Set Login Logout gameObject true");
             UIManager.Instance.LoginCtrl._ui.ButtonCancle.gameObject.SetActive(true);
         }
 #endif
@@ -94,28 +94,28 @@ public class LoginNetwork : Singleton<LoginNetwork>
         serverId = serverIdSDK;
 
 #if IOS_SDK || ANDROID_SDK
-        Logger.Log("SetSDKInfo called, MainPlayer.Instance.SDkLogin = " + MainPlayer.Instance.SDKLogin);
+        Debug.Log("SetSDKInfo called, MainPlayer.Instance.SDkLogin = " + MainPlayer.Instance.SDKLogin);
         //if (!MainPlayer.Instance.SDKLogin)
         {
-            Logger.Log("SetSDK userName=" + userName);
+            Debug.Log("SetSDK userName=" + userName);
             if (userName == null || userName.Equals(""))
             {
-                Logger.Log("GameSystem.Instance.ConstStringConfigData" + GameSystem.Instance.ConstStringConfigData);
+                Debug.Log("GameSystem.Instance.ConstStringConfigData" + GameSystem.Instance.ConstStringConfigData);
                 if (GameSystem.Instance.ConstStringConfigData != null)
                 {
-                    Logger.Log("SetSDK --- 1");
+                    Debug.Log("SetSDK --- 1");
                     userName = CommonFunction.GetConstString("STR_TOURIST");
-                    Logger.Log("SetSDK --- 2");
+                    Debug.Log("SetSDK --- 2");
                     if (string.Compare(userName, "STR_TOURIST") == 0)
                     {
                         // 当资源没有加载的时候,强行显示游客.
-                        Logger.Log("SetSDK --- 3");
+                        Debug.Log("SetSDK --- 3");
                         userName = "游客";
                     }
                 }
                 else
                 {
-                    Logger.Log("SetSDK --- 4");
+                    Debug.Log("SetSDK --- 4");
                     userName = "游客";
                 }
                 MainPlayer.Instance.Tourist = true;
@@ -126,12 +126,12 @@ public class LoginNetwork : Singleton<LoginNetwork>
             GameSystem.Instance.mClient.mUIManager.LoginCtrl.SetUserName(userName);
             MainPlayer.Instance.SDKLogin = true;
 
-            Logger.Log("SetSDKInfo MainPlayer.Instance.SDkLogin +" + MainPlayer.Instance.SDKLogin);
-            Logger.Log("SetSDKInfo LoginNetwork.Instance.isVerifySDK =" + LoginNetwork.Instance.isVerifySDK);
-            Logger.Log("GameSystem.Instance.mNetworkManager.m_loginConn = " + GameSystem.Instance.mNetworkManager.m_loginConn);
+            Debug.Log("SetSDKInfo MainPlayer.Instance.SDkLogin +" + MainPlayer.Instance.SDKLogin);
+            Debug.Log("SetSDKInfo LoginNetwork.Instance.isVerifySDK =" + LoginNetwork.Instance.isVerifySDK);
+            Debug.Log("GameSystem.Instance.mNetworkManager.m_loginConn = " + GameSystem.Instance.mNetworkManager.m_loginConn);
             if (GameSystem.Instance.mNetworkManager.m_loginConn != null && !isVerifySDK)
             {
-                Logger.Log("VerifySDK in SetSDKInfo");
+                Debug.Log("VerifySDK in SetSDKInfo");
                 isVerifySDK = true;
                 VerifySDKReq();
             }
@@ -143,7 +143,7 @@ public class LoginNetwork : Singleton<LoginNetwork>
 
 	public void DoConnectToLS()
 	{
-        Logger.Log("1927 - LoginNetwork DOConnectToLS is called");
+        Debug.Log("1927 - LoginNetwork DOConnectToLS is called");
 		if (userName == null || userName.Equals ("")) 
         {
             //userName = CommonFunction.GetConstString("STR_TOURIST");
@@ -170,12 +170,12 @@ public class LoginNetwork : Singleton<LoginNetwork>
 		verifySdk.token_id = tokenId;
 		verifySdk.nick_name = nickName;
 		verifySdk.user_name = userName;
-		Logger.Log("-------------SDK response verifySdk.cdkey ="+ verifySdk.cdkey );
-		Logger.Log("-------------SDK response verifySdk.token_id ="+ verifySdk.token_id );
-		Logger.Log("-------------SDK response verifySdk.nick_name ="+ verifySdk.nick_name );
-		Logger.Log("-------------SDK response verifySdk.user_name ="+ verifySdk.user_name );
+		Debug.Log("-------------SDK response verifySdk.cdkey ="+ verifySdk.cdkey );
+		Debug.Log("-------------SDK response verifySdk.token_id ="+ verifySdk.token_id );
+		Debug.Log("-------------SDK response verifySdk.nick_name ="+ verifySdk.nick_name );
+		Debug.Log("-------------SDK response verifySdk.user_name ="+ verifySdk.user_name );
 
-        Logger.Log("GameSystem.Instance.mNetworkManager.m_loginConn = " + GameSystem.Instance.mNetworkManager.m_loginConn);
+        Debug.Log("GameSystem.Instance.mNetworkManager.m_loginConn = " + GameSystem.Instance.mNetworkManager.m_loginConn);
 		GameSystem.Instance.mNetworkManager.m_loginConn.SendPack<VerifySdk>(0, verifySdk, MsgID.VerifySdkID);
 	}
 
@@ -183,7 +183,7 @@ public class LoginNetwork : Singleton<LoginNetwork>
     //CDKey验证请求
     public bool VerifyCDKeyReq()
     {
-        Logger.Log("-------------VerifyCDKeyReq");
+        Debug.Log("-------------VerifyCDKeyReq");
 
         uint ID = LoginIDManager.GetPlatServerID();
         VerifyCDKey verifyCDKey = new VerifyCDKey();
@@ -210,7 +210,7 @@ public class LoginNetwork : Singleton<LoginNetwork>
     //ServerList请求
     public void ServerInfoReq() 
     {
-        Logger.Log("-------------ServerInfoReq");
+        Debug.Log("-------------ServerInfoReq");
 
         ServerInfoReq serverInfo = new ServerInfoReq();
 
@@ -228,7 +228,7 @@ public class LoginNetwork : Singleton<LoginNetwork>
             return;
         }
         serverInfo.mac_add = SystemInfo.deviceUniqueIdentifier;
-		Logger.Log("-------------ServerInfoReq serverInfo.cdkey =" + serverInfo.cdkey );
+		Debug.Log("-------------ServerInfoReq serverInfo.cdkey =" + serverInfo.cdkey );
         GameSystem.Instance.mNetworkManager.m_loginConn.SendPack<ServerInfoReq>(0, serverInfo, MsgID.ServerInfoReqID);
     }
 }

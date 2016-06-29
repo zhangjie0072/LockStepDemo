@@ -43,6 +43,8 @@ public class MatchStatePlaying : MatchState,GameMatch.Count24Listener
 
     public void OnMatchTimeUp()
     {
+        m_match.m_gameMathCountEnable = false;
+        m_match.m_uiMatch.UpdateTime(0f);
 		m_finalHitBalls.Clear();
 		foreach (UBasketball ball in m_match.mCurScene.balls)
 		{
@@ -63,12 +65,15 @@ public class MatchStatePlaying : MatchState,GameMatch.Count24Listener
         if (mResIndicator == null)
             mResIndicator = ResourceLoadManager.Instance.LoadPrefab("Prefab/indicator/pre_3pt");
         if (mGoIndicator == null)
+		{
             mGoIndicator = GameObject.Instantiate(mResIndicator) as GameObject;
+			GameUtils.SetRenderQueue(mGoIndicator, RenderQueue.PlayGroundLine + 2);
+		}
 
         if (bShow)
         {
             mGoIndicator.SetActive(true);
-            Animation anim = mGoIndicator.GetComponent<Animation>();
+			Animation anim = mGoIndicator.GetComponentInChildren<Animation>();
             int iAnimCnt = anim.GetClipCount();
             AnimationClip clip = anim.GetClip("pt");
             anim.Play();
@@ -95,7 +100,7 @@ public class MatchStatePlaying : MatchState,GameMatch.Count24Listener
             if (animEvent == PlayerActionEventHandler.AnimEvent.eRebound)
             {
                 sender.mStatistics.success_rebound_times++;
-                //Logger.Log("rebound");
+                //Debug.Log("rebound");
             }
 			else
 			{
@@ -123,7 +128,7 @@ public class MatchStatePlaying : MatchState,GameMatch.Count24Listener
 					mRefreshCounter = false;
 					if (m_match.m_uiMatch != null && m_match.EnableCounter24())
 					{
-						m_match.m_uiMatch.ShowCounter(true, sender.m_team.m_side == m_match.m_mainRole.m_team.m_side );
+						m_match.m_uiMatch.ShowCounter(true, sender.m_team.m_side == Team.Side.eHome);
                         m_match.m_count24TimeStop = false;
 					}
 				}
@@ -175,7 +180,7 @@ public class MatchStatePlaying : MatchState,GameMatch.Count24Listener
 			{
 				if (m_match.m_uiMatch != null && m_match.EnableCounter24())
 				{
-					m_match.m_uiMatch.ShowCounter(true, sender.m_team.m_side == m_match.m_mainRole.m_team.m_side );
+					m_match.m_uiMatch.ShowCounter(true, sender.m_team.m_side == m_match.m_homeTeam.m_side);
                     m_match.m_count24TimeStop = false;
 				}
 			}
@@ -199,9 +204,9 @@ public class MatchStatePlaying : MatchState,GameMatch.Count24Listener
         }
     }
 
-    override public void Update(IM.Number fDeltaTime)
+    override public void GameUpdate(IM.Number fDeltaTime)
     {
-        base.Update(fDeltaTime);
+        base.GameUpdate(fDeltaTime);
 
 		RoadPathManager.Instance.Update(GameSystem.Instance.mClient.mPlayerManager.m_Players);
 
@@ -236,7 +241,7 @@ public class MatchStatePlaying : MatchState,GameMatch.Count24Listener
                 {
                     foreach (Player member in ball.m_owner.m_team.members)
                         member.m_enableAction = false;
-					if( m_match.m_ruler.m_toCheckBallTeam == m_match.m_mainRole.m_team )
+					if( m_match.m_ruler.m_toCheckBallTeam == m_match.mainRole.m_team )
                     	_ShowCheckBallIndicator(true);
                 }
                 else
@@ -246,7 +251,7 @@ public class MatchStatePlaying : MatchState,GameMatch.Count24Listener
 					m_match.m_ruler.m_toCheckBallTeam = null;
                 }
 
-				if( m_match.m_ruler.m_toCheckBallTeam != m_match.m_mainRole.m_team )
+				if( m_match.m_ruler.m_toCheckBallTeam != m_match.mainRole.m_team )
 					_ShowCheckBallIndicator(false);
             }
             else
@@ -258,7 +263,7 @@ public class MatchStatePlaying : MatchState,GameMatch.Count24Listener
 			if (ball.m_ballState == BallState.eRebound || ball.m_bGoal)
             {
                 m_goRebPlacementTip.SetActive(true);
-                m_goRebPlacementTip.transform.position = (Vector3)ball.m_reboundPlacement + Vector3.up * 0.01f;
+                m_goRebPlacementTip.transform.position = (Vector3)ball.m_reboundPlacement + Vector3.up * 0.04f;
             }
             else
                 m_goRebPlacementTip.SetActive(false);
@@ -267,6 +272,7 @@ public class MatchStatePlaying : MatchState,GameMatch.Count24Listener
         {
             UnityEngine.Object resPlacementTip = ResourceLoadManager.Instance.LoadPrefab("Prefab/indicator/RebPlacement");
             m_goRebPlacementTip = GameObject.Instantiate(resPlacementTip) as GameObject;
+			GameUtils.SetRenderQueue(m_goRebPlacementTip, RenderQueue.PlayGroundLine + 1);
             m_goRebPlacementTip.SetActive(false);
         }
         //if (m_match.m_mainRole != null)

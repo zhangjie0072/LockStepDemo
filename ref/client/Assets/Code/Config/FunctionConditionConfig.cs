@@ -72,11 +72,11 @@ public class FunctionConditionConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name);
+		Debug.Log("Config reading " + name);
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            Debug.LogError("LoadConfig failed: " + name);
             return;
         }
 
@@ -105,7 +105,7 @@ public class FunctionConditionConfig
 				data.conditionParams.AddRange(param.Split('&'));
 			}
 			if (data.conditionTypes.Count != data.conditionParams.Count)
-				Logger.LogError("Function condition config error, wrong param num. FuncName: " + data.name);
+				Debug.LogError("Function condition config error, wrong param num. FuncName: " + data.name);
 			data.lockTip = line.SelectSingleNode("lock_tip").InnerText;
 			data.unlockTip = line.SelectSingleNode("unlock_tip").InnerText;
 			foreach (ConditionType type in data.conditionTypes)
@@ -120,6 +120,6 @@ public class FunctionConditionConfig
 			}
 			funcConditions.Add(data.name, data);
 		}
-		Logger.ConfigEnd(name);
+		
 	}
 }

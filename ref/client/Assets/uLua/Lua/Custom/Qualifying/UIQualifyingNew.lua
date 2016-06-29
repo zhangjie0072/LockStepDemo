@@ -47,7 +47,7 @@ lastGrade = nil
 lastScore = nil
 
 function Awake(self)
-    self.btnRule = getChildGameObject(self.transform, "Top/Rule")
+    self.btnRule = getChildGameObject(self.transform, "TopRight/Rule")
     -- self.btnStore = getChildGameObject(self.transform, "Top/Store")
 
 
@@ -57,14 +57,14 @@ function Awake(self)
     -- self.labelWinningStreak = getComponentInChild(self.transform, "Left/WinningStreak/Num", "UILabel")
     -- self.labelHighest = getComponentInChild(self.transform, "Left/Highest/Label", "UILabel")
     -- self.labelStartTime = getComponentInChild(self.transform, "Right/StartTime/Label", "UILabel")
-    self.labelEndTime = getComponentInChild(self.transform, "Text", "UILabel")
+    self.labelEndTime = getComponentInChild(self.transform, "Top/Text", "UILabel")
     --初始化箱子和篮球对象
     for i=1,5 do
-        local btn = getChildGameObject(self.transform, "Middle/Box"..i.."/Box")
+        local btn = getChildGameObject(self.transform, "Center/Box"..i.."/Box")
         if btn then
             btn.name = i
             -- btn:set_tag(0)    --使用tag来判断是否按下 按下为1 否则为0
-            local name = getChildGameObject(self.transform, "Middle/Box"..i.."/Name"):GetComponent('UILabel')
+            local name = getChildGameObject(self.transform, "Center/Box"..i.."/Name"):GetComponent('UILabel')
             local anim = btn.transform:GetComponent('Animator')
             local btnCell = {btn,name,animator,effect,balls={}}
             --箱子
@@ -73,26 +73,26 @@ function Awake(self)
             btnCell.name = name
 
             --可以领取效果
-            btnCell.effect = getChildGameObject(self.transform, "Middle/Box"..i..'/UIEffect1')
+            btnCell.effect = getChildGameObject(self.transform, "Center/Box"..i..'/UIEffect1')
             NGUITools.SetActive(btnCell.effect,false)
 
             -- 动画初始点
-            btnCell.startPos = getChildGameObject(self.transform, "Middle/Box"..i.."/startPos")
+            btnCell.startPos = getChildGameObject(self.transform, "Center/Box"..i.."/startPos")
 
             --动画
             btnCell.animator = anim
             btnCell.animator.enabled = false
             local balls = {}
             for j=1,10 do
-                local ball = getChildGameObject(self.transform, "Middle/Box"..i..'/'..j)
+                local ball = getChildGameObject(self.transform, "Center/Box"..i..'/'..j)
                 if ball then
                     local ballCell = {
                         On = nil,
                         Off = nil
                     }
                     --每个球的开关状态
-                    ballCell.On =  getChildGameObject(self.transform, "Middle/Box"..i..'/'..j..'/On')
-                    ballCell.Off =  getChildGameObject(self.transform, "Middle/Box"..i..'/'..j..'/Off')
+                    ballCell.On =  getChildGameObject(self.transform, "Center/Box"..i..'/'..j..'/On')
+                    ballCell.Off =  getChildGameObject(self.transform, "Center/Box"..i..'/'..j..'/Off')
                     -- NGUITools.SetActive(ballCell.On,false)
                     -- NGUITools.SetActive(ballCell.Off,true)
                     table.insert(balls,j,ballCell)
@@ -109,7 +109,7 @@ function Awake(self)
         end
     end
 
-    self.btnStart = getChildGameObject(self.transform, "Middle/ButtonOK")
+    self.btnStart = getChildGameObject(self.transform, "Bottom/ButtonOK")
 
 
     -- self.spriteAward = getComponentInChild(self.transform, "Right/Award", "UISprite")
@@ -123,7 +123,7 @@ function Awake(self)
     -- --self.goEffectStar = getChildGameObject(self.transform, "Middle/E_Star")
     -- self.goEffectWinningStreak = getChildGameObject(self.transform, "Middle/E_Star3")
     -- self.goIconShine = getChildGameObject(self.transform, "Middle/Icon")
-    self.btnBack = getLuaComponent(createUI("ButtonBack", self.transform:FindChild("Top/ButtonBack")))
+    self.btnBack = getLuaComponent(createUI("ButtonBack", self.transform:FindChild("TopLeft/ButtonBack")))
     self.btnBack.delay = 0.47
     -- Object.DontDestroyOnLoad(self.btnBack.gameObject)
     self.streakLights = {}
@@ -612,7 +612,7 @@ function SendStartMatchReq(self, selectedIDs)
         local badgebook = MainPlayer.Instance.badgeSystemInfo:GetBadgeBookByBookId(player.m_roleInfo.badge_book_id)
         player.m_attrData = MainPlayer.Instance:GetRoleAttrs(player.m_roleInfo, nil, nil, nil, nil, badgebook)
         print(self.uiName, ID, player and player.m_name or "NULL")
-        table.insert(req.fight_power, {id = ID, value = player.m_fightingCapacity})
+        table.insert(req.fight_power, {id = ID, value = player.m_fightingCapacity.floorToInt})
         -- 添加涂鸦信息
         table.insert(req.data.roles,{id = ID,badge_book_id = player.m_roleInfo.badge_book_id})
     end
@@ -859,7 +859,8 @@ function StartMatch(self, notifyGameStart )
     matchConfig.leagueType	= leagueType
     matchConfig.type		= matchType
     matchConfig.sceneId		= qualifying.scene_id
-    matchConfig.MatchTime	= GameSystem.Instance.CommonConfig:GetUInt("gChallengeGameTime")
+    local matchTime = GameSystem.Instance.CommonConfig:GetUInt("gChallengeGameTime")
+    matchConfig.MatchTime	= IM.Number.New(matchTime)
     matchConfig.session_id	= session_id
     matchConfig.ip			= qualifying.game_ip
     matchConfig.port		= qualifying.game_port

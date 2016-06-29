@@ -239,7 +239,7 @@ namespace IM.Test
                     UE.Vector3 refCross = UE.Vector3.Cross(((UE.Vector3)x).normalized, refResult.normalized).normalized;
                     Debug.DrawLine("Ref Rotation Axis", UE.Vector3.zero, refCross * 10, UE.Color.red + UE.Color.blue / 2);
                     float angle = UE.Vector3.Angle((UE.Vector3)result, refResult);
-                    Logger.Log(string.Format("Input1:{0} Input2:{1} RefCross:{2} Angle:{3}", x, y, refCross, angle));
+                    UE.Debug.Log(string.Format("Input1:{0} Input2:{1} RefCross:{2} Angle:{3}", x, y, refCross, angle));
                     //*/
                     return CheckResult(name, x, y, z, w, (UE.Vector3)result, refResult, minValue1, maxValue1, devMode, (float)maxDev);
                 }
@@ -319,7 +319,7 @@ namespace IM.Test
 
         public static bool TestCritical(Tester<Number> tester)
         {
-            Logger.Log("IMath test, Test critical:" + tester.name);
+            UE.Debug.Log("IMath test, Test critical:" + tester.name);
             if (!tester.test(tester.minValue))
                 return false;
             if (!tester.test(tester.maxValue))
@@ -330,7 +330,7 @@ namespace IM.Test
         }
         public static bool TestCritical(Tester<Number, Number> tester)
         {
-            Logger.Log("IMath test, Test critical:" + tester.name);
+            UE.Debug.Log("IMath test, Test critical:" + tester.name);
             for (int i = 0; i < 3; ++i)
             {
                 Number x = Number.zero;
@@ -368,7 +368,7 @@ namespace IM.Test
         }
         public static bool TestCritical(Tester<Vector3> tester)
         {
-            Logger.Log("IMath test, Test critical:" + tester.name);
+            UE.Debug.Log("IMath test, Test critical:" + tester.name);
             bool zeroInRange = tester.minValue < Number.zero && Number.zero < tester.maxValue;
             if (!tester.test(new Vector3(tester.minValue, tester.minValue, tester.minValue)))
                 return false;
@@ -431,7 +431,7 @@ namespace IM.Test
         }
         public static bool TestCritical(Tester<Vector3, Vector3> tester)
         {
-            Logger.Log("IMath test, Test critical:" + tester.name);
+            UE.Debug.Log("IMath test, Test critical:" + tester.name);
             if (!tester.test(new Vector3(Number.zero, Number.zero, Number.zero), new Vector3(Number.zero, Number.zero, Number.zero)))
                 return false;
             if (!tester.test(new Vector3(Number.zero, Number.zero, Number.zero), new Vector3(tester.minValue2.x, Number.zero, tester.maxValue2.z)))
@@ -454,7 +454,7 @@ namespace IM.Test
         }
         public static bool TestSequence(Tester<Number> tester, Number start, Number end, Number step)
         {
-            Logger.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3}", 
+            UE.Debug.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3}", 
                 tester.name, start, end, step));
             bool succ = true;
             for (long i = start.raw; i <= end.raw; i += step.raw)
@@ -473,7 +473,7 @@ namespace IM.Test
         public static bool TestSequence(Tester<Number, Number> tester, 
             Number start1, Number end1, Number step1, Number start2, Number end2, Number step2)
         {
-            Logger.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3} start:{4} end:{5} step:{6}", 
+            UE.Debug.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3} start:{4} end:{5} step:{6}", 
                 tester.name, start1, end1, step1, start2, end2, step2));
             bool succ = true;
             for (long i = start1.raw; i <= end1.raw; i += step1.raw)
@@ -490,7 +490,7 @@ namespace IM.Test
         }
         public static bool TestSequence(Tester<Vector3> tester)
         {
-            Logger.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3}", 
+            UE.Debug.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3}", 
                 tester.name, tester.minValue, tester.maxValue, 1));
             bool succ = true;
             for (long x = tester.minValue.raw; x <= tester.maxValue.raw; x += 1)
@@ -510,7 +510,7 @@ namespace IM.Test
         }
         public static bool TestSequence(Tester<Number, Vector3> tester)
         {
-            Logger.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3} start:{4} end:{5} step:{6}", 
+            UE.Debug.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3} start:{4} end:{5} step:{6}", 
                 tester.name, tester.minValue1, tester.maxValue1, 1, tester.minValue2, tester.maxValue2, 1));
             bool succ = true;
             for (long i = tester.minValue1.raw; i <= tester.maxValue1.raw; ++i)
@@ -533,7 +533,7 @@ namespace IM.Test
         }
         public static bool TestSequence(Tester<Vector3, Vector3> tester)
         {
-            Logger.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3} start:{4} end:{5} step:{6}", 
+            UE.Debug.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3} start:{4} end:{5} step:{6}", 
                 tester.name, tester.minValue1, tester.maxValue1, 1, tester.minValue2, tester.maxValue2, 1));
             bool succ = true;
             for (long x1 = tester.minValue1.x.raw; x1 <= tester.maxValue1.x.raw; x1 += 1)
@@ -562,7 +562,7 @@ namespace IM.Test
         }
         public static bool TestSequence(Tester<Vector3, Vector3, Number> tester)
         {
-            Logger.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3} start:{4} end:{5} step:{6} start:{7} end:{8} step:{9}", 
+            UE.Debug.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3} start:{4} end:{5} step:{6} start:{7} end:{8} step:{9}", 
                 tester.name, tester.minValue1, tester.maxValue1, 1, tester.minValue2, tester.maxValue2, 1, tester.minValue3, tester.maxValue3, 1));
             bool succ = true;
             for (long x1 = tester.minValue1.x.raw; x1 <= tester.maxValue1.x.raw; x1 += 1)
@@ -596,7 +596,7 @@ namespace IM.Test
         }
         public static bool TestSequence(Tester<Vector3, Vector3, Number, Number> tester)
         {
-            Logger.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3} start:{4} end:{5} step:{6} start:{7} end:{8} step:{9} start:{10} end:{11} step:{12}", 
+            UE.Debug.Log(string.Format("IMath test, Test sequence:{0} start:{1} end:{2} step:{3} start:{4} end:{5} step:{6} start:{7} end:{8} step:{9} start:{10} end:{11} step:{12}", 
                 tester.name, tester.minValue1, tester.maxValue1, 1, tester.minValue2, tester.maxValue2, 1, tester.minValue3, tester.maxValue3, 1, tester.minValue4, tester.maxValue4, 1));
             bool succ = true;
             for (long x1 = tester.minValue1.x.raw; x1 <= tester.maxValue1.x.raw; x1 += 1)
@@ -633,7 +633,7 @@ namespace IM.Test
         }
         public static bool TestRandom(Tester<Number> tester, int count)
         {
-            Logger.Log("IMath test, Test random:" + tester.name + " count:" + count);
+            UE.Debug.Log("IMath test, Test random:" + tester.name + " count:" + count);
             for (int i = 0; i < count; ++i)
             {
                 if (!tester.test(Number.Raw(UE.Random.Range(tester.minValue.raw, tester.maxValue.raw))))
@@ -643,7 +643,7 @@ namespace IM.Test
         }
         public static bool TestRandom(Tester<Vector3> tester, int count)
         {
-            Logger.Log("IMath test, Test random:" + tester.name + " count:" + count);
+            UE.Debug.Log("IMath test, Test random:" + tester.name + " count:" + count);
             for (int i = 0; i < count; ++i)
             {
                 Number x = Number.Raw(UE.Random.Range(tester.minValue.raw, tester.maxValue.raw));
@@ -656,7 +656,7 @@ namespace IM.Test
         }
         public static bool TestRandom(Tester<Number, Number> tester, int count)
         {
-            Logger.Log("IMath test, Test random:" + tester.name + " count:" + count);
+            UE.Debug.Log("IMath test, Test random:" + tester.name + " count:" + count);
             for (int i = 0; i < count; ++i)
             {
                 Number x = Number.Raw(UE.Random.Range(tester.minValue1.raw, tester.maxValue1.raw));
@@ -668,7 +668,7 @@ namespace IM.Test
         }
         public static bool TestRandom(Tester<Vector3, Vector3> tester, int count)
         {
-            Logger.Log("IMath test, Test random:" + tester.name + " count:" + count);
+            UE.Debug.Log("IMath test, Test random:" + tester.name + " count:" + count);
             for (int i = 0; i < count; ++i)
             {
                 Number x1 = Number.Raw(UE.Random.Range(tester.minValue1.x.raw, tester.maxValue1.x.raw));
@@ -684,7 +684,7 @@ namespace IM.Test
         }
         public static bool TestRandom(Tester<Vector3, Vector3, Number> tester, int count)
         {
-            Logger.Log("IMath test, Test random:" + tester.name + " count:" + count);
+            UE.Debug.Log("IMath test, Test random:" + tester.name + " count:" + count);
             for (int i = 0; i < count; ++i)
             {
                 Number x1 = Number.Raw(UE.Random.Range(tester.minValue1.x.raw, tester.maxValue1.x.raw));
@@ -701,7 +701,7 @@ namespace IM.Test
         }
         public static bool TestRandom(Tester<Vector3, Vector3, Number, Number> tester, int count)
         {
-            Logger.Log("IMath test, Test random:" + tester.name + " count:" + count);
+            UE.Debug.Log("IMath test, Test random:" + tester.name + " count:" + count);
             for (int i = 0; i < count; ++i)
             {
                 Number x1 = Number.Raw(UE.Random.Range(tester.minValue1.x.raw, tester.maxValue1.x.raw));
@@ -722,7 +722,7 @@ namespace IM.Test
         }
         public static bool TestRandom(Tester<Number, Vector3> tester, int count)
         {
-            Logger.Log("IMath test, Test random:" + tester.name + " count:" + count);
+            UE.Debug.Log("IMath test, Test random:" + tester.name + " count:" + count);
             for (int i = 0; i < count; ++i)
             {
                 Number input1 = Number.Raw(UE.Random.Range(tester.minValue1.raw, tester.maxValue1.raw));
@@ -759,7 +759,7 @@ namespace IM.Test
             float dev = CalcDev(diff, refResult, minValue, maxValue, devMode);
             if (dev > maxDev)
             {
-                Logger.LogError(string.Format(
+                UE.Debug.LogError(string.Format(
                     "TestName:{0} Input:{1} Result:{2} RefResult:{3} Diff:{4} Dev:{5} MaxDev:{6} DevMode:{7}",
                     name, input, result, refResult, diff, dev, maxDev, devMode));
                 return false;
@@ -773,7 +773,7 @@ namespace IM.Test
             float dev = CalcDev(diff, refResult, minValue, maxValue, devMode);
             if (dev > maxDev)
             {
-                Logger.LogError(string.Format(
+                UE.Debug.LogError(string.Format(
                     "TestName:{0} Input:{1},{2} Result:{3} RefResult:{4} Diff:{5} Dev:{6} MaxDev:{7} DevMode:{8}",
                     name, input1, input2, result, refResult, diff, dev, maxDev, devMode));
                 return false;
@@ -789,7 +789,7 @@ namespace IM.Test
             float devZ = CalcDev(System.Math.Abs(diff.z), refResult.z, minValue, maxValue, devMode);
             if (devX > maxDev || devY > maxDev || devZ > maxDev)
             {
-                Logger.LogError(string.Format(
+                UE.Debug.LogError(string.Format(
                     "TestName:{0} Input:{1} Result:{2} RefResult:{3} Diff:{4} Dev:{5} MaxDev:{6} DevMode:{7}",
                     name, input, result.ToString("F4"), refResult.ToString("F4"), 
                     diff.ToString("F4"), new UE.Vector3(devX, devY, devZ).ToString("F4"), maxDev, devMode));
@@ -810,7 +810,7 @@ namespace IM.Test
             float devW = CalcDev(System.Math.Abs(diffW), refResult.w, minValue, maxValue, devMode);
             if (devX > maxDev || devY > maxDev || devZ > maxDev)
             {
-                Logger.LogError(string.Format(
+                UE.Debug.LogError(string.Format(
                     "TestName:{0} Input:{1} Result:{2} RefResult:{3} Diff:{4} Dev:{5} MaxDev:{6} DevMode:{7}",
                     name, input, result.ToString("F4"), refResult.ToString("F4"), 
                     (new UE.Quaternion(diffX, diffY, diffZ, diffW)).ToString("F4"),
@@ -832,7 +832,7 @@ namespace IM.Test
             float devW = CalcDev(System.Math.Abs(diffW), refResult.w, minValue, maxValue, devMode);
             if (devX > maxDev || devY > maxDev || devZ > maxDev || devW > maxDev)
             {
-                Logger.LogError(string.Format(
+                UE.Debug.LogError(string.Format(
                     "TestName:{0} Input:{1} {2} Result:{3} RefResult:{4} Diff:{5} Dev:{6} MaxDev:{7} DevMode:{8}",
                     name, input1, input2, result.ToString("F4"), refResult.ToString("F4"), 
                     (new UE.Quaternion(diffX, diffY, diffZ, diffW)).ToString("F4"),
@@ -850,7 +850,7 @@ namespace IM.Test
             float devZ = CalcDev(System.Math.Abs(diff.z), refResult.z, minValue, maxValue, devMode);
             if (devX > maxDev || devY > maxDev || devZ > maxDev)
             {
-                Logger.LogError(string.Format(
+                UE.Debug.LogError(string.Format(
                     "TestName:{0} Input:{1} {2} Result:{3} RefResult:{4} Diff:{5} Dev:{6} MaxDev:{7} DevMode:{8}",
                     name, input1, input2, result.ToString("F4"), refResult.ToString("F4"),
                     diff.ToString("F4"), new UE.Vector3(devX, devY, devZ).ToString("F4"), maxDev, devMode));
@@ -871,7 +871,7 @@ namespace IM.Test
             float devW = CalcDev(System.Math.Abs(diffW), refResult.w, minValue, maxValue, devMode);
             if (devX > maxDev || devY > maxDev || devZ > maxDev || devW > maxDev)
             {
-                Logger.LogError(string.Format(
+                UE.Debug.LogError(string.Format(
                     "TestName:{0} Input:{1} {2} Result:{3} RefResult:{4} Diff:{5} Dev:{6} MaxDev:{7} DevMode:{8}",
                     name, input1, input2, result.ToString("F4"), refResult.ToString("F4"),
                     new UE.Quaternion(diffX, diffY, diffZ, diffW).ToString("F4"),
@@ -887,7 +887,7 @@ namespace IM.Test
             float dev = CalcDev(System.Math.Abs(diff), refResult, minValue, maxValue, devMode);
             if (dev > maxDev)
             {
-                Logger.LogError(string.Format(
+                UE.Debug.LogError(string.Format(
                     "TestName:{0} Input:{1} {2} Result:{3} RefResult:{4} Diff:{5} Dev:{6} MaxDev:{7} DevMode:{8}",
                     name, input1, input2, result, refResult, diff, dev, maxDev, devMode));
                 return false;
@@ -903,7 +903,7 @@ namespace IM.Test
             float devZ = CalcDev(System.Math.Abs(diff.z), refResult.z, minValue, maxValue, devMode);
             if (devX > maxDev || devY > maxDev || devZ > maxDev)
             {
-                Logger.LogError(string.Format(
+                UE.Debug.LogError(string.Format(
                     "TestName:{0} Input:{1} {2} {3} Result:{4} RefResult:{5} Diff:{6} Dev:{7} MaxDev:{8} DevMode:{9}",
                     name, input1, input2, input3, result.ToString("F4"), refResult.ToString("F4"),
                     diff.ToString("F4"), new UE.Vector3(devX, devY, devZ).ToString("F4"), maxDev, devMode));
@@ -920,7 +920,7 @@ namespace IM.Test
             float devZ = CalcDev(System.Math.Abs(diff.z), refResult.z, minValue, maxValue, devMode);
             if (devX > maxDev || devY > maxDev || devZ > maxDev)
             {
-                Logger.LogError(string.Format(
+                UE.Debug.LogError(string.Format(
                     "TestName:{0} Input:{1} {2} {3} {4} Result:{5} RefResult:{6} Diff:{7} Dev:{8} MaxDev:{9} DevMode:{10}",
                     name, input1, input2, input3, input4, result.ToString("F4"), refResult.ToString("F4"),
                     diff.ToString("F4"), new UE.Vector3(devX, devY, devZ).ToString("F4"), maxDev, devMode));
@@ -931,23 +931,23 @@ namespace IM.Test
 
         static void ExOutput<T>(string name, Exception ex, T input)
         {
-            Logger.LogError(ex);
-            Logger.LogError(string.Format("Test:{0} Input:{1}", name, input));
+            UE.Debug.LogError(ex);
+            UE.Debug.LogError(string.Format("Test:{0} Input:{1}", name, input));
         }
         static void ExOutput<T, U>(string name, Exception ex, T input1, U input2)
         {
-            Logger.LogError(ex);
-            Logger.LogError(string.Format("Test:{0} Input:{1}, {2}", name, input1, input2));
+            UE.Debug.LogError(ex);
+            UE.Debug.LogError(string.Format("Test:{0} Input:{1}, {2}", name, input1, input2));
         }
         static void ExOutput<T, U, V>(string name, Exception ex, T input1, U input2, V input3)
         {
-            Logger.LogError(ex);
-            Logger.LogError(string.Format("Test:{0} Input:{1}, {2} {3}", name, input1, input2, input3));
+            UE.Debug.LogError(ex);
+            UE.Debug.LogError(string.Format("Test:{0} Input:{1}, {2} {3}", name, input1, input2, input3));
         }
         static void ExOutput<T, U, V, W>(string name, Exception ex, T input1, U input2, V input3, W input4)
         {
-            Logger.LogError(ex);
-            Logger.LogError(string.Format("Test:{0} Input:{1}, {2} {3} {4}", name, input1, input2, input3, input4));
+            UE.Debug.LogError(ex);
+            UE.Debug.LogError(string.Format("Test:{0} Input:{1}, {2} {3} {4}", name, input1, input2, input3, input4));
         }
     }
 }

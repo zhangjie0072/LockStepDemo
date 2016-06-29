@@ -67,7 +67,7 @@ public class UIPlayPlot : MonoBehaviour
 		else if (shapeID < 2000)
 			portAtlas += "_2";
 		else
-			Logger.Log("cannot getPortrait by id=" + shapeID);
+			Debug.Log("cannot getPortrait by id=" + shapeID);
 
 		icons[side].atlas = ResourceLoadManager.Instance.GetAtlas(portAtlas);
 		icons[side].spriteName = icon;

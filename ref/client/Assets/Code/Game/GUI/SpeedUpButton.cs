@@ -60,7 +60,7 @@ public class SpeedUpButton : MonoBehaviour
         }
         else
         {
-            Logger.LogError("Not Enough picture to support more speed mode!");
+            Debug.LogError("Not Enough picture to support more speed mode!");
         }
 	}
 

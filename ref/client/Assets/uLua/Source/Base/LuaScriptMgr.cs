@@ -426,11 +426,11 @@ public class LuaScriptMgr
         //#endif
         System.DateTime time = System.DateTime.Now;
         DoFile("System/Global.lua");
-        Logger.Log("【Time】LuaMgr>>>LuaScriptMgr>>>DoFile:Global.lua=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+        UnityEngine.Debug.Log("【Time】LuaMgr>>>LuaScriptMgr>>>DoFile:Global.lua=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
 
         time = System.DateTime.Now;
         InitLayers(lua.L);
-        Logger.Log("【Time】LuaMgr>>>LuaScriptMgr>>>InitLayers=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+        UnityEngine.Debug.Log("【Time】LuaMgr>>>LuaScriptMgr>>>InitLayers=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
 
         unpackVec3 = GetLuaReference("Vector3.Get");
         unpackVec2 = GetLuaReference("Vector2.Get");
@@ -456,7 +456,7 @@ public class LuaScriptMgr
 
         time = System.DateTime.Now;
         DoFile("System/Main.lua");
-        Logger.Log("【Time】LuaMgr>>>LuaScriptMgr>>>DoFile:Main.lua=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+        UnityEngine.Debug.Log("【Time】LuaMgr>>>LuaScriptMgr>>>DoFile:Main.lua=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
 
         updateFunc = GetLuaFunction("Update");
         lateUpdateFunc = GetLuaFunction("LateUpdate");
@@ -465,7 +465,7 @@ public class LuaScriptMgr
 
         time = System.DateTime.Now;
         CallLuaFunction("Main");
-        Logger.Log("【Time】LuaMgr>>>LuaScriptMgr>>>CallLuaFunction=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+        UnityEngine.Debug.Log("【Time】LuaMgr>>>LuaScriptMgr>>>CallLuaFunction=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
     }
 
     public void OnLevelLoaded(int level)

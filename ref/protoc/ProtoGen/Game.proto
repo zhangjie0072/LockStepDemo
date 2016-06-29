@@ -495,6 +495,7 @@ message GameBeginResp
 	optional uint32 tip_off			= 7; //0不跳球  1跳球
 	optional FightRoleInfo home_position		= 8;
 	optional FightRoleInfo away_position		= 9;
+	optional uint32 seed = 10; //随机数种子
 }
 
 message BeginTipOffReq
@@ -564,22 +565,7 @@ message BlockSuccess
     required uint32 char_id         = 1;
 }
 
-//帧同步相关
-//客户端输入
-message ClientInput
-{
-	optional uint32 dir		= 1;
-    optional uint32 cmd		= 2;
-	optional uint32 acc_id	= 3;
-}
 
-//帧数据
-message FrameInfo
-{
-	repeated ClientInput info	= 1; //帧信息
-	optional uint32 frameNum 	= 2; //帧编号
-	optional double time		= 3;
-}
 
 
 

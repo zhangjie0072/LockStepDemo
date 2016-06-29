@@ -18,7 +18,6 @@ public class fogs_proto_msg_TaskInfoWrap
 			new LuaField("daily_info", get_daily_info, set_daily_info),
 			new LuaField("main_info", get_main_info, set_main_info),
 			new LuaField("task_list", get_task_list, null),
-			new LuaField("game_task_list", get_game_task_list, null),
 		};
 
 		LuaScriptMgr.RegisterLib(L, "fogs.proto.msg.TaskInfo", typeof(fogs.proto.msg.TaskInfo), regs, fields, typeof(object));
@@ -169,30 +168,6 @@ public class fogs_proto_msg_TaskInfoWrap
 		}
 
 		LuaScriptMgr.PushObject(L, obj.task_list);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_game_task_list(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		fogs.proto.msg.TaskInfo obj = (fogs.proto.msg.TaskInfo)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name game_task_list");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index game_task_list on a nil value");
-			}
-		}
-
-		LuaScriptMgr.PushObject(L, obj.game_task_list);
 		return 1;
 	}
 

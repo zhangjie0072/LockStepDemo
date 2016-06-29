@@ -74,23 +74,13 @@ public class ReboundHelper
 				Info selectedRebounder = null;
 				if (rebounders.Count > 0)
 				{
-					/*
-					selectedRebounder = rebounders[0];
-					for (int i = 1; i < rebounders.Count; ++i)
-					{
-						Info rebounder = rebounders[i];
-						float rate = hedging.Calc(selectedRebounder.reboundValue, rebounder.reboundValue);
-						if (Random.value > rate)
-							selectedRebounder = rebounder;
-					}
-					*/
 					uint totalValue = 0;
 					foreach (Info info in rebounders)
 						totalValue += info.reboundValue;
-					uint value = (uint)Random.Range(0, totalValue);
-					Logger.Log("rebound value: " + value );
+					uint value = (uint)IM.Random.Range(0, totalValue);
+					Debug.Log("rebound value: " + value );
 					foreach( Info pl in rebounders )
-						Logger.Log("player :" + pl.player.m_id + " rebound : " + pl.reboundValue );
+						Debug.Log("player :" + pl.player.m_id + " rebound : " + pl.reboundValue );
 
 					uint finalOdd = 0;
 					foreach( Info pl in rebounders )
@@ -122,7 +112,7 @@ public class ReboundHelper
                                 if (eCurState == MatchState.State.ePlaying || eCurState == MatchState.State.eTipOff)
                                 {
                                     if (ball.m_owner != null)
-                                        Logger.LogError("can not grab ball.");
+                                        Debug.LogError("can not grab ball.");
                                     ball.m_picker.GrabBall(ball);
                                 }
                             }
@@ -131,7 +121,7 @@ public class ReboundHelper
 						string trace = "Rebound: player: " + info.player.m_id + " " + info.player.m_name +
 							" value:" + info.reboundValue + " canPick:" + canPick;
 						Debugger.Instance.m_steamer.message += "\n" + trace + "\n";
-						Logger.Log(trace);
+						Debug.Log(trace);
 					}
 				}
 			}

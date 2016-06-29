@@ -16,7 +16,7 @@ RoleSelectedIcon = {
 --=============================--
 --==     私有变量分隔线      ==--
 --=============================--
-    COLOR_DEFAULT = Color.New(0.38,0.243,0,1),
+    COLOR_DEFAULT = Color.New(201/255,173/255,133/255),
     COLOR_SELECT = Color.New(0.24,0.87,0.92,1),
     _roleId = nil,--角色id
     _roleIcon = nil,--球员角色icon

@@ -52,11 +52,11 @@ public class PickupDetector
 		if( ball.m_ballState != BallState.eLoseBall && ball.m_ballState != BallState.eRebound )
 			return;
 
-		if( match is GameMatch_PVP )
-		{
-			if( m_owner != match.m_mainRole && !m_owner.m_bIsAI )
-				return;
-		}
+        //if( match is GameMatch_PVP )
+        //{
+        //    if( m_owner != match.m_mainRole && !m_owner.m_bIsAI )
+        //        return;
+        //}
 
 		PlayerState curState = m_owner.m_StateMachine.m_curState;
 		if( curState.m_eState != PlayerState.State.eStand 

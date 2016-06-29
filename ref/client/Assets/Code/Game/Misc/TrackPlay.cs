@@ -82,6 +82,7 @@ public class TrackPlayer
 			uint uFind = curMatch.m_auxiliaries.Find((uint id)=>{return id == player.m_id;});
 			player.gameObject.SetActive( uFind == 0 );
 
+            player.m_applyLogicPostion = false;
 			player.transform.position = poseInfo.transform.position;
 			player.transform.rotation = poseInfo.transform.rotation;
 

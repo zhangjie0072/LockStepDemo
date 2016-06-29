@@ -2,7 +2,7 @@
 
 NewRoleBuy =  {
 	uiName	= "NewRoleBuy",
-	
+
 	--data
 	id,
 	roleData,
@@ -13,12 +13,12 @@ NewRoleBuy =  {
 	--ui
 	uiButtonClose,
 	uiBtn_1,
-	uiBtn_2,	
+	uiBtn_2,
 	uiConsumeGrid, --用于动态控制界面排序
 	uiButtonGrid,  --用于动态控制界面排序
 	uiGoodsIconConsume_1,
 	uiGoodsIconConsume_2,
-	
+
 	uiHeadIcon,
 	uiCareerRoleIcon,
 }
@@ -34,24 +34,24 @@ function NewRoleBuy:Awake()
 	self.uiGoodsIconConsume_1 = createUI("GoodsIconConsume", self.uiConsumeGrid.transform)
 	local script_1 = getLuaComponent(self.uiGoodsIconConsume_1)
 	script_1.isAdd = false
-	script_1.isBG = true
-	
+	script_1.isBG = false
+
 	self.uiGoodsIconConsume_2 = createUI("GoodsIconConsume", self.uiConsumeGrid.transform)
 	local script_2 = getLuaComponent(self.uiGoodsIconConsume_2)
 	script_2.isAdd = false
-	script_2.isBG = true
+	script_2.isBG = false
 end
 
 function NewRoleBuy:Start()
 	local uiBtnClose = createUI('ButtonClose', self.uiBackBtn.transform)
 	local closeBtn = getLuaComponent(uiBtnClose)
 	closeBtn.onClick = self:OnCloseClick()
-	
+
 	addOnClick(self.uiBtn_1, self:OnBuy())
 	addOnClick(self.uiBtn_2, self:OnBuy())
 
 	self.transform.localPosition = Vector3.New(self.transform.localPosition.x,self.transform.localPosition.y,-700)
-	
+
 	self:Refresh()
 end
 
@@ -59,7 +59,7 @@ function NewRoleBuy:Refresh()
 	--设置头像
 	if not self.uiCareerRoleIcon then
 		self.uiCareerRoleIcon = createUI('NewRoleBustItem1', self.uiHeadIcon.transform)
-	end 
+	end
 	local role = getLuaComponent(self.uiCareerRoleIcon)
 	role.id = self.roleData.id
 	role.isHas = true
@@ -68,7 +68,7 @@ function NewRoleBuy:Refresh()
 	self:RefreshConsume()
 	self.uiConsumeGrid:Reposition()
 	self.uiButtonGrid:Reposition()
-	
+
 	print("-----------------------------------")
 end
 
@@ -89,6 +89,9 @@ end
 function NewRoleBuy:OnBuy()
 	return function (go)
 		print( "OnBuy=>".. go.name )
+
+		if not FunctionSwitchData.CheckSwith(FSID.players_btn) then return end
+
 		local array = string.split(go.name, '_')
 		self:SendBuyMessage(tonumber(array[1]), tonumber(array[2]))
 	end
@@ -121,7 +124,7 @@ function NewRoleBuy:RefreshConsume()
 	--购买开销
 	local consume = self.roleData.recruit_consume
 	local cur_enum = consume:GetEnumerator()
-	
+
 	local index = 0
 	while cur_enum:MoveNext() do
 		local key = cur_enum.Current.Key
@@ -136,7 +139,7 @@ function NewRoleBuy:RefreshConsume()
 				NewRoleBuy.ChangeButtonText(self.uiBtn_2, key)
 
 				local script_2 = getLuaComponent(self.uiGoodsIconConsume_2)
-				script_2:SetData(key, value) 
+				script_2:SetData(key, value)
 			else
 				NGUITools.SetActive(self.uiGoodsIconConsume_1, true)
 				NGUITools.SetActive(self.uiBtn_1, true)
@@ -156,7 +159,7 @@ function NewRoleBuy:RefreshConsume()
 			NewRoleBuy.ChangeButtonText(self.uiBtn_2, key)
 
 			local script_2 = getLuaComponent(self.uiGoodsIconConsume_2)
-			script_2:SetData(key, value) 
+			script_2:SetData(key, value)
 		end
 	end
 end
@@ -169,7 +172,7 @@ function NewRoleBuy:SendBuyMessage(ConsumeType, num)
 	if not rst then
 		return
 	end
-	
+
 	local req = {
 			role_id = self.id,
 			flag = ConsumeType
@@ -199,7 +202,7 @@ function NewRoleBuy:GetRole()
 					SkillSlotProto.id = v.id
 					SkillSlotProto.is_unlock = v.is_unlock
 					SkillSlotProto.skill_uuid = v.skill_uuid
-					RoleInfo.skill_slot_info:Add(SkillSlotProto) 
+					RoleInfo.skill_slot_info:Add(SkillSlotProto)
 				end
 				-- RoleInfo.skill_slot_info = SkillSlotProtoList
 				for k,v in pairs(resp.role.exercise) do
@@ -207,19 +210,19 @@ function NewRoleBuy:GetRole()
 					ExerciseInfo.id = v.id
 					ExerciseInfo.star = v.star
 					ExerciseInfo.quality = v.quality
-					RoleInfo.exercise:Add(ExerciseInfo) 
+					RoleInfo.exercise:Add(ExerciseInfo)
 				end
 				-- RoleInfo.exercise = ExerciseInfoList
 				for k,v in pairs(resp.role.fashion_slot_info) do
 					local FashionSlotProto = FashionSlotProto.New()
 					FashionSlotProto.id = v.id
 					FashionSlotProto.fashion_uuid = v.fashion_uuid
-					RoleInfo.fashion_slot_info:Add(FashionSlotProto) 
+					RoleInfo.fashion_slot_info:Add(FashionSlotProto)
 				end
 				-- RoleInfo.fashion_slot_info = FashionSlotProtoList
 
 				MainPlayer.Instance:AddInviteRoleInList(RoleInfo)
-				
+
 				-- self:OnClose()
 				self:OnBuyNewPlayer()
 			else
@@ -236,22 +239,22 @@ end
 
 
 function NewRoleBuy:Update()
-	
+
 end
 
 function NewRoleBuy:FixedUpdate()
-	
+
 end
 
 function NewRoleBuy:OnDestroy()
-	
+
 end
 
 function NewRoleBuy:OnClose()
 	if self.onCloseClick then
 		self.onCloseClick()
 	end
-	
+
 	NGUITools.Destroy(self.gameObject)
 end
 
@@ -259,7 +262,7 @@ function NewRoleBuy:OnBuyNewPlayer( ... )
 	if self.onBuyNewPlayer then
 		self.onBuyNewPlayer()
 	end
-	
+
 	NGUITools.Destroy(self.gameObject)
 end
 

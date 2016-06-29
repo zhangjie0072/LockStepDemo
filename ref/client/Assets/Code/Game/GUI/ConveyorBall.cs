@@ -66,7 +66,7 @@ public class ConveyorBall : MonoBehaviour
 
 	static public void Pause()
 	{
-		//Logger.Log("Conveyor pause");
+		//Debug.Log("Conveyor pause");
 		foreach (ConveyorBall ball in ballQ)
 		{
 			ball.GetComponent<Animator>().speed = 0f;
@@ -88,7 +88,7 @@ public class ConveyorBall : MonoBehaviour
 
 	static public void Resume()
 	{
-		//Logger.Log("Conveyor Resume");
+		//Debug.Log("Conveyor Resume");
 		foreach (ConveyorBall ball in ballQ)
 		{
 			ball.GetComponent<Animator>().speed = ball.animSpeed;

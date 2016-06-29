@@ -124,7 +124,7 @@ public class UIMatchScoreEffect : MonoBehaviour
 	{
         m_initPos = (Vector3)match.mCurScene.mBasket.m_vShootTarget;
 		if( match is GameMatch_PVP )
-			m_endPos = ball.m_actor.m_team == match.m_mainRole.m_team ? uiMatch.leftScoreBoard.transform.parent.localPosition : uiMatch.rightScoreBoard.transform.parent.localPosition;
+			m_endPos = ball.m_actor.m_team == match.mainRole.m_team ? uiMatch.leftScoreBoard.transform.parent.localPosition : uiMatch.rightScoreBoard.transform.parent.localPosition;
 		else
 			m_endPos = ball.m_actor.m_team.m_side == Team.Side.eHome ? uiMatch.leftScoreBoard.transform.parent.localPosition : uiMatch.rightScoreBoard.transform.parent.localPosition;
 		m_endPos.z = 0.0f;

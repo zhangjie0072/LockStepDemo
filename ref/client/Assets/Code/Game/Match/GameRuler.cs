@@ -66,6 +66,8 @@ public class GameRuler
 
 	public void SwitchRole()
 	{
+        //TODO 针对PVP修改
+        /*
 		Team mainTeam 		= m_match.m_mainRole.m_team;
 		Team defenseTeam 	= m_match.m_mainRole.m_defenseTarget.m_team;
 
@@ -79,14 +81,18 @@ public class GameRuler
 					member.m_enableAction = true;
 			}
         }
+        */
 
-		if (mainTeam.m_role == GameMatch.MatchRole.eNone)
+		if (m_match.m_homeTeam.m_role == GameMatch.MatchRole.eNone)
 		{
 			Player player = m_match.mCurScene.mBall.m_owner;
 			if (player == null)
 			{
+                Debug.LogError("Ball owner is null.");
+                /*
 				mainTeam.m_role = GameMatch.MatchRole.eOffense;
 				defenseTeam.m_role = GameMatch.MatchRole.eDefense;
+                */
 			}
 			else
 			{

@@ -156,15 +156,15 @@ end
 --	5. The value Name in front each Line will be CHANGED for other SHORT appropriate name.		 --
 ---------------------------------------------------------------------------------------------------
 function UIPracticeCourt:UiParse()
-	self.uiBackBtn       = self.transform:FindChild("Top/ButtonBack"):GetComponent("Transform")
-	self.uiPlayerInfo    = self.transform:FindChild("Top/PlayerInfoGrids"):GetComponent("Transform")
-	self.uiButtonMenu    = self.transform:FindChild("Top/ButtonMenu"):GetComponent("Transform")
+	self.uiBackBtn       = self.transform:FindChild("TopLeft/ButtonBack"):GetComponent("Transform")
+	self.uiPlayerInfo    = self.transform:FindChild("TopRight/PlayerInfoGrids"):GetComponent("Transform")
+	self.uiButtonMenu    = self.transform:FindChild("TopRight/ButtonMenu"):GetComponent("Transform")
 
-	self.uiFreePractice  = self.transform:FindChild("Middle/FreePractice"):GetComponent("UISprite")
-	self.uiPracticeMatch = self.transform:FindChild("Middle/PracticeMatch"):GetComponent("UISprite")
-	self.uiFocusPractice = self.transform:FindChild("Middle/FocusPractice"):GetComponent("UISprite")
+	self.uiFreePractice  = self.transform:FindChild("Middle/2/FreePractice"):GetComponent("UISprite")
+	self.uiPracticeMatch = self.transform:FindChild("Middle/3/PracticeMatch"):GetComponent("UISprite")
+	self.uiFocusPractice = self.transform:FindChild("Middle/4/FocusPractice"):GetComponent("UISprite")
 
-	self.ui1Vs1Match= self.transform:FindChild("Middle/FreePractice1")
+	self.ui1Vs1Match= self.transform:FindChild("Middle/1/FreePractice1")
 end
 
 return UIPracticeCourt

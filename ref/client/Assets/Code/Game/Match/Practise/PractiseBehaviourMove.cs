@@ -72,9 +72,9 @@ public class PractiseBehaviourMove : PractiseBehaviour
 		match.tip = practise.tips[3];
 	}
 
-	protected override void OnUpdate()
+	public override void GameUpdate(IM.Number deltaTime)
 	{
-		base.OnUpdate();
+		base.GameUpdate(deltaTime);
 
 		if (_step == Step.GrabBall && match.mCurScene.mBall.m_owner != null)
 			Step_Wait_Move();
@@ -83,8 +83,8 @@ public class PractiseBehaviourMove : PractiseBehaviour
 	private void Step_GrabBall()
 	{
         IM.Transform ballTrans = GameSystem.Instance.MatchPointsConfig.PractiseMovePos.ball_transform;
-		match.m_mainRole.DropBall(match.mCurScene.mBall);
-		match.m_mainRole.m_StateMachine.SetState(PlayerState.State.eStand);
+		match.mainRole.DropBall(match.mCurScene.mBall);
+		match.mainRole.m_StateMachine.SetState(PlayerState.State.eStand);
         match.mCurScene.mBall.transform.localPosition = (Vector3)ballTrans.position;
 		match.ResetPlayerPos();
 
@@ -149,7 +149,7 @@ public class PractiseBehaviourMove : PractiseBehaviour
 
 	private bool OnTrigger(GameObject source, Collider collider)
 	{
-		if (collider.gameObject == match.m_mainRole.gameObject)
+		if (collider.gameObject == match.mainRole.gameObject)
 		{
             if (source == movePosGo.gameObject && _step == Step.Move1)
 			{

@@ -59,7 +59,7 @@ public class AISystem_Basic: AISystem
 		RoadPathManager.Instance.AddDrawSector("targetSector", targetSector);
 		
 		AIState positioning = m_arStateList[(int)AIState.Type.ePositioning];
-        positioning.m_moveTarget = targetSector.center.xz;
+        positioning.m_moveTarget = targetSector.center.x0z;
 		SetTransaction(positioning);
 	}
 
@@ -106,6 +106,6 @@ public class AISystem_Basic: AISystem
 		mate2Switch.m_defenseTarget.m_defenseTarget = mate2Switch;
 		m_player.m_defenseTarget.m_defTargetSwitched = true;
 		mate2Switch.m_defenseTarget.m_defTargetSwitched = true;
-		Logger.Log(string.Format("AISystem, switch defense target between {0} and {1}.", m_player.m_name, mate2Switch.m_name));
+        UnityEngine.Debug.Log(string.Format("AISystem, switch defense target between {0} and {1}.", m_player.m_name, mate2Switch.m_name));
 	}
 }

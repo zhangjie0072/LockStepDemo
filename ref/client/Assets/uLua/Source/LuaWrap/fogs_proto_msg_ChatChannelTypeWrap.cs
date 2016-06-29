@@ -9,6 +9,9 @@ public class fogs_proto_msg_ChatChannelTypeWrap
 		new LuaMethod("CCT_SYSTEM", GetCCT_SYSTEM),
 		new LuaMethod("CCT_LEAGUE", GetCCT_LEAGUE),
 		new LuaMethod("CCT_TEAM", GetCCT_TEAM),
+		new LuaMethod("CCT_ROOM", GetCCT_ROOM),
+		new LuaMethod("CCT_GAME", GetCCT_GAME),
+		new LuaMethod("CCT_PRIVATE", GetCCT_PRIVATE),
 		new LuaMethod("IntToEnum", IntToEnum),
 	};
 
@@ -42,6 +45,27 @@ public class fogs_proto_msg_ChatChannelTypeWrap
 	static int GetCCT_TEAM(IntPtr L)
 	{
 		LuaScriptMgr.Push(L, fogs.proto.msg.ChatChannelType.CCT_TEAM);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetCCT_ROOM(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, fogs.proto.msg.ChatChannelType.CCT_ROOM);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetCCT_GAME(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, fogs.proto.msg.ChatChannelType.CCT_GAME);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetCCT_PRIVATE(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, fogs.proto.msg.ChatChannelType.CCT_PRIVATE);
 		return 1;
 	}
 

@@ -34,11 +34,11 @@ public class ServerDataConfig
         //string text = ResourceLoadManager.Instance.GetConfigText(name);
         //if (text == null)
         //{
-        //    Logger.LogError("LoadConfig failed: " + name);
+        //    Debug.LogError("LoadConfig failed: " + name);
         //    return;
         //}
 
-		Logger.ConfigBegin(name);
+		Debug.Log("Config reading " + name);
         //读取以及处理XML文本的类
         XmlDocument xmlDoc = CommonFunction.LoadXmlConfig(name, obj);
         //解析xml的过程
@@ -68,7 +68,7 @@ public class ServerDataConfig
             IsCached = true;
         }
 
-		Logger.ConfigEnd(name);
+		
     }
 
     public ServerIPAndPort GetServerIPAndPort()

@@ -61,7 +61,8 @@ function StartMatch(buf)
     print("1927 - <Qualifying> --6")
     matchConfig.sceneId		= qualifying.scene_id
     print("1927 - <Qualifying> --7")
-    matchConfig.MatchTime	= GameSystem.Instance.CommonConfig:GetUInt("gChallengeGameTime")
+    local matchTime = GameSystem.Instance.CommonConfig:GetUInt("gChallengeGameTime")
+    matchConfig.MatchTime	= IM.Number.New(matchTime)
     print("1927 - <Qualifying> --8")
     matchConfig.session_id	= session_id
     print("1927 - <Qualifying> --9")

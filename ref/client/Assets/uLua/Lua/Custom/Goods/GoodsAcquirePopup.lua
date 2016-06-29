@@ -80,7 +80,7 @@ function GoodsAcquirePopup:OpenTreaureBox()
 				self.goods =goods
 				self.goodsNum = v.num
 				table.remove(self.BoxsList,k)
-				local info = self.uiAnimator:GetCurrentAnimatorStateInfo(0)
+				-- local info = self.uiAnimator:GetCurrentAnimatorStateInfo(0)
 				local openNum
 				if self.goodsNum then
 					openNum = self.goodsNum

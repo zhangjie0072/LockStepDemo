@@ -951,13 +951,6 @@ namespace fogs.proto.msg
       get { return _task_list; }
     }
   
-    private readonly global::System.Collections.Generic.List<fogs.proto.msg.GameTask> _game_task_list = new global::System.Collections.Generic.List<fogs.proto.msg.GameTask>();
-    [global::ProtoBuf.ProtoMember(6, Name=@"game_task_list", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<fogs.proto.msg.GameTask> game_task_list
-    {
-      get { return _game_task_list; }
-    }
-  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -1223,40 +1216,6 @@ namespace fogs.proto.msg
     {
       get { return _task_info; }
       set { _task_info = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"GameTask")]
-  public partial class GameTask : global::ProtoBuf.IExtensible
-  {
-    public GameTask() {}
-    
-    private uint _id = default(uint);
-    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(uint))]
-    public uint id
-    {
-      get { return _id; }
-      set { _id = value; }
-    }
-    private uint _race_times = default(uint);
-    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"race_times", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(uint))]
-    public uint race_times
-    {
-      get { return _race_times; }
-      set { _race_times = value; }
-    }
-    private uint _reset_time = default(uint);
-    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"reset_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(uint))]
-    public uint reset_time
-    {
-      get { return _reset_time; }
-      set { _reset_time = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)

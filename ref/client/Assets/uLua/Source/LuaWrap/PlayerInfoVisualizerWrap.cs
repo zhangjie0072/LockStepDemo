@@ -10,8 +10,6 @@ public class PlayerInfoVisualizerWrap
 		{
 			new LuaMethod("SetActive", SetActive),
 			new LuaMethod("Update", Update),
-			new LuaMethod("CreateStrengthBar", CreateStrengthBar),
-			new LuaMethod("DestroyStrengthBar", DestroyStrengthBar),
 			new LuaMethod("ShowStaminaBar", ShowStaminaBar),
 			new LuaMethod("New", _CreatePlayerInfoVisualizer),
 			new LuaMethod("GetClassType", GetClassType),
@@ -22,7 +20,6 @@ public class PlayerInfoVisualizerWrap
 			new LuaField("m_uiName", get_m_uiName, set_m_uiName),
 			new LuaField("m_goPlayerInfo", get_m_goPlayerInfo, set_m_goPlayerInfo),
 			new LuaField("m_goState", get_m_goState, set_m_goState),
-			new LuaField("m_strengthBar", get_m_strengthBar, set_m_strengthBar),
 		};
 
 		LuaScriptMgr.RegisterLib(L, "PlayerInfoVisualizer", typeof(PlayerInfoVisualizer), regs, fields, typeof(object));
@@ -130,30 +127,6 @@ public class PlayerInfoVisualizerWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_m_strengthBar(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		PlayerInfoVisualizer obj = (PlayerInfoVisualizer)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name m_strengthBar");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index m_strengthBar on a nil value");
-			}
-		}
-
-		LuaScriptMgr.Push(L, obj.m_strengthBar);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_m_uiName(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -226,30 +199,6 @@ public class PlayerInfoVisualizerWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int set_m_strengthBar(IntPtr L)
-	{
-		object o = LuaScriptMgr.GetLuaObject(L, 1);
-		PlayerInfoVisualizer obj = (PlayerInfoVisualizer)o;
-
-		if (obj == null)
-		{
-			LuaTypes types = LuaDLL.lua_type(L, 1);
-
-			if (types == LuaTypes.LUA_TTABLE)
-			{
-				LuaDLL.luaL_error(L, "unknown member name m_strengthBar");
-			}
-			else
-			{
-				LuaDLL.luaL_error(L, "attempt to index m_strengthBar on a nil value");
-			}
-		}
-
-		obj.m_strengthBar = (StrengthBar)LuaScriptMgr.GetUnityObject(L, 3, typeof(StrengthBar));
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int SetActive(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
@@ -265,24 +214,6 @@ public class PlayerInfoVisualizerWrap
 		LuaScriptMgr.CheckArgsCount(L, 1);
 		PlayerInfoVisualizer obj = (PlayerInfoVisualizer)LuaScriptMgr.GetNetObjectSelf(L, 1, "PlayerInfoVisualizer");
 		obj.Update();
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int CreateStrengthBar(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 1);
-		PlayerInfoVisualizer obj = (PlayerInfoVisualizer)LuaScriptMgr.GetNetObjectSelf(L, 1, "PlayerInfoVisualizer");
-		obj.CreateStrengthBar();
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int DestroyStrengthBar(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 1);
-		PlayerInfoVisualizer obj = (PlayerInfoVisualizer)LuaScriptMgr.GetNetObjectSelf(L, 1, "PlayerInfoVisualizer");
-		obj.DestroyStrengthBar();
 		return 0;
 	}
 

@@ -272,23 +272,23 @@ function UIRole:UIParse()
 		return transform:FindChild(struct)
 	end
 
-	self.uiTitle = find("Top/Title"):GetComponent("MultiLabel")
-	self.uiBackBtn = find("Top/ButtonBack"):GetComponent("Transform")
+	self.uiTitle = find("TopLeft/Title"):GetComponent("MultiLabel")
+	self.uiBackBtn = find("TopLeft/ButtonBack"):GetComponent("Transform")
 	self.uiRoleGrid = find("RoleScroll/RoleGrid"):GetComponent("UIGrid")
 --	self.uiRecruitGrid = find("RecuitScroll/RoleGrid"):GetComponent("UIGrid")
-	self.uiPosAll = find("Position/All"):GetComponent("UISprite")
-	self.uiPosC = find("Position/C"):GetComponent("UISprite")
-	self.uiPosPF = find("Position/PF"):GetComponent("UISprite")
-	self.uiPosSF = find("Position/SF"):GetComponent("UISprite")
-	self.uiPosSG = find("Position/SG"):GetComponent("UISprite")
-	self.uiPosPG = find("Position/PG"):GetComponent("UISprite")
+	self.uiPosAll = find("Left/Position/All"):GetComponent("UISprite")
+	self.uiPosC = find("Left/Position/C"):GetComponent("UISprite")
+	self.uiPosPF = find("Left/Position/PF"):GetComponent("UISprite")
+	self.uiPosSF = find("Left/Position/SF"):GetComponent("UISprite")
+	self.uiPosSG = find("Left/Position/SG"):GetComponent("UISprite")
+	self.uiPosPG = find("Left/Position/PG"):GetComponent("UISprite")
 
-	self.colliderPosAll = find("Position/All"):GetComponent("BoxCollider")
-	self.colliderPosC = find("Position/C"):GetComponent("BoxCollider")
-	self.colliderPosPF = find("Position/PF"):GetComponent("BoxCollider")
-	self.colliderPosSF = find("Position/SF"):GetComponent("BoxCollider")
-	self.colliderPosSG = find("Position/SG"):GetComponent("BoxCollider")
-	self.colliderPosPG = find("Position/PG"):GetComponent("BoxCollider")
+	self.colliderPosAll = find("Left/Position/All"):GetComponent("BoxCollider")
+	self.colliderPosC = find("Left/Position/C"):GetComponent("BoxCollider")
+	self.colliderPosPF = find("Left/Position/PF"):GetComponent("BoxCollider")
+	self.colliderPosSF = find("Left/Position/SF"):GetComponent("BoxCollider")
+	self.colliderPosSG = find("Left/Position/SG"):GetComponent("BoxCollider")
+	self.colliderPosPG = find("Left/Position/PG"):GetComponent("BoxCollider")
 
 --	self.uiRecruitBtn = find("RecruitBtn/ButtonGray"):GetComponent("UIButton")
 --	self.uiRecruitBtnRedDot = find("RecruitBtn/ButtonGray/RedDot"):GetComponent("UISprite")
@@ -379,8 +379,6 @@ end
 
 function UIRole:ClickRoleItem(index)
 	return function(item, exerciseId)
-		if not FunctionSwitchData.CheckSwith(FSID.players_btn) then return end
-
 		local id = item.id
 		self.curRoleItem = item
 		if self.isRoleState then

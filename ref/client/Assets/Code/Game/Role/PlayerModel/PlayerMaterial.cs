@@ -98,7 +98,7 @@ public class PlayerMaterialControl
         }
         catch(IOException exp)
         {
-            Logger.LogError( "读取动作文件配置失败: " + exp.Message );
+            Debug.LogError( "读取动作文件配置失败: " + exp.Message );
         }
         return false;
     }
@@ -138,7 +138,7 @@ public class PlayerMaterialControl
 		
         UnityEngine.Object mtlRes = ResourceLoadManager.Instance.GetResources("Object/Material/" + strMaterial);
         if( mtlRes == null )
-            Logger.LogError("找不到材质: " + strMaterial);
+            Debug.LogError("找不到材质: " + strMaterial);
         return mtlRes;
     }
 	
@@ -146,7 +146,7 @@ public class PlayerMaterialControl
     {
         UnityEngine.Object animRes = ResourceLoadManager.Instance.GetResources("Object/Effect/Animation/" + strAnim);
         if( animRes == null )
-            Logger.LogError("找不到动画: " + strAnim);
+            Debug.LogError("找不到动画: " + strAnim);
         return animRes;
     }
 	
@@ -223,7 +223,7 @@ public class PlayerMaterialControl
         _ApplyEffect( mBody, curPlayerState, newPlayerState );
         _ApplyEffect( mHead, curPlayerState, newPlayerState );
 		
-    //	Logger.Log("state from: " + curPlayerState + " to: " + newPlayerState );
+    //	Debug.Log("state from: " + curPlayerState + " to: " + newPlayerState );
     }
 	
     private void _ApplyEffect( Part target, PlayerState curPlayerState, PlayerState newPlayerState )

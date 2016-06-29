@@ -43,9 +43,9 @@ public class MapConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name);
+		Debug.Log("Config reading " + name);
 		ReadData();
-		Logger.ConfigEnd(name);
+		
     }
 
     void ReadData()
@@ -53,7 +53,7 @@ public class MapConfig
         string text = ResourceLoadManager.Instance.GetConfigText(GlobalConst.DIR_XML_MAP);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + GlobalConst.DIR_XML_MAP);
+            Debug.LogError("LoadConfig failed: " + GlobalConst.DIR_XML_MAP);
             return;
         }
         XmlDocument doc = CommonFunction.LoadXmlConfig(GlobalConst.DIR_XML_MAP, text);

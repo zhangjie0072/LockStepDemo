@@ -45,6 +45,7 @@ public static class DelegateFactory
 		dict.Add(typeof(UITable.OnReposition), new DelegateValue(UITable_OnReposition));
 		dict.Add(typeof(UIWrapContent.OnInitializeItem), new DelegateValue(UIWrapContent_OnInitializeItem));
 		dict.Add(typeof(AnimationResp.RespDel), new DelegateValue(AnimationResp_RespDel));
+		dict.Add(typeof(Func<int,Transform,GameObject>), new DelegateValue(Func_int_Transform_GameObject));
 		dict.Add(typeof(FriendData.OnListChanged), new DelegateValue(FriendData_OnListChanged));
 		dict.Add(typeof(GameScene.DEBUG_DRAW_DELEGATE), new DelegateValue(GameScene_DEBUG_DRAW_DELEGATE));
 		dict.Add(typeof(NetworkManager.OnServerConnected), new DelegateValue(NetworkManager_OnServerConnected));
@@ -52,7 +53,6 @@ public static class DelegateFactory
 		dict.Add(typeof(Action<string>), new DelegateValue(Action_string));
 		dict.Add(typeof(Action<Texture>), new DelegateValue(Action_Texture));
 		dict.Add(typeof(DelegateLoadComplete), new DelegateValue(DelegateLoadComplete));
-		dict.Add(typeof(Func<int,Transform,GameObject>), new DelegateValue(Func_int_Transform_GameObject));
 		dict.Add(typeof(Action<int,GameObject>), new DelegateValue(Action_int_GameObject));
 		dict.Add(typeof(UBasket.BasketEventDelegate), new DelegateValue(UBasket_BasketEventDelegate));
 		dict.Add(typeof(UBasket.BasketEventDunkDelegate), new DelegateValue(UBasket_BasketEventDunkDelegate));
@@ -577,6 +577,22 @@ public static class DelegateFactory
 		return d;
 	}
 
+	public static Delegate Func_int_Transform_GameObject(LuaFunction func)
+	{
+		Func<int,Transform,GameObject> d = (param0, param1) =>
+		{
+			int top = func.BeginPCall();
+			IntPtr L = func.GetLuaState();
+			LuaScriptMgr.Push(L, param0);
+			LuaScriptMgr.Push(L, param1);
+			func.PCall(top, 2);
+			object[] objs = func.PopValues(top);
+			func.EndPCall(top);
+			return (GameObject)objs[0];
+		};
+		return d;
+	}
+
 	public static Delegate FriendData_OnListChanged(LuaFunction func)
 	{
 		FriendData.OnListChanged d = (param0) =>
@@ -661,22 +677,6 @@ public static class DelegateFactory
 			LuaScriptMgr.PushVarObject(L, param1);
 			func.PCall(top, 2);
 			func.EndPCall(top);
-		};
-		return d;
-	}
-
-	public static Delegate Func_int_Transform_GameObject(LuaFunction func)
-	{
-		Func<int,Transform,GameObject> d = (param0, param1) =>
-		{
-			int top = func.BeginPCall();
-			IntPtr L = func.GetLuaState();
-			LuaScriptMgr.Push(L, param0);
-			LuaScriptMgr.Push(L, param1);
-			func.PCall(top, 2);
-			object[] objs = func.PopValues(top);
-			func.EndPCall(top);
-			return (GameObject)objs[0];
 		};
 		return d;
 	}

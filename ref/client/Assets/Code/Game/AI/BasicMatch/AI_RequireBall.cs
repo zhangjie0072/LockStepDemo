@@ -19,7 +19,7 @@ public class AI_RequireBall
 
 		m_player.m_toSkillInstance = m_player.m_skillSystem.GetValidSkillInMatch(Command.RequireBall, true);
 		if (m_player.m_toSkillInstance == null)
-			Logger.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI RequireBall");
+			Debug.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI RequireBall");
 
 		if( lastState.m_eType == Type.ePositioning )
 		{
@@ -50,7 +50,7 @@ public class AI_RequireBall
 				iCollideSector = 0;
 			RoadPathManager.Sector targetSector = RoadPathManager.Instance.Bounce( m_player.position.xz, RoadPathManager.Instance.m_Sectors[iCollideSector], m_player.m_favorSectors );
 			RoadPathManager.Instance.AddDrawSector("targetSector", targetSector);
-			m_moveTarget = targetSector.center.xz;
+			m_moveTarget = targetSector.center.x0z;
 		}
 	}
 	

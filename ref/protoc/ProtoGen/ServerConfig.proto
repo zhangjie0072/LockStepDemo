@@ -77,7 +77,20 @@ message GameServerCfg
 	optional ResCfg res					= 3;
 }
 
+message ReplayServerCfg
+{
+	optional ServerInfo host			= 1;
+	repeated ServerInfo proxies			= 2;
+	optional ResCfg res					= 3;
+}
+
 message GatewayServerCfg
+{
+	optional ServerInfo host			= 1;
+	optional ServerInfo connection		= 2;
+}
+
+message ReplayGatewayServerCfg
 {
 	optional ServerInfo host			= 1;
 	optional ServerInfo connection		= 2;

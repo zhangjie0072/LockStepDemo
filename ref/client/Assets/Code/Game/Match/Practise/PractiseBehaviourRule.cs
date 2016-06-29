@@ -57,7 +57,7 @@ public class PractiseBehaviourRule : PractiseBehaviour,GameMatch.Count24Listener
 	{
 		base.OnMatchSetted();
 
-		npc1 = match.m_mainRole;
+		npc1 = match.mainRole;
 		npc2 = match.m_awayTeam.GetMember(0);
 	}
 
@@ -88,15 +88,15 @@ public class PractiseBehaviourRule : PractiseBehaviour,GameMatch.Count24Listener
 		return true;
 	}
 
-    public override IM.BigNumber AdjustShootRate(Player shooter, IM.BigNumber rate)
+    public override IM.PrecNumber AdjustShootRate(Player shooter, IM.PrecNumber rate)
 	{
         if (shooter == npc1)
-            return IM.BigNumber.one;
+            return IM.PrecNumber.one;
         else
             return IM.Number.zero;
 	}
 
-    public override ShootSolution GetShootSolution(UBasket basket, Area area, Player shooter, IM.BigNumber rate)
+    public override ShootSolution GetShootSolution(UBasket basket, Area area, Player shooter, IM.PrecNumber rate)
 	{
 		if (shooter == npc2)
 			return GameSystem.Instance.shootSolutionManager.GetShootSolution(26, false, 6);
@@ -117,8 +117,8 @@ public class PractiseBehaviourRule : PractiseBehaviour,GameMatch.Count24Listener
 		NGUITools.SetActive(match.m_uiController.gameObject, false);
 		npc1.m_inputDispatcher.m_enable = false;
 		npc1.m_InfoVisualizer.ShowStaminaBar(false);
-		npc1.m_InfoVisualizer.DestroyStrengthBar();
-		npc1.m_aiMgr = new AISystem_PractiseRule(match, npc1, AIState.Type.ePractiseRule_Idle);
+		//npc1.m_InfoVisualizer.DestroyStrengthBar();
+        npc1.operMode = Player.OperMode.AI;
 
 		match.mCurScene.mBasket.onGoal += OnGoal;
 		match.mCurScene.mBall.onGrab += OnGrab;
@@ -159,9 +159,9 @@ public class PractiseBehaviourRule : PractiseBehaviour,GameMatch.Count24Listener
         StartCoroutine(Step_Begin());
     }
 
-	protected override void OnUpdate()
+	public override void GameUpdate(IM.Number deltaTime)
 	{
-		base.OnUpdate();
+		base.GameUpdate(deltaTime);
 
 		if (_step == Step.CheckBall && !match.mCurScene.mGround.In3PointRange(npc1.position.xz, IM.Number.zero))
 			StartCoroutine(Step_Final());

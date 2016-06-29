@@ -29,9 +29,6 @@ public class MatchStatePlot
             player.m_enableAction = false;
             player.m_enableMovement = false;
 
-            if (player.m_aiMgr != null)
-                player.m_aiMgr.m_enable = false;
-
             if (player.m_catchHelper != null)
                 player.m_catchHelper.enabled = false;
 
@@ -39,7 +36,7 @@ public class MatchStatePlot
             if (player.m_pickupDetector != null)
             {
                 player.m_enablePickupDetector = false;
-                Logger.Log("MatchStatePlotBegin:  pickup detector sets to false.");
+                Debug.Log("MatchStatePlotBegin:  pickup detector sets to false.");
             }
 
             //player.m_enbleMovement = false;
@@ -55,7 +52,7 @@ public class MatchStatePlot
 			plotUI.onNext = OnNextDialogClick;
 			if (plotUI == null)
 			{
-				Logger.Log("Error -- can not find UI resource " + "UIPlayPlot");
+				Debug.Log("Error -- can not find UI resource " + "UIPlayPlot");
 				return;
 			}
         }
@@ -156,7 +153,7 @@ public class MatchStatePlot
         //
         if (config.icon == "self")
         {
-			plotUI.Show(0, m_match.m_mainRole.m_roleInfo.id, config.content);
+			plotUI.Show(0, m_match.mainRole.m_roleInfo.id, config.content);
         }
         else
         {

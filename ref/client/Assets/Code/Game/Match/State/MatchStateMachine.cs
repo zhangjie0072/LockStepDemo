@@ -57,13 +57,6 @@ public class MatchStateMachine
 	{
 		return SetState(eNewState, false);
 	}
-
-	public MatchState ReplaceState(MatchState state)
-	{
-		MatchState oldState = m_arStateList[(int)state.m_eState];
-		m_arStateList[(int)state.m_eState] = state;
-		return oldState;
-	}
 	
 	public bool SetState( MatchState.State eNewState, bool bForceChange )
 	{
@@ -74,13 +67,13 @@ public class MatchStateMachine
 			m_curState.OnExit();
 
 		if (m_curState != null)
-			Logger.Log(string.Format("MatchState from state: {0} to state: {1}", m_curState.m_eState, eNewState));
+			Debug.Log(string.Format("MatchState from state: {0} to state: {1}", m_curState.m_eState, eNewState));
 		
 		MatchState lastState = m_curState;
 		m_curState = m_arStateList[(int)eNewState];
 		if( m_curState == null )
 		{
-			Logger.LogError( string.Format("Can not find state: {0}", eNewState) );
+			Debug.LogError( string.Format("Can not find state: {0}", eNewState) );
 			return false;
 		}
 
@@ -94,18 +87,18 @@ public class MatchStateMachine
 	}
 	
     //逻辑层
-	public void Update( IM.Number fDeltaTime ) 
+	public void GameUpdate( IM.Number fDeltaTime ) 
 	{
 		if( m_curState == null )
 			return;
-		m_curState.Update( fDeltaTime );
+		m_curState.GameUpdate( fDeltaTime );
 	}
 
     //显示层
-    public void Update(float deltaTime)
+    public void ViewUpdate(float deltaTime)
     {
 		if( m_curState == null )
 			return;
-		m_curState.Update(deltaTime);
+		m_curState.ViewUpdate(deltaTime);
     }
 }

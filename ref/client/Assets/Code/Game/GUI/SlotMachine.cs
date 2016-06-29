@@ -130,7 +130,7 @@ public class SlotMachine : MonoBehaviour
 		itemHeight = invisibleQ.Peek().GetComponent<UIWidget>().height;
 		visibleItemCount = Mathf.CeilToInt((float)scrollAreaHeight / itemHeight) + 1;
 		if (visibleItemCount > itemCount)
-			Logger.LogError("Visible item count: " + visibleItemCount + " item count: " + itemCount + 
+			Debug.LogError("Visible item count: " + visibleItemCount + " item count: " + itemCount + 
 				", enlarge item or shrink scroll area.");
 
 		//add tween to item
@@ -244,7 +244,7 @@ public class SlotMachine : MonoBehaviour
 	void OnItemTweenFinished(GameObject item)
 	{
 		if (item != visibleQ.Peek())
-			Logger.LogError("It's impossible.");
+			Debug.LogError("It's impossible.");
 		visibleQ.Dequeue();
 		item.SetActive(false);
 		item.GetComponent<TweenPosition>().enabled = false;
@@ -271,6 +271,6 @@ public class SlotMachine : MonoBehaviour
 
 	void OnEnd(GameObject item)
 	{
-		Logger.Log("Selected item: " + item.transform.FindChild("Name").GetComponent<UILabel>().text);
+		Debug.Log("Selected item: " + item.transform.FindChild("Name").GetComponent<UILabel>().text);
 	}
 }

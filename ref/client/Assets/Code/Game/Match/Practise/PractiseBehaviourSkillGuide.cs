@@ -49,9 +49,9 @@ public class PractiseBehaviourSkillGuide : PractiseBehaviour
 		return false;
 	}
 
-    public override IM.BigNumber AdjustShootRate(Player shooter, IM.BigNumber rate)
+    public override IM.PrecNumber AdjustShootRate(Player shooter, IM.PrecNumber rate)
 	{
-        return IM.BigNumber.one; 
+        return IM.PrecNumber.one; 
 	}
 
 	protected override void OnFirstStart()
@@ -67,7 +67,7 @@ public class PractiseBehaviourSkillGuide : PractiseBehaviour
 		match.mCurScene.mBall.onHitGround += OnHitGround;
 		match.mCurScene.mBasket.onGoal += OnGoal;
 
-		match.m_mainRole.m_InfoVisualizer.m_strengthBar = null;
+        match.mainRole.m_InfoVisualizer.ShowStrengthBar(false);
 
 		foreach (string tip in practise.tips)
 		{
@@ -80,9 +80,9 @@ public class PractiseBehaviourSkillGuide : PractiseBehaviour
 
 	private void EnsureTomahawkDunk()
 	{
-		match.m_mainRole.m_skillSystem.DisableCommand(Command.Layup);	//Disable layup
+		match.mainRole.m_skillSystem.DisableCommand(Command.Layup);	//Disable layup
 
-		foreach (SkillSlotProto proto in match.m_mainRole.m_roleInfo.skill_slot_info)
+		foreach (SkillSlotProto proto in match.mainRole.m_roleInfo.skill_slot_info)
 		{
 			Goods goods = MainPlayer.Instance.GetGoods(GoodsCategory.GC_TOTAL, proto.skill_uuid);
 			if (goods != null && goods.GetID() == SKILL_ID)
@@ -100,9 +100,9 @@ public class PractiseBehaviourSkillGuide : PractiseBehaviour
 
 	private void CancelEnsureTomahawkDunk()
 	{
-		match.m_mainRole.m_skillSystem.CancelDisableCommand(Command.Layup);	//Cancel disable layup
+		match.mainRole.m_skillSystem.CancelDisableCommand(Command.Layup);	//Cancel disable layup
 
-		foreach (SkillSlotProto proto in match.m_mainRole.m_roleInfo.skill_slot_info)
+		foreach (SkillSlotProto proto in match.mainRole.m_roleInfo.skill_slot_info)
 		{
 			Goods goods = MainPlayer.Instance.GetGoods(GoodsCategory.GC_TOTAL, proto.skill_uuid);
 			if (goods != null && goods.GetID() == SKILL_ID)
@@ -133,19 +133,19 @@ public class PractiseBehaviourSkillGuide : PractiseBehaviour
 		StartCoroutine(Step_Intro());
 	}
 
-	protected override void OnUpdate()
+	public override void GameUpdate(IM.Number deltaTime)
 	{
-		base.OnUpdate();
+		base.GameUpdate(deltaTime);
 
-		if (!match.m_mainRole.m_bWithBall)
+		if (!match.mainRole.m_bWithBall)
 		{
 			match.HighlightButton(0, false);
 		}
 
-		if (!jumped && !match.m_mainRole.m_bOnGround)
+		if (!jumped && !match.mainRole.m_bOnGround)
 		{
 			jumped = true;
-			jumpedInRightArea = (match.m_mainRole.m_StateMachine.m_curState.m_curExecSkill.skill.id == SKILL_ID);
+			jumpedInRightArea = (match.mainRole.m_StateMachine.m_curState.m_curExecSkill.skill.id == SKILL_ID);
 		}
 	}
 
@@ -191,7 +191,7 @@ public class PractiseBehaviourSkillGuide : PractiseBehaviour
 
 	private IEnumerator Step_Intro()
 	{
-		match.m_mainRole.m_StateMachine.SetState(PlayerState.State.eStand);
+		match.mainRole.m_StateMachine.SetState(PlayerState.State.eStand);
 		match.ResetPlayerPos();
 
 		yield return new WaitForSeconds(0.3f);
@@ -199,7 +199,7 @@ public class PractiseBehaviourSkillGuide : PractiseBehaviour
 		match.ShowGuideTip();
 		match.tip = tips["Intro"];
 		match.ShowTipArrow();
-		match.m_mainRole.m_inputDispatcher.m_enable = false;
+		match.mainRole.m_inputDispatcher.m_enable = false;
 
 		step = Step.Intro;
 	}
@@ -225,12 +225,12 @@ public class PractiseBehaviourSkillGuide : PractiseBehaviour
 	{
 		jumped = false;
 		jumpedInRightArea = false;
-		match.m_mainRole.GrabBall(match.mCurScene.mBall);
+		match.mainRole.GrabBall(match.mCurScene.mBall);
 		match.ResetPlayerPos();
 		match.HideGuideTip();
         NGUITools.Destroy(guideDunk);
         guideDunk = null;
-		match.m_mainRole.m_inputDispatcher.m_enable = true;
+		match.mainRole.m_inputDispatcher.m_enable = true;
 		step = Step.Play;
 	}
 
@@ -238,7 +238,7 @@ public class PractiseBehaviourSkillGuide : PractiseBehaviour
 	{
 		match.ShowTipArrow();
 		match.tip = tips["Retutor"];
-		match.m_mainRole.m_inputDispatcher.m_enable = false;
+		match.mainRole.m_inputDispatcher.m_enable = false;
 		step = Step.Retutor;
 		guideDunk = UIManager.Instance.CreateUI("UIGuide");
         guideDunk.transform.FindChild("Middle/Texture").GetComponent<UITexture>().mainTexture
@@ -249,7 +249,7 @@ public class PractiseBehaviourSkillGuide : PractiseBehaviour
 
 	private void Step_Praise()
 	{
-		match.m_mainRole.m_inputDispatcher.m_enable = false;
+		match.mainRole.m_inputDispatcher.m_enable = false;
         GameObject prefab = ResourceLoadManager.Instance.LoadPrefab("Prefab/GUI/GuideTip_4") as GameObject;
 		GameObject tip = CommonFunction.InstantiateObject(prefab, UIManager.Instance.m_uiRootBasePanel.transform);
 		tip.GetComponent<UIPanel>().depth = 10000;
@@ -326,7 +326,7 @@ public class PractiseBehaviourSkillGuide : PractiseBehaviour
 	private void Step_FreePlay()
 	{
 		match.HideGuideTip();
-		match.m_mainRole.m_inputDispatcher.m_enable = true;
+		match.mainRole.m_inputDispatcher.m_enable = true;
 		step = Step.FreePlay;
 	}
 

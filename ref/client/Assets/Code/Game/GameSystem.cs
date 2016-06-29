@@ -143,23 +143,23 @@ public class GameSystem
         {
             DateTime time = System.DateTime.Now;
             mClient = new Client();
-            Logger.Log("【Time】new Client=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+            Debug.Log("【Time】new Client=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
 
             time = System.DateTime.Now;
             mVDebug = new VDebugStatus();
-            Logger.Log("【Time】new VDebugStatus=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+            Debug.Log("【Time】new VDebugStatus=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
 
             time = System.DateTime.Now;
             mNetworkManager = new NetworkManager();
-            Logger.Log("【Time】new NetworkManager=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+            Debug.Log("【Time】new NetworkManager=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
 
             time = System.DateTime.Now;
             LuaMgr.Instance.Init();
-            Logger.Log("【Time】LuaMgr.Instance.Init=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+            Debug.Log("【Time】LuaMgr.Instance.Init=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
         }
         catch (UnityException exp)
         {
-            Logger.LogError(exp.Message);
+            Debug.LogError(exp.Message);
             if (mClient != null)
                 mClient.Exit();
         }
@@ -288,7 +288,7 @@ public class GameSystem
 
                 lock (LockObject)
                 {
-                    //Logger.Log("ParseCommonConfig --- readConfigCnt : " + readConfigCnt);
+                    //Debug.Log("ParseCommonConfig --- readConfigCnt : " + readConfigCnt);
                     if (loadConfigCnt > 30 && loadConfigCnt == readConfigCnt)
                     {
                         return;
@@ -299,7 +299,7 @@ public class GameSystem
         }
         catch (System.Exception ex)
         {
-            //Logger.LogError("Config parse error: " + ex.Message + "" + LogType.Exception + ex.StackTrace);
+            //Debug.LogError("Config parse error: " + ex.Message + "" + LogType.Exception + ex.StackTrace);
         }
     }
 
@@ -310,7 +310,7 @@ public class GameSystem
 			while (true)
             {
                 ParsePreConfig();
-                //Logger.Log("ParseConfig --- showLoading : " + showLoading);
+                //Debug.Log("ParseConfig --- showLoading : " + showLoading);
                 if (showLoading)
                 {
                     if (!isNewPlayer)
@@ -326,7 +326,7 @@ public class GameSystem
 
                     lock (LockObject)
                     {
-                        //Logger.Log("ParseConfig --- readConfigCnt : " + readConfigCnt);
+                        //Debug.Log("ParseConfig --- readConfigCnt : " + readConfigCnt);
                         if (loadConfigCnt > 30 && loadConfigCnt == readConfigCnt)
                         {
                             loadConfigFinish = true;
@@ -339,13 +339,13 @@ public class GameSystem
 		}
 		catch(System.Exception ex)
 		{
-            //Logger.LogError("Config parse error: " + ex.Message + "" + LogType.Exception + ex.StackTrace);
+            //Debug.LogError("Config parse error: " + ex.Message + "" + LogType.Exception + ex.StackTrace);
 		}
     }
 
     public void ParsePreConfig()
     {
-        //Logger.Log("this log is needed!");
+        //Debug.Log("this log is needed!");
         RoleShapeConfig.ReadConfig();
         BodyInfoListConfig.ReadConfig();
         AttrDataConfigData.ReadConfig();
@@ -486,7 +486,8 @@ public class GameSystem
 			mNetworkManager.Update(Time.deltaTime);
 
         //更新虚拟服务器（如果发送了消息，再更新一次虚拟连接，保证一帧之内客户端收到回复）
-        VirtualGameServer.Instance.Update(Time.deltaTime);
+        if (VirtualGameServer.Instance != null)
+            VirtualGameServer.Instance.Update(Time.unscaledDeltaTime);
 
         //客户端更新（驱动比赛逻辑层）
         mClient.Update();

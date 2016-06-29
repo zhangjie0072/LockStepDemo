@@ -56,25 +56,25 @@ end
 -----------------------------------------------------------------
 function NewComerTrial:Awake( ... )
 	for i = 1 , 7 do
-		table.insert(self.uiDayButton,i,self.transform:FindChild("Window/Right/Up/" .. i))
+		table.insert(self.uiDayButton,i,self.transform:FindChild("Right/Anchor/Right/Up/" .. i))
 		addOnClick(self.uiDayButton[i].gameObject, self:ClickItem(i))
 	end
 	self.uiRedDot = {}
 	for i = 1 , 7 do
-		table.insert(self.uiRedDot,i,self.transform:FindChild("Window/Right/Up/" .. i .. "/RedDot"))
+		table.insert(self.uiRedDot,i,self.transform:FindChild("Right/Anchor/Right/Up/" .. i .. "/RedDot"))
 	end
-	self.uiGrid = self.transform:FindChild("Window/Right/Scroll/Grid"):GetComponent("UIGrid")
-	self.uiProcess = self.transform:FindChild("Window/Left/Process"):GetComponent("UIProgressBar")
-	self.uiPrcLight = self.transform:FindChild("Window/Left/Process/Light"):GetComponent("UIProgressBar")
-	self.uiLightEffect = self.transform:FindChild("Window/Left/Process/ThumbLight")
-	self.uiPercentLabel = self.transform:FindChild("Window/Left/Num"):GetComponent("UILabel")
-	self.uiCloseGrid = self.transform:FindChild("Top/ButtonBack")
-	self.uiButtonGray = self.transform:FindChild("Window/Left/ButtonGray")
-	self.uiButtonGrayAnimator = self.transform:FindChild("Window/Left/Ef_Button1").gameObject
+	self.uiGrid = self.transform:FindChild("Right/Anchor/Right/Scroll/Grid"):GetComponent("UIGrid")
+	self.uiProcess = self.transform:FindChild("Left/Anchor/Left/Process"):GetComponent("UIProgressBar")
+	self.uiPrcLight = self.transform:FindChild("Left/Anchor/Left/Process/Light"):GetComponent("UIProgressBar")
+	self.uiLightEffect = self.transform:FindChild("Left/Anchor/Left/Process/ThumbLight")
+	self.uiPercentLabel = self.transform:FindChild("Left/Anchor/Left/Process/Num"):GetComponent("UILabel")
+	self.uiCloseGrid = self.transform:FindChild("TopLeft/ButtonBack")
+	self.uiButtonGray = self.transform:FindChild("Left/Anchor/Left/ButtonGray")
+	self.uiButtonGrayAnimator = self.transform:FindChild("Left/Anchor/Left/Ef_Button1").gameObject
 	-- self.uiTitle = self.transform:FindChild("Window/Left/Text"):GetComponent("UILabel")
 	self.uiAimator = self.transform:GetComponent("Animator")
-	self.uiRoleModel = self.transform:FindChild("Window/Left/Model/ModelShowItem"):GetComponent("ModelShowItem")
-	self.uiCoka = self.transform:FindChild("Window/Left/Cola"):GetComponent('UITweener')
+	self.uiRoleModel = self.transform:FindChild("Left/Anchor/Left/Model/ModelShowItem"):GetComponent("ModelShowItem")
+	self.uiCoka = self.transform:FindChild("Left/Anchor/Left/Cola"):GetComponent('UITweener')
 
 	if self.uiCoka then
 		self.uiCoka:AddOnFinished(LuaHelper.Callback(self:TweenScaleFinished()))
@@ -130,8 +130,10 @@ function NewComerTrial:Start( ... )
 		end
 		if i == self.day then
 			sp.spriteName = 'sign_today'
+			sp.color = Color.New(1/255 , 131/255, 251/255)
 			sp:MakePixelPerfect()
 			sel.spriteName = 'sign_today'
+			sel.color = Color.New(1/255 , 131/255, 251/255)
 			sel:MakePixelPerfect()
 		end
 	end
@@ -732,7 +734,7 @@ function NewComerTrial:RefreshScore(withAnim)
 		return
 	end
 	self.uiProcess.value = MainPlayer.Instance.trialTotalScore / self.TotalScore
-	self.uiPercentLabel.text = string.format(getCommonStr('STR_NEED_COLA'), self.TotalScore- MainPlayer.Instance.trialTotalScore)
+	self.uiPercentLabel.text = string.format(getCommonStr('STR_NEED_COLA'), MainPlayer.Instance.trialTotalScore)
 	if self.uiProcess.value == 1 or MainPlayer.Instance.NewComerSign.open_flag == 0 then
 		self.uiButtonGray.transform:GetComponent("UIButton").isEnabled = true
 		NGUITools.SetActive(self.uiButtonGrayAnimator, true)
@@ -776,7 +778,7 @@ function NewComerTrial:ProcessWithAnim(  )
 		if ScoreTemp >= score then
 			MainPlayer.Instance.trialTotalScore = score
 			-- print('process over')
-			self.uiPercentLabel.text = string.format(getCommonStr('STR_NEED_COLA'), ScoreMax- score)
+			self.uiPercentLabel.text = string.format(getCommonStr('STR_NEED_COLA'), score)
 			self.AnimExcecuting = false
 			--显示领奖信息
 			if self.DelayShowAwardId~=nil then

@@ -14,13 +14,14 @@ public class ScrollViewAsyncLoadItem : MonoBehaviour
     int ItemCount = 0;
     bool m_IsStartLoad = false;
     public System.Func<int, Transform, GameObject> OnCreateItem = null;
+	public int LoadCountOnce = 1;	//一次yield return 加载的个数
 
     void Awake()
     {
         UIGrid[] grids = GetComponentsInChildren<UIGrid>(true);
         if (grids == null || grids.Length == 0)
         {
-            Logger.LogError("ScrollViewIncLoad requires UIGrid.");
+            Debug.LogError("ScrollViewIncLoad requires UIGrid.");
         }
 
         scroll = GetComponent<UIScrollView>();
@@ -34,7 +35,7 @@ public class ScrollViewAsyncLoadItem : MonoBehaviour
             NGUITools.Destroy(grid.transform.GetChild(0).gameObject);
         }
         yield return null;
-
+		int loadCount = 0;
         for (int index = 0; index < ItemCount; index++)
         {
             if (OnCreateItem == null)
@@ -44,9 +45,10 @@ public class ScrollViewAsyncLoadItem : MonoBehaviour
 
             //调用回调函数中的逻辑，填充控件内容
             GameObject item = OnCreateItem(index, grid.transform);
+			loadCount++;
             if (item == null)
             {
-                Logger.LogError(this.transform.name + "=>ScrollViewAsyncLoadItem load error! index = " + index.ToString());
+                Debug.LogError(this.transform.name + "=>ScrollViewAsyncLoadItem load error! index = " + index.ToString());
                 break;
             }
 
@@ -55,8 +57,11 @@ public class ScrollViewAsyncLoadItem : MonoBehaviour
             {
                 scroll.ResetPosition();
             }
-
-            yield return null;
+			if(loadCount >= LoadCountOnce)
+			{
+				loadCount = 0;
+				yield return null;
+			}
             //yield return new WaitForEndOfFrame();
         }
 

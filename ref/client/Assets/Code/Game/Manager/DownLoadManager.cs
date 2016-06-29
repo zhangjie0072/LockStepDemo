@@ -26,7 +26,7 @@ public class DownLoadManager
             {
                 //CommonFunction.DebugLog(string.Format("[Exception][OperateClassDownLoad LoadFile]: [{0}][{1}][{2}]", vURL, vPath, e.Message));
                 // File.Delete(vPath);
-                Logger.LogError(e.Message + "  " + vURL);
+                Debug.LogError(e.Message + "  " + vURL);
                 //CommonFunction.DebugLog(string.Format("[Exception][OperateClassDownLoad LoadFile]: [{0}][{1}][{2}]", vURL, vPath, Path.GetDirectoryName(vPath)));
                 tmpResult = false;
                 return tmpResult;

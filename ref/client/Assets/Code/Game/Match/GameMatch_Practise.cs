@@ -55,17 +55,6 @@ public class GameMatch_Practise : GameMatch
 
 	public System.Action onBehaviourCreated;
 
-	public Player mainRole
-	{
-		get { return base.m_mainRole; }
-		set
-		{
-			base.m_mainRole = value;
-			_UpdateCamera(m_mainRole);
-			InputReader.Instance.player = m_mainRole;
-		}
-	}
-
     private static Dictionary<uint, string> _practise_behaviour_name = new Dictionary<uint, string>();
 
 	public GameMatch_Practise(Config config)
@@ -100,9 +89,9 @@ public class GameMatch_Practise : GameMatch
 	{
 	}
 
-	override public void OnSceneComplete ()
+	protected override void _OnLoadingCompleteImp ()
 	{
-		base.OnSceneComplete();
+		base._OnLoadingCompleteImp ();
 		mCurScene.CreateBall();
 
 		GameObject obj = new GameObject("PractiseBehaviour");
@@ -114,7 +103,7 @@ public class GameMatch_Practise : GameMatch
 
 		if( m_config == null )
 		{
-			Logger.LogError("Match config file loading failed.");
+			Debug.LogError("Match config file loading failed.");
 			return;
 		}
 		
@@ -124,35 +113,40 @@ public class GameMatch_Practise : GameMatch
 			if (m_config.MainRole.id != null)
 			{
                 if (GameSystem.Instance.PractiseConfig.GetConfig(practise.ID).is_activity == 1)
-				    m_mainRole = CreatePlayer(m_config.MainRole, false);
+				    mainRole = CreatePlayer(m_config.MainRole, false);
                 else
-                    m_mainRole = CreatePlayer(m_config.MainRole, true);
+                    mainRole = CreatePlayer(m_config.MainRole, true);
 			}
 		}
 		else
 		{
 			if (m_config.MainRole.id.Length >= 5)
 				m_config.MainRole.id = MainPlayer.Instance.CaptainID.ToString();
-			m_mainRole = CreatePlayer(m_config.MainRole, false);
+			mainRole = CreatePlayer(m_config.MainRole, false);
 		}
-        _UpdateCamera(m_mainRole);
+        _UpdateCamera(mainRole);
 		foreach( GameMatch.Config.TeamMember member in m_config.NPCs )
         {
             Player npc = CreatePlayer(member, true);
-			npc.m_aiMgr = (AISystem)Activator.CreateInstance(
-				Assembly.GetExecutingAssembly().GetType("AISystem_Practise" + _practise_behaviour_name[practise.ID]), 
-				new System.Object[] { this, npc, practise_behaviour.GetInitialAIState() });
+            npc.operMode = Player.OperMode.AI;
         }
-		m_homeTeam.m_role = (m_homeTeam == m_mainRole.m_team) ? MatchRole.eOffense : MatchRole.eDefense;
-		m_awayTeam.m_role = (m_awayTeam == m_mainRole.m_team) ? MatchRole.eOffense : MatchRole.eDefense;
+		m_homeTeam.m_role = (m_homeTeam == mainRole.m_team) ? MatchRole.eOffense : MatchRole.eDefense;
+		m_awayTeam.m_role = (m_awayTeam == mainRole.m_team) ? MatchRole.eOffense : MatchRole.eDefense;
 		AssumeDefenseTarget();
 	}
 
-	public override void Update ()
-	{
-        base.Update();
+    public override AISystem CreateAISystem(Player player)
+    {
+        return (AISystem)Activator.CreateInstance(
+            Assembly.GetExecutingAssembly().GetType("AISystem_Practise" + _practise_behaviour_name[practise.ID]), 
+            new System.Object[] { this, player, practise_behaviour.GetInitialAIState() });
+    }
 
-		if( !GameSystem.Instance.mClient.mUIManager.isInMatchLoading && !practise_behaviour.enabled )
+	public override void ViewUpdate ()
+	{
+        base.ViewUpdate();
+
+		if( !GameSystem.Instance.mClient.mUIManager.isInMatchLoading && m_uiController == null)
 		{
 			_CreateGUI();
 			PostCreateUI();
@@ -164,7 +158,15 @@ public class GameMatch_Practise : GameMatch
         }
 	}
 
-    public override void HandleGameBegin(Pack pack)
+    public override void GameUpdate(IM.Number deltaTime)
+    {
+        base.GameUpdate(deltaTime);
+
+        if (practise_behaviour != null)
+            practise_behaviour.GameUpdate(deltaTime);
+    }
+
+    public override void OnGameBegin(GameBeginResp resp)
     {
 		m_stateMachine.SetState(MatchState.State.eBegin);
 		practise_behaviour.enabled = true;
@@ -179,13 +181,11 @@ public class GameMatch_Practise : GameMatch
 		//if (mem.id == MainPlayer.Instance.CaptainID.ToString())
 		//	mem.roleInfo = MainPlayer.Instance.Captain.m_roleInfo;
 		Player player = _GeneratePlayerData(mem, rival);
-		_CreateTeamMember(player);
+		CreateTeamMember(player);
 
 		if ((FightStatus)mem.pos == FightStatus.FS_MAIN)
         {
-            player.m_inputDispatcher = new InputDispatcher(this, player);
-            player.m_InfoVisualizer.CreateStrengthBar();
-			player.m_InfoVisualizer.ShowStaminaBar(true);
+            player.operMode = Player.OperMode.Input;
         }
         player.m_catchHelper = new CatchHelper(player);
         player.m_catchHelper.ExtractBallLocomotion();
@@ -454,7 +454,7 @@ public class GameMatch_Practise : GameMatch
 		}
 	}
 
-	public override IM.BigNumber AdjustShootRate(Player shooter, IM.BigNumber rate)
+	public override IM.PrecNumber AdjustShootRate(Player shooter, IM.PrecNumber rate)
 	{
 		return practise_behaviour.AdjustShootRate(shooter, rate);
 	}
@@ -469,17 +469,19 @@ public class GameMatch_Practise : GameMatch
 		return practise_behaviour.AdjustCrossRate(crosser, defender, rate);
 	}
 
-    public override ShootSolution GetShootSolution(UBasket basket, Area area, Player shooter, IM.BigNumber rate, ShootSolution.Type type)
+    public override ShootSolution GetShootSolution(UBasket basket, Area area, Player shooter, IM.PrecNumber rate, ShootSolution.Type type)
 	{
 		ShootSolution solution = practise_behaviour.GetShootSolution(basket, area, shooter, rate);
 		if (solution == null)
 			solution = base.GetShootSolution(basket, area, shooter, rate, type);
-		Logger.Log("Practise shoot solution: " + solution.m_id);
+		Debug.Log("Practise shoot solution: " + solution.m_id);
 		return solution;
 	}
 
 	public override bool IsCommandValid(Command command)
 	{
+        if (practise_behaviour == null)
+            return false;
 		return practise_behaviour.IsCommandValid(command);
 	}
 
@@ -568,7 +570,7 @@ public class GameMatch_Practise : GameMatch
     //    }
     //    else
     //    {
-    //        Logger.Log("Exit practise error: " + (ErrorID)resp.practice.result);
+    //        Debug.Log("Exit practise error: " + (ErrorID)resp.practice.result);
     //        CommonFunction.ShowErrorMsg((ErrorID)resp.practice.result);
     //    }
     //}

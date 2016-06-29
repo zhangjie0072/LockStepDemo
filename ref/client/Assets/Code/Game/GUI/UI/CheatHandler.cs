@@ -2,6 +2,9 @@
 using System.Collections;
 using fogs.proto.msg;
 
+/// <summary>
+/// 作弊界面【用于开启一些调试功能】
+/// </summary>
 public class CheatHandler : MonoBehaviour
 {
 
@@ -43,8 +46,8 @@ public class CheatHandler : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-		tgEnableLog.value = Logger.EnableLog;
-		tgEnableLog.onChange.Add(new EventDelegate(() => Logger.EnableLog = tgEnableLog.value));
+		//tgEnableLog.value =  Debug.LogEnabled;
+		//tgEnableLog.onChange.Add(new EventDelegate(() => Debug.Debug.LogEnabled = tgEnableLog.value));
 		tgDisplayLog.value = ErrorDisplay.Instance.enabled;
 		tgDisplayLog.onChange.Add(new EventDelegate(() => ErrorDisplay.Instance.enabled = tgDisplayLog.value));
 
@@ -115,7 +118,6 @@ public class CheatHandler : MonoBehaviour
         if (toggle.value)
             _cmdStr = "SetVip";
     }
-
     public void AddGoods(UIToggle toggle)
     {
         if (toggle.value)
@@ -136,6 +138,18 @@ public class CheatHandler : MonoBehaviour
         if (toggle.value)
             _cmdStr = "AddTask";
     }
+    public void AddQualifyingNewerScore(UIToggle toggle)
+    {
+        if (toggle.value)
+            _cmdStr = "AddQualifingNewerScore";
+    }
+
+    public void AddTourNewScore(UIToggle toggle)
+    {
+        if (toggle.value)
+            _cmdStr = "AddTourNewerScore";
+    }
+
     public void FinishTask(UIToggle toggle)
     {
         if (toggle.value)

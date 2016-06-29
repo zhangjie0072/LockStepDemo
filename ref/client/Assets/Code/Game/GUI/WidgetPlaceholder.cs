@@ -37,13 +37,13 @@ public class WidgetPlaceholder : MonoBehaviour
         UIWidget widget = GetComponentInChildren<UIWidget>();
         if (widget == null)
         {
-            Logger.LogError("Widget placeholder can not be used without widget.");
+            Debug.LogError("Widget placeholder can not be used without widget.");
         }
         GameObject obj = GameObject.Instantiate(prefab) as GameObject;
         UIWidget new_widget = obj.GetComponentInChildren<UIWidget>();
         if (new_widget == null)
         {
-            Logger.LogError("The prefab isn't a widget.");
+            Debug.LogError("The prefab isn't a widget.");
         }
         obj.name = gameObject.name;
         obj.transform.parent = transform.parent;

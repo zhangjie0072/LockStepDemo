@@ -10,7 +10,7 @@ public class MatchStateOverWrap
 		{
 			new LuaMethod("IsCommandValid", IsCommandValid),
 			new LuaMethod("OnEnter", OnEnter),
-			new LuaMethod("Update", Update),
+			new LuaMethod("ViewUpdate", ViewUpdate),
 			new LuaMethod("OnExit", OnExit),
 			new LuaMethod("SendPractise1vs1Result", SendPractise1vs1Result),
 			new LuaMethod("SendCareerResult", SendCareerResult),
@@ -126,12 +126,12 @@ public class MatchStateOverWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int Update(IntPtr L)
+	static int ViewUpdate(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		MatchStateOver obj = (MatchStateOver)LuaScriptMgr.GetNetObjectSelf(L, 1, "MatchStateOver");
 		float arg0 = (float)LuaScriptMgr.GetNumber(L, 2);
-		obj.Update(arg0);
+		obj.ViewUpdate(arg0);
 		return 0;
 	}
 

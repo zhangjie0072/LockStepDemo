@@ -48,11 +48,11 @@ public class ResourceLoadManagerBase : Singleton<ResourceLoadManagerBase>
     {
         System.DateTime time = System.DateTime.Now;
         GetResourcsList();
-        Logger.Log("【Time】GetResourcsList=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+        Debug.Log("【Time】GetResourcsList=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
 
         time = System.DateTime.Now;
         this.Init();
-        Logger.Log("【Time】ResourceLoadManagerBase Init=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+        Debug.Log("【Time】ResourceLoadManagerBase Init=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public class ResourceLoadManagerBase : Singleton<ResourceLoadManagerBase>
             //time = System.DateTime.Now;
             //assetBundlePath = "atlas/atlas_script.assetbundle";
             //assetBundle = this.GetLoadAssetBundle(assetBundlePath);
-            //Logger.Log("【Time】ResourceLoadManagerBase Init AtlasScript=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+            //Debug.Log("【Time】ResourceLoadManagerBase Init AtlasScript=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
 
             time = System.DateTime.Now;
             #region lua
@@ -83,10 +83,10 @@ public class ResourceLoadManagerBase : Singleton<ResourceLoadManagerBase>
                 if (!_luaList.ContainsKey(luaName))
                     _luaList.Add(luaName, objs[i] as TextAsset);
                 else
-                    Logger.LogWarning("Lua Name is Exist =>" + luaName);
+                    Debug.LogWarning("Lua Name is Exist =>" + luaName);
             }
             #endregion
-            Logger.Log("【Time】ResourceLoadManagerBase Init lua=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+            Debug.Log("【Time】ResourceLoadManagerBase Init lua=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
 
             time = System.DateTime.Now;
             #region proto
@@ -99,10 +99,10 @@ public class ResourceLoadManagerBase : Singleton<ResourceLoadManagerBase>
                 if (!_luaList.ContainsKey(protoName))
                     _luaList.Add(protoName, objs[i] as TextAsset);
                 else
-                    Logger.LogWarning("proto Name is Exist =>" + protoName);
+                    Debug.LogWarning("proto Name is Exist =>" + protoName);
             }
             #endregion
-            Logger.Log("【Time】ResourceLoadManagerBase Init proto=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+            Debug.Log("【Time】ResourceLoadManagerBase Init proto=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
         }
     }
 
@@ -236,7 +236,7 @@ public class ResourceLoadManagerBase : Singleton<ResourceLoadManagerBase>
             {
                 if (!File.Exists(filePath))
                 {
-                    Logger.LogError("file not find filePath=>" + filePath + "\n vPath=>" + vPath);
+                    Debug.LogError("file not find filePath=>" + filePath + "\n vPath=>" + vPath);
                     return null;
                 }
                 dependAssetBytes = File.ReadAllBytes(filePath);
@@ -246,7 +246,7 @@ public class ResourceLoadManagerBase : Singleton<ResourceLoadManagerBase>
         }
         catch (System.Exception ex)
         {
-            Logger.LogError(ex.StackTrace + " vpath=" + vPath);
+            Debug.LogError(ex.StackTrace + " vpath=" + vPath);
             return null;
         }
 

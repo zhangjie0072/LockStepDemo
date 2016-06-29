@@ -53,6 +53,7 @@ public class fogs_proto_config_SectionConfigWrap
 			new LuaField("role_gift", get_role_gift, set_role_gift),
 			new LuaField("awards_id", get_awards_id, set_awards_id),
 			new LuaField("icon_level", get_icon_level, set_icon_level),
+			new LuaField("frame", get_frame, set_frame),
 		};
 
 		LuaScriptMgr.RegisterLib(L, "fogs.proto.config.SectionConfig", typeof(fogs.proto.config.SectionConfig), regs, fields, typeof(object));
@@ -1047,6 +1048,30 @@ public class fogs_proto_config_SectionConfigWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_frame(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		fogs.proto.config.SectionConfig obj = (fogs.proto.config.SectionConfig)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name frame");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index frame on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.frame);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_id(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -1979,6 +2004,30 @@ public class fogs_proto_config_SectionConfigWrap
 		}
 
 		obj.icon_level = LuaScriptMgr.GetString(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_frame(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		fogs.proto.config.SectionConfig obj = (fogs.proto.config.SectionConfig)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name frame");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index frame on a nil value");
+			}
+		}
+
+		obj.frame = LuaScriptMgr.GetString(L, 3);
 		return 0;
 	}
 }

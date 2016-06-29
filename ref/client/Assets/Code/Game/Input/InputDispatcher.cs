@@ -47,7 +47,7 @@ public enum Command
 	CutIn 				= 9,
 	BodyThrowCatch 		= 10,
 	BackToBack 			= 11,
-	JockeyForPosition 	= 12,
+	Boxout 				= 12,
 	PickAndRoll 		= 13,
 	RequireBall 		= 14,
 	Defense 			= 15,
@@ -153,10 +153,10 @@ public class InputDispatcher
 		if (bufferedCommand != Command.None)
 		{
 			bufferedTime -= deltaTime;
-			//Logger.Log("Cur buffer time:" + bufferedTime);
+			//Debug.Log("Cur buffer time:" + bufferedTime);
 			if (bufferedTime < IM.Number.zero)
 			{
-			//	Logger.Log("Clear buffer command for time out.");
+			//	Debug.Log("Clear buffer command for time out.");
 				bufferedCommand = Command.None;
 			}
 		}
@@ -176,7 +176,7 @@ public class InputDispatcher
         //投篮力度条控制
         if (_prevCmd == Command.Shoot && cmd != Command.Shoot)
         {
-            if (m_player.m_InfoVisualizer.m_strengthBar != null &&
+            if (m_player.shootStrength != null &&
                 m_player.m_StateMachine.m_curState.m_eState == PlayerState.State.eShoot)
             {
                 m_player.shootStrength.Stop();
@@ -207,6 +207,9 @@ public class InputDispatcher
 		{
             //方向操作取消技能
 			PlayerState skillState = m_player.m_StateMachine.m_curState;
+			if( !(skillState is PlayerState_Skill) )
+				CommandToAction(Command.None);
+
 			if (skillState.m_lstActionId.Count != 0
 			   && skillState is PlayerState_Skill)
 			{
@@ -215,7 +218,7 @@ public class InputDispatcher
 			}
 			else if (bufferedCommand != Command.None)   //执行缓存命令
 			{
-				//Logger.Log("Cast buffered command:" + bufferedCommand);
+				//Debug.Log("Cast buffered command:" + bufferedCommand);
 				CommandToAction(bufferedCommand);
 			}
 		}
@@ -224,7 +227,7 @@ public class InputDispatcher
 			m_match.m_stateMachine.m_curState.m_eState == MatchState.State.ePlaying)
 		{
 			//AI 接管玩家操作
-			if (m_match.EnableTakeOver() && m_player == m_match.m_mainRole)
+			if (m_match.EnableTakeOver())
 			{
 				bool uncontrol = (dir == InputDirection.None && cmd != Command.None);
 				if (uncontrol)
@@ -240,7 +243,7 @@ public class InputDispatcher
 					if (uncontrolTime > MAX_UNCONTROL_TIME)
 					{
 						inTakeOver = true;
-						Logger.Log("InputDispatcher, Take over.");
+						Debug.Log("InputDispatcher, Take over.");
 						if (m_player.m_aiMgr != null && m_player.m_aiMgr.m_enable != Debugger.Instance.m_bEnableAI)
 							m_player.m_aiMgr.m_enable = Debugger.Instance.m_bEnableAI;
 					}
@@ -248,7 +251,7 @@ public class InputDispatcher
 				else if (inTakeOver && !uncontrol)
 				{
 					inTakeOver = false;
-					Logger.Log("InputDispatcher, Resume.");
+					Debug.Log("InputDispatcher, Resume.");
 					if (m_player.m_aiMgr != null && m_player.m_aiMgr.m_enable)
 						m_player.m_aiMgr.m_enable = false;
 				}
@@ -321,7 +324,7 @@ public class InputDispatcher
 	{
 		inTakeOver = dispatcher.inTakeOver;
 		uncontrolTime = dispatcher.uncontrolTime;
-		Logger.Log(string.Format("TransmitUncontrolInfo from {0} to {1}, inTakeOver:{2}, uncontrolTime:{3}",
+		Debug.Log(string.Format("TransmitUncontrolInfo from {0} to {1}, inTakeOver:{2}, uncontrolTime:{3}",
 			dispatcher.m_player.m_name, m_player.m_name, inTakeOver, uncontrolTime));
 	}
 
@@ -393,12 +396,12 @@ public class InputDispatcher
 			Command curCmd = Command.None;
 			if (curState.m_curExecSkill != null)
 				curCmd = (Command)curState.m_curExecSkill.skill.action_type;
-			//Logger.Log("Cur skill type:" + curCmd);
+			//Debug.Log("Cur skill type:" + curCmd);
 			if (cmd != curCmd)
 			{
 				if (cmd != bufferedCommand)
 				{
-					//Logger.Log("Buffer command:" + cmd);
+					//Debug.Log("Buffer command:" + cmd);
 					bufferedCommand = cmd;
 					bufferedTime = COMMAND_BUFFER_TIME;
 				}
@@ -407,16 +410,23 @@ public class InputDispatcher
 			{
 				if (cmd == bufferedCommand)
 				{
-					//Logger.Log("Clear buffer command for casted.");
+					//Debug.Log("Clear buffer command for casted.");
 					bufferedCommand = Command.None;
 				}
 			}
 		}
+		/*
+		if (cmd == Command.Boxout)
+		{
+			m_player.m_StateMachine.SetState(PlayerState.State.eBoxout);
+			return;
+		}
+		*/
 		if (cmd == Command.Switch)
 		{
 			GameMatch_MultiPlayer match = m_match as GameMatch_MultiPlayer; 
 			if(match != null)
-				match.OnSwitch();
+				match.OnSwitch(m_player.m_team.m_side);
 		}
 		//for prepare shoot
 		if( cmd == Command.Shoot && curState.m_eState == PlayerState.State.ePrepareToShoot )
@@ -434,10 +444,10 @@ public class InputDispatcher
 		}
 
 		SkillInstance skill = m_player.m_skillSystem.GetValidSkillInMatch(cmd);
-		//Logger.Log( Time.frameCount + "skill: " + (skill != null ? skill.skill.name : "NULL" ));
+		//Debug.Log( Time.frameCount + "skill: " + (skill != null ? skill.skill.name : "NULL" ));
 		if( skill == null )
 		{
-			//Logger.LogError("Can not get valid skill, check config.");
+			//Debug.LogError("Can not get valid skill, check config.");
 			return;
 		}
 
@@ -500,7 +510,7 @@ public class InputDispatcher
 		*/
 
 		m_player.m_toSkillInstance = skill;
-		//Logger.Log( "skill type: " + m_player.m_toSkillInstance.skill.name );
+		Debug.Log( "skill id: " + m_player.m_toSkillInstance.skill.id );
 	}
 	
 	void _UpdateInputDirection(InputDirection dir, Command cmd)
@@ -551,7 +561,7 @@ public class InputDispatcher
 
     static IM.Vector3 Dir2Vec3(InputDirection dir)
     {
-        IM.Number horiAngle = Dir2Dir(dir) * GlobalConst.ROTATE_ANGLE_SEC;
+        IM.Number horiAngle = Dir2Dir(dir) * MoveController.ANGLE_PER_DIR;
         IM.Vector3 vec3 = IM.Quaternion.Euler(IM.Number.zero, horiAngle, IM.Number.zero) * IM.Vector3.forward;
         return vec3;
     }

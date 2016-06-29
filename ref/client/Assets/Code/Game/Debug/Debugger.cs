@@ -2,8 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-public class Debugger
-	: Singleton<Debugger>
+public class Debugger: Singleton<Debugger>
 {
 	public bool m_bEnableAI = true;
 
@@ -17,9 +16,14 @@ public class Debugger
 
 	public Debugger()
 	{
-		GameObject debug_streamer = new GameObject("Debug Streamer");
-		m_steamer = debug_streamer.AddComponent<DebugStreamer>();
+		
 	}
+
+    public void Init()
+    {
+        GameObject debug_streamer = new GameObject("Debug Streamer");
+        m_steamer = debug_streamer.AddComponent<DebugStreamer>();
+    }
 
 	public void DrawSphere(string type, Vector3 pos, Color color, float range = 0.1f)
 	{
@@ -52,18 +56,18 @@ public class Debugger
     public static void Log(string str, params object[] args)
     {
         str = string.Format(str, args);
-        Logger.Log(str);
+        Debug.Log(str);
     }
 
     public static void LogWarning(string str, params object[] args)
     {
         str = string.Format(str, args);
-        Logger.LogWarning(str);
+        Debug.LogWarning(str);
     }
 
     public static void LogError(string str, params object[] args)
     {
         str = string.Format(str, args);
-        Logger.LogError(str);
+        Debug.LogError(str);
     }
 }

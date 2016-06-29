@@ -64,31 +64,35 @@ UILottery = {
     -- uiRightRedDot,
     uiPaintAnimator,
     uiAnimator,
+    tfLeftBuyOne,
+    tfRightBuyOne,
 }
 
 
 -----------------------------------------------------------------
 function UILottery:Awake()
-    self.uiBtnBack = createUI('ButtonBack',self.transform:FindChild('Top/ButtonBack'))
-    self.uiLeftBtnOne = self.transform:FindChild('Left/LotteryPane1turn/ButtonOne'):GetComponent('UIButton')
-    self.uiLeftBtnTen = self.transform:FindChild('Left/LotteryPane1turn/ButtonTen'):GetComponent('UIButton')
-    self.uiRightBtnOne = self.transform:FindChild('Right/LotteryPane2turn/ButtonOne'):GetComponent('UIButton')
-    self.uiRightBtnTen = self.transform:FindChild('Right/LotteryPane2turn/ButtonTen'):GetComponent('UIButton')
-    self.uiLeftBtnOneRedDot = self.transform:FindChild('Left/LotteryPane1turn/ButtonOne/RedDot'):GetComponent('UISprite')
-    self.uiRightBtnOneRedDot = self.transform:FindChild('Right/LotteryPane2turn/ButtonOne/RedDot'):GetComponent('UISprite')
-    self.uiLeftBtnOneConsume = createUI("GoodsIconConsume", self.transform:FindChild('Left/LotteryPane1turn/ButtonOne/GoodsIconConsume'))
-    self.uiLeftBtnTenConsume = createUI("GoodsIconConsume", self.transform:FindChild('Left/LotteryPane1turn/ButtonTen/GoodsIconConsume'))
-    self.uiRightBtnOneConsume = createUI("GoodsIconConsume", self.transform:FindChild('Right/LotteryPane2turn/ButtonOne/GoodsIconConsume'))
-    self.uiRightBtnTenConsume = createUI("GoodsIconConsume", self.transform:FindChild('Right/LotteryPane2turn/ButtonTen/GoodsIconConsume'))
+    self.uiBtnBack = createUI('ButtonBack',self.transform:FindChild('TopLeft/ButtonBack'))
+    self.uiLeftBtnOne = self.transform:FindChild('Left/Anchor/Left/LotteryPane1turn/ButtonOne'):GetComponent('UIButton')
+    self.uiLeftBtnTen = self.transform:FindChild('Left/Anchor/Left/LotteryPane1turn/ButtonTen'):GetComponent('UIButton')
+    self.tfLeftBuyOne = self.transform:FindChild('Left/Anchor/Left/LotteryPane1turn/ButtonOne/Text')
+    self.uiRightBtnOne = self.transform:FindChild('Right/Anchor/Right/LotteryPane2turn/ButtonOne'):GetComponent('UIButton')
+    self.uiRightBtnTen = self.transform:FindChild('Right/Anchor/Right/LotteryPane2turn/ButtonTen'):GetComponent('UIButton')
+    self.tfRightBuyOne = self.transform:FindChild('Right/Anchor/Right/LotteryPane2turn/ButtonOne/Text')
+    self.uiLeftBtnOneRedDot = self.transform:FindChild('Left/Anchor/Left/LotteryPane1turn/ButtonOne/RedDot'):GetComponent('UISprite')
+    self.uiRightBtnOneRedDot = self.transform:FindChild('Right/Anchor/Right/LotteryPane2turn/ButtonOne/RedDot'):GetComponent('UISprite')
+    self.uiLeftBtnOneConsume = createUI("GoodsIconConsume", self.transform:FindChild('Left/Anchor/Left/LotteryPane1turn/ButtonOne/GoodsIconConsume'))
+    self.uiLeftBtnTenConsume = createUI("GoodsIconConsume", self.transform:FindChild('Left/Anchor/Left/LotteryPane1turn/ButtonTen/GoodsIconConsume'))
+    self.uiRightBtnOneConsume = createUI("GoodsIconConsume", self.transform:FindChild('Right/Anchor/Right/LotteryPane2turn/ButtonOne/GoodsIconConsume'))
+    self.uiRightBtnTenConsume = createUI("GoodsIconConsume", self.transform:FindChild('Right/Anchor/Right/LotteryPane2turn/ButtonTen/GoodsIconConsume'))
 
-    self.uiGoldFreeTimes = self.transform:FindChild('Left/LotteryPane1turn/FreeTimes'):GetComponent('UILabel')
-    self.uiDiamondFreeTimes = self.transform:FindChild('Right/LotteryPane2turn/FreeTimes'):GetComponent('UILabel')
-    self.uiGoldTip = self.transform:FindChild('Left/LotteryPane1turn/TipOne'):GetComponent('UILabel')
-    self.uiDiamondTip = self.transform:FindChild('Right/LotteryPane2turn/TipOne'):GetComponent('UILabel')
+    self.uiGoldFreeTimes = self.transform:FindChild('Left/Anchor/Left/LotteryPane1turn/FreeTimes'):GetComponent('UILabel')
+    self.uiDiamondFreeTimes = self.transform:FindChild('Right/Anchor/Right/LotteryPane2turn/FreeTimes'):GetComponent('UILabel')
+    self.uiGoldTip = self.transform:FindChild('Left/Anchor/Left/LotteryPane1turn/TipOne'):GetComponent('UILabel')
+    self.uiDiamondTip = self.transform:FindChild('Right/Anchor/Right/LotteryPane2turn/TipOne'):GetComponent('UILabel')
     self.uiPaint1 = self.transform:FindChild('Paint/Paint1')
     self.uiPaint2 = self.transform:FindChild('Paint/Paint2')
-    self.uiBuyGoldNum = self.transform:FindChild('Left/LotteryPane1turn/Num'):GetComponent('UILabel')
-    self.uiBuyDiamondNum = self.transform:FindChild('Right/LotteryPane2turn/Num'):GetComponent('UILabel')
+    self.uiBuyGoldNum = self.transform:FindChild('Left/Anchor/Left/LotteryPane1turn/Num'):GetComponent('UILabel')
+    self.uiBuyDiamondNum = self.transform:FindChild('Right/Anchor/Right/LotteryPane2turn/Num'):GetComponent('UILabel')
     -- self.uiLeftRedDot = self.transform:FindChild('Left/LotteryPane1/TipIcon'):GetComponent('UISprite')
     -- self.uiRightRedDot = self.transform:FindChild('Right/LotteryPane2/TipIcon'):GetComponent('UISprite')
 
@@ -150,11 +154,14 @@ function UILottery:FixedUpdate( ... )
         LotteryTime = self.restoreTime1 - self.lastElapsedTime1
         self.uiGoldFreeTimes.text = tip
         self.uiGoldTip.text = ''
+
+        NGUITools.SetActive(self.tfLeftBuyOne.gameObject, true)
         NGUITools.SetActive(self.uiLeftBtnOneRedDot.gameObject, false)
         NGUITools.SetActive(self.uiLeftBtnOneConsume.gameObject, true)
     else
         -- self.uiGoldFreeTimes.text = getCommonStr("STR_REMAIN_FREE_TIMES_TODAY"):format(self.freeTimes1, self.totalFreeTimes1)
         self.uiGoldTip.text = getCommonStr('FREE')
+        NGUITools.SetActive(self.tfLeftBuyOne.gameObject, false)
         NGUITools.SetActive(self.uiLeftBtnOneRedDot.gameObject, true)
         NGUITools.SetActive(self.uiLeftBtnOneConsume.gameObject, false)
         self:Refresh()
@@ -166,11 +173,13 @@ function UILottery:FixedUpdate( ... )
         -- LotteryTime = self.restoreTime2 - self.lastElapsedTime2
         self.uiDiamondFreeTimes.text = tip
         self.uiDiamondTip.text = ''
+        NGUITools.SetActive(self.tfRightBuyOne.gameObject, true)
         NGUITools.SetActive(self.uiRightBtnOneRedDot.gameObject, false)
         NGUITools.SetActive(self.uiRightBtnOneConsume.gameObject, true)
     else
         -- self.uiGoldFreeTimes.text = getCommonStr("STR_REMAIN_FREE_TIMES_TODAY"):format(self.freeTimes1, self.totalFreeTimes1)
         self.uiDiamondTip.text = getCommonStr('FREE')
+        NGUITools.SetActive(self.tfRightBuyOne.gameObject, false)
         NGUITools.SetActive(self.uiRightBtnOneRedDot.gameObject, true)
         NGUITools.SetActive(self.uiRightBtnOneConsume.gameObject, false)
         self:Refresh()

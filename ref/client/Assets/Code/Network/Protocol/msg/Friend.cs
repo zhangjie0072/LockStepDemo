@@ -114,6 +114,14 @@ namespace fogs.proto.msg
       get { return _pvp_ladder_score; }
       set { _pvp_ladder_score = value; }
     }
+    private uint _first_win_time = default(uint);
+    [global::ProtoBuf.ProtoMember(13, IsRequired = false, Name=@"first_win_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint first_win_time
+    {
+      get { return _first_win_time; }
+      set { _first_win_time = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -168,6 +176,13 @@ namespace fogs.proto.msg
       get { return _get_gift_times; }
       set { _get_gift_times = value; }
     }
+    private readonly global::System.Collections.Generic.List<fogs.proto.msg.FriendInfo> _send_apply_list = new global::System.Collections.Generic.List<fogs.proto.msg.FriendInfo>();
+    [global::ProtoBuf.ProtoMember(7, Name=@"send_apply_list", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<fogs.proto.msg.FriendInfo> send_apply_list
+    {
+      get { return _send_apply_list; }
+    }
+  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -650,6 +665,22 @@ namespace fogs.proto.msg
       get { return _qualifying_newer_score; }
       set { _qualifying_newer_score = value; }
     }
+    private uint _first_win_time = default(uint);
+    [global::ProtoBuf.ProtoMember(23, IsRequired = false, Name=@"first_win_time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint first_win_time
+    {
+      get { return _first_win_time; }
+      set { _first_win_time = value; }
+    }
+    private fogs.proto.msg.FriendListInfo _friend_info = null;
+    [global::ProtoBuf.ProtoMember(24, IsRequired = false, Name=@"friend_info", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public fogs.proto.msg.FriendListInfo friend_info
+    {
+      get { return _friend_info; }
+      set { _friend_info = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -744,6 +775,24 @@ namespace fogs.proto.msg
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"UpdateFriendInfo")]
+  public partial class UpdateFriendInfo : global::ProtoBuf.IExtensible
+  {
+    public UpdateFriendInfo() {}
+    
+    private fogs.proto.msg.FriendInfo _friend = null;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"friend", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public fogs.proto.msg.FriendInfo friend
+    {
+      get { return _friend; }
+      set { _friend = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
     [global::ProtoBuf.ProtoContract(Name=@"FriendOperationType")]
     public enum FriendOperationType
     {
@@ -785,7 +834,10 @@ namespace fogs.proto.msg
       FOT_QUERY_GIFT = 12,
             
       [global::ProtoBuf.ProtoEnum(Name=@"FOT_IGNORE_APPLY", Value=13)]
-      FOT_IGNORE_APPLY = 13
+      FOT_IGNORE_APPLY = 13,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"FOT_APPLY_AGREE", Value=14)]
+      FOT_APPLY_AGREE = 14
     }
   
     [global::ProtoBuf.ProtoContract(Name=@"SearchFriendType")]

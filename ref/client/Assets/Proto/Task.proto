@@ -175,7 +175,6 @@ message TaskInfo
 	optional TaskConditionDaily daily_info	= 3;
 	optional TaskConditionMain main_info	= 4;
 	repeated TaskData task_list				= 5;
-	repeated GameTask game_task_list		= 6; //比赛任务列表
 }
 
 //任务信息
@@ -241,12 +240,4 @@ message NotifyTaskFinish
 {
 	required uint32 acc_id			= 1;
 	required TaskData task_info		= 2;
-}
-
-//比赛任务
-message GameTask
-{
-	optional uint32 id = 1;
-	optional uint32 race_times = 2;
-	optional uint32 reset_time = 3;
 }

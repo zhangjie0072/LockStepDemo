@@ -39,7 +39,7 @@ public class GameMatch_ReboundStorm : GameMatch
         ballHeightScale = IM.Number.Parse(tokens[2]);
 		if (string.IsNullOrEmpty(gameMode.additionalInfo))
 		{
-			Logger.LogError("No additional info. GameMode ID: " + gameMode.ID);
+			Debug.LogError("No additional info. GameMode ID: " + gameMode.ID);
 		}
 		else
 		{
@@ -59,42 +59,40 @@ public class GameMatch_ReboundStorm : GameMatch
 		_GeneratePlayerData(member, member.team != m_config.MainRole.team);
 	}
 
-	override public void OnSceneComplete()
+	protected override void _OnLoadingCompleteImp ()
 	{
+		base._OnLoadingCompleteImp ();
 		GameMatch.Config.TeamMember member = m_config.NPCs[1];
 		_GeneratePlayerData(member, member.team != m_config.MainRole.team);
-
-		base.OnSceneComplete();
 		 
 		if (m_config == null)
 		{
-			Logger.LogError("Match config file loading failed.");
+			Debug.LogError("Match config file loading failed.");
 			return;
 		}
 
+        //TODO 针对PVP修改
 		//main role
 		PlayerManager pm = GameSystem.Instance.mClient.mPlayerManager;
-		m_mainRole = pm.GetPlayerById( uint.Parse(m_config.MainRole.id) );
-		m_mainRole.m_StateMachine.ReplaceState(new PlayerState_Stand_Simple(m_mainRole.m_StateMachine, this));
-		//m_mainRole.m_inputDispatcher = new InputDispatcher(m_mainRole);
-		//m_mainRole.m_inputDispatcher.m_enable = false;
+		mainRole = pm.GetPlayerById( uint.Parse(m_config.MainRole.id) );
+		mainRole.m_StateMachine.ReplaceState(new PlayerState_Stand_Simple(mainRole.m_StateMachine, this));
+		//mainRole.m_inputDispatcher = new InputDispatcher(mainRole);
+		//mainRole.m_inputDispatcher.m_enable = false;
 
-		m_mainRole.m_catchHelper = new CatchHelper(m_mainRole);
-		m_mainRole.m_catchHelper.ExtractBallLocomotion();
-		m_mainRole.m_StateMachine.SetState(PlayerState.State.eStand, true);
-		m_mainRole.m_InfoVisualizer.CreateStrengthBar();
-		m_mainRole.m_InfoVisualizer.ShowStaminaBar(true);
-		m_mainRole.m_team.m_role = GameMatch.MatchRole.eDefense;
-		m_mainRole.m_alwaysForbiddenPickup = true;
+		mainRole.m_catchHelper = new CatchHelper(mainRole);
+		mainRole.m_catchHelper.ExtractBallLocomotion();
+		mainRole.m_StateMachine.SetState(PlayerState.State.eStand, true);
+		mainRole.m_team.m_role = GameMatch.MatchRole.eDefense;
+		mainRole.m_alwaysForbiddenPickup = true;
 
 		//npc
-		Team oppoTeam = m_mainRole.m_team.m_side == Team.Side.eAway ? m_homeTeam : m_awayTeam;
+		Team oppoTeam = mainRole.m_team.m_side == Team.Side.eAway ? m_homeTeam : m_awayTeam;
 		npc = oppoTeam.GetMember(0);
 		npc.m_StateMachine.ReplaceState(new PlayerState_Knocked_NoHold(npc.m_StateMachine, this));
 		if (npc.model != null)
 			npc.model.EnableGrey();
-		npc.m_aiMgr = new AISystem_ReboundStorm(this, npc, AIState.Type.eReboundStorm_Idle, m_config.NPCs[0].AIID);
 		npc.m_team.m_role = GameMatch.MatchRole.eOffense;
+        npc.operMode = Player.OperMode.AI;
 		npc.m_alwaysForbiddenPickup = true;
 
 		//shooter
@@ -104,22 +102,28 @@ public class GameMatch_ReboundStorm : GameMatch
 
 		m_auxiliaries.Add(shooter.m_id);
 
-		shooter.m_aiMgr = new AISystem_ReboundStorm(this, shooter, AIState.Type.eReboundStorm_ShooterIdle, m_config.NPCs[0].AIID);
 		shooter.m_team.m_role = GameMatch.MatchRole.eOffense;
+        shooter.operMode = Player.OperMode.AI;
 		shooter.m_alwaysForbiddenPickup = true;
 
-		_UpdateCamera(m_mainRole);
-
-
-
+		_UpdateCamera(mainRole);
 	}
+
+    public override AISystem CreateAISystem(Player player)
+    {
+        if (player == npc)
+            return new AISystem_ReboundStorm(this, npc, AIState.Type.eReboundStorm_Idle, m_config.NPCs[0].AIID);
+        else if (player == shooter)
+            return new AISystem_ReboundStorm(this, shooter, AIState.Type.eReboundStorm_ShooterIdle, m_config.NPCs[0].AIID);
+        return null;
+    }
 	protected override void OnLoadingComplete ()
 	{
 		base.OnLoadingComplete ();
 		m_stateMachine.SetState(m_config.needPlayPlot ? MatchState.State.ePlotBegin : MatchState.State.eShowRule);
 	}
 
-    public override void HandleGameBegin(Pack pack)
+    public override void OnGameBegin(GameBeginResp resp)
     {
         m_stateMachine.SetState(MatchState.State.eBegin);
     }
@@ -167,15 +171,16 @@ public class GameMatch_ReboundStorm : GameMatch
 
 	public override void ResetPlayerPos()
 	{
+        //TODO 针对PVP修改
         ReboundStormPos reboundStormPos = GameSystem.Instance.MatchPointsConfig.ReboundStormPos;
-        m_mainRole.position = reboundStormPos.mainRole_transform.position;
-		m_mainRole.forward = -IM.Vector3.forward;
+        mainRole.position = reboundStormPos.mainRole_transform.position;
+		mainRole.forward = -IM.Vector3.forward;
         npc.position = reboundStormPos.npc_transform.position;
 		npc.forward = -IM.Vector3.forward;
         ResetShooter(reboundStormPos.shoots_transform[3]);
 
-		if (m_mainRole.m_bWithBall)
-			m_mainRole.DropBall(m_mainRole.m_ball);
+		if (mainRole.m_bWithBall)
+			mainRole.DropBall(mainRole.m_ball);
 		if (npc.m_bWithBall)
 			npc.DropBall(npc.m_ball);
 		if (shooter.m_bWithBall)
@@ -204,22 +209,26 @@ public class GameMatch_ReboundStorm : GameMatch
 			return base.IsCommandValid(command);
 	}
 
-	public override IM.BigNumber AdjustShootRate(Player shooter, IM.BigNumber rate)
+	public override IM.PrecNumber AdjustShootRate(Player shooter, IM.PrecNumber rate)
 	{
-		return IM.BigNumber.one;
-	}
+        return IM.PrecNumber.zero;
+    }
 
 	protected override void CreateCustomGUI()
 	{
 		GameObject prefab = ResourceLoadManager.Instance.LoadPrefab("Prefab/GUI/UIMatchReboundStorm") as GameObject;
 		uiMatch = CommonFunction.InstantiateObject(prefab, UIManager.Instance.m_uiRootBasePanel.transform).GetComponent<UIMatchReboundStorm>();
+        uiMatch.timerBoard.isChronograph = true;
 		gameMatchTime = new IM.Number((int)gameMode.time);
+        uiMatch.timerBoard.UpdateTime((float)gameMatchTime);
         if (m_gameMathCountEnable)
         {
             if (m_gameMathCountTimer == null)
             {
                 m_gameMathCountTimer = new GameUtils.Timer(gameMatchTime, () => { m_stateMachine.SetState(MatchState.State.eOver); 
-                                              NGUITools.SetActive(uiMatch.transform.FindChild("ButtonBack").gameObject, false); });
+                                              NGUITools.SetActive(uiMatch.transform.FindChild("ButtonBack").gameObject, false);
+                                              uiMatch.timerBoard.UpdateTime(0f);
+                });
             }
             else
             {
@@ -229,9 +238,9 @@ public class GameMatch_ReboundStorm : GameMatch
 		m_gameMatchCountStop = true;
 	}
 
-	public override void Update(IM.Number deltaTime)
+	public override void GameUpdate(IM.Number deltaTime)
 	{
-		base.Update(deltaTime);
+		base.GameUpdate(deltaTime);
 
 		if (uiMatch != null) {
 			if (m_stateMachine.m_curState != null && m_stateMachine.m_curState.m_eState == MatchState.State.ePlaying)
@@ -248,13 +257,22 @@ public class GameMatch_ReboundStorm : GameMatch
 			firstTime = false;
 		}
 
-		if (m_mainRole != null && npc != null) {
+        //TODO 针对PVP修改
+		if (mainRole != null && npc != null) {
 			if (refreshOnReboundOver &&
-				m_mainRole.m_StateMachine.m_curState.m_eState != PlayerState.State.eRebound &&
+				mainRole.m_StateMachine.m_curState.m_eState != PlayerState.State.eRebound &&
 				npc.m_StateMachine.m_curState.m_eState != PlayerState.State.eRebound) {
 				Refresh ();
 			}
 		}
+        //添加倒计时相关的代码
+        if (m_gameMathCountTimer != null && !m_gameMatchCountStop && m_gameMathCountEnable)
+        {
+            if (uiMatch != null)
+            {
+                uiMatch.timerBoard.UpdateTime((float)m_gameMathCountTimer.Remaining());
+            }
+        }
 	}
 
     public override void FixedUpdate()
@@ -315,7 +333,7 @@ public class GameMatch_ReboundStorm : GameMatch
 			ShowOpportunity();
 		ConveyorBall.DestroyFront();
 		ConveyorBall.Resume();
-		DestroyHandBall(m_mainRole);
+		DestroyHandBall(mainRole);
 		DestroyHandBall(npc);
 	}
 
@@ -355,7 +373,7 @@ public class GameMatch_ReboundStorm : GameMatch
 		{
 			int score = currBall.m_special ? specialBallScore : normalBallScore;
 			refreshOnReboundOver = true;
-			if (ball.m_owner == m_mainRole)
+			if (ball.m_owner == mainRole)
 			{
 				++myCombo;
 				float bonusRatio = GameSystem.Instance.GameModeConfig.GetComboBonus(GetMatchType(), myCombo);
@@ -365,7 +383,7 @@ public class GameMatch_ReboundStorm : GameMatch
 					ShowComboBonus(bonusRatio);
 				}
 				m_homeScore += (int)(score * (1 + bonusRatio));
-				m_mainRole.mStatistics.success_rebound_times = (uint)m_homeScore;
+				mainRole.mStatistics.success_rebound_times = (uint)m_homeScore;
 				uiMatch.leftScore = m_homeScore;
 				npcCombo = 0;
 			}
@@ -389,7 +407,7 @@ public class GameMatch_ReboundStorm : GameMatch
 		shooting = false;
 		//ResetPlayerPos();
         List<IM.Transform> shooterPos = GameSystem.Instance.MatchPointsConfig.ReboundStormPos.shoots_transform;
-		ResetShooter(shooterPos[Random.Range(0, shooterPos.Count - 1)]);
+		ResetShooter(shooterPos[IM.Random.Range(0, shooterPos.Count - 1)]);
 		FetchBall(shooter);
 	}
 }

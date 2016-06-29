@@ -17,7 +17,7 @@ public class HUDFPS : MonoBehaviour
 	// corstartRect overall FPS even if the interval renders something like
 	// 5.5 frames.
 	
-	public Rect startRect = new Rect( 10, 10, 75, 50 ); // The rect the window is initially displayed at.
+	public Rect startRect = new Rect( 10, 10, 200, 150 ); // The rect the window is initially displayed at.
 	public bool updateColor = true; // Do you want the color to change if the FPS gets low
 	public bool allowDrag = true; // Do you want to allow the dragging of the FPS window
 	public  float frequency = 0.5F; // The update frequency of the fps
@@ -49,7 +49,8 @@ public class HUDFPS : MonoBehaviour
 		{
 			// Update the FPS
 			float fps = accum/frames;
-			sFPS = fps.ToString( "f" + Mathf.Clamp( nbDecimal, 0, 10 ) );
+			sFPS = fps.ToString( "f" + Mathf.Clamp( nbDecimal, 0, 10 ) ) + "FPS ";
+            sFPS += "TimeScale:" + Time.timeScale.ToString("0.00");
 			
 			//Update the color
 			color = (fps >= 30) ? Color.green : ((fps > 10) ? Color.red : Color.yellow);
@@ -77,7 +78,7 @@ public class HUDFPS : MonoBehaviour
 	
 	void DoMyWindow(int windowID)
 	{
-		GUI.Label( new Rect(0, 0, startRect.width, startRect.height), sFPS + " FPS", style );
+		GUI.Label( new Rect(0, 0, startRect.width, startRect.height), sFPS , style );
 		if( allowDrag ) GUI.DragWindow(new Rect(0, 0, Screen.width, Screen.height));
 	}
 }

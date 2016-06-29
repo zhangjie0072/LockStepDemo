@@ -100,7 +100,7 @@ public class PlayerState_Pickup : PlayerState
 			m_stateMachine.SetState(PlayerState.State.eRun);
 		else 
 		{
-			Logger.Log("pickup m_bSuccess: " + m_bSuccess);
+			Debug.Log("pickup m_bSuccess: " + m_bSuccess);
 
 			if( !m_bSuccess )
 				m_stateMachine.SetState(PlayerState.State.eStand);
@@ -111,7 +111,7 @@ public class PlayerState_Pickup : PlayerState
 
 	public override void OnExit ()
 	{
-        Logger.Log(Time.frameCount + " Exit PlayerState_Pickup.");
+        Debug.Log(Time.frameCount + " Exit PlayerState_Pickup.");
 		base.OnExit ();
 		m_animType = fogs.proto.msg.AnimType.B_TYPE_0;
 		m_ballToPickup = null;

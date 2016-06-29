@@ -4,8 +4,9 @@ using UnityEngine;
 public class MatchStatePlayerCloseUp
 	: MatchState
 {
-    static float BEGIN_WAIT_TIME = 5f;
-	GameUtils.Timer4View timer;
+    static IM.Number BEGIN_WAIT_TIME = new IM.Number(5);
+	GameUtils.Timer4View timer1;
+	GameUtils.Timer timer2;
 
 	public MatchStatePlayerCloseUp(MatchStateMachine owner)
 		:base(owner)
@@ -30,15 +31,12 @@ public class MatchStatePlayerCloseUp
 			player.m_enableAction = false;
 			player.m_enableMovement = false;
 			player.m_enablePickupDetector = false;
-			if (player.m_aiMgr != null)
-				player.m_aiMgr.m_enable = false;
-
-			player.Show( !(m_match is GameMatch_PVP) );
+			player.Show(true);
 		}
 	
 		m_match.m_cam.m_moveSpeed = m_match.m_cam.m_CloseUpRestoreSpeed;
 
-		m_match.m_cam.m_Zoom.SetZoom(m_match.m_mainRole.gameObject.transform, ZoomType.ePlayerCloseUp);
+		m_match.m_cam.m_Zoom.SetZoom(m_match.mainRole.gameObject.transform, ZoomType.ePlayerCloseUp);
 
 		if( m_match.m_uiMatch != null )
 		{
@@ -46,16 +44,18 @@ public class MatchStatePlayerCloseUp
             m_match.m_count24TimeStop = true;
 		}
 
-		Team oppoTeam = m_match.m_mainRole.m_team.m_side == Team.Side.eAway ? m_match.m_homeTeam : m_match.m_awayTeam;
+		Team oppoTeam = m_match.mainRole.m_team.m_side == Team.Side.eAway ? m_match.m_homeTeam : m_match.m_awayTeam;
 		foreach (Player member in oppoTeam.members)
 		{
 			if (member.model != null)
 				member.model.EnableGrey();
 		}
-        m_match.m_mainRole.ShowIndicator(Color.yellow, true);
 
-		if (m_match.m_mainRole.m_inputDispatcher == null && m_match.GetMatchType() != GameMatch.Type.e3AIOn3AI )
-			m_match.m_mainRole.m_inputDispatcher = new InputDispatcher (m_match, m_match.m_mainRole);
+        Color yellow = new Color(1f, 252f / 255, 10f / 255, 1);
+        m_match.mainRole.ShowIndicator(yellow, true);
+
+		//if (m_match.m_mainRole.m_inputDispatcher == null && m_match.GetMatchType() != GameMatch.Type.e3AIOn3AI )
+		//	m_match.m_mainRole.m_inputDispatcher = new InputDispatcher (m_match, m_match.m_mainRole);
 
 		//reset position
 		if( m_match.m_needTipOff )
@@ -82,21 +82,23 @@ public class MatchStatePlayerCloseUp
 			m_match.m_needTipOff = false;
 		}
 
-		if (m_match is GameMatch_3ON3 || m_match is GameMatch_PracticeVs)
-		{
-			GameMatch_MultiPlayer mul = m_match as GameMatch_MultiPlayer;
-			mul.SwitchMainrole(mul.m_homeTeam.members[0]);
-		}
-
-        timer = new GameUtils.Timer4View(BEGIN_WAIT_TIME, GameMsgSender.SendGameBegin);
+        if (m_match.m_bOverTime)
+            timer2 = new GameUtils.Timer(BEGIN_WAIT_TIME, () => m_stateMachine.SetState(State.eTipOff), 1);
+        else
+            timer1 = new GameUtils.Timer4View((float)BEGIN_WAIT_TIME, GameMsgSender.SendGameBegin, 1);
 	}
 
-	public override void Update(float fDeltaTime)
+	public override void ViewUpdate(float fDeltaTime)
 	{
-		base.Update(fDeltaTime);
-
-        timer.Update(fDeltaTime);
+		base.ViewUpdate(fDeltaTime);
+        timer1.Update(fDeltaTime);
 	}
+
+    public override void GameUpdate(IM.Number fDeltaTime)
+    {
+        base.GameUpdate(fDeltaTime);
+        timer2.Update(fDeltaTime);
+    }
 
 	public override bool IsCommandValid(Command command)
 	{
@@ -110,8 +112,6 @@ public class MatchStatePlayerCloseUp
 			player.m_enableAction = true;
 			player.m_enableMovement = true;
 			player.m_enablePickupDetector = true;
-			if (player.m_aiMgr != null)
-				player.m_aiMgr.m_enable = true;
 		}
 	}
 }

@@ -280,6 +280,40 @@ namespace fogs.proto.msg
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"GetBulkAttachment")]
+  public partial class GetBulkAttachment : global::ProtoBuf.IExtensible
+  {
+    public GetBulkAttachment() {}
+    
+    private readonly global::System.Collections.Generic.List<ulong> _mailid_list = new global::System.Collections.Generic.List<ulong>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"mailid_list", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public global::System.Collections.Generic.List<ulong> mailid_list
+    {
+      get { return _mailid_list; }
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"GetBulkAttachmentResp")]
+  public partial class GetBulkAttachmentResp : global::ProtoBuf.IExtensible
+  {
+    public GetBulkAttachmentResp() {}
+    
+    private readonly global::System.Collections.Generic.List<fogs.proto.msg.GetAttachmentResp> _resp_list = new global::System.Collections.Generic.List<fogs.proto.msg.GetAttachmentResp>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"resp_list", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<fogs.proto.msg.GetAttachmentResp> resp_list
+    {
+      get { return _resp_list; }
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
     [global::ProtoBuf.ProtoContract(Name=@"MailType")]
     public enum MailType
     {
@@ -306,6 +340,17 @@ namespace fogs.proto.msg
             
       [global::ProtoBuf.ProtoEnum(Name=@"READ_WITHOUT", Value=4)]
       READ_WITHOUT = 4
+    }
+  
+    [global::ProtoBuf.ProtoContract(Name=@"MailOperationType")]
+    public enum MailOperationType
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"MOT_GET_ATTACHMENT", Value=1)]
+      MOT_GET_ATTACHMENT = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"MOT_GET_BULK_ATTACHMENT", Value=2)]
+      MOT_GET_BULK_ATTACHMENT = 2
     }
   
 }

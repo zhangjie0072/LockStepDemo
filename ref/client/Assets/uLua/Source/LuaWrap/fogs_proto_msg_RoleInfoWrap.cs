@@ -29,6 +29,7 @@ public class fogs_proto_msg_RoleInfoWrap
 			new LuaField("regular_data", get_regular_data, set_regular_data),
 			new LuaField("qualifying_data", get_qualifying_data, set_qualifying_data),
 			new LuaField("badge_book_id", get_badge_book_id, set_badge_book_id),
+			new LuaField("qualifying_newer_data", get_qualifying_newer_data, set_qualifying_newer_data),
 		};
 
 		LuaScriptMgr.RegisterLib(L, "fogs.proto.msg.RoleInfo", typeof(fogs.proto.msg.RoleInfo), regs, fields, typeof(object));
@@ -447,6 +448,30 @@ public class fogs_proto_msg_RoleInfoWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_qualifying_newer_data(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		fogs.proto.msg.RoleInfo obj = (fogs.proto.msg.RoleInfo)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name qualifying_newer_data");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index qualifying_newer_data on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushObject(L, obj.qualifying_newer_data);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_id(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -755,6 +780,30 @@ public class fogs_proto_msg_RoleInfoWrap
 		}
 
 		obj.badge_book_id = (uint)LuaScriptMgr.GetNumber(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_qualifying_newer_data(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		fogs.proto.msg.RoleInfo obj = (fogs.proto.msg.RoleInfo)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name qualifying_newer_data");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index qualifying_newer_data on a nil value");
+			}
+		}
+
+		obj.qualifying_newer_data = (fogs.proto.msg.MatchRoleData)LuaScriptMgr.GetNetObject(L, 3, typeof(fogs.proto.msg.MatchRoleData));
 		return 0;
 	}
 }

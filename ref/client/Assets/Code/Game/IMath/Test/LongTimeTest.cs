@@ -24,7 +24,7 @@ namespace IM.Test
 
             //Application.RegisterLogCallbackThreaded(HandleLog);
             thread = new Thread(Test);
-            Logger.Log("Start testing thread.");
+            UnityEngine.Debug.Log("Start testing thread.");
             thread.Start();
         }
 
@@ -43,7 +43,7 @@ namespace IM.Test
                 test.Test(true);
                 if (Utils.interruptTest)
                 {
-                    Logger.Log("Test interrupted.");
+                    UnityEngine.Debug.Log("Test interrupted.");
                     break;
                 }
             }

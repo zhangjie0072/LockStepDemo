@@ -36,7 +36,7 @@ public class AI_CutIn : AIState
 				m_player.m_toSkillInstance.curActionId = m_player.position.x > 0 ? LEFT_ACTION_ID : RIGHT_ACTION_ID;
 		}
 		else
-			Logger.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI CutIn");
+			Debug.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI CutIn");
 	}
 
     public override void Update(IM.Number fDeltaTime)

@@ -215,8 +215,8 @@ public class UIMatch : MonoBehaviour
 		m_goCheckBallMsg.transform.parent = mCenterAnchor;
 		m_goCheckBallMsg.SetActive(false);
 
-        prefab = ResourceLoadManager.Instance.LoadPrefab("Prefab/GUI/ButtonBack") as GameObject;
-        Transform buttonParent = transform.FindChild("ButtonBack");      
+		prefab = ResourceLoadManager.Instance.LoadPrefab("Prefab/GUI/ButtonPause") as GameObject;
+		Transform buttonParent = transform.FindChild("ButtonPause");      
         goExit = CommonFunction.InstantiateObject(prefab, buttonParent);
 		UIEventListener.Get(goExit).onClick = OnExit;
 
@@ -335,7 +335,7 @@ public class UIMatch : MonoBehaviour
 		foreach( MatchMsgBtn btn in m_matchMsgBtns )
 			btn.Reset( msgBtn.msg.cd );
 		m_bShowCustomMsg = false;
-		GameMsgSender.SendGameShortMsg( m_match.m_mainRole, msgBtn.msg.id, (uint)msgBtn.msg.recvType );
+		GameMsgSender.SendGameShortMsg( m_match.mainRole, msgBtn.msg.id, (uint)msgBtn.msg.recvType );
 	}
 
 	void FixedUpdate()
@@ -369,9 +369,9 @@ public class UIMatch : MonoBehaviour
 			curMatchMsgCond = 1;
 		else
 		{
-			if( ball.m_owner.m_team == m_match.m_mainRole.m_team )
+			if( ball.m_owner.m_team == m_match.mainRole.m_team )
 			{
-				if( ball.m_owner == m_match.m_mainRole )
+				if( ball.m_owner == m_match.mainRole )
 					curMatchMsgCond = 4;
 				else
 					curMatchMsgCond = 3;
@@ -381,19 +381,19 @@ public class UIMatch : MonoBehaviour
 		}
 
 		if( (curMatchMsgCond != m_curMatchMsgCond && curMatchMsgCond != 0) 
-		   || (m_match.m_mainRole != null && m_curMatchMsgRoleId != m_match.m_mainRole.m_id )
+		   || (m_match.mainRole != null && m_curMatchMsgRoleId != m_match.mainRole.m_id )
 		   )
 		{
 			m_matchMsgBtns.Clear();
-			m_curMatchMsgRoleId = m_match.m_mainRole.m_id;
+			m_curMatchMsgRoleId = m_match.mainRole.m_id;
 
 			List<MatchMsg> matchedmsgs = GameSystem.Instance.matchMsgConfig.matchMsgs.FindAll( (MatchMsg msg)=>{return msg.conds.Contains(curMatchMsgCond);} );
-			if( m_match.m_mainRole != null )
+			if( m_match.mainRole != null )
 			{
-				uint id = m_match.m_mainRole.m_id;
+				uint id = m_match.mainRole.m_id;
 				RoleBaseData2 rd = GameSystem.Instance.RoleBaseConfigData2.GetConfigData(id);
 				if( rd == null )
-					Logger.LogError("Unable to find role base: " + id);
+					Debug.LogError("Unable to find role base: " + id);
 
 				m_matchMsgBtns.Add(new MatchMsgBtn(goCustomMsg, null));
 
@@ -509,14 +509,28 @@ public class UIMatch : MonoBehaviour
     private void OnExit(GameObject go)
     {
 		GameMatch curMatch = GameSystem.Instance.mClient.mCurMatch;
-		if (curMatch.GetMatchType() != GameMatch.Type.ePVP_1PLUS && 
-			curMatch.GetMatchType() != GameMatch.Type.ePVP_3On3)
-			GameSystem.Instance.mClient.pause = true;
-        CommonFunction.ShowPopupMsg(CommonFunction.GetConstString("MATCH_TIPS_EXIT_MATCH"), 
-			UIManager.Instance.m_uiRootBasePanel.transform, OnConfirmExit, OnCancelExit);
+        if (curMatch.GetMatchType() != GameMatch.Type.ePVP_1PLUS &&
+            curMatch.GetMatchType() != GameMatch.Type.ePVP_3On3)
+            GameSystem.Instance.mClient.pause = true;
+
+        PopPauseDlg(UIManager.Instance.m_uiRootBasePanel.transform, OnConfirmExit, OnCancelExit);
     }
 
-	private void OnConfirmExit(GameObject go)
+    private LuaComponent PopPauseDlg(Transform parent, UIEventListener.VoidDelegate outClick, UIEventListener.VoidDelegate continueClick)
+    {
+        GameObject go = ResourceLoadManager.Instance.LoadPrefab("Prefab/GUI/UIPause") as GameObject;
+        GameObject go_clone = CommonFunction.InstantiateObject(go, parent);
+        go_clone.transform.localPosition = go_clone.transform.localPosition;
+
+        LuaComponent popup_message = go_clone.GetComponent<LuaComponent>();
+        popup_message.table.Set("outClicked", outClick);
+        popup_message.table.Set("continueClicked", continueClick);
+        NGUITools.BringForward(go_clone);
+
+        return popup_message;
+    }
+
+    private void OnConfirmExit(GameObject go)
 	{
 		GameMatch curMatch = GameSystem.Instance.mClient.mCurMatch;
 		if (curMatch.m_stateMachine.m_curState.m_eState == MatchState.State.eOver)
@@ -610,7 +624,7 @@ public class UIMatch : MonoBehaviour
 
 			if( GameSystem.Instance.mNetworkManager.m_gameConn != null )
 			{
-				Logger.Log("send exit game req");
+				Debug.Log("send exit game req");
 				GameSystem.Instance.mNetworkManager.m_gameConn.SendPack(0, req, MsgID.ExitGameReqID);
 			}
 			
@@ -643,7 +657,7 @@ public class UIMatch : MonoBehaviour
 			{
 				if (GameSystem.Instance.mNetworkManager.m_gameConn != null)
 				{
-					Logger.Log("send exit game req to game server");
+					Debug.Log("send exit game req to game server");
 					GameSystem.Instance.mNetworkManager.m_gameConn.SendPack(0, req, MsgID.ExitGameReqID);
 				}
 			}
@@ -654,7 +668,7 @@ public class UIMatch : MonoBehaviour
 			}
 			else
 			{
-				Logger.Log("send exit game req to plat server");
+				Debug.Log("send exit game req to plat server");
 				GameSystem.Instance.mNetworkManager.m_platConn.SendPack(0, req, MsgID.ExitGameReqID);
 			}
 		}
@@ -671,7 +685,7 @@ public class UIMatch : MonoBehaviour
 			{
 				if (GameSystem.Instance.mNetworkManager.m_gameConn != null)
 				{
-					Logger.Log("send exit game req to game server");
+					Debug.Log("send exit game req to game server");
 					GameSystem.Instance.mNetworkManager.m_gameConn.SendPack(0, req, MsgID.ExitGameReqID);
 				}
 			}
@@ -682,7 +696,7 @@ public class UIMatch : MonoBehaviour
 			}
 			else
 			{
-				Logger.Log("send exit game req to plat server");
+				Debug.Log("send exit game req to plat server");
 				GameSystem.Instance.mNetworkManager.m_platConn.SendPack(0, req, MsgID.ExitGameReqID);
 			}
 		}

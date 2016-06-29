@@ -78,7 +78,6 @@ end
 --------------侦听事件--------------
 function RoleSkillsDetailTips:AddEvent( ... )
 	--addOnClick(self.uiCloseBtn.gameObject,self:OnClickHanlder())--
-	addOnClick(self.gameObject,self:OnClick())
 end
 
 --=============================--
@@ -187,12 +186,6 @@ function RoleSkillsDetailTips:DisplaySkills(skills)
     end
     self._gridSkill.repositionNow = true
 
-end
-
-function RoleSkillsDetailTips:OnClick()
-    return function ()
-        NGUITools.Destroy(self.gameObject)
-    end
 end
 
 return RoleSkillsDetailTips

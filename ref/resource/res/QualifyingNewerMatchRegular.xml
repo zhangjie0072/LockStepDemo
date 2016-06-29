@@ -1,4 +1,4 @@
-<Data Count="178">
+<Data Count="175">
   <Line>
     <switch>
     </switch>
@@ -13,33 +13,6 @@
     </switch>
     <grade>1</grade>
     <wait_time>10</wait_time>
-    <grade_low>0</grade_low>
-    <grade_high>3</grade_high>
-    <one_way>0</one_way>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <grade>1</grade>
-    <wait_time>15</wait_time>
-    <grade_low>0</grade_low>
-    <grade_high>6</grade_high>
-    <one_way>0</one_way>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <grade>1</grade>
-    <wait_time>20</wait_time>
-    <grade_low>0</grade_low>
-    <grade_high>25</grade_high>
-    <one_way>1</one_way>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <grade>1</grade>
-    <wait_time>25</wait_time>
     <grade_low>0</grade_low>
     <grade_high>0</grade_high>
     <one_way>0</one_way>
@@ -58,7 +31,7 @@
     </switch>
     <grade>2</grade>
     <wait_time>10</wait_time>
-    <grade_low>1</grade_low>
+    <grade_low>0</grade_low>
     <grade_high>2</grade_high>
     <one_way>0</one_way>
   </Line>
@@ -67,7 +40,7 @@
     </switch>
     <grade>2</grade>
     <wait_time>15</wait_time>
-    <grade_low>1</grade_low>
+    <grade_low>0</grade_low>
     <grade_high>3</grade_high>
     <one_way>0</one_way>
   </Line>
@@ -76,7 +49,7 @@
     </switch>
     <grade>2</grade>
     <wait_time>20</wait_time>
-    <grade_low>1</grade_low>
+    <grade_low>0</grade_low>
     <grade_high>6</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -85,7 +58,7 @@
     </switch>
     <grade>2</grade>
     <wait_time>25</wait_time>
-    <grade_low>4</grade_low>
+    <grade_low>0</grade_low>
     <grade_high>24</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -112,7 +85,7 @@
     </switch>
     <grade>3</grade>
     <wait_time>10</wait_time>
-    <grade_low>1</grade_low>
+    <grade_low>0</grade_low>
     <grade_high>2</grade_high>
     <one_way>0</one_way>
   </Line>
@@ -121,7 +94,7 @@
     </switch>
     <grade>3</grade>
     <wait_time>15</wait_time>
-    <grade_low>1</grade_low>
+    <grade_low>0</grade_low>
     <grade_high>3</grade_high>
     <one_way>0</one_way>
   </Line>
@@ -130,7 +103,7 @@
     </switch>
     <grade>3</grade>
     <wait_time>20</wait_time>
-    <grade_low>1</grade_low>
+    <grade_low>0</grade_low>
     <grade_high>6</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -139,7 +112,7 @@
     </switch>
     <grade>3</grade>
     <wait_time>25</wait_time>
-    <grade_low>4</grade_low>
+    <grade_low>0</grade_low>
     <grade_high>24</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -166,7 +139,7 @@
     </switch>
     <grade>4</grade>
     <wait_time>10</wait_time>
-    <grade_low>1</grade_low>
+    <grade_low>0</grade_low>
     <grade_high>2</grade_high>
     <one_way>0</one_way>
   </Line>
@@ -175,7 +148,7 @@
     </switch>
     <grade>4</grade>
     <wait_time>15</wait_time>
-    <grade_low>1</grade_low>
+    <grade_low>0</grade_low>
     <grade_high>3</grade_high>
     <one_way>0</one_way>
   </Line>
@@ -184,7 +157,7 @@
     </switch>
     <grade>4</grade>
     <wait_time>20</wait_time>
-    <grade_low>1</grade_low>
+    <grade_low>0</grade_low>
     <grade_high>6</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -193,7 +166,7 @@
     </switch>
     <grade>4</grade>
     <wait_time>25</wait_time>
-    <grade_low>4</grade_low>
+    <grade_low>0</grade_low>
     <grade_high>24</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -247,7 +220,7 @@
     </switch>
     <grade>5</grade>
     <wait_time>25</wait_time>
-    <grade_low>7</grade_low>
+    <grade_low>3</grade_low>
     <grade_high>21</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -301,7 +274,7 @@
     </switch>
     <grade>6</grade>
     <wait_time>25</wait_time>
-    <grade_low>7</grade_low>
+    <grade_low>3</grade_low>
     <grade_high>21</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -355,7 +328,7 @@
     </switch>
     <grade>7</grade>
     <wait_time>25</wait_time>
-    <grade_low>7</grade_low>
+    <grade_low>3</grade_low>
     <grade_high>21</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -409,7 +382,7 @@
     </switch>
     <grade>8</grade>
     <wait_time>20</wait_time>
-    <grade_low>6</grade_low>
+    <grade_low>5</grade_low>
     <grade_high>6</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -418,7 +391,7 @@
     </switch>
     <grade>8</grade>
     <wait_time>30</wait_time>
-    <grade_low>10</grade_low>
+    <grade_low>6</grade_low>
     <grade_high>18</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -472,7 +445,7 @@
     </switch>
     <grade>9</grade>
     <wait_time>20</wait_time>
-    <grade_low>6</grade_low>
+    <grade_low>5</grade_low>
     <grade_high>6</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -481,7 +454,7 @@
     </switch>
     <grade>9</grade>
     <wait_time>30</wait_time>
-    <grade_low>10</grade_low>
+    <grade_low>6</grade_low>
     <grade_high>18</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -535,7 +508,7 @@
     </switch>
     <grade>10</grade>
     <wait_time>20</wait_time>
-    <grade_low>6</grade_low>
+    <grade_low>5</grade_low>
     <grade_high>6</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -544,7 +517,7 @@
     </switch>
     <grade>10</grade>
     <wait_time>30</wait_time>
-    <grade_low>10</grade_low>
+    <grade_low>6</grade_low>
     <grade_high>18</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -607,7 +580,7 @@
     </switch>
     <grade>11</grade>
     <wait_time>40</wait_time>
-    <grade_low>13</grade_low>
+    <grade_low>9</grade_low>
     <grade_high>15</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -670,7 +643,7 @@
     </switch>
     <grade>12</grade>
     <wait_time>40</wait_time>
-    <grade_low>13</grade_low>
+    <grade_low>9</grade_low>
     <grade_high>15</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -733,7 +706,7 @@
     </switch>
     <grade>13</grade>
     <wait_time>40</wait_time>
-    <grade_low>13</grade_low>
+    <grade_low>9</grade_low>
     <grade_high>15</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -796,7 +769,7 @@
     </switch>
     <grade>14</grade>
     <wait_time>60</wait_time>
-    <grade_low>16</grade_low>
+    <grade_low>12</grade_low>
     <grade_high>12</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -859,7 +832,7 @@
     </switch>
     <grade>15</grade>
     <wait_time>60</wait_time>
-    <grade_low>16</grade_low>
+    <grade_low>12</grade_low>
     <grade_high>12</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -922,7 +895,7 @@
     </switch>
     <grade>16</grade>
     <wait_time>60</wait_time>
-    <grade_low>16</grade_low>
+    <grade_low>12</grade_low>
     <grade_high>12</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -985,7 +958,7 @@
     </switch>
     <grade>17</grade>
     <wait_time>60</wait_time>
-    <grade_low>19</grade_low>
+    <grade_low>15</grade_low>
     <grade_high>9</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -1048,7 +1021,7 @@
     </switch>
     <grade>18</grade>
     <wait_time>60</wait_time>
-    <grade_low>19</grade_low>
+    <grade_low>15</grade_low>
     <grade_high>9</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -1111,7 +1084,7 @@
     </switch>
     <grade>19</grade>
     <wait_time>60</wait_time>
-    <grade_low>19</grade_low>
+    <grade_low>15</grade_low>
     <grade_high>9</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -1174,7 +1147,7 @@
     </switch>
     <grade>20</grade>
     <wait_time>80</wait_time>
-    <grade_low>21</grade_low>
+    <grade_low>18</grade_low>
     <grade_high>6</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -1237,7 +1210,7 @@
     </switch>
     <grade>21</grade>
     <wait_time>80</wait_time>
-    <grade_low>21</grade_low>
+    <grade_low>18</grade_low>
     <grade_high>6</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -1300,7 +1273,7 @@
     </switch>
     <grade>22</grade>
     <wait_time>80</wait_time>
-    <grade_low>21</grade_low>
+    <grade_low>18</grade_low>
     <grade_high>6</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -1372,7 +1345,7 @@
     </switch>
     <grade>23</grade>
     <wait_time>90</wait_time>
-    <grade_low>24</grade_low>
+    <grade_low>21</grade_low>
     <grade_high>3</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -1444,7 +1417,7 @@
     </switch>
     <grade>24</grade>
     <wait_time>90</wait_time>
-    <grade_low>24</grade_low>
+    <grade_low>21</grade_low>
     <grade_high>3</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -1516,7 +1489,7 @@
     </switch>
     <grade>25</grade>
     <wait_time>90</wait_time>
-    <grade_low>24</grade_low>
+    <grade_low>21</grade_low>
     <grade_high>3</grade_high>
     <one_way>1</one_way>
   </Line>
@@ -1588,7 +1561,7 @@
     </switch>
     <grade>26</grade>
     <wait_time>90</wait_time>
-    <grade_low>26</grade_low>
+    <grade_low>24</grade_low>
     <grade_high>0</grade_high>
     <one_way>1</one_way>
   </Line>

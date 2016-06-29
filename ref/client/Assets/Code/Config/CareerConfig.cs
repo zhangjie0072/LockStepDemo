@@ -68,25 +68,24 @@ public class CareerConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
 		ParseChapterConfig();
-		Logger.ConfigEnd(name1);
-		Logger.ConfigBegin(name2);
+		
+		Debug.Log("Config reading " + name2);
 		ParseSectionConfig();
-		Logger.ConfigEnd(name2);
-		Logger.ConfigBegin(name3);
+		
+		Debug.Log("Config reading " + name3);
 		ParseCareerAwardLibConfig();
-		Logger.ConfigEnd(name3);
-		Logger.ConfigBegin(name4);
+		
+		Debug.Log("Config reading " + name4);
         //ParseAwardPackConfig();
 		ParsePlotConfig();
-		Logger.ConfigEnd(name4);
-		Logger.ConfigBegin(name5);
+		
+		Debug.Log("Config reading " + name5);
 		ParseStarConditionConfig();
-		Logger.ConfigEnd(name5);
-		Logger.ConfigBegin(name6);
+
+		Debug.Log("Config reading " + name6);
 		ParseSectionResetConfig();
-		Logger.ConfigEnd(name6);
     }
 
     public void ParseChapterConfig()
@@ -94,7 +93,7 @@ public class CareerConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         chapterConfig.Clear();
@@ -181,7 +180,7 @@ public class CareerConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
         sectionConfig.Clear();
@@ -417,6 +416,10 @@ public class CareerConfig
                 {
                     config.icon_level = xel.InnerText;
                 }
+                else if (xel.Name == "frame")
+                {
+                    config.frame = xel.InnerText;
+                }
             }
             sectionConfig[config.id] = config;
         }
@@ -427,7 +430,7 @@ public class CareerConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name3);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name3);
+            Debug.LogError("LoadConfig failed: " + name3);
             return;
         }
         careerAwardLibConfig.Clear();
@@ -482,7 +485,7 @@ public class CareerConfig
         //string text = ResourceLoadManager.Instance.GetConfigText(name4);
         //if (text == null)
         //{
-        //    Logger.LogError("LoadConfig failed: " + name4);
+        //    Debug.LogError("LoadConfig failed: " + name4);
         //    return;
         //}
         //awardPackConfig.Clear();
@@ -547,7 +550,7 @@ public class CareerConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name5);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name5);
+            Debug.LogError("LoadConfig failed: " + name5);
             return;
         }
         plotConfig.Clear();
@@ -605,7 +608,7 @@ public class CareerConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name6);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name6);
+            Debug.LogError("LoadConfig failed: " + name6);
             return;
         }
         starConditionConfig.Clear();
@@ -643,7 +646,7 @@ public class CareerConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name7);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name7);
+            Debug.LogError("LoadConfig failed: " + name7);
             return;
         }
         sectionResetConfig.Clear();
@@ -794,7 +797,7 @@ public class CareerConfig
     //{
     //    if (assistConfig.ContainsKey(sectionID))
     //    {
-    //        Logger.Log("外援球员ID " + assistConfig[sectionID]);
+    //        Debug.Log("外援球员ID " + assistConfig[sectionID]);
     //        return assistConfig[sectionID];
     //    }
     //    return null;

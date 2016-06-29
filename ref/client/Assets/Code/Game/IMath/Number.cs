@@ -2,6 +2,7 @@
 
 namespace IM
 {
+    //精确到小数点后面3位
     public struct Number : IComparable<Number>, IEquatable<Number>, IComparable<int>, IEquatable<int>
     {
         public static Number max = Number.Raw(int.MaxValue);
@@ -46,13 +47,6 @@ namespace IM
             raw = (int)x;
         }
 
-#if UNITY_EDITOR
-        public static Number FromUnity(float f)
-        {
-             return Number.Raw(UnityEngine.Mathf.RoundToInt(f * Math.FACTOR));
-        }
-#endif
-
         public static Number Raw(int x)
         {
             Number number = new Number();
@@ -62,7 +56,7 @@ namespace IM
 
         public static Number Raw(long x)
         {
-            Math.CheckRange(x, (long)int.MinValue, (long)int.MaxValue, "Number.FromRaw(x)");
+            Math.CheckRange(x, (long)int.MinValue, (long)int.MaxValue, "Number.Raw(x)");
             return Number.Raw((int)x);
         }
 
@@ -186,9 +180,9 @@ namespace IM
             return (float)number.raw / Math.FACTOR;
         }
         //支持Number到BigNumber的隐式转换
-        public static implicit operator BigNumber(Number number)
+        public static implicit operator PrecNumber(Number number)
         {
-            return BigNumber.Raw((int)Math.RndDiv((long)number.raw * Math.BIG_FACTOR, Math.FACTOR));
+            return PrecNumber.Raw((int)Math.RndDiv((long)number.raw * Math.BIG_FACTOR, Math.FACTOR));
         }
 
         public int CompareTo(Number other)

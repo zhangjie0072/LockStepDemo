@@ -23,7 +23,7 @@ public class HedgingHelper
 			resultDefault = config.GetAttribute("resultDefault", func + "/" + subFunc);
 		factorMin = config.factorMin;
 		factorMax = config.factorMax;
-		Logger.Log("Hedging, " + name + ", resultMin:" + resultMin + " resultMax:" + resultMax +
+		Debug.Log("Hedging, " + name + ", resultMin:" + resultMin + " resultMax:" + resultMax +
 			" resultDefault:" + resultDefault + " factorMin:" + factorMin + " factorMax:" + factorMax);
 	}
 
@@ -40,7 +40,7 @@ public class HedgingHelper
 			result = resultMin + (resultDefault - resultMin) * (factor - factorMin) / (IM.Number.one - factorMin);
 		}
         result = IM.Math.Clamp(result, resultMin, resultMax);
-		Logger.Log("Hedging calc, " + name + ", " + value1 + ", " + value2 + ", " + result);
+		Debug.Log("Hedging calc, " + name + ", " + value1 + ", " + value2 + ", " + result);
 		return result;
 	}
 }

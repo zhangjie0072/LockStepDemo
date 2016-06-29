@@ -29,9 +29,9 @@ public class StealConfig
             return;
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
-		Logger.ConfigBegin(name);
+		UnityEngine.Debug.Log("Config reading " + name);
         ReadRatio();
-		Logger.ConfigEnd(name);
+		
     }
 
     void ReadRatio()
@@ -39,7 +39,7 @@ public class StealConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            UnityEngine.Debug.LogError("LoadConfig failed: " + name);
             return;
         }
         

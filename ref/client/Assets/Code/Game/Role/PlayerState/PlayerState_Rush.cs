@@ -81,7 +81,7 @@ public class PlayerState_Rush : PlayerState
 		IM.Vector3 dirVelocity = m_player.moveDirection.normalized;
         if (!m_player.m_stamina.ConsumeStamina((m_player.m_skillSystem.m_rushStamina * fDeltaTime)))
 		{
-			if (m_match.m_mainRole == m_player)
+			if (m_match.mainRole == m_player)
 				m_match.ShowTips((Vector3)m_player.position + Vector3.up, CommonFunction.GetConstString("MATCH_TIPS_NOT_ENOUGH_STAMINA"), GlobalConst.MATCH_TIP_COLOR_RED);
 			m_stateMachine.SetState(PlayerState.State.eRun);
 			return;

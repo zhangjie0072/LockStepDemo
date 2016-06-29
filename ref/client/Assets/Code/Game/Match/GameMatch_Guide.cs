@@ -62,9 +62,9 @@ public class GameMatch_Guide : GameMatch_3ON3, MatchStateMachine.Listener,GameMa
 		config.leagueType = LeagueType.ePractise;
 	}
 
-    public override void OnSceneComplete()
-    {
-        base.OnSceneComplete();
+	protected override void _OnLoadingCompleteImp ()
+	{
+		base._OnLoadingCompleteImp ();
 		m_stateMachine.m_matchStateListeners.Add(this);
 
 		mCurScene.mBall.onCatch = OnCatchBall;
@@ -84,9 +84,9 @@ public class GameMatch_Guide : GameMatch_3ON3, MatchStateMachine.Listener,GameMa
 		guideTip.Hide();
     }
 
-	public override void Update(IM.Number deltaTime)
+	public override void GameUpdate(IM.Number deltaTime)
 	{
-		base.Update(deltaTime);
+		base.GameUpdate(deltaTime);
 
 		if ( m_stateMachine.m_curState.m_eState != MatchState.State.eOpening && m_stateMachine.m_curState.m_eState != MatchState.State.eOverTime )
 		{
@@ -100,17 +100,17 @@ public class GameMatch_Guide : GameMatch_3ON3, MatchStateMachine.Listener,GameMa
 
 		matchReviseTip.Update((float)deltaTime);
 
-		if (m_mainRole.m_StateMachine.m_curState.m_eState == PlayerState.State.eHold && m_mainRole.m_bMovedWithBall)
+		if (mainRole.m_StateMachine.m_curState.m_eState == PlayerState.State.eHold && mainRole.m_bMovedWithBall)
 			ShowGuide("HoldLock");
 
-		if (!(m_mainRole.m_StateMachine.m_curState is PlayerState_Skill) &&
+		if (!(mainRole.m_StateMachine.m_curState is PlayerState_Skill) &&
 			!m_ruler.m_bToCheckBall &&
-			m_mainRole.m_bWithBall && m_mainRole.m_bOnGround)
+			mainRole.m_bWithBall && mainRole.m_bOnGround)
 		{
-			bool isMainRoleDefended = m_mainRole.IsDefended();
+			bool isMainRoleDefended = mainRole.IsDefended();
 			if (isMainRoleDefended)
 			{
-				if (m_mainRole.m_position == PositionType.PT_C || m_mainRole.m_position == PositionType.PT_PF)
+				if (mainRole.m_position == PositionType.PT_C || mainRole.m_position == PositionType.PT_PF)
 				{
 					//if (completedGuide.Contains("Clutch") && !clutchGuiding)
 						ShowGuide("CrossOver", 4);
@@ -130,34 +130,34 @@ public class GameMatch_Guide : GameMatch_3ON3, MatchStateMachine.Listener,GameMa
 			clutchGuiding = false;
 
 		if (mCurScene.mBall.m_ballState == BallState.eLoseBall &&
-			m_mainRole.m_bOnGround &&
-			(m_mainRole.m_position == PositionType.PT_PG || m_mainRole.m_position == PositionType.PT_SG))
+			mainRole.m_bOnGround &&
+			(mainRole.m_position == PositionType.PT_PG || mainRole.m_position == PositionType.PT_SG))
 		{
-			IM.Number catchDistance = PlayerState_BodyThrowCatch.GetMaxDistance(m_mainRole);
-			IM.Number curDistance = GameUtils.HorizonalDistance(m_mainRole.position, mCurScene.mBall.position);
+			IM.Number catchDistance = PlayerState_BodyThrowCatch.GetMaxDistance(mainRole);
+			IM.Number curDistance = GameUtils.HorizonalDistance(mainRole.position, mCurScene.mBall.position);
 			if (curDistance <= catchDistance)
 				ShowGuide("BodyThrowCatch", 1);
 		}
 
-		if (m_mainRole.m_defenseTarget.m_bWithBall &&
-			m_mainRole.m_defenseTarget.m_AOD.GetStateByPos(m_mainRole.position) != AOD.Zone.eInvalid)
+		if (mainRole.m_defenseTarget.m_bWithBall &&
+			mainRole.m_defenseTarget.m_AOD.GetStateByPos(mainRole.position) != AOD.Zone.eInvalid)
 		{
-			if (GameSystem.Instance.StealConfig.GetRatio(m_mainRole.m_defenseTarget.m_StateMachine.m_curState.m_eState) > IM.Number.zero)
+			if (GameSystem.Instance.StealConfig.GetRatio(mainRole.m_defenseTarget.m_StateMachine.m_curState.m_eState) > IM.Number.zero)
 				ShowGuide("Steal", 4);
-			else if (AIUtils.CanBlock(m_mainRole, m_mainRole.m_defenseTarget, IM.Number.zero, IM.Number.zero, mCurScene.mBasket.m_vShootTarget))
+			else if (AIUtils.CanBlock(mainRole, mainRole.m_defenseTarget, IM.Number.zero, IM.Number.zero, mCurScene.mBasket.m_vShootTarget))
 			{
-				if (m_mainRole.m_defenseTarget.m_StateMachine.m_curState.m_eState != PlayerState.State.ePrepareToShoot)
+				if (mainRole.m_defenseTarget.m_StateMachine.m_curState.m_eState != PlayerState.State.ePrepareToShoot)
 					ShowGuide("Block", 1);
 			}
 		}
 
 		if (mCurScene.mBall.m_ballState == BallState.eRebound)
 		{
-			IM.Number fDistPlayer2Ball = GameUtils.HorizonalDistance(m_mainRole.position, mCurScene.mBall.position);
-			if (fDistPlayer2Ball <= m_mainRole.m_fReboundDist)
+			IM.Number fDistPlayer2Ball = GameUtils.HorizonalDistance(mainRole.position, mCurScene.mBall.position);
+			if (fDistPlayer2Ball <= mainRole.m_fReboundDist)
 			{
 				IM.Number minHeight = new IM.Number(1,6);
-				IM.Number maxHeight = m_mainRole.m_finalAttrs["rebound_height"] * new IM.Number(0,13) + new IM.Number(3);
+				IM.Number maxHeight = mainRole.m_finalAttrs["rebound_height"] * new IM.Number(0,13) + new IM.Number(3);
 				IM.Number ball_height = mCurScene.mBall.position.y;
 				bool inReboundRange = minHeight < ball_height && ball_height < maxHeight;
                 IM.Vector3 velocity = mCurScene.mBall.curVel;
@@ -257,7 +257,7 @@ public class GameMatch_Guide : GameMatch_3ON3, MatchStateMachine.Listener,GameMa
 			ShowGuide("SwitchRole");
 		else if (newState.m_eState == MatchState.State.ePlaying && oldState.m_eState == MatchState.State.eBegin)
 		{
-			if (m_mainRole.m_team.m_role == MatchRole.eDefense)
+			if (mainRole.m_team.m_role == MatchRole.eDefense)
 				ShowGuide("Defense", 2);
 		}
 		else if (newState.m_eState == MatchState.State.eTipOff)
@@ -297,15 +297,15 @@ public class GameMatch_Guide : GameMatch_3ON3, MatchStateMachine.Listener,GameMa
 
 	void OnCatchBall(UBasketball ball)
 	{
-		if (ball.m_owner.m_team == m_mainRole.m_team)
+		if (ball.m_owner.m_team == mainRole.m_team)
 			ShowGuide("SwitchMainRole");
 	}
 
 	public void OnTimeUp()
 	{
-		if (m_mainRole.m_team.m_role == MatchRole.eOffense && 
+		if (mainRole.m_team.m_role == MatchRole.eOffense && 
 			mCurScene.mBall.m_ballState != BallState.eUseBall_Shoot &&
-			m_mainRole.m_bWithBall && gameMatchTime > IM.Number.zero)
+			mainRole.m_bWithBall && gameMatchTime > IM.Number.zero)
 		{
 			ShowGuide("AttackTimeOut");
 		}

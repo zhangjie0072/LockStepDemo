@@ -174,7 +174,7 @@ public class AI_Defense : AIState
 					    IM.Number toBlockRate = IM.Number.half;
 						IM.Number value = IM.Random.value;
 						m_bToBlock = value < toBlockRate;
-						Logger.Log(m_player.m_name + "Block time dev:" + m_devBlockTime +
+						Debug.Log(m_player.m_name + "Block time dev:" + m_devBlockTime +
 							" To block rate: " + toBlockRate + " " + value + " " + m_bToBlock);
 						m_decidedToBlock = true;
 					}
@@ -196,7 +196,7 @@ public class AI_Defense : AIState
 							if (m_player.m_defenseTarget == m_ball.m_owner)
 							{
 								IM.Number stealRate = AIUtils.GetStealRate(m_player, m_ball.m_owner, m_match);
-								Logger.Log(m_player.m_name + " Steal rate: " + stealRate);
+								Debug.Log(m_player.m_name + " Steal rate: " + stealRate);
 								if (stealRate > IM.Number.zero)
 								{
 									m_system.SetTransaction(Type.eSteal, stealRate * 100);

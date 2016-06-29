@@ -11,7 +11,7 @@ public class AutoDefenseTakeOver
         set
         {
             _enabled = value;
-            Logger.Log("AutoDefenseTakeOver, Set enable: " + value);
+            Debug.Log("AutoDefenseTakeOver, Set enable: " + value);
             if (!value)
             {
                 InTakeOver = false;
@@ -61,13 +61,13 @@ public class AutoDefenseTakeOver
                 if (_uncontrolTime > MAX_UNCONTROL_TIME)
                 {
                     InTakeOver = true;
-                    Logger.Log("AutoDefenseTakeOver, Take over.");
+                    Debug.Log("AutoDefenseTakeOver, Take over.");
                 }
             }
             else if (InTakeOver && _isControlled)
             {
                 InTakeOver = false;
-                Logger.Log("AutoDefenseTakeOver, Resume.");
+                Debug.Log("AutoDefenseTakeOver, Resume.");
             }
         }
         else

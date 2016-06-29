@@ -4,7 +4,7 @@ using fogs.proto.msg;
 
 public class PlayerState_Dunk : PlayerState_Skill
 {
-	private IM.BigNumber	m_dunkRate = IM.Number.zero;
+	private IM.PrecNumber	m_dunkRate = IM.Number.zero;
 
 	private	bool			m_bRateFixed = false;
 
@@ -21,10 +21,10 @@ public class PlayerState_Dunk : PlayerState_Skill
 	static HedgingHelper dunkNearHedging = new HedgingHelper("DunkNear");
 	static HedgingHelper dunkMiddleHedging = new HedgingHelper("DunkMiddle");
 
-    static IM.BigNumber dunkMiddleMultiply = GameSystem.Instance.HedgingConfig.GetRatio("multiply", "DunkMiddle");
-    static IM.BigNumber dunkNearMultiply = GameSystem.Instance.HedgingConfig.GetRatio("multiply", "DunkNear");
-    static IM.BigNumber dunkMiddleAdd = GameSystem.Instance.HedgingConfig.GetRatio("add", "DunkMiddle");
-    static IM.BigNumber dunkNearAdd = GameSystem.Instance.HedgingConfig.GetRatio("add", "DunkNear");
+    static IM.PrecNumber dunkMiddleMultiply = GameSystem.Instance.HedgingConfig.GetRatio("multiply", "DunkMiddle");
+    static IM.PrecNumber dunkNearMultiply = GameSystem.Instance.HedgingConfig.GetRatio("multiply", "DunkNear");
+    static IM.PrecNumber dunkMiddleAdd = GameSystem.Instance.HedgingConfig.GetRatio("add", "DunkMiddle");
+    static IM.PrecNumber dunkNearAdd = GameSystem.Instance.HedgingConfig.GetRatio("add", "DunkNear");
 	
 	public PlayerState_Dunk (PlayerStateMachine owner, GameMatch match):base(owner,match)
 	{
@@ -45,7 +45,7 @@ public class PlayerState_Dunk : PlayerState_Skill
 		PlayerAnimAttribute.AnimAttr dunkAttr = m_player.m_animAttributes.GetAnimAttrById(Command.Dunk, m_curAction);
 		if( dunkAttr == null )
 		{
-			Logger.LogError("Current action: " + m_curAction + " in dunk id: " + m_curExecSkill.skill.id);
+			Debug.LogError("Current action: " + m_curAction + " in dunk id: " + m_curExecSkill.skill.id);
 		}
 
         IM.Number frameRate = m_player.animMgr.GetFrameRate(m_curAction);
@@ -79,9 +79,9 @@ public class PlayerState_Dunk : PlayerState_Skill
 		
 		m_vMovePos = -dirPlayerToBasket * vToBasketOffset.x + vRimHPos;
 		IM.Vector3 vMovePos2Bakset = m_vMovePos - m_player.position;
-		int fSameDir = IM.Vector3.Dot(vMovePos2Bakset,  vPlayer2Basket);
+		IM.Number fSameDir = IM.Vector3.Dot(vMovePos2Bakset,  vPlayer2Basket);
 		bool bRush = false;
-		if( vPlayer2Basket.magnitude < vMovePos2Bakset.magnitude || fSameDir < 0.0f || kf_mts.frame == 0 )
+		if( vPlayer2Basket.magnitude < vMovePos2Bakset.magnitude || fSameDir < IM.Number.zero || kf_mts.frame == 0 )
 		{
 			m_speed = IM.Vector3.zero;
 			bRush = false;
@@ -104,8 +104,8 @@ public class PlayerState_Dunk : PlayerState_Skill
 
 		m_player.GetNodePosition(SampleNode.Root, m_curAction, m_leaveGroundTime, out vPosLeaveGround );
 
-		vPosLeaveGround = m_player.position + IM.Vector3.DotForNumber(vPosLeaveGround, dirPlayerToBasket) * dirPlayerToBasket;
-		vPosDunk = m_player.position + IM.Vector3.DotForNumber(vPosDunk, dirPlayerToBasket) * dirPlayerToBasket;
+		vPosLeaveGround = m_player.position + IM.Vector3.Dot(vPosLeaveGround, dirPlayerToBasket) * dirPlayerToBasket;
+		vPosDunk = m_player.position + IM.Vector3.Dot(vPosDunk, dirPlayerToBasket) * dirPlayerToBasket;
 		
 		IM.Vector3 deltaDistance = vPosDunk - vPosLeaveGround;
 		IM.Number fOrigDunkOffset = vToBasketOffset.x - deltaDistance.magnitude;
@@ -121,7 +121,7 @@ public class PlayerState_Dunk : PlayerState_Skill
 			else
 				rootMotion.scale = fPlayer2Basket / vToBasketOffset.x; 
 
-			Logger.Log("scale: " + rootMotion.scale);
+			Debug.Log("scale: " + rootMotion.scale);
 		}
 
 		m_bRateFixed = false;
@@ -165,13 +165,13 @@ public class PlayerState_Dunk : PlayerState_Skill
         if (m_curExecSkill.skill.side_effects.TryGetValue((int)SkillSideEffect.Type.eShootRate, out effect))
             fSideEffect = effect.value;
 		//else
-		//	Logger.Log("No side effect data.");
+		//	Debug.Log("No side effect data.");
 
 		Dictionary<string, uint> skillAttr = m_player.GetSkillAttribute();
 		Dictionary<string, uint> data = m_player.m_finalAttrs;
 		if( data == null )
 		{
-			Logger.LogError("Can not build player: " + m_player.m_name + " ,can not find state by id: " + m_player.m_id );
+			Debug.LogError("Can not build player: " + m_player.m_name + " ,can not find state by id: " + m_player.m_id );
 			return;
 		}
 

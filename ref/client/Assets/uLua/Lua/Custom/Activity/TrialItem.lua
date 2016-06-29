@@ -97,9 +97,9 @@ function TrialItem:Refresh( ... )
 		--设置进度
 		--富文本颜色
 		NGUITools.SetActive(self.uiLblSchedule.gameObject,true)
-	    local strFormatWhite = '[FFFFFF]'
+	    local strFormatWhite = '[009900]'
 	    local strFormatWhiteEnd = '[-]'
-	    local strFormatGreen = '[B0FD04]'
+	    local strFormatGreen = '[660000]'
 	    local strFormatGreenEnd = '[-]'
 		if self.schedule then
 			if self.schedule.condition_need > self.schedule.condition_cur then

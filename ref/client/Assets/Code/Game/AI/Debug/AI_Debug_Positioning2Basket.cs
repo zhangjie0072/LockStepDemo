@@ -19,6 +19,6 @@ public class AI_Debug_Positioning2Basket : AIState
 
 	public override void OnPlayerCollided(Player colPlayer)
 	{
-		Logger.Log("Player collide: " + colPlayer.m_name);
+		Debug.Log("Player collide: " + colPlayer.m_name);
 	}
 }

@@ -110,9 +110,9 @@ public class PractiseStepConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
 		ReadStep();
-		Logger.ConfigEnd(name1);
+		
     }
 
 	public PractiseStep GetFirstStep()
@@ -135,7 +135,7 @@ public class PractiseStepConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         

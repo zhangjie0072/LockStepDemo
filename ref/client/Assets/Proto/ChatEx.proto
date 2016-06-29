@@ -111,7 +111,7 @@ message ChatRoomQueryResp
 }
 
 // 聊天室最近的聊天内容
-message ChatRoomLatestQueryReq
+message ChatRoomQueryLatestReq
 {
 	optional uint64 room_id = 1; //房间Id
 }

@@ -144,7 +144,7 @@ public class AIState
 		m_timerTick = new GameUtils.Timer(m_system.AI.delay, OnTick);
 
 		if( m_player == null )
-			Logger.LogError("AIState: player can not be null.");
+			Debug.LogError("AIState: player can not be null.");
 
 	}
 	
@@ -194,6 +194,6 @@ public class AIState
 
 	protected bool CanArriveBeforePlayer(IM.Vector3 target)
 	{
-		return AIUtils.CanArriveBefore(m_player, m_match.m_mainRole, target);
+		return AIUtils.CanArriveBefore(m_player, m_match.mainRole, target);
 	}
 }

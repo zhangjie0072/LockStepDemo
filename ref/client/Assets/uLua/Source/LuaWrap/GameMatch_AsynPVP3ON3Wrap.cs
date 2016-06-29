@@ -10,10 +10,8 @@ public class GameMatch_AsynPVP3ON3Wrap
 			new LuaMethod("SetNotifyGameStart", SetNotifyGameStart),
 			new LuaMethod("GetRivalScore", GetRivalScore),
 			new LuaMethod("GetRivalName", GetRivalName),
-			new LuaMethod("OnSceneComplete", OnSceneComplete),
-			new LuaMethod("HandleGameBegin", HandleGameBegin),
-			new LuaMethod("Update", Update),
-			new LuaMethod("SwitchMainrole", SwitchMainrole),
+			new LuaMethod("OnGameBegin", OnGameBegin),
+			new LuaMethod("GameUpdate", GameUpdate),
 			new LuaMethod("EnableTakeOver", EnableTakeOver),
 			new LuaMethod("EnableMatchTips", EnableMatchTips),
 			new LuaMethod("EnablePlayerTips", EnablePlayerTips),
@@ -91,41 +89,22 @@ public class GameMatch_AsynPVP3ON3Wrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int OnSceneComplete(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 1);
-		GameMatch_AsynPVP3ON3 obj = (GameMatch_AsynPVP3ON3)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch_AsynPVP3ON3");
-		obj.OnSceneComplete();
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int HandleGameBegin(IntPtr L)
+	static int OnGameBegin(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		GameMatch_AsynPVP3ON3 obj = (GameMatch_AsynPVP3ON3)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch_AsynPVP3ON3");
-		Pack arg0 = (Pack)LuaScriptMgr.GetNetObject(L, 2, typeof(Pack));
-		obj.HandleGameBegin(arg0);
+		fogs.proto.msg.GameBeginResp arg0 = (fogs.proto.msg.GameBeginResp)LuaScriptMgr.GetNetObject(L, 2, typeof(fogs.proto.msg.GameBeginResp));
+		obj.OnGameBegin(arg0);
 		return 0;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int Update(IntPtr L)
+	static int GameUpdate(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		GameMatch_AsynPVP3ON3 obj = (GameMatch_AsynPVP3ON3)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch_AsynPVP3ON3");
 		IM.Number arg0 = (IM.Number)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Number));
-		obj.Update(arg0);
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int SwitchMainrole(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 2);
-		GameMatch_AsynPVP3ON3 obj = (GameMatch_AsynPVP3ON3)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch_AsynPVP3ON3");
-		Player arg0 = (Player)LuaScriptMgr.GetNetObject(L, 2, typeof(Player));
-		obj.SwitchMainrole(arg0);
+		obj.GameUpdate(arg0);
 		return 0;
 	}
 

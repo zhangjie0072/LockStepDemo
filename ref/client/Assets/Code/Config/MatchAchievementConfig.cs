@@ -39,11 +39,11 @@ public class MatchAchievementConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name);
+		Debug.Log("Config reading " + name);
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            Debug.LogError("LoadConfig failed: " + name);
             return;
         }
         
@@ -68,10 +68,10 @@ public class MatchAchievementConfig
 				achievements.Add(data.type, levels);
 			}
 			if (levels.ContainsKey(data.level))
-				Logger.LogError("Match achievement config error. Type: " + data.type + " Level:" + data.level + " already existed.");
+				Debug.LogError("Match achievement config error. Type: " + data.type + " Level:" + data.level + " already existed.");
 			levels.Add(data.level, data);
 		}
-		Logger.ConfigEnd(name);
+		
 	}
 
 	public MatchAchievement GetMatchAchievement(PlayerStatistics.StatType type, uint value)

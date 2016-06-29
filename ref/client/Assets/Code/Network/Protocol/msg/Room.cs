@@ -678,6 +678,14 @@ namespace fogs.proto.msg
       get { return _data; }
       set { _data = value; }
     }
+    private uint _race_type = default(uint);
+    [global::ProtoBuf.ProtoMember(10, IsRequired = false, Name=@"race_type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint race_type
+    {
+      get { return _race_type; }
+      set { _race_type = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }

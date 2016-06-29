@@ -89,12 +89,12 @@ namespace IM
             return y > x ? y : x;
         }
 
-        public static BigNumber Max(BigNumber x , BigNumber y)
+        public static PrecNumber Max(PrecNumber x , PrecNumber y)
         {
             return y > x ? y : x;
         }
 
-        public static BigNumber Min(BigNumber x ,BigNumber y)
+        public static PrecNumber Min(PrecNumber x ,PrecNumber y)
         {
             return y < x ? y : x;
         }
@@ -211,11 +211,14 @@ namespace IM
             if (y == 0L)
                 throw new System.DivideByZeroException();
 
-            long sign = Sign(x) * Sign(y);
-            long absX = Abs(x);
-            long absY = Abs(y);
-            long q = absX / absY;
-            return sign * q;
+            //long sign = Sign(x) * Sign(y);
+            //long absX = Abs(x);
+            //long absY = Abs(y);
+            //long q = absX / absY;
+            //return sign * q;
+            long q = (long)(x / y);
+            q = (q <= 0 && x < 0) ? q - 1 : q;
+            return q;
         }
 
         public static Number Abs(Number x)

@@ -250,7 +250,7 @@ public class RoadPathManager
 
 		int iCurColomn 	= iCurPlayerSection % sectorColomns;
 		int iCurRow 	= iCurPlayerSection / sectorColomns;
-		//Logger.Log("Column: " + iCurColomn + " Row:" + iCurRow);
+		//Debug.Log("Column: " + iCurColomn + " Row:" + iCurRow);
 
 		if( matchRole == GameMatch.MatchRole.eOffense)
 		{
@@ -329,14 +329,14 @@ public class RoadPathManager
         IM.Number fAngle = IM.Vector3.FromToAngle(IM.Vector3.right, dirToShootTarget.normalized);
 
         IM.Number sectorDistNonArc = m_sectorDistance * IM.Math.Cos(IM.Math.Deg2Rad(m_angleNonArc * m_nonArcNum));
-		if (fAngle < IM.Number.zero || fAngle > new IM.Number(180))	// illegal area
+		if (fAngle <= IM.Number.zero || fAngle >= new IM.Number(180))	// illegal area
 			return -1;
-        else if (fAngle < m_angleNonArc * m_nonArcNum || fAngle > (new IM.Number(180) - m_angleNonArc * m_nonArcNum))	// no-arc area
+        else if (fAngle <= m_angleNonArc * m_nonArcNum || fAngle >= (new IM.Number(180) - m_angleNonArc * m_nonArcNum))	// no-arc area
 		{
-			if (IM.Math.Abs(pos.x) > sectorDistNonArc * m_DistanceList.Count)
+			if (IM.Math.Abs(pos.x) >= sectorDistNonArc * m_DistanceList.Count)
 				return -1;
 		}
-		else if (distToShootTarget > m_range)	//	arc area
+		else if (distToShootTarget >= m_range)	//	arc area
 			return -1;
 
 		int iDistanceIndex;
@@ -357,7 +357,10 @@ public class RoadPathManager
 			iAngleIndex = ((fAngle - m_angleNonArc * m_nonArcNum) / m_angle).floorToInt + m_nonArcNum;
 		}
 
-		return iDistanceIndex * m_AngleList.Count + iAngleIndex;
+		int index = iDistanceIndex * m_AngleList.Count + iAngleIndex;
+        if (index >= m_Sectors.Count)
+            Debug.LogError("CalcSectorIdx, error index: " + index);
+        return index;
 	}
 
 	public void AddDrawSector( string strSector, Sector toDraw )
@@ -410,24 +413,24 @@ public class RoadPathManager
 
 	public Sector Bounce(IM.Vector2 pos, Sector collideSector, SectorArea area)
 	{
-		int iCurSector 	= CalcSectorIdx( pos.xz );
+		int iCurSector 	= CalcSectorIdx( pos.x0z );
 		int iColomn = m_AngleList.Count;
 		
 		int iCurColomn 	= iCurSector % iColomn;
 
 		GameMatch match = GameSystem.Instance.mClient.mCurMatch;
-		IM.Vector3 dirSectorToBasket = GameUtils.HorizonalNormalized(match.mCurScene.mBasket.m_vShootTarget, collideSector.center.xy);
+		IM.Vector3 dirSectorToBasket = GameUtils.HorizonalNormalized(match.mCurScene.mBasket.m_vShootTarget, collideSector.center.x0z);
 		IM.Vector3 dirSectorToBasketRight = IM.Quaternion.AngleAxis(new IM.Number(90), IM.Vector3.up) * dirSectorToBasket;
         IM.Vector2 curRight = dirSectorToBasketRight.xz;
 		
 		IM.Vector2 dirSector2Pos = (collideSector.center - pos).normalized;
 		int iNewCol = iCurColomn;
-		if( IM.Vector2.Dot(dirSector2Pos, curRight) > 0.0f )
-			iNewCol = Mathf.Clamp( iCurColomn + Random.Range(3, 6), (int)area.start.x, (int)area.start.x + (int)area.range.x - 1 );
+		if( IM.Vector2.Dot(dirSector2Pos, curRight) > IM.Number.zero)
+			iNewCol = Mathf.Clamp( iCurColomn + IM.Random.Range(3, 6), (int)area.start.x, (int)area.start.x + (int)area.range.x - 1 );
 		else
-			iNewCol = Mathf.Clamp( iCurColomn - Random.Range(3, 6), (int)area.start.x, (int)area.start.x + (int)area.range.x - 1 );
+			iNewCol = Mathf.Clamp( iCurColomn - IM.Random.Range(3, 6), (int)area.start.x, (int)area.start.x + (int)area.range.x - 1 );
 		
-		int iNewRow = Mathf.Clamp( (int)area.start.y + Random.Range(0, (int)area.range.y), (int)area.start.y, (int)area.start.y + (int)area.range.y - 1 );
+		int iNewRow = Mathf.Clamp( (int)area.start.y + IM.Random.Range(0, (int)area.range.y), (int)area.start.y, (int)area.start.y + (int)area.range.y - 1 );
 		int index = iNewRow * iColomn + iNewCol;
 		return m_Sectors[index];
 		//AddDrawSector("targetSector", targetSector);
@@ -450,7 +453,7 @@ public class RoadPathManager
 			if( cnt != 0 )
 			{
 				for( int idx = 0; idx != cnt - 1; idx++ )
-					Gizmos.DrawLine((Vector3)(_debugAIPath[idx].center).xz, (Vector3)(_debugAIPath[idx+1].center).xz);
+					Gizmos.DrawLine((Vector3)(_debugAIPath[idx].center).x0z, (Vector3)(_debugAIPath[idx+1].center).x0z);
 			}
 		}
 

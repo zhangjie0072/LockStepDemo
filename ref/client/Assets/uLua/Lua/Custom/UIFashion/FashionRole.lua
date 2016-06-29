@@ -24,7 +24,7 @@ FashionRole =  {
 
 -----------------------------------------------------------------
 function FashionRole:Awake()
-	self.uiBtnBack = createUI('ButtonBack', self.transform:FindChild('ButtonBack'))
+	self.uiBtnBack = createUI('ButtonClose', self.transform:FindChild('ButtonBack'))
 	self.uiRoleGrid = self.transform:FindChild('RoleScroll/Role'):GetComponent('UIGrid')
 	self.uiAllPosition = self.transform:FindChild('Position/All')
 	self.uiCPosition = self.transform:FindChild('Position/C')

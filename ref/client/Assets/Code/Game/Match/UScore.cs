@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+[CLSCompliant(false)]
 public class UScore
 	: MonoBehaviour
 {
@@ -23,11 +24,13 @@ public class UScore
 	{
 		if( m_curScore == score )
 			return;
-
+        m_S1up.spriteName = m_curScore.ToString();
+        m_S1down.spriteName = m_curScore.ToString();
 		m_S2up.spriteName = score.ToString();
 		m_S2down.spriteName = score.ToString();
-		m_uiAnimator.Play("E_Score");
-		m_curScore = score;
+		m_uiAnimator.Play("E_Score",-1,0f);
+        m_uiAnimator.Update(0f);
+        m_curScore = score;
 	}
 
 	void OnAnimFinish()

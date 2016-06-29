@@ -613,7 +613,7 @@ public class UIGridWrap
 				func.PCall(top, 2);
 				object[] objs = func.PopValues(top);
 				func.EndPCall(top);
-				return (int)objs[0];
+				return (int)(double)objs[0];
 			};
 		}
 		return 0;

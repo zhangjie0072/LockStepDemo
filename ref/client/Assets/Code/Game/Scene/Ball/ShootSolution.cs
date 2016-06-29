@@ -75,6 +75,65 @@ public class ShootSolution
         }
     };
 
+    public struct CircleCurve
+    {
+        public float R;
+        public float x0;
+        public float z0;
+    }
+
+    public struct LineCurve
+    {
+        public IM.Vector3 x0;
+        public IM.Vector3 preVec;
+        public IM.Vector3 dir;
+        public IM.Number midDis;
+        public IM.Number mTime;
+        public int count;
+        public bool GetPosition(IM.Number time, out IM.Vector3 res)
+        {
+            int index = 1;
+            if (count % 2 == 0)
+                index = 1;
+            else
+                index = -1;
+            UBasket basket = GameSystem.Instance.mClient.mCurMatch.mCurScene.mBasket;
+            IM.Number radius = GameSystem.Instance.mClient.mCurMatch.mCurScene.mBall.m_ballRadius;
+
+            res.y = new IM.Number(3, 100);
+            res.x = x0.x + 2 * dir.x * time * index;
+            res.z = x0.z + 2 * dir.z * time * index;
+           
+            if (count < 4)
+            {
+                if (IsKnock(preVec, res))
+                {                
+                    ++count;
+                    x0 = preVec;
+                }
+                else
+                {
+                    preVec = res;
+                }
+                return true;
+            }
+                               
+            return false;
+        }
+
+        private bool IsKnock(IM.Vector3 pre, IM.Vector3 now)
+        {
+            UBasket basket = GameSystem.Instance.mClient.mCurMatch.mCurScene.mBasket;
+            IM.Number radius = GameSystem.Instance.mClient.mCurMatch.mCurScene.mBall.m_ballRadius;  
+
+            IM.Number d1 = basket.m_rim.radius - (IM.Vector3.Distance(pre, basket.m_rim.center)) - radius;
+            IM.Number d2 = basket.m_rim.radius - (IM.Vector3.Distance(now, basket.m_rim.center)) - radius;
+            if (d1 >= 0 && d2 < 0)
+                return true;
+            return false;
+        }
+    }
+
 	public int	m_id;
 	public enum Type
 	{
@@ -82,12 +141,22 @@ public class ShootSolution
 		Layup,
 		Dunk,
 	}
+     public  enum AnimationType{
+        none,
+        ballCircle,
+        ballBounce,
+        ballUpDown,
+    } 
 
 	public IM.Number m_fTime;
 	public bool m_bSuccess;
 	public bool m_bCleanShot;
 	public Type m_type;
 	public IM.Number m_fMaxHeight;
+    public AnimationType m_animationType;
+    public IM.Number m_playTime;
+    public IM.Number m_playSpeed;
+    public IM.Number m_reductionIndex;
 
 	public IM.Vector3 m_vInitPos;
 	public IM.Vector3 m_vInitVel;
@@ -97,7 +166,7 @@ public class ShootSolution
 
 	public IM.Vector3	m_vBounceRimAdjustment;
 	public IM.Number	m_fBounceBackboard;
-
+    public bool m_isLock;
 	public List<SShootCurve> m_ShootCurveList = new List<SShootCurve>();
 	
 	public ShootSolution(int id)
@@ -164,7 +233,22 @@ public class ShootSolution
 		node = solutionNode.SelectSingleNode("./max_height") as XmlElement;
 		if (node != null)
 			m_fMaxHeight = IM.Number.Parse(node.InnerText);
-		
+
+        node = solutionNode.SelectSingleNode("./animationType") as XmlElement;
+        if (node != null)
+            m_animationType = (AnimationType)(int.Parse(node.InnerText));
+        node = solutionNode.SelectSingleNode("./playTime") as XmlElement;
+        if (node != null)
+            m_playTime = IM.Number.Parse(node.InnerText);
+        node = solutionNode.SelectSingleNode("./playSpeed") as XmlElement;
+        if (node != null)
+            m_playSpeed = IM.Number.Parse(node.InnerText);
+        node = solutionNode.SelectSingleNode("./redunctionIndex") as XmlElement;
+        if (node != null)
+            m_reductionIndex = IM.Number.Parse(node.InnerText);
+        node = solutionNode.SelectSingleNode("./isLock") as XmlElement;
+        if (node != null)
+            m_isLock = bool.Parse(node.InnerText);
 		XmlNodeList curveNodes = solutionNode.SelectNodes("./curve");
 		foreach( XmlElement curveNode in curveNodes )
 		{
@@ -283,7 +367,29 @@ public class ShootSolution
 
 		text = string.Format("{0:f3} {1:f3} {2:f3}", m_vFinVel.x, m_vFinVel.y, m_vFinVel.z);
 		pNodeVelocity.AppendChild(pDoc.CreateTextNode(text));
-		
+
+        XmlNode animationClip = pDoc.CreateElement("animationType");
+        XmlNode animationTime = pDoc.CreateElement("playTime");
+        XmlNode animationSpeed = pDoc.CreateElement("playSpeed");
+        XmlNode reductionIndex = pDoc.CreateElement("redunctionIndex");
+        XmlNode isLock = pDoc.CreateElement("isLock");
+
+        pSolution.AppendChild(animationClip);
+        animationClip.AppendChild(pDoc.CreateTextNode(((int)m_animationType).ToString()));
+
+        pSolution.AppendChild(animationTime);
+        animationTime.AppendChild(pDoc.CreateTextNode(m_playTime.ToString()));
+
+        pSolution.AppendChild(animationSpeed);
+        animationSpeed.AppendChild(pDoc.CreateTextNode(m_playSpeed.ToString()));
+
+        pSolution.AppendChild(reductionIndex);
+        reductionIndex.AppendChild(pDoc.CreateTextNode(m_reductionIndex.ToString()));
+
+        pSolution.AppendChild(isLock);
+        isLock.AppendChild(pDoc.CreateTextNode(m_isLock.ToString()));
+
+
 		return true;
 	}
 
@@ -332,7 +438,7 @@ public class ShootSolution
 
 		if(fTimeStart > m_fTime)
 		{
-			Logger.LogError("ball shoot solution start time > current time.");
+			Debug.LogError("ball shoot solution start time > current time.");
 			return false;
 		}
 
@@ -476,4 +582,18 @@ public class ShootSolution
 
 		return false;
 	}
+
+    public IM.Number CalcReductionIndex(IM.Vector3 pos, Type type)
+    {
+        IM.Number dis = IM.Number.zero;
+        IM.Number index = IM.Number.one;
+        dis = (pos.magnitude - new IM.Number(1, 900) < 1) ? IM.Number.one : (pos.magnitude - new IM.Number(1, 900));
+        if (type == Type.Layup)
+            index = dis / 100 * dis * new IM.Number(0, 200);
+        else if (type == Type.Shoot)
+            index = dis / 100 * dis * new IM.Number(0, 500);
+        else
+            index = IM.Number.one;
+        return index;
+    }
 };

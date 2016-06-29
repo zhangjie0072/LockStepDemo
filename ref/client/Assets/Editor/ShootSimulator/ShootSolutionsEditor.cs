@@ -12,7 +12,7 @@ public class ShootSolutionEditor : EditorWindow
 	Vector2 	mSuccessScroll = Vector2.zero;
 	Vector2 	mFailScroll = Vector2.zero;
 
-	int			mCurSelectSector = -1;
+	public int			mCurSelectSector = -1;
 	int			mDistanceCount = 0;
 	int			mAngleCount = 0;
 	float		mDistanceStep = 1.5f;
@@ -55,14 +55,13 @@ public class ShootSolutionEditor : EditorWindow
 		ballTo.y = 0.0f;
 		Handles.color = Color.red;
 		Handles.DrawLine( mBall.transform.position, ballTo );
-
 		GUIStyle style = new GUIStyle();
 		style.normal.textColor = Color.red;
 		if( ShootSimulator.instance != null )
 			Handles.Label( ballTo, ShootSimulator.instance.m_iCurSector.ToString(), style );
 
 		_DrawSectors( (Vector3)mBasket.m_rim.center );
-		_DrawCurves();
+        //_DrawCurves();
 	}
 
 	void OnGUI ()
@@ -132,11 +131,11 @@ public class ShootSolutionEditor : EditorWindow
 			{
 				GameSystem.Instance.shootSolutionManager.Reset();
 				for( int idx = 1; idx <= mDistanceCount; idx++ )
-					GameSystem.Instance.shootSolutionManager.m_DistanceList.Add(IM.Number.FromUnity(mDistanceStep) * idx);
+					GameSystem.Instance.shootSolutionManager.m_DistanceList.Add(IM.Editor.Tools.Convert(mDistanceStep) * idx);
 
 				float angleStep = 180.0f / ( mAngleCount + 1 );
 				for( int idx = 1; idx <= mAngleCount; idx++ )
-					GameSystem.Instance.shootSolutionManager.m_AngleList.Add(IM.Number.FromUnity(angleStep) * idx);
+					GameSystem.Instance.shootSolutionManager.m_AngleList.Add(IM.Editor.Tools.Convert(angleStep) * idx);
 
 				int iNumSector = (mDistanceCount + 1) * (mAngleCount + 1);
 				for( int idx = 0; idx < iNumSector; idx++)
@@ -237,6 +236,14 @@ public class ShootSolutionEditor : EditorWindow
 			GUILayout.EndVertical();
 			GUILayout.EndHorizontal();
 
+            if (GUILayout.Button("AutoAddAnimationCurrent", GUILayout.Height(20f)))
+                AutoAddAnimation();
+
+            if (GUILayout.Button("AutoAddAnimationTotal", GUILayout.Height(20f)))
+                AutoAddAnimationTotal();
+
+            if (GUILayout.Button("ClcAnimationTotal", GUILayout.Height(20f)))
+               ClcAnimationTotal();
 
 			Repaint();
 		}
@@ -257,10 +264,35 @@ public class ShootSolutionEditor : EditorWindow
 			GUILayout.Label( idx.ToString(), GUILayout.Width(24f));
 			
 			if (GUILayout.Button("solution_" + idx.ToString(), "OL TextField", GUILayout.MaxHeight(20f)))
-				mCurSelectedSolution = solution;
+            {
+                mCurSelectedSolution = solution;
+                //_DrawCurves();
+            }
+				
 
 			if (success)
 				solution.m_bCleanShot = GUILayout.Toggle(solution.m_bCleanShot, "Clean shot");
+
+            if (solution.m_ShootCurveList.Count == 2)
+            {
+                EditorGUILayout.PrefixLabel("count: ");
+                EditorGUILayout.FloatField(solution.m_ShootCurveList.Count);
+
+                EditorGUILayout.PrefixLabel("Animation Type: ");
+                solution.m_animationType = (ShootSolution.AnimationType)EditorGUILayout.EnumPopup(solution.m_animationType);
+
+                EditorGUILayout.PrefixLabel("Animation Time: ");
+                solution.m_playTime = IM.Editor.Tools.Convert(EditorGUILayout.FloatField((float)solution.m_playTime));
+
+                EditorGUILayout.PrefixLabel("Animation Speed: ");
+                solution.m_playSpeed = IM.Editor.Tools.Convert(EditorGUILayout.FloatField((float)solution.m_playSpeed));
+
+                EditorGUILayout.PrefixLabel("Animation ReductionIndex: ");
+                solution.m_reductionIndex = IM.Editor.Tools.Convert(EditorGUILayout.FloatField((float)solution.m_reductionIndex));
+
+                solution.m_isLock = GUILayout.Toggle(solution.m_isLock, "isLock");
+
+            }
 
 			solution.m_type = (ShootSolution.Type)EditorGUILayout.EnumPopup(solution.m_type);
 
@@ -315,7 +347,7 @@ public class ShootSolutionEditor : EditorWindow
 		}
 	}
 
-	void _DrawCurves()
+	public void _DrawCurves()
 	{
 		//draw shoot solution
 		ShootSolution solution = mBall.m_shootSolution;
@@ -334,9 +366,9 @@ public class ShootSolutionEditor : EditorWindow
 			else
 			{
 				if( ShootSimulator.instance != null && solution == ShootSimulator.instance.m_simulatingShootSolution )
-					Handles.color = Color.cyan;
+                    Handles.color = Color.red;
 				else
-					Handles.color = Color.green;
+                    Handles.color = Color.red;
 			}
 			Handles.DrawLine(m_shootCurveKeys[idx], m_shootCurveKeys[idx+1]);
 		}
@@ -366,6 +398,7 @@ public class ShootSolutionEditor : EditorWindow
 			Handles.color = Color.red;
 			Handles.DrawPolyLine(poly.ToArray());
 		}
+
 	}
 	
 	void _DrawSectors(Vector3 center)
@@ -416,4 +449,81 @@ public class ShootSolutionEditor : EditorWindow
 			fTime += fStep;
 		}
 	}
+
+    void AutoAddAnimation()
+    {
+        List<ShootSolutionManager.ShootSolutionSector> m_ShootSolutionSectors = GameSystem.Instance.shootSolutionManager.m_ShootSolutionSectors;
+        foreach (ShootSolution solution in m_ShootSolutionSectors[mCurSelectSector].success)
+        {
+            if (solution.m_ShootCurveList.Count == 2)
+            {
+                solution.m_animationType = (ShootSolution.AnimationType)(int)Random.Range(1, 4);
+                solution.m_playTime = IM.Number.one;
+                solution.m_playSpeed = IM.Number.one;
+                solution.m_reductionIndex = solution.CalcReductionIndex(solution.m_vInitPos, solution.m_type);
+            }
+        }
+        foreach (ShootSolution solution in m_ShootSolutionSectors[mCurSelectSector].fail)
+        {
+            if (solution.m_ShootCurveList.Count == 2)
+            {
+                solution.m_animationType = (ShootSolution.AnimationType)(int)Random.Range(1, 4);
+                solution.m_playTime = IM.Number.one;
+                solution.m_playSpeed = IM.Number.one;
+                solution.m_reductionIndex = solution.CalcReductionIndex(solution.m_vInitPos, solution.m_type);
+            }
+        }
+        
+    }
+
+    void AutoAddAnimationTotal()
+    {
+        List<ShootSolutionManager.ShootSolutionSector> m_ShootSolutionSectors = GameSystem.Instance.shootSolutionManager.m_ShootSolutionSectors;
+        for (int i = 0; i < m_ShootSolutionSectors.Count; ++i)
+        {
+            foreach (ShootSolution solution in m_ShootSolutionSectors[i].success)
+            {
+                if (solution.m_ShootCurveList.Count == 2)
+                {
+                    solution.m_animationType = (ShootSolution.AnimationType)(int)Random.Range(1, 4);
+                    solution.m_playTime = IM.Number.one;
+                    solution.m_playSpeed = IM.Number.one;
+                    solution.m_reductionIndex = solution.CalcReductionIndex(solution.m_vInitPos, solution.m_type);
+                }
+            }
+            foreach (ShootSolution solution in m_ShootSolutionSectors[i].fail)
+            {
+                if (solution.m_ShootCurveList.Count == 2)
+                {
+                    solution.m_animationType = (ShootSolution.AnimationType)(int)Random.Range(1, 3);
+                    solution.m_playTime = IM.Number.one;
+                    solution.m_playSpeed = IM.Number.one;
+                    solution.m_reductionIndex = solution.CalcReductionIndex(solution.m_vInitPos, solution.m_type);
+                }
+            }
+        }
+    }
+
+    void ClcAnimationTotal()
+    {
+        List<ShootSolutionManager.ShootSolutionSector> m_ShootSolutionSectors = GameSystem.Instance.shootSolutionManager.m_ShootSolutionSectors;
+        for (int i = 0; i < m_ShootSolutionSectors.Count; ++i)
+        {
+            foreach (ShootSolution solution in m_ShootSolutionSectors[i].success)
+            {
+                if (solution.m_ShootCurveList.Count == 2)
+                {
+                    solution.m_animationType = ShootSolution.AnimationType.none;         
+                }
+            }
+            foreach (ShootSolution solution in m_ShootSolutionSectors[i].fail)
+            {
+                if (solution.m_ShootCurveList.Count == 2)
+                {
+                    solution.m_animationType = ShootSolution.AnimationType.none;                   
+                }
+            }
+        }
+    }
+
 }

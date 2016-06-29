@@ -179,7 +179,31 @@ function getBustAtlas(id)
 
 end
 
+function printSimpleTable(t)
+    -- body
+    if type(t) ==  'table' then
+        local length = 1
+        for k,v in pairs(t) do
+            if type(v) == 'userdata' then 
+                    print('userdata-------------------k:',k,',v:',v)
+            elseif type(v) == 'table' then
+               printSimpleTable(v)
+            elseif type(v) == 'number' or type(v) == 'string' then
+                    print('ns-------------------k:'..k..',v:'..v)                
+            else 
+                print('-------------------unknown k ',k,',',v)
+            end
+            length = length +1
+            if length > 100 then
+                break
+            end
 
+        end
+    else
+        print('-------------------given data t is not a table but a '..type(t))
+    end
+
+end
 function printTable(t, recursively, showMT, indent)
     local indent = indent or 0
     local indentStr = ""
@@ -263,7 +287,7 @@ end
 --这个函数的调用是在需要跳转场景的时候
 function jumpToUI(targetUI, subID, params)
 
-    print('@@jumpToUI targetUI='.. targetUI)
+    -- print('@@jumpToUI targetUI='.. targetUI)
 
     local isMatchUI, targetUI = checkMatchUI(targetUI)
     Scene.targetUI = targetUI

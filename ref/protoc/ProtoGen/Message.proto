@@ -506,11 +506,15 @@ enum MsgID
 
 	InstructionReqID                = 0x2560;
     InstructionBroadcastID          = 0x2561;
-	//帧同步
-	ClientInputID 					= 0x2570;
-	FrameInfoID 					= 0x2571;
-	CheckFrameID					= 0x2572;
-	NotifyUnsyncID					= 0x2573;
+
+    ClientInputID				    = 0x2562;
+    MissFrameReqID					= 0x2563;
+    PlayFrameID						= 0x2564;
+    CheckFrameID					= 0x2565;
+    NotifyOutSyncID                 = 0x2566;
+    TeamMatchDataID					= 0x2567;
+    TeamMatchDataRespID 			= 0x2568;
+
 	//--------------脚本接口消息定义
 	//
 	GMCommondExcuID					= 0x3000;

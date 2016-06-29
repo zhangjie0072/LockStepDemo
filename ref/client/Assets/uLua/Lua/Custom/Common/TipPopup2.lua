@@ -42,7 +42,6 @@ function TipPopup2:Refresh()
         self.uiContent.text = self.content
     end
 
-    addOnClick(self.gameObject,self:OnClick())
 end
 
 -- uncommoent if needed
@@ -77,12 +76,6 @@ end
 function TipPopup2:UiParse()
     self.uiTitle = self.transform:FindChild("LabelName"):GetComponent("UILabel")
     self.uiContent = self.transform:FindChild("LabelTip"):GetComponent("UILabel")
-end
-
-function TipPopup2:OnClick()
-    return function ()
-        NGUITools.Destroy(self.gameObject)
-    end
 end
 
 return TipPopup2

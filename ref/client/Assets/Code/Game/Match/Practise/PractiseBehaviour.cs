@@ -148,14 +148,18 @@ public class PractiseBehaviour : MonoBehaviour
         }
 	}
 
-	void Update()
-	{
-		OnUpdate();
-	}
+    void Update()
+    {
+        ViewUpdate(Time.deltaTime);
+    }
 
-	protected virtual void OnUpdate()
-	{
+    public virtual void ViewUpdate(float deltaTime)
+    {
 		UpdateUIEffects();
+    }
+
+	public virtual void GameUpdate(IM.Number deltaTime)
+	{
 	}
 
 	public virtual Team.Side GetNPCSide()
@@ -173,7 +177,7 @@ public class PractiseBehaviour : MonoBehaviour
 		return false;
 	}
 
-    public virtual IM.BigNumber AdjustShootRate(Player shooter, IM.BigNumber rate)
+    public virtual IM.PrecNumber AdjustShootRate(Player shooter, IM.PrecNumber rate)
 	{
 		return rate;
 	}
@@ -188,7 +192,7 @@ public class PractiseBehaviour : MonoBehaviour
 		return rate;
 	}
 
-    public virtual ShootSolution GetShootSolution(UBasket basket, Area area, Player shooter, IM.BigNumber rate)
+    public virtual ShootSolution GetShootSolution(UBasket basket, Area area, Player shooter, IM.PrecNumber rate)
 	{
 		return null;
 	}
@@ -251,7 +255,7 @@ public class PractiseBehaviour : MonoBehaviour
 
 	protected void ShowTipOnMainRole(string tip)
 	{
-		match.ShowTips( match.m_mainRole.model.head.position + Vector3.up, tip, new Color32(255, 75, 12, 255));
+		match.ShowTips( match.mainRole.model.head.position + Vector3.up, tip, new Color32(255, 75, 12, 255));
 	}
 
 	protected void Pause(bool pause = true)
@@ -380,7 +384,7 @@ public class PractiseBehaviour : MonoBehaviour
 		//EndPracticeResp resp = Serializer.Deserialize<EndPracticeResp>(new MemoryStream(pack.buffer));
         if ((ErrorID)practice.result != ErrorID.SUCCESS)
 		{
-            Logger.Log("End practise error: " + (ErrorID)practice.result);
+            Debug.Log("End practise error: " + (ErrorID)practice.result);
             CommonFunction.ShowErrorMsg((ErrorID)practice.result);
 		}
 	}

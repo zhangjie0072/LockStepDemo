@@ -212,22 +212,21 @@ public class SkillConfig
             return;
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
 		ReadSkillActionConfig();
-		Logger.ConfigEnd(name1);
-		Logger.ConfigBegin(name2);
+		
+		Debug.Log("Config reading " + name2);
 		ReadSkillAttrConfig();
-		Logger.ConfigEnd(name2);
-		Logger.ConfigBegin(name3);
+		
+		Debug.Log("Config reading " + name3);
 		ReadSkillSlotConfig();
-		Logger.ConfigEnd(name3);
-		Logger.ConfigBegin(name4);
+		
+		Debug.Log("Config reading " + name4);
 		ReadSkillLevelConfig();
-		Logger.ConfigEnd(name4);
-		Logger.ConfigBegin(name6);
+		
+		Debug.Log("Config reading " + name6);
 		//ReadSkillWeightsConfig();
 		ReadSkillEffectsConfig();
-		Logger.ConfigEnd(name6);
     }
 
 	private void ReadSkillLevelConfig()
@@ -235,7 +234,7 @@ public class SkillConfig
 		string text = ResourceLoadManager.Instance.GetConfigText(name3);
 		if (text == null)
 		{
-			Logger.LogError("LoadConfig failed: " + name3);
+			Debug.LogError("LoadConfig failed: " + name3);
 			return;
 		}
 		//读取以及处理XML文本的类
@@ -353,7 +352,7 @@ public class SkillConfig
 		string text = ResourceLoadManager.Instance.GetConfigText(name6);
 		if (text == null)
 		{
-			Logger.LogError("LoadConfig failed: " + name6);
+			Debug.LogError("LoadConfig failed: " + name6);
 			return;
 		}
 		skillEffectItems.Clear();
@@ -395,7 +394,7 @@ public class SkillConfig
 			{
 				skillEffect.moveWithTagPoint = uint.Parse(xel.InnerText);
 				//if( skillEffect.moveWithTagPoint == 1 )
-				//	Logger.Log("dont move with tagpoint.");
+				//	Debug.Log("dont move with tagpoint.");
 			}
 
 			xel = line.SelectSingleNode("Effects_Frame");
@@ -416,7 +415,7 @@ public class SkillConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         actions.Clear();
@@ -552,7 +551,7 @@ public class SkillConfig
 		else if( strType == "right" )
 			dirType = EDirection.eRight;
 		else
-			Logger.LogError("invalid move dir type");
+			Debug.LogError("invalid move dir type");
 		return dirType;
 	}
 
@@ -570,7 +569,7 @@ public class SkillConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
         basic_skills.Clear();
@@ -730,7 +729,7 @@ public class SkillConfig
             }
             catch (ArgumentException ex)
             {
-				Logger.LogError(ex.Message);
+				Debug.LogError(ex.Message);
             }
         }
     }
@@ -740,7 +739,7 @@ public class SkillConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name4);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name4);
+            Debug.LogError("LoadConfig failed: " + name4);
             return;
         }
         slots.Clear();
@@ -789,7 +788,7 @@ public class SkillConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name5);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name5);
+            Debug.LogError("LoadConfig failed: " + name5);
             return;
         }
         //读取以及处理XML文本的类

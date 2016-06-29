@@ -59,12 +59,12 @@ public class TrainingConfig
             return;
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
         ReadTrainingData();
-		Logger.ConfigEnd(name1);
-		Logger.ConfigBegin(name2);
+		
+		Debug.Log("Config reading " + name2);
 		ReadTrainingLevelData();
-		Logger.ConfigEnd(name2);
+		
     }
 
     public void ReadTrainingData()
@@ -72,7 +72,7 @@ public class TrainingConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         Data.Clear();
@@ -129,7 +129,7 @@ public class TrainingConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
         //读取以及处理XML文本的类

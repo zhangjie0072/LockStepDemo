@@ -245,11 +245,11 @@ public class PlayerState
 		if( newSkill == null )
 			return;
 
-		//Logger.Log(m_player.m_id + " Execute skill " + newSkill.skill.id + " " + newSkill.skill.name);
+		//Debug.Log(m_player.m_id + " Execute skill " + newSkill.skill.id + " " + newSkill.skill.name);
 		Command cmd = (Command)newSkill.skill.action_type;
 		if (!IsCommandValid(cmd))
 		{
-			Logger.Log("Command " + cmd + " invalid. State: " + m_eState);
+			Debug.Log("Command " + cmd + " invalid. State: " + m_eState);
 			return;
 		}
 
@@ -273,7 +273,7 @@ public class PlayerState
 		case Command.MoveStep:
 			m_stateMachine.SetState(PlayerState.State.eMoveStep, true);
 			break;
-		case Command.JockeyForPosition:
+		case Command.Boxout:
 			m_stateMachine.SetState(PlayerState.State.eStand);
 			break;
 		case Command.Steal:

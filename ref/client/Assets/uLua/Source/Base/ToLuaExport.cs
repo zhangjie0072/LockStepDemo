@@ -2744,7 +2744,7 @@ public static class ToLuaExport
 
             if (!typeof(System.Delegate).IsAssignableFrom(t))
             {
-                Logger.LogError(t.FullName + " not a delegate type");
+                Debug.LogError(t.FullName + " not a delegate type");
                 return;
             }
 

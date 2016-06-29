@@ -21,10 +21,12 @@ public class GameMatchWrap
 			new LuaMethod("Build", Build),
 			new LuaMethod("OnSceneComplete", OnSceneComplete),
 			new LuaMethod("HandleGameBegin", HandleGameBegin),
+			new LuaMethod("OnGameBegin", OnGameBegin),
 			new LuaMethod("FixedUpdate", FixedUpdate),
-			new LuaMethod("Update", Update),
-			new LuaMethod("LateUpdate", LateUpdate),
-			new LuaMethod("OnPostRender", OnPostRender),
+			new LuaMethod("GameUpdate", GameUpdate),
+			new LuaMethod("ViewUpdate", ViewUpdate),
+			new LuaMethod("GameLateUpdate", GameLateUpdate),
+			new LuaMethod("ViewLateUpdate", ViewLateUpdate),
 			new LuaMethod("ShowMatchTip", ShowMatchTip),
 			new LuaMethod("ShowMatchTipScoreDiff", ShowMatchTipScoreDiff),
 			new LuaMethod("ShowMatchPromptTip", ShowMatchPromptTip),
@@ -68,7 +70,7 @@ public class GameMatchWrap
 			new LuaMethod("ShowComboBonus", ShowComboBonus),
 			new LuaMethod("HideComboBonus", HideComboBonus),
 			new LuaMethod("HideAllTip", HideAllTip),
-			new LuaMethod("_CreateTeamMember", _CreateTeamMember),
+			new LuaMethod("CreateTeamMember", CreateTeamMember),
 			new LuaMethod("AssumeDefenseTarget", AssumeDefenseTarget),
 			new LuaMethod("GetAttrReduceScale", GetAttrReduceScale),
 			new LuaMethod("InitBallHolder", InitBallHolder),
@@ -87,6 +89,7 @@ public class GameMatchWrap
 			new LuaField("m_gameMathCountEnable", get_m_gameMathCountEnable, set_m_gameMathCountEnable),
 			new LuaField("MAX_COUNT24_TIME", get_MAX_COUNT24_TIME, set_MAX_COUNT24_TIME),
 			new LuaField("m_count24TimeStop", get_m_count24TimeStop, set_m_count24TimeStop),
+			new LuaField("reboundHelper", get_reboundHelper, set_reboundHelper),
 			new LuaField("m_uiMatch", get_m_uiMatch, set_m_uiMatch),
 			new LuaField("m_uiInGamePanel", get_m_uiInGamePanel, set_m_uiInGamePanel),
 			new LuaField("m_uiController", get_m_uiController, set_m_uiController),
@@ -99,6 +102,7 @@ public class GameMatchWrap
 			new LuaField("m_auxiliaries", get_m_auxiliaries, set_m_auxiliaries),
 			new LuaField("m_preloadCache", get_m_preloadCache, set_m_preloadCache),
 			new LuaField("m_needTipOff", get_m_needTipOff, set_m_needTipOff),
+			new LuaField("m_bLoadingComplete", get_m_bLoadingComplete, null),
 			new LuaField("leagueType", get_leagueType, null),
 			new LuaField("m_gameMathCountTimer", get_m_gameMathCountTimer, null),
 			new LuaField("m_count24Time", get_m_count24Time, set_m_count24Time),
@@ -109,7 +113,7 @@ public class GameMatchWrap
 			new LuaField("m_strongTeamScore", get_m_strongTeamScore, null),
 			new LuaField("m_weakTeamScore", get_m_weakTeamScore, null),
 			new LuaField("mCurScene", get_mCurScene, null),
-			new LuaField("m_mainRole", get_m_mainRole, null),
+			new LuaField("mainRole", get_mainRole, set_mainRole),
 			new LuaField("m_ruler", get_m_ruler, null),
 			new LuaField("m_cam", get_m_cam, null),
 			new LuaField("m_camFollowPath", get_m_camFollowPath, null),
@@ -325,6 +329,30 @@ public class GameMatchWrap
 		}
 
 		LuaScriptMgr.Push(L, obj.m_count24TimeStop);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_reboundHelper(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		GameMatch obj = (GameMatch)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name reboundHelper");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index reboundHelper on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushObject(L, obj.reboundHelper);
 		return 1;
 	}
 
@@ -617,6 +645,30 @@ public class GameMatchWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_m_bLoadingComplete(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		GameMatch obj = (GameMatch)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name m_bLoadingComplete");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index m_bLoadingComplete on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.m_bLoadingComplete);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int get_leagueType(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -857,7 +909,7 @@ public class GameMatchWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int get_m_mainRole(IntPtr L)
+	static int get_mainRole(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
 		GameMatch obj = (GameMatch)o;
@@ -868,15 +920,15 @@ public class GameMatchWrap
 
 			if (types == LuaTypes.LUA_TTABLE)
 			{
-				LuaDLL.luaL_error(L, "unknown member name m_mainRole");
+				LuaDLL.luaL_error(L, "unknown member name mainRole");
 			}
 			else
 			{
-				LuaDLL.luaL_error(L, "attempt to index m_mainRole on a nil value");
+				LuaDLL.luaL_error(L, "attempt to index mainRole on a nil value");
 			}
 		}
 
-		LuaScriptMgr.PushObject(L, obj.m_mainRole);
+		LuaScriptMgr.PushObject(L, obj.mainRole);
 		return 1;
 	}
 
@@ -1361,6 +1413,30 @@ public class GameMatchWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_reboundHelper(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		GameMatch obj = (GameMatch)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name reboundHelper");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index reboundHelper on a nil value");
+			}
+		}
+
+		obj.reboundHelper = (ReboundHelper)LuaScriptMgr.GetNetObject(L, 3, typeof(ReboundHelper));
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_m_uiMatch(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -1721,6 +1797,30 @@ public class GameMatchWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_mainRole(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		GameMatch obj = (GameMatch)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name mainRole");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index mainRole on a nil value");
+			}
+		}
+
+		obj.mainRole = (Player)LuaScriptMgr.GetNetObject(L, 3, typeof(Player));
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_m_awayScore(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -1883,6 +1983,16 @@ public class GameMatchWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int OnGameBegin(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 2);
+		GameMatch obj = (GameMatch)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch");
+		fogs.proto.msg.GameBeginResp arg0 = (fogs.proto.msg.GameBeginResp)LuaScriptMgr.GetNetObject(L, 2, typeof(fogs.proto.msg.GameBeginResp));
+		obj.OnGameBegin(arg0);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int FixedUpdate(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 1);
@@ -1892,63 +2002,40 @@ public class GameMatchWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int Update(IntPtr L)
+	static int GameUpdate(IntPtr L)
 	{
-		int count = LuaDLL.lua_gettop(L);
-
-		if (count == 1)
-		{
-			GameMatch obj = (GameMatch)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch");
-			obj.Update();
-			return 0;
-		}
-		else if (count == 2)
-		{
-			GameMatch obj = (GameMatch)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch");
-			IM.Number arg0 = (IM.Number)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Number));
-			obj.Update(arg0);
-			return 0;
-		}
-		else
-		{
-			LuaDLL.luaL_error(L, "invalid arguments to method: GameMatch.Update");
-		}
-
+		LuaScriptMgr.CheckArgsCount(L, 2);
+		GameMatch obj = (GameMatch)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch");
+		IM.Number arg0 = (IM.Number)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Number));
+		obj.GameUpdate(arg0);
 		return 0;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int LateUpdate(IntPtr L)
-	{
-		int count = LuaDLL.lua_gettop(L);
-
-		if (count == 1)
-		{
-			GameMatch obj = (GameMatch)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch");
-			obj.LateUpdate();
-			return 0;
-		}
-		else if (count == 2)
-		{
-			GameMatch obj = (GameMatch)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch");
-			IM.Number arg0 = (IM.Number)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Number));
-			obj.LateUpdate(arg0);
-			return 0;
-		}
-		else
-		{
-			LuaDLL.luaL_error(L, "invalid arguments to method: GameMatch.LateUpdate");
-		}
-
-		return 0;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int OnPostRender(IntPtr L)
+	static int ViewUpdate(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 1);
 		GameMatch obj = (GameMatch)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch");
-		obj.OnPostRender();
+		obj.ViewUpdate();
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GameLateUpdate(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 2);
+		GameMatch obj = (GameMatch)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch");
+		IM.Number arg0 = (IM.Number)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Number));
+		obj.GameLateUpdate(arg0);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int ViewLateUpdate(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		GameMatch obj = (GameMatch)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch");
+		obj.ViewLateUpdate();
 		return 0;
 	}
 
@@ -2195,8 +2282,8 @@ public class GameMatchWrap
 		LuaScriptMgr.CheckArgsCount(L, 3);
 		GameMatch obj = (GameMatch)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch");
 		Player arg0 = (Player)LuaScriptMgr.GetNetObject(L, 2, typeof(Player));
-		IM.BigNumber arg1 = (IM.BigNumber)LuaScriptMgr.GetNetObject(L, 3, typeof(IM.BigNumber));
-		IM.BigNumber o = obj.AdjustShootRate(arg0,arg1);
+		IM.PrecNumber arg1 = (IM.PrecNumber)LuaScriptMgr.GetNetObject(L, 3, typeof(IM.PrecNumber));
+		IM.PrecNumber o = obj.AdjustShootRate(arg0,arg1);
 		LuaScriptMgr.PushValue(L, o);
 		return 1;
 	}
@@ -2235,7 +2322,7 @@ public class GameMatchWrap
 		UBasket arg0 = (UBasket)LuaScriptMgr.GetUnityObject(L, 2, typeof(UBasket));
 		fogs.proto.msg.Area arg1 = (fogs.proto.msg.Area)LuaScriptMgr.GetNetObject(L, 3, typeof(fogs.proto.msg.Area));
 		Player arg2 = (Player)LuaScriptMgr.GetNetObject(L, 4, typeof(Player));
-		IM.BigNumber arg3 = (IM.BigNumber)LuaScriptMgr.GetNetObject(L, 5, typeof(IM.BigNumber));
+		IM.PrecNumber arg3 = (IM.PrecNumber)LuaScriptMgr.GetNetObject(L, 5, typeof(IM.PrecNumber));
 		ShootSolution.Type arg4 = (ShootSolution.Type)LuaScriptMgr.GetNetObject(L, 6, typeof(ShootSolution.Type));
 		ShootSolution o = obj.GetShootSolution(arg0,arg1,arg2,arg3,arg4);
 		LuaScriptMgr.PushObject(L, o);
@@ -2397,12 +2484,12 @@ public class GameMatchWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int _CreateTeamMember(IntPtr L)
+	static int CreateTeamMember(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		GameMatch obj = (GameMatch)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch");
 		Player arg0 = (Player)LuaScriptMgr.GetNetObject(L, 2, typeof(Player));
-		obj._CreateTeamMember(arg0);
+		obj.CreateTeamMember(arg0);
 		return 0;
 	}
 

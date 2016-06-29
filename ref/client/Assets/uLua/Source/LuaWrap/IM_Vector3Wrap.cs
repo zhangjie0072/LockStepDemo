@@ -10,7 +10,6 @@ public class IM_Vector3Wrap
 		{
 			new LuaMethod("Normalize", Normalize),
 			new LuaMethod("Dot", Dot),
-			new LuaMethod("DotForNumber", DotForNumber),
 			new LuaMethod("Cross", Cross),
 			new LuaMethod("CrossAndNormalize", CrossAndNormalize),
 			new LuaMethod("FromToAngle", FromToAngle),
@@ -536,18 +535,7 @@ public class IM_Vector3Wrap
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		IM.Vector3 arg0 = (IM.Vector3)LuaScriptMgr.GetNetObject(L, 1, typeof(IM.Vector3));
 		IM.Vector3 arg1 = (IM.Vector3)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Vector3));
-		int o = IM.Vector3.Dot(arg0,arg1);
-		LuaScriptMgr.Push(L, o);
-		return 1;
-	}
-
-	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int DotForNumber(IntPtr L)
-	{
-		LuaScriptMgr.CheckArgsCount(L, 2);
-		IM.Vector3 arg0 = (IM.Vector3)LuaScriptMgr.GetNetObject(L, 1, typeof(IM.Vector3));
-		IM.Vector3 arg1 = (IM.Vector3)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Vector3));
-		IM.Number o = IM.Vector3.DotForNumber(arg0,arg1);
+		IM.Number o = IM.Vector3.Dot(arg0,arg1);
 		LuaScriptMgr.PushValue(L, o);
 		return 1;
 	}

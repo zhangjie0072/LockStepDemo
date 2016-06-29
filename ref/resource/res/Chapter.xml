@@ -1,4 +1,4 @@
-<Data Count="6">
+<Data Count="9">
   <Line>
     <id>10001</id>
     <name>梦的开始</name>
@@ -10,7 +10,7 @@
     <bronze_award>20101</bronze_award>
     <silver_value>12</silver_value>
     <silver_award>20102</silver_award>
-    <gold_value>21</gold_value>
+    <gold_value>15</gold_value>
     <gold_award>20103</gold_award>
   </Line>
   <Line>
@@ -24,7 +24,7 @@
     <bronze_award>20201</bronze_award>
     <silver_value>12</silver_value>
     <silver_award>20202</silver_award>
-    <gold_value>21</gold_value>
+    <gold_value>15</gold_value>
     <gold_award>20203</gold_award>
   </Line>
   <Line>
@@ -38,7 +38,7 @@
     <bronze_award>20301</bronze_award>
     <silver_value>12</silver_value>
     <silver_award>20302</silver_award>
-    <gold_value>21</gold_value>
+    <gold_value>15</gold_value>
     <gold_award>20303</gold_award>
   </Line>
   <Line>
@@ -52,7 +52,7 @@
     <bronze_award>20401</bronze_award>
     <silver_value>12</silver_value>
     <silver_award>20402</silver_award>
-    <gold_value>21</gold_value>
+    <gold_value>15</gold_value>
     <gold_award>20403</gold_award>
   </Line>
   <Line>
@@ -66,13 +66,13 @@
     <bronze_award>20501</bronze_award>
     <silver_value>12</silver_value>
     <silver_award>20502</silver_award>
-    <gold_value>21</gold_value>
+    <gold_value>15</gold_value>
     <gold_award>20503</gold_award>
   </Line>
   <Line>
     <id>10006</id>
     <name>弗兰克林之战</name>
-    <next_chapter_id>0</next_chapter_id>
+    <next_chapter_id>10007</next_chapter_id>
     <first_section_id>10601</first_section_id>
     <area>career_bg_roof</area>
     <unlock_level>1</unlock_level>
@@ -80,7 +80,49 @@
     <bronze_award>20601</bronze_award>
     <silver_value>12</silver_value>
     <silver_award>20602</silver_award>
-    <gold_value>21</gold_value>
+    <gold_value>15</gold_value>
     <gold_award>20603</gold_award>
+  </Line>
+  <Line>
+    <id>10007</id>
+    <name>城市英雄</name>
+    <next_chapter_id>10008</next_chapter_id>
+    <first_section_id>10701</first_section_id>
+    <area>career_bg_warehouse</area>
+    <unlock_level>1</unlock_level>
+    <bronze_value>6</bronze_value>
+    <bronze_award>20701</bronze_award>
+    <silver_value>12</silver_value>
+    <silver_award>20702</silver_award>
+    <gold_value>15</gold_value>
+    <gold_award>20703</gold_award>
+  </Line>
+  <Line>
+    <id>10008</id>
+    <name>蜕变</name>
+    <next_chapter_id>10009</next_chapter_id>
+    <first_section_id>10801</first_section_id>
+    <area>career_bg_construction</area>
+    <unlock_level>1</unlock_level>
+    <bronze_value>6</bronze_value>
+    <bronze_award>20801</bronze_award>
+    <silver_value>12</silver_value>
+    <silver_award>20802</silver_award>
+    <gold_value>15</gold_value>
+    <gold_award>20803</gold_award>
+  </Line>
+  <Line>
+    <id>10009</id>
+    <name>最后的比赛</name>
+    <next_chapter_id>0</next_chapter_id>
+    <first_section_id>10901</first_section_id>
+    <area>career_bg_roof</area>
+    <unlock_level>1</unlock_level>
+    <bronze_value>6</bronze_value>
+    <bronze_award>20901</bronze_award>
+    <silver_value>12</silver_value>
+    <silver_award>20902</silver_award>
+    <gold_value>15</gold_value>
+    <gold_award>20903</gold_award>
   </Line>
 </Data>

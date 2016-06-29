@@ -37,15 +37,15 @@ public class PractiseBehaviourRebound : PractiseBehaviour
 
 	protected override void OnMatchSetted()
 	{
-		match.m_mainRole.m_StateMachine.ReplaceState(new PlayerState_Stand_Simple(match.m_mainRole.m_StateMachine, match));
-		match.m_mainRole.m_alwaysForbiddenPickup = true;
+		match.mainRole.m_StateMachine.ReplaceState(new PlayerState_Stand_Simple(match.mainRole.m_StateMachine, match));
+		match.mainRole.m_alwaysForbiddenPickup = true;
 		attacker = match.m_homeTeam.GetMember(1);
 		attacker.m_alwaysForbiddenPickup = true;
 		match.mCurScene.mBall.onHitGround += OnBallHitGround;
 		match.mCurScene.mBall.onRebound += OnRebound;
 		match.mCurScene.mBall.onGrab += OnGrab;
-		PlayerState_Rebound.GetDefaultHeightRange(match.m_mainRole, out minHeight, out maxHeight);
-		eventTime = PlayerState_Rebound.GetEventTime(match.m_mainRole);
+		PlayerState_Rebound.GetDefaultHeightRange(match.mainRole, out minHeight, out maxHeight);
+		eventTime = PlayerState_Rebound.GetEventTime(match.mainRole);
 	}
 
 	public override bool ResetPlayerPos()
@@ -57,8 +57,8 @@ public class PractiseBehaviourRebound : PractiseBehaviour
         attacker.forward = IM.Vector3.forward;
 		IM.Vector3 basketCenter = match.mCurScene.mBasket.m_vShootTarget;
 		basketCenter.y = IM.Number.zero;
-		match.m_mainRole.position = basketCenter - IM.Vector3.forward * IM.Number.half;
-		match.m_mainRole.forward = -IM.Vector3.forward;
+		match.mainRole.position = basketCenter - IM.Vector3.forward * IM.Number.half;
+		match.mainRole.forward = -IM.Vector3.forward;
 
 		if (match.mCurScene.mBall.m_owner != null)
 			match.mCurScene.mBall.m_owner.DropBall(match.mCurScene.mBall);
@@ -67,7 +67,7 @@ public class PractiseBehaviourRebound : PractiseBehaviour
 		return true;
 	}
 
-    public override IM.BigNumber AdjustShootRate(Player shooter, IM.BigNumber rate)
+    public override IM.PrecNumber AdjustShootRate(Player shooter, IM.PrecNumber rate)
 	{
 		if (shooter == attacker)
             return IM.Number.zero;
@@ -80,7 +80,7 @@ public class PractiseBehaviourRebound : PractiseBehaviour
 		return command == Command.Rebound &&(!in_tutorial || step == Step.Tip1);
 	}
 
-    public override ShootSolution GetShootSolution(UBasket basket, Area area, Player shooter, IM.BigNumber rate)
+    public override ShootSolution GetShootSolution(UBasket basket, Area area, Player shooter, IM.PrecNumber rate)
 	{
 		if (in_tutorial)
 			return GameSystem.Instance.shootSolutionManager.GetShootSolution(25, false, 1);
@@ -108,11 +108,21 @@ public class PractiseBehaviourRebound : PractiseBehaviour
 		}
 	}
 
-	protected override void OnUpdate()
-	{
-		base.OnUpdate();
+    public override void ViewUpdate(float deltaTime)
+    {
+        base.ViewUpdate(deltaTime);
 
-		if (match.m_mainRole.m_StateMachine.m_curState.m_eState == PlayerState.State.eRebound)
+#if !UNITY_IPHONE && !UNITY_ANDROID
+		if (in_tutorial && step == Step.Tip1 && Input.GetKey(KeyCode.J))
+			Pause(false);
+#endif
+    }
+
+	public override void GameUpdate(IM.Number deltaTime)
+	{
+		base.GameUpdate(deltaTime);
+
+		if (match.mainRole.m_StateMachine.m_curState.m_eState == PlayerState.State.eRebound)
 		{
 			if (curr_state != PlayerState.State.eRebound)
 			{
@@ -126,7 +136,7 @@ public class PractiseBehaviourRebound : PractiseBehaviour
 			player_rebounding = false;
 		}
 
-		curr_state = match.m_mainRole.m_StateMachine.m_curState.m_eState;
+		curr_state = match.mainRole.m_StateMachine.m_curState.m_eState;
 
 		if (step == Step.Shoot && match.mCurScene.mBall.m_ballState == BallState.eRebound)
 		{
@@ -138,11 +148,6 @@ public class PractiseBehaviourRebound : PractiseBehaviour
 		}
 
 		match.HighlightButton(0, in_tutorial && IsCommandValid(Command.Rebound));
-
-#if !UNITY_IPHONE && !UNITY_ANDROID
-		if (in_tutorial && step == Step.Tip1 && Input.GetKey(KeyCode.J))
-			Pause(false);
-#endif
 
 		//if (Input.GetKey(KeyCode.R))
 		//{
@@ -189,7 +194,7 @@ public class PractiseBehaviourRebound : PractiseBehaviour
 		{
 			if (!failed_on_rebound_over)
 			{
-				//Logger.Log("**&& Failed on ball hit ground.");
+				//Debug.Log("**&& Failed on ball hit ground.");
 				FinishObjective(false);
 			}
 		}
@@ -200,11 +205,11 @@ public class PractiseBehaviourRebound : PractiseBehaviour
 	{
 		if (ball_rebounding)
 		{
-			if (match.mCurScene.mBall.m_owner != match.m_mainRole)
+			if (match.mCurScene.mBall.m_owner != match.mainRole)
 			{
 				if (_curr_obj_index != EXERCISE_OBJ_INDEX)
 				{
-					//Logger.Log("**&& Failed on rebound over.");
+					//Debug.Log("**&& Failed on rebound over.");
 					FinishObjective(false);
 					failed_on_rebound_over = true;
 				}
@@ -216,7 +221,7 @@ public class PractiseBehaviourRebound : PractiseBehaviour
 	private void OnGrab(UBasketball ball)
 	{
 		match.HighlightButton(0, false);
-		if (ball.m_owner == match.m_mainRole && player_rebounding && ball_rebounding)
+		if (ball.m_owner == match.mainRole && player_rebounding && ball_rebounding)
 		{
 			if (in_tutorial)
 				Tip2();
@@ -249,14 +254,14 @@ public class PractiseBehaviourRebound : PractiseBehaviour
 		match.tip = practise.tips[0];
 		match.ShowGuideTip();
 		match.ShowTipArrow();
-		match.m_mainRole.m_inputDispatcher.m_enable = false;
+		InputReader.Instance.enabled = false;
 	}
 
 	private void Shoot()
 	{
 		step = Step.Shoot;
 		match.HideGuideTip();
-		match.m_mainRole.m_inputDispatcher.m_enable = false;
+		InputReader.Instance.enabled = false;
 	}
 
 	private void Tip1()
@@ -277,7 +282,7 @@ public class PractiseBehaviourRebound : PractiseBehaviour
 		match.tip = practise.tips[2];
 		match.ShowGuideTip();
 		match.ShowTipArrow();
-		match.m_mainRole.m_inputDispatcher.m_enable = false;
+		InputReader.Instance.enabled = false;
 	}
 
 	private void OnTipClick(GameObject go)
@@ -290,7 +295,7 @@ public class PractiseBehaviourRebound : PractiseBehaviour
 			case Step.Tip2:
 				FinishObjective(true);
 				match.HideGuideTip();
-				match.m_mainRole.m_inputDispatcher.m_enable = true;
+				InputReader.Instance.enabled = true;
 				break;
 		}
 	}

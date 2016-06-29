@@ -6,7 +6,7 @@
 require "Custom/Store/UIStore"
 require "Custom/Task/UITask"
 require "Custom/Mail/UIMail"
-
+require "Custom/Activity/ActivityAnnounceData"
 
 UIHall =  {
     uiName     = "UIHall",
@@ -145,7 +145,7 @@ function UIHall:Awake()
     self.uiCareerLockLabel.text = string.format(getCommonStr("SKILL_UNLOCK_LEVEL"), self.careerFCLv)
     --END 解锁信息
 
-    self.svRankList = getComponentInChild(self.transform, "ForRanking/ScrollView", "UIScrollView")
+    self.svRankList = getComponentInChild(self.transform, "Left/ForRanking/ScrollView", "UIScrollView")
     self.gridRankList = getComponentInChild(self.svRankList.transform, "Grid", "UIGrid")
 
     self.friendChangedFunc = FriendData.FriendListChangedDelegate(self:RefreshSocialRedDot())
@@ -239,20 +239,21 @@ function UIHall:Start()
         print("first login:",LoginIDManager.GetAnnounceVersion())
         if not LoginIDManager.GetAnnounceVersion() or LoginIDManager.GetAnnounceVersion() == 0 then
             LoginIDManager.SetAnnouceVersion(GameSystem.Instance.AnnouncementConfigData:GetOpenItem().version)
-            return
+        else
+            local obj = createUI("NoticePopup")
+            local pos = obj.transform.localPosition
+            pos.z = -500
+            obj.transform.localPosition = pos
         end
-        local obj = createUI("NoticePopup")
-        local pos = obj.transform.localPosition
-        pos.z = -500
-        obj.transform.localPosition = pos
     end
 
     local centerW = self.uiCenter.transform:GetComponent("UISprite").width
     local centerH = self.uiCenter.transform:GetComponent("UISprite").height
     self.uiCenter.transform:GetComponent("UIDragDropItem"):SetLimit(-640+centerW/2, 640-centerW/2, -360+centerH/2, 360-centerH/2)
     --签到自动弹出
-    self.uiAnimatorResp:AddResp(self:ShowUISign(), self.gameObject)
-
+    --TODO
+    -- self.uiAnimatorResp:AddResp(self:ShowPopup(), self.gameObject)
+    self:ShowPopup()()
     self:RefreshSocialRedDot()()
     self:FirstWinRefresh()()
     --等级奖励状态请求
@@ -273,6 +274,9 @@ function UIHall:Start()
         --     self.uiNewComerTrial:SetBool('New Bool', false)
         -- end
     end
+    --设置协助首胜次数
+    Friends.AssistFriendFirstWin = MainPlayer.Instance.assist_first_win_times
+    print('assist_first_win_times '..Friends.AssistFriendFirstWin)
 
 end
 
@@ -321,6 +325,23 @@ function UIHall:LateRefresh(subID )
        if MainPlayer.Instance.inPvpJoining then
             Ladder.ContinueJoinGame()
             return
+        end
+        if self.forceShow then  --显示好友聊天
+            if self.forceShow == 'uiChat' then
+                if self.acc_id and self.acc_id ~= 0 then
+                    local friend = Friends.GetFriendById(self.acc_id)
+                    if friend then
+                        warning('open uichat to player ',friend.acc_id)
+                        local data = {}
+                        data.name = friend.name
+                        data.id = friend.acc_id
+                        local luaChat = getLuaComponent(self.uiChat)
+                        luaChat:OpenChatFrame()(luaChat.uiBox.gameObject)
+                        luaChat:HandlerClickFriend()(data)
+                        return
+                    end
+                end
+            end
         end
         -- self:RefreshDailyRedDot()
         self:RefreshSocialRedDot()
@@ -500,7 +521,11 @@ function UIHall:SelectGiftRole()
         while enumSection:MoveNext() do
             local section = enumSection.Current.Value
             if section.is_complete and section.get_role == 0 then
-                local roleGift = GameSystem.Instance.CareerConfigData:GetSectionData(section.id).role_gift
+                local sectionData = GameSystem.Instance.CareerConfigData:GetSectionData(section.id);
+                local roleGift = 0 
+                if sectionData then
+                    roleGift = GameSystem.Instance.CareerConfigData:GetSectionData(section.id).role_gift
+                end
                 if roleGift > 0 then
                     CurChapterID = chapter.id
                     CurSectionID = section.id
@@ -1189,6 +1214,7 @@ function UIHall:OpenSignInRespHandler( ... )
     l:SetParent(self)
     l.onClose = function ( ... )
         self.openSign = false
+        self:ShowPopup()(0)
     end
     self.openSign = true
     UIManager.Instance:BringPanelForward(sign.gameObject)
@@ -1225,44 +1251,104 @@ function UIHall:CloseChatSetting(isClose)
     end
 end
 
-
-
-function UIHall:ShowUISign( ... )
+function UIHall:ShowPopup( ... )
     -- body
-    return function ()
-        local isGuide = GuideSystem.Instance.curModule
-        local signed = MainPlayer.Instance.signInfo.signed
-        -- print('isGuide -------- ' .. tostring(isGuide))
-        -- print('signed -------- ' .. tostring(signed))
-        -- print('have unfinished Guide -------- ' .. tostring(MainPlayer.Instance:GetUncompletedGuide() ~= 0))
-        local inPvpJoing = MainPlayer.Instance.inPvpJoining
-
-        if signed == 0
-            and not isGuide
-            and MainPlayer.Instance:GetUncompletedGuide() == 0
-            and not inPvpJoing
-        then
-            self:OpenSignInRespHandler()
+    return function (callbackType)
+        -- body
+        if callbackType then 
+            if callbackType == 0 and self.openSign then
+                self.openSign = nil
+            elseif callbackType == 1 and self.openActivityAnnounce then
+                self.openActivityAnnounce = nil
+            end
         end
-        if signed == 1
-            and not isGuide
-            and MainPlayer.Instance:GetUncompletedGuide() == 0
-            and not inPvpJoing
-        then
-            local listCount = MainPlayer.Instance.signInfo.sign_list.Count
-            if listCount > 0 then
-                local signState = MainPlayer.Instance.signInfo.sign_list:get_Item(listCount - 1)
-                local vipLevel = GameSystem.Instance.signConfig:GetDaySignData(listCount).vip_level
-                if signState == 1 and vipLevel and vipLevel > 0 and self:GetVip() >= vipLevel then
-                    self:OpenSignInRespHandler()
+        local signFlag = false
+          --签到先弹出
+          --第一次调用不会传入callbacktype
+        if not callbackType then
+            local signed = MainPlayer.Instance.signInfo.signed
+            if signed == 0 then
+                self:OpenSignInRespHandler()
+                signed = 1
+                signFlag = true
+            elseif signed ==1 then
+                local listCount = MainPlayer.Instance.signInfo.sign_list.Count
+                if listCount > 0 then
+                    local signState = MainPlayer.Instance.signInfo.sign_list:get_Item(listCount - 1)
+                    local vipLevel = GameSystem.Instance.signConfig:GetDaySignData(listCount).vip_level
+                    if signState == 1 and vipLevel and vipLevel > 0 and self:GetVip() >= vipLevel then
+                        self:OpenSignInRespHandler()
+                        signFlag = true
+                        signed = 1
+                    end
                 end
+            end
+        end
+
+        callbackType = callbackType or 0
+        if not signFlag then
+            --弹出活动公告
+            if not ActivityAnnounceData.AnnounceAlreadyRead and callbackType == 0 then
+                self:ShowUIActivityAnnounce()
+            else -- 弹出新手引导
+                GuideSystem.Instance:ReqBeginGuide(self.uiName)
             end
         end
     end
 end
 
+-- function UIHall:ShowUISign( ... )
+--     -- body
+--     return function ()
+--         if not FunctionSwitchData.Cancel(FSID.checkin) then return end
 
+--         local isGuide = GuideSystem.Instance.curModule
+--         local signed = MainPlayer.Instance.signInfo.signed
+--         -- print('isGuide -------- ' .. tostring(isGuide))
+--         -- print('signed -------- ' .. tostring(signed))
+--         -- print('have unfinished Guide -------- ' .. tostring(MainPlayer.Instance:GetUncompletedGuide() ~= 0))
+--         local inPvpJoing = MainPlayer.Instance.inPvpJoining
 
+--         if signed == 0
+--             and not isGuide
+--             and MainPlayer.Instance:GetUncompletedGuide() == 0
+--             and not inPvpJoing
+--         then
+--             self:OpenSignInRespHandler()
+--         end
+--         if signed == 1
+--             and not isGuide
+--             and MainPlayer.Instance:GetUncompletedGuide() == 0
+--             and not inPvpJoing
+--         then
+--             local listCount = MainPlayer.Instance.signInfo.sign_list.Count
+--             if listCount > 0 then
+--                 local signState = MainPlayer.Instance.signInfo.sign_list:get_Item(listCount - 1)
+--                 local vipLevel = GameSystem.Instance.signConfig:GetDaySignData(listCount).vip_level
+--                 if signState == 1 and vipLevel and vipLevel > 0 and self:GetVip() >= vipLevel then
+--                     self:OpenSignInRespHandler()
+--                 end
+--             end
+--         end
+--     end
+-- end
+
+--打开活动公告界面
+function UIHall:ShowUIActivityAnnounce( ... )
+    -- body
+    if self.openActivityAnnounce then 
+        return
+    end
+    self:CloseChatSetting()()
+    
+    local l = require "Custom/Activity/UIActivityAnnounce"
+    l:SetParent(self)
+    l.onClose = function ( ... )
+        self:ShowPopup()(1)
+    end
+    l:Start()
+    self.openActivityAnnounce = true
+end
 -- Now Hall does not have model, nothing to do now.
 -- Keep the interface to let outter call.
 function UIHall:SetModelActive()
@@ -1276,7 +1362,7 @@ function UIHall:FirstWinRefresh()
         local server_time = GameSystem.mTime
         local last_win_time = LuaPlayerData.last_win_time
 
-        local ctr = self.transform:FindChild("FristVictory")
+        local ctr = self.transform:FindChild("BottomLeft/FristVictory")
         if last_win_time == 0 then
             NGUITools.SetActive(ctr.gameObject, false)
         else
@@ -1300,7 +1386,7 @@ end
 function UIHall:ChatRefresh()
     return function ()
         print('-----------------ChatRefresh-------------------')
-        self.transform:FindChild("UIChat/UIChat/SmallTip/Scroll"):GetComponent("UIPanel"):Refresh()
+        self.transform:FindChild("BottomLeft/UIChat/UIChat/SmallTip/Scroll"):GetComponent("UIPanel"):Refresh()
     end
 end
 
@@ -1348,72 +1434,72 @@ end
 --	5. The value Name in front each Line will be CHANGED for other SHORT appropriate name.       --
 ---------------------------------------------------------------------------------------------------
 function UIHall:UiParse()
-    self.uiMyIcon          = self.transform:FindChild("PlayerDesc/Icon"):GetComponent("Transform")
-    self.uiMyIconClick     = self.transform:FindChild("PlayerDesc/Icon/Click"):GetComponent("Transform")
-    self.uiRankIconGrid    = self.transform:FindChild("ForRanking/ScrollView/Grid"):GetComponent("UIGrid")
-    self.uiTeamName        = self.transform:FindChild("PlayerDesc/TeamName"):GetComponent("UILabel")
-    self.uiTeamLevel       = self.transform:FindChild("PlayerDesc/TeamName/LabelLevel"):GetComponent("UILabel")
-    self.uiBgexp           = self.transform:FindChild("PlayerDesc/Exp/Bgexp"):GetComponent("UIProgressBar")
-    self.uiExp             = self.transform:FindChild("PlayerDesc/Exp/LabelNum"):GetComponent("UILabel")
-    self.uiVipNum1         = self.transform:FindChild("PlayerDesc/BgVip/VipNum1"):GetComponent("UISprite")
-    self.uiVipNum2         = self.transform:FindChild("PlayerDesc/BgVip/VipNum2"):GetComponent("UISprite")
-    self.uiVip2               = self.transform:FindChild("PlayerDesc/BgVip2"):GetComponent("UISprite")
-    self.uiVip2Num        = self.transform:FindChild("PlayerDesc/BgVip2/Num"):GetComponent("UILabel")
-    self.uiPlayerInfoGrids = self.transform:FindChild("Top/PlayerInfoGrids"):GetComponent("Transform")
-    self.uiSocial          = self.transform:FindChild("Top/HallTopBtns/Social/SocialButton"):GetComponent("UIButton")
-    self.uiSocialRedDot       = self.transform:FindChild("Top/HallTopBtns/Social/SocialButton/RedDot")
+    self.uiMyIcon          = self.transform:FindChild("TopLeft/PlayerDesc/Icon"):GetComponent("Transform")
+    self.uiMyIconClick     = self.transform:FindChild("TopLeft/PlayerDesc/Icon/Click"):GetComponent("Transform")
+    self.uiRankIconGrid    = self.transform:FindChild("Left/ForRanking/ScrollView/Grid"):GetComponent("UIGrid")
+    self.uiTeamName        = self.transform:FindChild("TopLeft/PlayerDesc/TeamName"):GetComponent("UILabel")
+    self.uiTeamLevel       = self.transform:FindChild("TopLeft/PlayerDesc/TeamName/LabelLevel"):GetComponent("UILabel")
+    self.uiBgexp           = self.transform:FindChild("TopLeft/PlayerDesc/Exp/Bgexp"):GetComponent("UIProgressBar")
+    self.uiExp             = self.transform:FindChild("TopLeft/PlayerDesc/Exp/LabelNum"):GetComponent("UILabel")
+    self.uiVipNum1         = self.transform:FindChild("TopLeft/PlayerDesc/BgVip/VipNum1"):GetComponent("UISprite")
+    self.uiVipNum2         = self.transform:FindChild("TopLeft/PlayerDesc/BgVip/VipNum2"):GetComponent("UISprite")
+    self.uiVip2               = self.transform:FindChild("TopLeft/PlayerDesc/BgVip2"):GetComponent("UISprite")
+    self.uiVip2Num        = self.transform:FindChild("TopLeft/PlayerDesc/BgVip2/Num"):GetComponent("UILabel")
+    self.uiPlayerInfoGrids = self.transform:FindChild("TopRight/PlayerInfoGrids"):GetComponent("Transform")
+    self.uiSocial          = self.transform:FindChild("TopRight/HallTopBtns/Social/SocialButton"):GetComponent("UIButton")
+    self.uiSocialRedDot       = self.transform:FindChild("TopRight/HallTopBtns/Social/SocialButton/RedDot")
 
-    self.uiRank          = self.transform:FindChild("ForRanking/Bg"):GetComponent("UIButton")
-    self.uiMail          = self.transform:FindChild("Top/HallTopBtns/Mail/MailButton"):GetComponent("UIButton")
-    self.uiSetting       = self.transform:FindChild("Top/HallTopBtns/Setting/SettingButton"):GetComponent("UIButton")
-    self.uiNewPlayerGift = self.transform:FindChild("NewPlayerGift/Background"):GetComponent("UISprite")
-    self.uiPracticeCourt = self.transform:FindChild("PracticeCourt/Icon"):GetComponent("UISprite")
-    self.uiFirstRecharge = self.transform:FindChild("FristRecharge/Icon"):GetComponent("UISprite")
-    self.uiShop          = self.transform:FindChild("Shop/Icon"):GetComponent("UISprite")
-    self.uiActivity      = self.transform:FindChild("Activity/Icon"):GetComponent("UISprite")
-    self.uiActivityRedDot= self.transform:FindChild("Activity/RedDot"):GetComponent("UISprite")
-    self.uiSign          = self.transform:FindChild("Sign/Icon"):GetComponent("UISprite")
-    self.uiCode          = self.transform:FindChild("code/Icon"):GetComponent("UISprite")
+    self.uiRank          = self.transform:FindChild("Left/ForRanking/Bg"):GetComponent("UIButton")
+    self.uiMail          = self.transform:FindChild("TopRight/HallTopBtns/Mail/MailButton"):GetComponent("UIButton")
+    self.uiSetting       = self.transform:FindChild("TopRight/HallTopBtns/Setting/SettingButton"):GetComponent("UIButton")
+    self.uiNewPlayerGift = self.transform:FindChild("Right/NewPlayerGift/Background"):GetComponent("UISprite")
+    self.uiPracticeCourt = self.transform:FindChild("Right/PracticeCourt/Icon"):GetComponent("UISprite")
+    self.uiFirstRecharge = self.transform:FindChild("Right/FristRecharge/Icon"):GetComponent("UISprite")
+    self.uiShop          = self.transform:FindChild("Right/Shop/Icon"):GetComponent("UISprite")
+    self.uiActivity      = self.transform:FindChild("Right/Activity/Icon"):GetComponent("UISprite")
+    self.uiActivityRedDot= self.transform:FindChild("Right/Activity/RedDot"):GetComponent("UISprite")
+    self.uiSign          = self.transform:FindChild("Right/Sign/Icon"):GetComponent("UISprite")
+    self.uiCode          = self.transform:FindChild("Right/code/Icon"):GetComponent("UISprite")
 
-    self.uiCenter     = self.transform:FindChild("UserCenter/Background"):GetComponent("UIButton")
+    self.uiCenter     = self.transform:FindChild("Right/UserCenter/Background"):GetComponent("UIButton")
     self.uiRegular    = self.transform:FindChild("HallMatch/BoxMatch"):GetComponent("UIButton")
     self.uiQualifying = self.transform:FindChild("HallMatch/BoxQualifying"):GetComponent("UIButton")
     self.uiCareer     = self.transform:FindChild("HallMatch/BoxCareer"):GetComponent("UIButton")
     self.uiCareerRedDot = self.transform:FindChild("HallMatch/BoxCareer/RedDot"):GetComponent('UISprite')
     self.uiLadder     = self.transform:FindChild("HallMatch/BoxLadder"):GetComponent("UIButton")
 
-    self.uiRole         = self.transform:FindChild("HallBottomBtns/ForMember/Bg"):GetComponent("UIButton")
-    self.uiBadge        = self.transform:FindChild("HallBottomBtns/Badge/Bg"):GetComponent("UIButton")
-    self.uiBadgeRedDot	= self.transform:FindChild("HallBottomBtns/Badge/Bg/Tip"):GetComponent("UISprite")
-    self.uiSkill        = self.transform:FindChild("HallBottomBtns/Skill/Bg"):GetComponent("UIButton")
-    self.uiFashion      = self.transform:FindChild("HallBottomBtns/ForFashion/Bg"):GetComponent("UIButton")
-    self.uiFashionRedDot= self.transform:FindChild("HallBottomBtns/ForFashion/Bg/Tip"):GetComponent("UISprite")
-    self.uiSkillRedDot = self.transform:FindChild("HallBottomBtns/Skill/Bg/Tip"):GetComponent("UISprite")
-    self.uiPackage      = self.transform:FindChild("HallBottomBtns/ForPackage/Bg"):GetComponent("UIButton")
-    self.uiPackageRedDot= self.transform:FindChild("HallBottomBtns/ForPackage/Bg/Tip"):GetComponent("UISprite")
-    self.uiAchievenment = self.transform:FindChild("HallBottomBtns/ForAchievement/Bg"):GetComponent("UIButton")
-    self.uiDaily        = self.transform:FindChild("HallBottomBtns/ForDaily/Bg"):GetComponent("UIButton")
+    self.uiRole         = self.transform:FindChild("BottomLeft/HallBottomBtns/ForMember/Bg"):GetComponent("UIButton")
+    self.uiBadge        = self.transform:FindChild("BottomLeft/HallBottomBtns/Badge/Bg"):GetComponent("UIButton")
+    self.uiBadgeRedDot	= self.transform:FindChild("BottomLeft/HallBottomBtns/Badge/Bg/Tip"):GetComponent("UISprite")
+    self.uiSkill        = self.transform:FindChild("BottomLeft/HallBottomBtns/Skill/Bg"):GetComponent("UIButton")
+    self.uiFashion      = self.transform:FindChild("BottomLeft/HallBottomBtns/ForFashion/Bg"):GetComponent("UIButton")
+    self.uiFashionRedDot= self.transform:FindChild("BottomLeft/HallBottomBtns/ForFashion/Bg/Tip"):GetComponent("UISprite")
+    self.uiSkillRedDot = self.transform:FindChild("BottomLeft/HallBottomBtns/Skill/Bg/Tip"):GetComponent("UISprite")
+    self.uiPackage      = self.transform:FindChild("BottomLeft/HallBottomBtns/ForPackage/Bg"):GetComponent("UIButton")
+    self.uiPackageRedDot= self.transform:FindChild("BottomLeft/HallBottomBtns/ForPackage/Bg/Tip"):GetComponent("UISprite")
+    self.uiAchievenment = self.transform:FindChild("BottomLeft/HallBottomBtns/ForAchievement/Bg"):GetComponent("UIButton")
+    self.uiDaily        = self.transform:FindChild("BottomRight/ForDaily/Bg"):GetComponent("UIButton")
 
-    self.uiBgVipBtn = self.transform:FindChild("PlayerDesc/BgVip"):GetComponent("UISprite")
-    self.uiChat     = self.transform:FindChild("UIChat/UIChat"):GetComponent("UIPanel")
+    self.uiBgVipBtn = self.transform:FindChild("TopLeft/PlayerDesc/BgVip"):GetComponent("UISprite")
+    self.uiChat     = self.transform:FindChild("BottomLeft/UIChat/UIChat"):GetComponent("UIPanel")
 
     -- self.uiWifi                  = self.transform:FindChild("Top/HallTopBtns/Wifi/icon"):GetComponent("UISprite")
-    self.uiNewPlayerGiftAnimator = self.transform:FindChild("NewPlayerGift"):GetComponent("Animator")
-    self.uiNewComerTrial         = self.transform:FindChild("NewComerTrial")
+    self.uiNewPlayerGiftAnimator = self.transform:FindChild("Right/NewPlayerGift"):GetComponent("Animator")
+    self.uiNewComerTrial         = self.transform:FindChild("Right/NewComerTrial")
 
     self.uiAnimator     = self.transform:GetComponent('Animator')
     self.uiAnimatorResp = self.transform:GetComponent("AnimationResp")
 
     -- red dot.
-    self.uiRedDot = self.transform:FindChild("ButtonMenu/ButtonMenu/Tip")
+    --self.uiRedDot = self.transform:FindChild("ButtonMenu/ButtonMenu/Tip")
     -- NOT use in tencent.
     -- self.uiGiftBagRedDot = self.transform:FindChild("Top/HallTopBtns/Recharge/RedDot")
-    self.uiMailRedDot          = self.transform:FindChild("Top/HallTopBtns/Mail/MailButton/RedDot")
-    self.uiLotteryRedDot       = self.transform:FindChild("Shop/RedDot")
-    self.uiSignRedDot          = self.transform:FindChild("Sign/RedDot")
-    self.uiTaskRedDot          = self.transform:FindChild("HallBottomBtns/ForAchievement/Bg/Tip")
-    self.uiDailyRedDot         = self.transform:FindChild("HallBottomBtns/ForDaily/Bg/Tip")
-    self.uiProgress            = self.transform:FindChild("PlayerDesc/Exp/Progress"):GetComponent("UIProgressBar")
+    self.uiMailRedDot          = self.transform:FindChild("TopRight/HallTopBtns/Mail/MailButton/RedDot")
+    self.uiLotteryRedDot       = self.transform:FindChild("Right/Shop/RedDot")
+    self.uiSignRedDot          = self.transform:FindChild("Right/Sign/RedDot")
+    self.uiTaskRedDot          = self.transform:FindChild("BottomLeft/HallBottomBtns/ForAchievement/Bg/Tip")
+    self.uiDailyRedDot         = self.transform:FindChild("BottomRight/ForDaily/Bg/Tip")
+    self.uiProgress            = self.transform:FindChild("TopLeft/PlayerDesc/Exp/Progress"):GetComponent("UIProgressBar")
     self.uiQualifyingLock      = self.transform:FindChild("HallMatch/BoxQualifying/LockNode"):GetComponent("Transform")
     self.uiLadderLock          = self.transform:FindChild("HallMatch/BoxLadder/LockNode"):GetComponent("Transform")
     self.uiCareerLock          = self.transform:FindChild("HallMatch/BoxCareer/LockNode")
@@ -1421,7 +1507,7 @@ function UIHall:UiParse()
     self.uiLadderLockLabel     = self.transform:FindChild("HallMatch/BoxLadder/LockNode/LockLabel"):GetComponent("UILabel")
     self.uiCareerLockLabel     = self.transform:FindChild("HallMatch/BoxCareer/LockNode/LockLabel"):GetComponent("UILabel")
 
-    self.uiLabelVictory        = getComponentInChild(self.transform, "FristVictory/LabelVictory", "UILabel")
+    self.uiLabelVictory        = getComponentInChild(self.transform, "BottomLeft/FristVictory/LabelVictory", "UILabel")
 end
 
 

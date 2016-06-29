@@ -8,7 +8,8 @@ public class MatchStatePlayerCloseUpWrap
 		LuaMethod[] regs = new LuaMethod[]
 		{
 			new LuaMethod("OnEnter", OnEnter),
-			new LuaMethod("Update", Update),
+			new LuaMethod("ViewUpdate", ViewUpdate),
+			new LuaMethod("GameUpdate", GameUpdate),
 			new LuaMethod("IsCommandValid", IsCommandValid),
 			new LuaMethod("OnExit", OnExit),
 			new LuaMethod("New", _CreateMatchStatePlayerCloseUp),
@@ -62,12 +63,22 @@ public class MatchStatePlayerCloseUpWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int Update(IntPtr L)
+	static int ViewUpdate(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		MatchStatePlayerCloseUp obj = (MatchStatePlayerCloseUp)LuaScriptMgr.GetNetObjectSelf(L, 1, "MatchStatePlayerCloseUp");
 		float arg0 = (float)LuaScriptMgr.GetNumber(L, 2);
-		obj.Update(arg0);
+		obj.ViewUpdate(arg0);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GameUpdate(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 2);
+		MatchStatePlayerCloseUp obj = (MatchStatePlayerCloseUp)LuaScriptMgr.GetNetObjectSelf(L, 1, "MatchStatePlayerCloseUp");
+		IM.Number arg0 = (IM.Number)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Number));
+		obj.GameUpdate(arg0);
 		return 0;
 	}
 

@@ -24,7 +24,7 @@ public class PlayerState_FallLostBall : PlayerState
         m_player.m_lostBallContext.vInitPos = m_ball.position;
         m_player.m_lostBallContext.vInitVel = m_player.forward;
 
-		Logger.Log("m_animType: " + m_animType);
+		Debug.Log("m_animType: " + m_animType);
 		m_curAction = m_mapAnimType[m_animType];
 		m_player.animMgr.Play(m_curAction, false);
 		PlaySoundManager.Instance.PlaySound(MatchSoundEvent.FallGround);
@@ -48,9 +48,9 @@ public class PlayerState_FallLostBall : PlayerState
 	void OnBallLost(UBasketball ball)
 	{
 		if (ball.m_owner != null)
-			Logger.LogError("Ball owner: " + ball.m_owner.m_name);
+			Debug.LogError("Ball owner: " + ball.m_owner.m_name);
 		ball.position = m_player.position;
-        //TODO:后面需要修改，不能使用Unity的Vector3参与运算
+        //TODO:潞贸脙忙脨猫脪陋脨脼赂脛拢卢虏禄脛脺脢鹿脫脙Unity碌脛Vector3虏脦脫毛脭脣脣茫
 		ball.GetComponent<Rigidbody>().velocity = (Vector3)(-m_player.forward * new IM.Number(2));
 	}
 }

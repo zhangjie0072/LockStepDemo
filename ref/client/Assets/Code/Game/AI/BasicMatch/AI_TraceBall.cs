@@ -29,25 +29,25 @@ public class AI_TraceBall
 
 		if( m_player.CanRebound(m_ball) && (timerRebound == null || timerRebound.stop))
 		{
-			//Logger.Log("Rebound info of " + m_player.m_name);
+			//Debug.Log("Rebound info of " + m_player.m_name);
 			ReboundAttrConfig.ReboundAttr attr = GameSystem.Instance.ReboundAttrConfigData.GetReboundAttr(m_player.m_position);
 			if (attr == null)
-				Logger.LogError("Rebound height config error.");
+				Debug.LogError("Rebound height config error.");
 
 			ShootSolution.SShootCurve curve = m_ball.CompleteLastCurve();
 			IM.Number ballHeight = m_ball.position.y;
 			ballHeight *= (IM.Number.one - m_system.AI.devBallHeight);
 			if (ballHeight >= attr.minHeight)
 			{
-				//Logger.Log("Rebound max height: " + attr.maxHeight +" Ball height: " + ballHeight + " Rebound height scale: " + attr.reboundHeightScale + " Ball height scale: " + attr.ballHeightScale);
+				//Debug.Log("Rebound max height: " + attr.maxHeight +" Ball height: " + ballHeight + " Rebound height scale: " + attr.reboundHeightScale + " Ball height scale: " + attr.ballHeightScale);
 				IM.Number npcReboundBallHeight = AIUtils.GetNPCReboundBallHeight(attr.maxHeight, ballHeight, attr.reboundHeightScale, attr.ballHeightScale);
-				//Logger.Log("NPC rebound ball height: " + npcReboundBallHeight);
+				//Debug.Log("NPC rebound ball height: " + npcReboundBallHeight);
                 IM.Number time1, time2;
                 curve.GetTimeByHeight(npcReboundBallHeight, out time1, out time2);
                 IM.Number ballFlyTime = time2;
-				//Logger.Log("Ball fly time: " + ballFlyTime);
+				//Debug.Log("Ball fly time: " + ballFlyTime);
 				if (ballFlyTime < -new IM.Number(0,1))
-					Logger.LogError("Ball fly time error.");
+					Debug.LogError("Ball fly time error.");
 
 				SkillInstance basicRebound = m_player.m_skillSystem.GetBasicSkillsByCommand(Command.Rebound)[0];
 				string basicActionId = basicRebound.skill.actions[0].action_id;
@@ -57,7 +57,7 @@ public class AI_TraceBall
 				IM.Number reboundActionTime = reboundKey / frameRate;
 
 				IM.Number reboundDelayTime = ballFlyTime - m_ball.m_fTime - reboundActionTime;
-				//Logger.Log("Rebound delay time: " + reboundDelayTime);
+				//Debug.Log("Rebound delay time: " + reboundDelayTime);
 				if (reboundDelayTime < IM.Number.zero)
 				{
 					reboundDelayTime = IM.Number.zero;

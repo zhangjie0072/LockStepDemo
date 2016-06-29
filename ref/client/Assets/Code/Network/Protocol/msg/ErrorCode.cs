@@ -386,6 +386,9 @@ namespace fogs.proto.msg
       [global::ProtoBuf.ProtoEnum(Name=@"NOT_FRIEND_CAN_PRESENT", Value=521)]
       NOT_FRIEND_CAN_PRESENT = 521,
             
+      [global::ProtoBuf.ProtoEnum(Name=@"TARGET_IN_SEND_APPLY", Value=522)]
+      TARGET_IN_SEND_APPLY = 522,
+            
       [global::ProtoBuf.ProtoEnum(Name=@"FRIEND_OFFLINE", Value=530)]
       FRIEND_OFFLINE = 530,
             

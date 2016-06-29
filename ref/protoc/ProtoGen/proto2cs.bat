@@ -38,4 +38,5 @@ protogen -i:Chat.proto -o:Chat.cs
 protogen -i:Activity.proto -o:Activity.cs
 protogen -i:Friend.proto -o:Friend.cs
 protogen -i:QualifyingNewer.proto -o:QualifyingNewer.cs
+protogen -i:Pvp.proto -o:Pvp.cs
 pause

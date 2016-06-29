@@ -41,7 +41,7 @@ public class PlayerState_CrossOver:  PlayerState_Skill
 		PlayerAnimAttribute.AnimAttr crossoverAttr = m_player.m_animAttributes.GetAnimAttrById(Command.CrossOver, m_curAction);
 		if( crossoverAttr == null )
 		{
-			Logger.LogError("Current action: " + m_curAction + " in crossover id: " + m_curExecSkill.skill.id);
+			Debug.LogError("Current action: " + m_curAction + " in crossover id: " + m_curExecSkill.skill.id);
 		}
         IM.Number frameRate = m_player.animMgr.GetFrameRate(m_curAction);
         m_player.m_blockable.Init(crossoverAttr, frameRate);
@@ -61,7 +61,7 @@ public class PlayerState_CrossOver:  PlayerState_Skill
 		uint uSkillValue = 0;
 		m_player.m_skillSystem.HegdingToValue("cross_speed", ref uSkillValue);
         //float crossSpeed = (m_player.m_finalAttrs["cross_speed"] + uSkillValue) * 0.0036f + 1f;(添加精度更高Number，还末测试)
-        IM.BigNumber crossSpeed = new IM.BigNumber((int)(m_player.m_finalAttrs["cross_speed"] + uSkillValue)) * new IM.BigNumber(0, 003600) + IM.BigNumber.one;
+        IM.PrecNumber crossSpeed = new IM.PrecNumber((int)(m_player.m_finalAttrs["cross_speed"] + uSkillValue)) * new IM.PrecNumber(0, 003600) + IM.PrecNumber.one;
 
 		m_player.animMgr.Play(m_curAction, (IM.Number)crossSpeed, true).rootMotion.Reset();
 
@@ -111,7 +111,7 @@ public class PlayerState_CrossOver:  PlayerState_Skill
 			{
 				if( _ValidDefender(defender) && defender.m_curInputDir != -1 )
 				{
-					IM.Vector3	vDefenderDir = IM.Quaternion.Euler(IM.Number.zero, defender.m_curInputDir * GlobalConst.ROTATE_ANGLE_SEC, IM.Number.zero) * IM.Vector3.forward;
+					IM.Vector3	vDefenderDir = IM.Quaternion.Euler(IM.Number.zero, defender.m_curInputDir * MoveController.ANGLE_PER_DIR, IM.Number.zero) * IM.Vector3.forward;
 					IM.Number fAngleToDir = IM.Vector3.Angle( vDefenderDir, m_crossDir == CrossDir.Left ?m_player.right : -m_player.right );
                     bool bMiss = fAngleToDir < new IM.Number(90);
 					if( bMiss )
@@ -130,7 +130,7 @@ public class PlayerState_CrossOver:  PlayerState_Skill
                         if (fAngleToDir > new IM.Number(90))
 						{
 							_DoDefenseCross(defender);
-							Logger.Log("match defense cross.");
+							Debug.Log("match defense cross.");
 						}
 					}
 
@@ -139,7 +139,7 @@ public class PlayerState_CrossOver:  PlayerState_Skill
 			}
 			else
 			{
-				Logger.Log("match defense cross not in blockable range.");
+				Debug.Log("match defense cross not in blockable range.");
 			}
 
 			if(m_crossDir != CrossDir.None && m_player.m_blockable.tooLate)

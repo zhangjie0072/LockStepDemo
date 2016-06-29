@@ -53,11 +53,11 @@ public class ConditionValidator : Singleton<ConditionValidator>
 		{
 			if (i >= args.Count)
 			{
-				Logger.Log("ConditionValidator, wrong arg count.");
+				Debug.Log("ConditionValidator, wrong arg count.");
 				foreach (ConditionType cond in conditions)
-					Logger.Log("ConditionValidator, Condition: " + cond);
+					Debug.Log("ConditionValidator, Condition: " + cond);
 				foreach (string arg in args)
-					Logger.Log("ConditionValidator, Argument: " + arg);
+					Debug.Log("ConditionValidator, Argument: " + arg);
 			}
             bool result = Validate(conditions[i], args[i]);
             if (!matchAnyOne && !result)
@@ -72,7 +72,7 @@ public class ConditionValidator : Singleton<ConditionValidator>
 	{
 		MethodInfo method = GetType().GetMethod("Validate" + condition.ToString());
 		if (method == null)
-			Logger.LogError("Error condition type: " + condition);
+			Debug.LogError("Error condition type: " + condition);
 		return (bool)method.Invoke(this, new System.Object[] { arg });
 	}
 
@@ -85,7 +85,7 @@ public class ConditionValidator : Singleton<ConditionValidator>
 	{
 		uint level = uint.Parse(arg);
 		bool enabled = MainPlayer.Instance.Level >= level;
-		Logger.Log("Validate captain level, " + enabled + " , Captain level: " + MainPlayer.Instance.Level + " Arg: " + level);
+		Debug.Log("Validate captain level, " + enabled + " , Captain level: " + MainPlayer.Instance.Level + " Arg: " + level);
 		return enabled;
 	}
 
@@ -95,7 +95,7 @@ public class ConditionValidator : Singleton<ConditionValidator>
 		uint chapterID = uint.Parse(tokens[0]);
 		uint sectionID = uint.Parse(tokens[1]);
 		bool enabled = MainPlayer.Instance.CheckSectionComplete(chapterID, sectionID);
-		Logger.Log("Validate career section complete, " + enabled + " , Chapter: " + chapterID + " Section: " + sectionID);
+		Debug.Log("Validate career section complete, " + enabled + " , Chapter: " + chapterID + " Section: " + sectionID);
 		return enabled;
 	}
 
@@ -112,13 +112,13 @@ public class ConditionValidator : Singleton<ConditionValidator>
 			uint curSectionID = (uint)(double)luaCom.table["sectionID"];
 			if (curChapterID == chapterID && curSectionID == sectionID)
 			{
-				Logger.Log("Validate career section UI, true, Chapter: " + chapterID + " Section: " + sectionID);
+				Debug.Log("Validate career section UI, true, Chapter: " + chapterID + " Section: " + sectionID);
 				return true;
 			}
-			Logger.Log("Validate career section UI, false, Chapter: " + chapterID + " Section: " + sectionID);
+			Debug.Log("Validate career section UI, false, Chapter: " + chapterID + " Section: " + sectionID);
 			return false;
 		}
-		Logger.Log("Validate career section UI, false, UI not visible.");
+		Debug.Log("Validate career section UI, false, UI not visible.");
 		return false;
 	}
 
@@ -132,13 +132,13 @@ public class ConditionValidator : Singleton<ConditionValidator>
 			uint curChapterID = (uint)(double)luaCom.table["chapterID"];
 			if (curChapterID == chapterID || chapterID == 0)
 			{
-				Logger.Log("Validate career chapter UI, true, Chapter: " + chapterID);
+				Debug.Log("Validate career chapter UI, true, Chapter: " + chapterID);
 				return true;
 			}
-			Logger.Log("Validate career chapter UI, false, Chapter: " + chapterID);
+			Debug.Log("Validate career chapter UI, false, Chapter: " + chapterID);
 			return false;
 		}
-		Logger.Log("Validate career chapter UI, false, UI not visible");
+		Debug.Log("Validate career chapter UI, false, UI not visible");
 		return false;
 	}
 
@@ -146,7 +146,7 @@ public class ConditionValidator : Singleton<ConditionValidator>
 	{
 		uint guideModuleID = uint.Parse(arg);
 		bool enabled =  MainPlayer.Instance.IsGuideCompleted(guideModuleID);
-		Logger.Log("Validate guide module complete, " + enabled + ", ID: " + guideModuleID);
+		Debug.Log("Validate guide module complete, " + enabled + ", ID: " + guideModuleID);
 		return enabled;
 	}
 
@@ -154,7 +154,7 @@ public class ConditionValidator : Singleton<ConditionValidator>
 	{
 		uint taskID = uint.Parse(arg);
 		bool enabled = MainPlayer.Instance.IsTaskCompleted(taskID);
-		Logger.Log("Validate task complete, " + enabled + ", ID: " + taskID);
+		Debug.Log("Validate task complete, " + enabled + ", ID: " + taskID);
 		return enabled;
 	}
 
@@ -183,11 +183,11 @@ public class ConditionValidator : Singleton<ConditionValidator>
 		{
 			if (skillProto.skill_id == skillID)
 			{
-				Logger.Log("ConditionValidator, SkillEquip succeed. " + skillID);
+				Debug.Log("ConditionValidator, SkillEquip succeed. " + skillID);
 				return true;
 			}
 		}
-		Logger.Log("ConditionValidator, SkillEquip failed. " + skillID);
+		Debug.Log("ConditionValidator, SkillEquip failed. " + skillID);
 		return false;
 	}
 
@@ -244,7 +244,7 @@ public class ConditionValidator : Singleton<ConditionValidator>
 		uint curStep = MainPlayer.Instance.CreateStep;
 		if (curStep != step)
 		{
-			Logger.Log("Validate create step failed, Cur step: " + curStep + " Expected step: " + step);
+			Debug.Log("Validate create step failed, Cur step: " + curStep + " Expected step: " + step);
 			return false;
 		}
 		return true;
@@ -263,13 +263,13 @@ public class ConditionValidator : Singleton<ConditionValidator>
 			{
 				if (info.quality < quality)
 				{
-					Logger.Log("Validate RoleAllTrainingQuality failed, required quality: " + quality + " cur quality: " + info.quality + " exercise id: " + info.id + " roleID: " + roleID);
+					Debug.Log("Validate RoleAllTrainingQuality failed, required quality: " + quality + " cur quality: " + info.quality + " exercise id: " + info.id + " roleID: " + roleID);
 					return false;
 				}
 			}
 			return true;
 		}
-		Logger.Log("Validate RoleAllTrainingQuality failed, UI not opened");
+		Debug.Log("Validate RoleAllTrainingQuality failed, UI not opened");
 		return false;
 	}
 
@@ -284,13 +284,13 @@ public class ConditionValidator : Singleton<ConditionValidator>
 			Chapter chapter = MainPlayer.Instance.GetChapter(curChapterID);
 			if (chapter.star_num >= starNum)
 			{
-				Logger.Log("Validate cur career star num, true, Chapter: " + curChapterID + " Star num:" + starNum);
+				Debug.Log("Validate cur career star num, true, Chapter: " + curChapterID + " Star num:" + starNum);
 				return true;
 			}
-			Logger.Log("Validate cur career star num, false, Chapter: " + curChapterID + " Star num:" + starNum);
+			Debug.Log("Validate cur career star num, false, Chapter: " + curChapterID + " Star num:" + starNum);
 			return false;
 		}
-		Logger.Log("Validate cur career star num, false, UI not visible");
+		Debug.Log("Validate cur career star num, false, UI not visible");
 		return false;
 	}
 
@@ -319,7 +319,7 @@ public class ConditionValidator : Singleton<ConditionValidator>
 			if (pair.Value.GetLevel() > 1)
 				return true;
 		}
-		Logger.Log("ConditionValidator, AnyEquipmentUpgraded failed.");
+		Debug.Log("ConditionValidator, AnyEquipmentUpgraded failed.");
 		return false;
 	}
 
@@ -340,7 +340,7 @@ public class ConditionValidator : Singleton<ConditionValidator>
 					return true;
 			}
 		}
-		Logger.Log("ConditionValidator, AnyRoleAnyExercise failed.");
+		Debug.Log("ConditionValidator, AnyRoleAnyExercise failed.");
 		return false;
 	}
 
@@ -390,7 +390,7 @@ public class ConditionValidator : Singleton<ConditionValidator>
 			if (role.m_roleInfo.star > 0)
 				return true;
 		}
-		Logger.Log("ConditionValidator, AnyRoleImproved failed.");
+		Debug.Log("ConditionValidator, AnyRoleImproved failed.");
 		return false;
 	}
 
@@ -405,13 +405,13 @@ public class ConditionValidator : Singleton<ConditionValidator>
 			bool hasGoods = (bool)(func.Call((double)goodsID)[0]);
 			if (hasGoods)
 			{
-				Logger.Log("Validate goods acquire, true, GoodsID: " + goodsID);
+				Debug.Log("Validate goods acquire, true, GoodsID: " + goodsID);
 				return true;
 			}
-			Logger.Log("Validate goods acquire, false, GoodsID: " + goodsID);
+			Debug.Log("Validate goods acquire, false, GoodsID: " + goodsID);
 			return false;
 		}
-		Logger.Log("Validate goods acquire, false, UI not visible");
+		Debug.Log("Validate goods acquire, false, UI not visible");
 		return false;
 	}
 
@@ -430,19 +430,19 @@ public class ConditionValidator : Singleton<ConditionValidator>
 					if (sectionID == uint.Parse(arg))
 					{
 						return true;
-						Logger.Log("Validate failed at section, true, section ID:" + sectionID);
+						Debug.Log("Validate failed at section, true, section ID:" + sectionID);
 					}
 					else
-						Logger.Log("Validate failed at section, false, cur section ID:" + sectionID);
+						Debug.Log("Validate failed at section, false, cur section ID:" + sectionID);
 				}
 				else
-					Logger.Log("Validate failed at section, false, match is not career.");
+					Debug.Log("Validate failed at section, false, match is not career.");
 			}
 			else
-				Logger.Log("Validate failed at section, false, match win.");
+				Debug.Log("Validate failed at section, false, match win.");
 		}
 		else
-			Logger.Log("Validate failed at section, false, UI not visible");
+			Debug.Log("Validate failed at section, false, UI not visible");
 		return false;
 	}
 
@@ -453,7 +453,7 @@ public class ConditionValidator : Singleton<ConditionValidator>
 			if (role.m_roleInfo.level > 1)
 				return true;
 		}
-		Logger.Log("ConditionValidator, AnyRoleUpgraded failed.");
+		Debug.Log("ConditionValidator, AnyRoleUpgraded failed.");
 		return false;
 	}
 
@@ -461,7 +461,7 @@ public class ConditionValidator : Singleton<ConditionValidator>
 	{
 		uint skillID = uint.Parse(arg);
 		uint count = MainPlayer.Instance.GetGoodsCount(skillID);
-		Logger.Log("ConditionValidator, SkillOwned " + (count > 0 ? "succeed" : "failed"));
+		Debug.Log("ConditionValidator, SkillOwned " + (count > 0 ? "succeed" : "failed"));
 		return count > 0; 
 	}
 
@@ -473,11 +473,11 @@ public class ConditionValidator : Singleton<ConditionValidator>
 		{
 			if (goods.GetLevel() > 1)
 			{
-				Logger.Log("ConditionValidator, SkillUpgraded succeed. " + skillID);
+				Debug.Log("ConditionValidator, SkillUpgraded succeed. " + skillID);
 				return true;
 			}
 		}
-		Logger.Log("ConditionValidator, SkillUpgraded failed. " + skillID);
+		Debug.Log("ConditionValidator, SkillUpgraded failed. " + skillID);
 		return false;
 	}
 
@@ -491,12 +491,12 @@ public class ConditionValidator : Singleton<ConditionValidator>
 			{
 				if (slot.status == BadgeSlotStatus.UNLOCK && slot.badge_id == badgeID)
 				{
-					Logger.Log("ConditionValidator, BadgeEquiped succeed. " + badgeID);
+					Debug.Log("ConditionValidator, BadgeEquiped succeed. " + badgeID);
 					return true;
 				}
 			}
 		}
-		Logger.Log("ConditionValidator, BadgeEquiped failed. " + badgeID);
+		Debug.Log("ConditionValidator, BadgeEquiped failed. " + badgeID);
 		return false;
 	}
 
@@ -509,7 +509,7 @@ public class ConditionValidator : Singleton<ConditionValidator>
 			uint totalFreeTimes = GameSystem.Instance.CommonConfig.GetUInt("gSpecialLotteryFreeTimes");
 			if (lotteryInfo.free_times2 > 0 || totalFreeTimes == 0)
 			{
-				Logger.Log("ConditionValidator, LotteryFree failed. " + ID);
+				Debug.Log("ConditionValidator, LotteryFree failed. " + ID);
 				return false;
 			}
 		}
@@ -518,11 +518,11 @@ public class ConditionValidator : Singleton<ConditionValidator>
 			uint totalFreeTimes = GameSystem.Instance.CommonConfig.GetUInt("gNormalLotteryFreeTimes");
 			if (lotteryInfo.free_times1 > 0 || totalFreeTimes == 0)
 			{
-				Logger.Log("ConditionValidator, LotteryFree failed. " + ID);
+				Debug.Log("ConditionValidator, LotteryFree failed. " + ID);
 				return false;
 			}
 		}
-		Logger.Log("ConditionValidator, LotteryFree succeed. " + ID);
+		Debug.Log("ConditionValidator, LotteryFree succeed. " + ID);
 		return true;
 	}
 
@@ -539,10 +539,10 @@ public class ConditionValidator : Singleton<ConditionValidator>
 		uint slotID = uint.Parse(tokens[1]);
 		BadgeBook books = MainPlayer.Instance.badgeSystemInfo.GetBadgeBookByBookId(bookID);
 		if (books == null)
-			Logger.LogError("ValidateBadgeSlotEquiped, error book ID:" + bookID);
+			Debug.LogError("ValidateBadgeSlotEquiped, error book ID:" + bookID);
 		BadgeSlot slot = books.slot_list.Find((s) => s.id == slotID);
 		if (slot == null)
-			Logger.LogError("ValidateBadgeSlotEquiped, error slot ID:" + bookID + " " + slotID);
+			Debug.LogError("ValidateBadgeSlotEquiped, error slot ID:" + bookID + " " + slotID);
 		return slot.status == BadgeSlotStatus.UNLOCK && slot.badge_id != 0;
 	}
 }

@@ -1,4 +1,4 @@
-<Data Count="303">
+<Data Count="306">
   <Line>
     <switch>#</switch>
     <id>任务ID</id>
@@ -36,7 +36,7 @@
     <precondition_value2>
     </precondition_value2>
     <condition_id1>5</condition_id1>
-    <condition_value1>10107</condition_value1>
+    <condition_value1>10105</condition_value1>
     <condition_id2>
     </condition_id2>
     <condition_value2>
@@ -60,7 +60,7 @@
     <precondition_id2>2</precondition_id2>
     <precondition_value2>20701</precondition_value2>
     <condition_id1>5</condition_id1>
-    <condition_value1>10207</condition_value1>
+    <condition_value1>10205</condition_value1>
     <condition_id2>
     </condition_id2>
     <condition_value2>
@@ -84,7 +84,7 @@
     <precondition_id2>2</precondition_id2>
     <precondition_value2>20702</precondition_value2>
     <condition_id1>5</condition_id1>
-    <condition_value1>10307</condition_value1>
+    <condition_value1>10305</condition_value1>
     <condition_id2>
     </condition_id2>
     <condition_value2>
@@ -108,7 +108,7 @@
     <precondition_id2>2</precondition_id2>
     <precondition_value2>20703</precondition_value2>
     <condition_id1>5</condition_id1>
-    <condition_value1>10407</condition_value1>
+    <condition_value1>10405</condition_value1>
     <condition_id2>
     </condition_id2>
     <condition_value2>
@@ -132,7 +132,7 @@
     <precondition_id2>2</precondition_id2>
     <precondition_value2>20704</precondition_value2>
     <condition_id1>5</condition_id1>
-    <condition_value1>10507</condition_value1>
+    <condition_value1>10505</condition_value1>
     <condition_id2>
     </condition_id2>
     <condition_value2>
@@ -156,7 +156,79 @@
     <precondition_id2>2</precondition_id2>
     <precondition_value2>20705</precondition_value2>
     <condition_id1>5</condition_id1>
-    <condition_value1>10607</condition_value1>
+    <condition_value1>10605</condition_value1>
+    <condition_id2>
+    </condition_id2>
+    <condition_value2>
+    </condition_value2>
+    <award_id>32212</award_id>
+    <link>0</link>
+    <show_process>0</show_process>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>20707</id>
+    <type>2</type>
+    <icon>icon_task_001</icon>
+    <title>迎接挑战</title>
+    <desc>通关生涯模式[F8BA27]第7章[-]</desc>
+    <award_tips>
+    </award_tips>
+    <precondition_id1>1</precondition_id1>
+    <precondition_value1>5</precondition_value1>
+    <precondition_id2>2</precondition_id2>
+    <precondition_value2>20706</precondition_value2>
+    <condition_id1>5</condition_id1>
+    <condition_value1>10705</condition_value1>
+    <condition_id2>
+    </condition_id2>
+    <condition_value2>
+    </condition_value2>
+    <award_id>32212</award_id>
+    <link>0</link>
+    <show_process>0</show_process>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>20708</id>
+    <type>2</type>
+    <icon>icon_task_001</icon>
+    <title>迎接挑战</title>
+    <desc>通关生涯模式[F8BA27]第8章[-]</desc>
+    <award_tips>
+    </award_tips>
+    <precondition_id1>1</precondition_id1>
+    <precondition_value1>5</precondition_value1>
+    <precondition_id2>2</precondition_id2>
+    <precondition_value2>20707</precondition_value2>
+    <condition_id1>5</condition_id1>
+    <condition_value1>10805</condition_value1>
+    <condition_id2>
+    </condition_id2>
+    <condition_value2>
+    </condition_value2>
+    <award_id>32212</award_id>
+    <link>0</link>
+    <show_process>0</show_process>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>20709</id>
+    <type>2</type>
+    <icon>icon_task_001</icon>
+    <title>迎接挑战</title>
+    <desc>通关生涯模式[F8BA27]第9章[-]</desc>
+    <award_tips>
+    </award_tips>
+    <precondition_id1>1</precondition_id1>
+    <precondition_value1>5</precondition_value1>
+    <precondition_id2>2</precondition_id2>
+    <precondition_value2>20708</precondition_value2>
+    <condition_id1>5</condition_id1>
+    <condition_value1>10905</condition_value1>
     <condition_id2>
     </condition_id2>
     <condition_value2>
@@ -6357,7 +6429,7 @@
     <type>6</type>
     <icon>icon_task_001</icon>
     <title>生涯之路</title>
-    <desc>3星通关生涯模式[F8BA27]第一章-第7关[-]</desc>
+    <desc>3星通关生涯模式[F8BA27]第一章-第5关[-]</desc>
     <award_tips>
     </award_tips>
     <precondition_id1>1</precondition_id1>
@@ -6367,7 +6439,7 @@
     <precondition_value2>
     </precondition_value2>
     <condition_id1>49</condition_id1>
-    <condition_value1>10107</condition_value1>
+    <condition_value1>10105</condition_value1>
     <condition_id2>
     </condition_id2>
     <condition_value2>
@@ -6509,7 +6581,7 @@
     <type>6</type>
     <icon>icon_task_001</icon>
     <title>生涯之路</title>
-    <desc>三星通关生涯模式[F8BA27]第二章-第7关[-]</desc>
+    <desc>三星通关生涯模式[F8BA27]第二章-第5关[-]</desc>
     <award_tips>
     </award_tips>
     <precondition_id1>1</precondition_id1>
@@ -6519,7 +6591,7 @@
     <precondition_value2>
     </precondition_value2>
     <condition_id1>49</condition_id1>
-    <condition_value1>10207</condition_value1>
+    <condition_value1>10205</condition_value1>
     <condition_id2>
     </condition_id2>
     <condition_value2>
@@ -6585,7 +6657,7 @@
     <type>6</type>
     <icon>icon_task_001</icon>
     <title>生涯之路</title>
-    <desc>通关生涯模式[F8BA27]第三章-第7关[-]</desc>
+    <desc>通关生涯模式[F8BA27]第三章-第5关[-]</desc>
     <award_tips>
     </award_tips>
     <precondition_id1>1</precondition_id1>
@@ -6595,7 +6667,7 @@
     <precondition_value2>
     </precondition_value2>
     <condition_id1>5</condition_id1>
-    <condition_value1>10307</condition_value1>
+    <condition_value1>10305</condition_value1>
     <condition_id2>
     </condition_id2>
     <condition_value2>
@@ -6637,7 +6709,7 @@
     <type>6</type>
     <icon>icon_task_001</icon>
     <title>生涯之路</title>
-    <desc>三星通关生涯模式[F8BA27]第三章-第7关[-]</desc>
+    <desc>三星通关生涯模式[F8BA27]第三章-第5关[-]</desc>
     <award_tips>
     </award_tips>
     <precondition_id1>1</precondition_id1>
@@ -6647,7 +6719,7 @@
     <precondition_value2>
     </precondition_value2>
     <condition_id1>49</condition_id1>
-    <condition_value1>10307</condition_value1>
+    <condition_value1>10305</condition_value1>
     <condition_id2>
     </condition_id2>
     <condition_value2>
@@ -6711,7 +6783,7 @@
     <type>6</type>
     <icon>icon_task_001</icon>
     <title>生涯之路</title>
-    <desc>通关生涯模式[F8BA27]第四章-第7关[-]</desc>
+    <desc>通关生涯模式[F8BA27]第四章-第5关[-]</desc>
     <award_tips>
     </award_tips>
     <precondition_id1>1</precondition_id1>
@@ -6721,7 +6793,7 @@
     <precondition_value2>
     </precondition_value2>
     <condition_id1>5</condition_id1>
-    <condition_value1>10407</condition_value1>
+    <condition_value1>10405</condition_value1>
     <condition_id2>
     </condition_id2>
     <condition_value2>
@@ -6789,7 +6861,7 @@
     <type>6</type>
     <icon>icon_task_001</icon>
     <title>生涯之路</title>
-    <desc>三星通关生涯模式[F8BA27]第四章-第7关[-]</desc>
+    <desc>三星通关生涯模式[F8BA27]第四章-第5关[-]</desc>
     <award_tips>
     </award_tips>
     <precondition_id1>1</precondition_id1>
@@ -6799,7 +6871,7 @@
     <precondition_value2>
     </precondition_value2>
     <condition_id1>49</condition_id1>
-    <condition_value1>10407</condition_value1>
+    <condition_value1>10405</condition_value1>
     <condition_id2>
     </condition_id2>
     <condition_value2>
@@ -6865,7 +6937,7 @@
     <type>6</type>
     <icon>icon_task_001</icon>
     <title>生涯之路</title>
-    <desc>通关生涯模式[F8BA27]第五章-第7关[-]</desc>
+    <desc>通关生涯模式[F8BA27]第五章-第5关[-]</desc>
     <award_tips>
     </award_tips>
     <precondition_id1>1</precondition_id1>
@@ -6875,7 +6947,7 @@
     <precondition_value2>
     </precondition_value2>
     <condition_id1>5</condition_id1>
-    <condition_value1>10507</condition_value1>
+    <condition_value1>10505</condition_value1>
     <condition_id2>
     </condition_id2>
     <condition_value2>
@@ -6915,7 +6987,7 @@
     <type>6</type>
     <icon>icon_task_001</icon>
     <title>生涯之路</title>
-    <desc>三星通关生涯模式[F8BA27]第五章-第7关[-]</desc>
+    <desc>三星通关生涯模式[F8BA27]第六章-第5关[-]</desc>
     <award_tips>
     </award_tips>
     <precondition_id1>1</precondition_id1>
@@ -6925,13 +6997,13 @@
     <precondition_value2>
     </precondition_value2>
     <condition_id1>49</condition_id1>
-    <condition_value1>10507</condition_value1>
+    <condition_value1>10605</condition_value1>
     <condition_id2>
     </condition_id2>
     <condition_value2>
     </condition_value2>
     <award_id>32304</award_id>
-    <link>4:10005</link>
+    <link>4:10006</link>
     <show_process>0</show_process>
   </Line>
   <Line>
@@ -6965,7 +7037,7 @@
     <type>6</type>
     <icon>icon_task_001</icon>
     <title>生涯之路</title>
-    <desc>通关生涯模式[F8BA27]第六章-第7关[-]</desc>
+    <desc>通关生涯模式[F8BA27]第八章-第5关[-]</desc>
     <award_tips>
     </award_tips>
     <precondition_id1>1</precondition_id1>
@@ -6975,13 +7047,13 @@
     <precondition_value2>
     </precondition_value2>
     <condition_id1>5</condition_id1>
-    <condition_value1>10507</condition_value1>
+    <condition_value1>10805</condition_value1>
     <condition_id2>
     </condition_id2>
     <condition_value2>
     </condition_value2>
     <award_id>32304</award_id>
-    <link>4:10006</link>
+    <link>4:10008</link>
     <show_process>0</show_process>
   </Line>
   <Line>
@@ -7067,7 +7139,7 @@
     <type>6</type>
     <icon>icon_task_001</icon>
     <title>生涯之路</title>
-    <desc>三星通关生涯模式[F8BA27]第六章-第7关[-]</desc>
+    <desc>三星通关生涯模式[F8BA27]第九章-第5关[-]</desc>
     <award_tips>
     </award_tips>
     <precondition_id1>1</precondition_id1>
@@ -7077,13 +7149,13 @@
     <precondition_value2>
     </precondition_value2>
     <condition_id1>49</condition_id1>
-    <condition_value1>10607</condition_value1>
+    <condition_value1>10905</condition_value1>
     <condition_id2>
     </condition_id2>
     <condition_value2>
     </condition_value2>
     <award_id>32304</award_id>
-    <link>4:10006</link>
+    <link>4:10009</link>
     <show_process>0</show_process>
   </Line>
 </Data>

@@ -37,7 +37,8 @@ public class GameMatch_BullFight : GameMatch, GameMatch.Count24Listener, MatchSt
 			}
 			else
 			{
-				m_uiMatch.ShowCounter(true, m_mainRole.m_team.m_role == MatchRole.eOffense);
+                //TODO 针对PVP修改
+				m_uiMatch.ShowCounter(true, mainRole.m_team.m_role == MatchRole.eOffense);
                 m_count24Time = MAX_COUNT24_TIME;
                 m_count24TimeStop = false;
 			}
@@ -70,9 +71,9 @@ public class GameMatch_BullFight : GameMatch, GameMatch.Count24Listener, MatchSt
 		GameSystem.Instance.mNetworkManager.ConnectToGS(config.type, "", 1);
 	}
 
-	override public void OnSceneComplete()
+	protected override void _OnLoadingCompleteImp ()
 	{
-		base.OnSceneComplete();
+		base._OnLoadingCompleteImp ();
 		mCurScene.CreateBall();
 		mCurScene.mBall.onShootGoal += OnGoal;
 		mCurScene.mBall.onGrab += OnGrab;
@@ -81,29 +82,29 @@ public class GameMatch_BullFight : GameMatch, GameMatch.Count24Listener, MatchSt
 		
 		if (m_config == null)
 		{
-			Logger.LogError("Match config file loading failed.");
+			Debug.LogError("Match config file loading failed.");
 			return;
 		}
 
+        //TODO 针对PVP修改
 		//main role
 		PlayerManager pm = GameSystem.Instance.mClient.mPlayerManager;
-		m_mainRole = pm.GetPlayerById( uint.Parse(m_config.MainRole.id) );
-		m_mainRole.m_inputDispatcher = new InputDispatcher(this, m_mainRole);
-		m_mainRole.m_catchHelper = new CatchHelper(m_mainRole);
-		m_mainRole.m_catchHelper.ExtractBallLocomotion();
-		m_mainRole.m_StateMachine.SetState(PlayerState.State.eStand, true);
-		m_mainRole.m_InfoVisualizer.CreateStrengthBar();
-		m_mainRole.m_InfoVisualizer.ShowStaminaBar(true);
-		m_mainRole.m_team.m_role = GameMatch.MatchRole.eOffense;
-		mainRoleNormalAISystem = new AISystem_Basic(this, m_mainRole);
-		m_mainRole.m_aiMgr = mainRoleNormalAISystem;
-		m_mainRole.m_aiMgr.m_enable = false;
-		mainRolePositioningAISystem = new AISystem_BullFight(this, m_mainRole);
+		mainRole = pm.GetPlayerById( uint.Parse(m_config.MainRole.id) );
+		//mainRole.m_inputDispatcher = new InputDispatcher(this, mainRole);
+		mainRole.m_catchHelper = new CatchHelper(mainRole);
+		mainRole.m_catchHelper.ExtractBallLocomotion();
+		mainRole.m_StateMachine.SetState(PlayerState.State.eStand, true);
+		mainRole.m_InfoVisualizer.ShowStaminaBar(true);
+		mainRole.m_team.m_role = GameMatch.MatchRole.eOffense;
+		mainRoleNormalAISystem = new AISystem_Basic(this, mainRole);
+		//mainRole.m_aiMgr = mainRoleNormalAISystem;
+		mainRole.m_aiMgr.m_enable = false;
+		mainRolePositioningAISystem = new AISystem_BullFight(this, mainRole);
 		mainRoleAIState = mainRolePositioningAISystem.GetState(AIState.Type.eBullFight_Positioning) as AI_BullFight_Positioning;
 		mainRoleAIState.onArrive += OnArrive;
 
 		//npc
-        Team oppoTeam = m_mainRole.m_team.m_side == Team.Side.eAway ? m_homeTeam : m_awayTeam;
+        Team oppoTeam = mainRole.m_team.m_side == Team.Side.eAway ? m_homeTeam : m_awayTeam;
 		npc = oppoTeam.GetMember(0);
 		if (npc.model != null)
 			npc.model.EnableGrey();
@@ -113,12 +114,12 @@ public class GameMatch_BullFight : GameMatch, GameMatch.Count24Listener, MatchSt
 		npcPositioningAISystem = new AISystem_BullFight(this, npc);
 		npcAIState = npcPositioningAISystem.GetState(AIState.Type.eBullFight_Positioning) as AI_BullFight_Positioning;
 		npcAIState.onArrive += OnArrive;
-		npc.m_aiMgr = npcNormalAISystem;
+		//npc.m_aiMgr = npcNormalAISystem;
 		npc.m_aiMgr.m_enable = false;
 		npc.m_team.m_role = GameMatch.MatchRole.eDefense;
 
 		AssumeDefenseTarget();
-		_UpdateCamera(m_mainRole);
+		_UpdateCamera(mainRole);
 		//_CreateGUI();
 
 		m_stateMachine.m_matchStateListeners.Add(this);
@@ -193,26 +194,27 @@ public class GameMatch_BullFight : GameMatch, GameMatch.Count24Listener, MatchSt
 
 	public void SetStartingAttacker(int index)
 	{
+        //TODO 针对PVP修改
 		if (index == 0)
 		{
-			m_mainRole.m_team.m_role = MatchRole.eOffense;
+			mainRole.m_team.m_role = MatchRole.eOffense;
 			npc.m_team.m_role = MatchRole.eDefense;
 		}
 		else
 		{
-			m_mainRole.m_team.m_role = MatchRole.eDefense;
+			mainRole.m_team.m_role = MatchRole.eDefense;
 			npc.m_team.m_role = MatchRole.eOffense;
 		}
 	}
 
-    public override void HandleGameBegin(Pack pack)
+    public override void OnGameBegin(GameBeginResp resp)
     {
         m_stateMachine.SetState(MatchState.State.eFreeThrowStart);
     }
 
-	public override void Update(IM.Number deltaTime)
+	public override void GameUpdate(IM.Number deltaTime)
 	{
-		base.Update(deltaTime);
+		base.GameUpdate(deltaTime);
 		_RefreshAOD();
 
         timerReset.Update(deltaTime);
@@ -246,8 +248,9 @@ public class GameMatch_BullFight : GameMatch, GameMatch.Count24Listener, MatchSt
 
 	private void SwitchRole()
 	{
-		GameMatch.MatchRole temp = m_mainRole.m_team.m_role;
-		m_mainRole.m_team.m_role = npc.m_team.m_role;
+        //TODO 针对PVP修改
+		GameMatch.MatchRole temp = mainRole.m_team.m_role;
+		mainRole.m_team.m_role = npc.m_team.m_role;
 		npc.m_team.m_role = temp;
 	}
 
@@ -255,14 +258,14 @@ public class GameMatch_BullFight : GameMatch, GameMatch.Count24Listener, MatchSt
 	{
 		if (m_stateMachine.m_curState.m_eState == MatchState.State.eFreeThrowStart)
 		{
-			if (ball.m_actor == m_mainRole)
+			if (ball.m_actor == mainRole)
 				m_mainRoleStart = true;
 		}
 		else
 		{
 			m_needSwitchRole = false;
 			m_criticalShoot = false;
-			if (ball.m_pt == GlobalConst.PT_3 && ball.m_actor == m_mainRole)
+			if (ball.m_pt == GlobalConst.PT_3 && ball.m_actor == mainRole)
 			{
 				m_showShootFarTip = true;
 				ShowBasketTip(ball.m_actor, "gameInterface_tip_2point");
@@ -276,16 +279,16 @@ public class GameMatch_BullFight : GameMatch, GameMatch.Count24Listener, MatchSt
 		if (m_stateMachine.m_curState != null && m_stateMachine.m_curState.m_eState == MatchState.State.ePlaying)
 		{
             BeginPos beginPos = GameSystem.Instance.MatchPointsConfig.BeginPos;
-			if (m_mainRole.m_team.m_role == MatchRole.eOffense)
+			if (mainRole.m_team.m_role == MatchRole.eOffense)
 			{
-				if (ball.m_owner != m_mainRole)	//球被对方抢了
+				if (ball.m_owner != mainRole)	//球被对方抢了
 				{
-					m_mainRole.m_inputDispatcher.m_enable = false;
-					m_mainRole.m_aiMgr = mainRolePositioningAISystem;
-					if (m_mainRole.m_aiAssist != null)
-						m_mainRole.m_aiAssist.Disable();
+					mainRole.m_inputDispatcher.m_enable = false;
+					//mainRole.m_aiMgr = mainRolePositioningAISystem;
+					if (mainRole.m_aiAssist != null)
+						mainRole.m_aiAssist.Disable();
                     mainRoleAIState.moveTarget = beginPos.defenses_transform[0].position;
-					npc.m_aiMgr = npcPositioningAISystem;
+					//npc.m_aiMgr = npcPositioningAISystem;
                     npcAIState.moveTarget = beginPos.offenses_transform[0].position;
 					m_inPositioning = true;
 					m_ruler.SwitchRole();
@@ -301,16 +304,16 @@ public class GameMatch_BullFight : GameMatch, GameMatch.Count24Listener, MatchSt
 				else if (m_criticalShoot)	//球被自己抢了，但已经是绝杀球
 					m_stateMachine.SetState(MatchState.State.eFoul);
 			} 
-			else if (m_mainRole.m_team.m_role == MatchRole.eDefense)
+			else if (mainRole.m_team.m_role == MatchRole.eDefense)
 			{
-				if (ball.m_owner == m_mainRole) //球被对方抢了
+				if (ball.m_owner == mainRole) //球被对方抢了
 				{
-					m_mainRole.m_inputDispatcher.m_enable = false;
-					m_mainRole.m_aiMgr = mainRolePositioningAISystem;
-					if (m_mainRole.m_aiAssist != null)
-						m_mainRole.m_aiAssist.Disable();
+					mainRole.m_inputDispatcher.m_enable = false;
+					//mainRole.m_aiMgr = mainRolePositioningAISystem;
+					if (mainRole.m_aiAssist != null)
+						mainRole.m_aiAssist.Disable();
                     mainRoleAIState.moveTarget = beginPos.offenses_transform[0].position;
-					npc.m_aiMgr = npcPositioningAISystem;
+					//npc.m_aiMgr = npcPositioningAISystem;
                     npcAIState.moveTarget = beginPos.defenses_transform[0].position;
 					m_inPositioning = true;
 					m_ruler.SwitchRole();
@@ -380,18 +383,18 @@ public class GameMatch_BullFight : GameMatch, GameMatch.Count24Listener, MatchSt
 		if (m_stateMachine.m_curState.m_eState == MatchState.State.ePlayerCloseUp ||
 			m_stateMachine.m_curState.m_eState == MatchState.State.eFreeThrowStart)
 		{
-            m_mainRole.position = GameSystem.Instance.MatchPointsConfig.FreeThrowCenter.transform.position - IM.Vector3.forward * IM.Number.half;
-            m_mainRole.FaceTo(mCurScene.mBasket.m_vShootTarget);
+            mainRole.position = GameSystem.Instance.MatchPointsConfig.FreeThrowCenter.transform.position - IM.Vector3.forward * IM.Number.half;
+            mainRole.FaceTo(mCurScene.mBasket.m_vShootTarget);
 
-			m_mainRole.m_defenseTarget.position = m_mainRole.position + new IM.Vector3(IM.Number.two, IM.Number.zero, IM.Number.zero);
-			m_mainRole.m_defenseTarget.forward =
-                GameUtils.HorizonalNormalized(mCurScene.mBasket.m_vShootTarget, m_mainRole.m_defenseTarget.position);
+			mainRole.m_defenseTarget.position = mainRole.position + new IM.Vector3(IM.Number.two, IM.Number.zero, IM.Number.zero);
+			mainRole.m_defenseTarget.forward =
+                GameUtils.HorizonalNormalized(mCurScene.mBasket.m_vShootTarget, mainRole.m_defenseTarget.position);
 		}
 		else
 		{
 			base.ResetPlayerPos();
             m_count24Time = MAX_COUNT24_TIME;
-			m_uiMatch.ShowCounter(true, m_mainRole.m_team.m_role == MatchRole.eOffense);
+			m_uiMatch.ShowCounter(true, mainRole.m_team.m_role == MatchRole.eOffense);
 		}
 	}
 
@@ -418,10 +421,10 @@ public class GameMatch_BullFight : GameMatch, GameMatch.Count24Listener, MatchSt
 	private void EndSwitchPositioning()
 	{
 		timerReset.stop = true;
-		npc.m_aiMgr = npcNormalAISystem;
-		m_mainRole.m_aiMgr = mainRoleNormalAISystem;
-		m_mainRole.m_aiMgr.m_enable = false;
-		m_mainRole.m_inputDispatcher.m_enable = true;
+		//npc.m_aiMgr = npcNormalAISystem;
+		//mainRole.m_aiMgr = mainRoleNormalAISystem;
+		mainRole.m_aiMgr.m_enable = false;
+		mainRole.m_inputDispatcher.m_enable = true;
 		m_inPositioning = false;
 		HideAnimTip("gameInterface_text_ChangeBall");
 	}

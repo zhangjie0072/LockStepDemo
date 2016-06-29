@@ -106,7 +106,7 @@ public class FashionShopItem :MonoBehaviour
                 }
                 else
                 {
-                    Logger.LogWarning("FashionShopItem is_aDresson _isDressOnSprite is null for state ==1");
+                    Debug.LogWarning("FashionShopItem is_aDresson _isDressOnSprite is null for state ==1");
                 }
                 
             }
@@ -128,7 +128,7 @@ public class FashionShopItem :MonoBehaviour
                 }
                 else
                 {
-                    Logger.LogWarning("FashionShopItem is_aDresson _isDressOnSprite is null for state ==0");
+                    Debug.LogWarning("FashionShopItem is_aDresson _isDressOnSprite is null for state ==0");
                 }
             }
             else
@@ -143,7 +143,7 @@ public class FashionShopItem :MonoBehaviour
             }
             else
             {
-                Logger.LogWarning("FashionShopItem is_aDresson _isDressOnSprite is null");
+                Debug.LogWarning("FashionShopItem is_aDresson _isDressOnSprite is null");
             }
 
             // also update the owned.
@@ -292,7 +292,7 @@ public class FashionShopItem :MonoBehaviour
             //}
             //else
             //{
-            //    Logger.LogError("cannot find the fashion in goods, the fashion id is +" + _configItem._fashionID);
+            //    Debug.LogError("cannot find the fashion in goods, the fashion id is +" + _configItem._fashionID);
             //}
 
             //updateOwnedSprite();

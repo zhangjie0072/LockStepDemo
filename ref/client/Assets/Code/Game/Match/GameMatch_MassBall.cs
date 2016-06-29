@@ -59,53 +59,55 @@ public class GameMatch_MassBall : GameMatch
         GameSystem.Instance.mNetworkManager.ConnectToGS(_config.type, "", 1);
 	}
 
-	override public void OnSceneComplete()
+	protected override void _OnLoadingCompleteImp ()
 	{
-		base.OnSceneComplete();
+		base._OnLoadingCompleteImp ();
 
 		if (m_config == null)
 		{
-			Logger.LogError("Match config file loading failed.");
+			Debug.LogError("Match config file loading failed.");
 			return;
 		}
 
+        //TODO 针对PVP修改
 		//main role
 		PlayerManager pm = GameSystem.Instance.mClient.mPlayerManager;
-		m_mainRole = pm.GetPlayerById( uint.Parse(m_config.MainRole.id) );
-		m_mainRole.m_StateMachine.ReplaceState(new PlayerState_Stand_Simple(m_mainRole.m_StateMachine, this));
-		m_mainRole.m_inputDispatcher = new InputDispatcher(this, m_mainRole);
-		m_mainRole.m_catchHelper = new CatchHelper(m_mainRole);
-		m_mainRole.m_catchHelper.ExtractBallLocomotion();
-		m_mainRole.m_StateMachine.SetState(PlayerState.State.eStand, true);
-		m_mainRole.m_InfoVisualizer.CreateStrengthBar();
-		m_mainRole.m_InfoVisualizer.ShowStaminaBar(true);
-		m_mainRole.m_team.m_role = GameMatch.MatchRole.eOffense;
-		m_mainRole.m_alwaysForbiddenPickup = false;
+		mainRole = pm.GetPlayerById( uint.Parse(m_config.MainRole.id) );
+		mainRole.m_StateMachine.ReplaceState(new PlayerState_Stand_Simple(mainRole.m_StateMachine, this));
+        mainRole.operMode = Player.OperMode.Input;
+		mainRole.m_catchHelper = new CatchHelper(mainRole);
+		mainRole.m_catchHelper.ExtractBallLocomotion();
+		mainRole.m_StateMachine.SetState(PlayerState.State.eStand, true);
+		mainRole.m_team.m_role = GameMatch.MatchRole.eOffense;
+		mainRole.m_alwaysForbiddenPickup = false;
 
 		//npc
-		Team oppoTeam = m_mainRole.m_team.m_side == Team.Side.eAway ? m_homeTeam : m_awayTeam;
+		Team oppoTeam = mainRole.m_team.m_side == Team.Side.eAway ? m_homeTeam : m_awayTeam;
 		npc = oppoTeam.GetMember(0);
 		npc.m_StateMachine.ReplaceState(new PlayerState_Stand_Simple(npc.m_StateMachine, this));
 		npc.m_StateMachine.ReplaceState(new PlayerState_Knocked_NoHold(npc.m_StateMachine, this));
 		if (npc.model != null)
 			npc.model.EnableGrey();
-		npc.m_aiMgr = new AISystem_MassBall(this, npc, AIState.Type.eMassBall_Init, m_config.NPCs[0].AIID);
+        npc.operMode = Player.OperMode.AI;
 		npc.m_team.m_role = GameMatch.MatchRole.eDefense;
 
 		npc.m_alwaysForbiddenPickup = false;
 
-		_UpdateCamera(m_mainRole);
-
 		mCurScene.mBasket.onGoal += OnGoal;
 
 	}
+
+    public override AISystem CreateAISystem(Player player)
+    {
+		return new AISystem_MassBall(this, player, AIState.Type.eMassBall_Init, m_config.NPCs[0].AIID);
+    }
 	protected override void OnLoadingComplete ()
 	{
 		base.OnLoadingComplete ();
 		m_stateMachine.SetState(m_config.needPlayPlot ? MatchState.State.ePlotBegin : MatchState.State.eShowRule);
 	}
 
-    public override void HandleGameBegin(Pack pack)
+    public override void OnGameBegin(GameBeginResp resp)
     {
         m_stateMachine.SetState(MatchState.State.eBegin);
     }
@@ -147,9 +149,10 @@ public class GameMatch_MassBall : GameMatch
 
 	public override void ResetPlayerPos()
 	{
+        //TODO 针对PVP修改
         MassBallPos massBallPos = GameSystem.Instance.MatchPointsConfig.MassBallPos;
-        m_mainRole.position = massBallPos.mainRole_transform.position;
-		m_mainRole.forward = IM.Vector3.forward;
+        mainRole.position = massBallPos.mainRole_transform.position;
+		mainRole.forward = IM.Vector3.forward;
         npc.position = massBallPos.npc_transform.position;
 		npc.forward = IM.Vector3.forward;
 	}
@@ -170,9 +173,9 @@ public class GameMatch_MassBall : GameMatch
 			return base.IsCommandValid(command);
 	}
 
-	public override void Update(IM.Number deltaTime)
+	public override void GameUpdate(IM.Number deltaTime)
 	{
-		base.Update(deltaTime);
+		base.GameUpdate(deltaTime);
 
 		if (m_bTimeUp)
 			npc.m_aiMgr.m_enable = false;
@@ -183,7 +186,8 @@ public class GameMatch_MassBall : GameMatch
 		}
 
 		//If there is no ball in the scene, or the only ball is hold by main player.
-		if ((mCurScene.balls.Count == 0 || (mCurScene.balls.Count == 1 && m_mainRole.m_bWithBall)) &&
+        //TODO 针对PVP修改
+		if ((mCurScene.balls.Count == 0 || (mCurScene.balls.Count == 1 && mainRole.m_bWithBall)) &&
 			refreshTimeNum == refresh_infos.Count)
 		{
 			refreshTimeNum = 0;
@@ -196,18 +200,19 @@ public class GameMatch_MassBall : GameMatch
 
 	private void OnGoal(UBasket basket, UBasketball ball)
 	{
+        //TODO 针对PVP修改
 		int score = (ball.m_special ? 2 : 1);
-		if (ball.m_actor == m_mainRole)
+		if (ball.m_actor == mainRole)
 		{
 			m_homeScore += score;
-			//Logger.Log("Main role score: " + m_homeScore);
+			//Debug.Log("Main role score: " + m_homeScore);
 		}
 		else if (ball.m_actor == npc)
 		{
 			m_awayScore += score;
-			//Logger.Log("NPC score: " + m_awayScore);
+			//Debug.Log("NPC score: " + m_awayScore);
 		}
-
+        //碰地删除
 		ball.onHitGround += (UBasketball b) => { mCurScene.DestroyBall(b); };
 		ball.m_pickable = false;
 	}
@@ -217,13 +222,17 @@ public class GameMatch_MassBall : GameMatch
 		for (uint i = 0; i < refresh_infos[refreshTimeNum].normal; ++i)
 		{
 			UBasketball ball = mCurScene.CreateBall();
-			ball.SetInitPos(GenerateIn3PTPosition());
+            IM.Vector3 tempPos = GenerateIn3PTPosition();
+            tempPos.y = ball.m_ballRadius;
+			ball.SetInitPos(tempPos);
 			ball.m_ballState = BallState.eLoseBall;
 		}
 		for (uint i = 0; i < refresh_infos[refreshTimeNum].special; ++i)
 		{
 			UBasketball ball = mCurScene.CreateBall();
-			ball.SetInitPos(GenerateIn3PTPosition());
+            IM.Vector3 tempPos = GenerateIn3PTPosition();
+            tempPos.y = ball.m_ballRadius;
+			ball.SetInitPos(tempPos);
 			ball.m_special = true;
 			ball.onGrab += OnGrab;
 			ball.m_ballState = BallState.eLoseBall;
@@ -240,7 +249,8 @@ public class GameMatch_MassBall : GameMatch
 
 	private void OnGrab(UBasketball ball)
 	{
-		if (ball.m_owner == m_mainRole)
+        //TODO 针对PVP修改
+		if (ball.m_owner == mainRole)
 		{
 			ShowOpportunity();
 			ball.onShoot += OnShoot;

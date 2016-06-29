@@ -29,7 +29,22 @@ public class Client
     public UIManager mUIManager { get; private set; }
     public PlayerManager mPlayerManager { get; private set; }
 
-    public bool pause = false;
+    private bool _pause = false;
+    public bool pause { 
+        get { return _pause; }
+        set { 
+            _pause = value;
+            //*
+            if (VirtualGameServer.Instance != null)
+            {
+                if (pause)
+                    VirtualGameServer.Instance.Stop();
+                else
+                    VirtualGameServer.Instance.Resume();
+            }
+            //*/
+        }
+    }
 	public float timeScale = 1f;
 
     public bool bStartGuide = false;
@@ -40,22 +55,22 @@ public class Client
 
         DateTime time = System.DateTime.Now;
         mInputManager = new InputManager();
-        Logger.Log("【Time】Client>>>new InputManager=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+        Debug.Log("【Time】Client>>>new InputManager=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
 
         time = System.DateTime.Now;
         mUIManager = new UIManager();
-        Logger.Log("【Time】Client>>>new UIManager=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+        Debug.Log("【Time】Client>>>new UIManager=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
 
         time = System.DateTime.Now;
         mPlayerManager = new PlayerManager();
-        Logger.Log("【Time】Client>>>new PlayerManager=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+        Debug.Log("【Time】Client>>>new PlayerManager=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
 
         //m_rooms = new Dictionary<uint,Room>();
     }
 
     public void Reset()
     {
-		Logger.Log("Client.Reset");
+		Debug.Log("Client.Reset");
         mCurClientState = State.none;
 
         if (mCurMatch != null)
@@ -87,10 +102,10 @@ public class Client
         if (mUIManager != null)
             mUIManager.OnUpdate(Time.deltaTime);
 
-        if (mCurMatch != null && mCurMatch.mCurScene != null && mCurMatch.mCurScene.loaded)
+		if (mCurMatch != null && mCurMatch.m_bLoadingComplete)
         {
             TurnController.Instance.Update(Time.deltaTime);
-            mCurMatch.Update();
+            mCurMatch.ViewUpdate();
         }
 
 		PlaySoundManager.Instance.Update(Time.deltaTime);
@@ -98,14 +113,16 @@ public class Client
 
 	public void FixedUpdate()
 	{
-		if( mCurMatch != null )
-			mCurMatch.FixedUpdate();
+		if (mCurMatch == null || !mCurMatch.m_bLoadingComplete )
+			return;
+
+		mCurMatch.FixedUpdate();
 	}
 
     public void LateUpdate()
     {
-        if (mCurMatch != null && mCurMatch.mCurScene != null && mCurMatch.mCurScene.loaded)
-			mCurMatch.LateUpdate();
+        if (mCurMatch != null && mCurMatch.m_bLoadingComplete)
+			mCurMatch.ViewLateUpdate();
 
         if (bStartGuide)
             GuideSystem.Instance.Update();
@@ -195,7 +212,7 @@ public class Client
         }
         if (match == null)
         {
-            Logger.LogError("Unsupported match type is detected when creating a new match.");
+            Debug.LogError("Unsupported match type is detected when creating a new match.");
             return false;
         }
 
@@ -303,7 +320,7 @@ public class Client
         }
         if (match == null)
         {
-            Logger.LogError("Unsupported match type is detected when creating a new match.");
+            Debug.LogError("Unsupported match type is detected when creating a new match.");
             return false;
         }
 
@@ -643,6 +660,7 @@ public class Client
             npc.team = Team.Side.eAway;
             RoleInfo r = new RoleInfo();
             r.id = id;
+            r.acc_id = MainPlayer.Instance.AccountID;
             RoleBaseData2 rd = GameSystem.Instance.RoleBaseConfigData2.GetConfigData(id);
             r.star = (uint)rd.init_star;
             r.level = 1;
@@ -796,7 +814,7 @@ public class Client
     {
         string strStateChange = string.Format("Change state: {0} to {1}", mCurClientState, newState);
         mCurClientState = newState;
-       // Logger.Log(strStateChange);
+       // Debug.Log(strStateChange);
     }
 
 	public bool IsConnected()
@@ -808,7 +826,7 @@ public class Client
 //			AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
 
 //			bool isNetworkConnected = jo.Call<bool>("isNetworkConnected");
-//			Logger.Log("isNetworkConnected=" + isNetworkConnected);
+//			Debug.Log("isNetworkConnected=" + isNetworkConnected);
 //			return isNetworkConnected;
 //		}
 //#endif

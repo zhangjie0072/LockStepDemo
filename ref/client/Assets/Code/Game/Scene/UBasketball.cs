@@ -10,6 +10,8 @@ public enum BallEvent
 	eGoal,
 	eCollBoard,
 	eCollRim,
+    eBounceRim,
+    eCirlceRim,
 }
 
 public enum BallState
@@ -34,6 +36,42 @@ public class BallStateEffect
 		goEffect = inGoEffect;
 		bDone = false;
 	}
+}
+
+public class MiddleAnimation
+{
+    public Animation animation;
+    public bool onPlaying;
+    public bool onStop;
+    public IM.Number diffTime;
+    public IM.Number playSpeed;
+
+    public MiddleAnimation(Transform obj)
+    {
+        animation = obj.GetComponent<Animation>();
+        onPlaying = false;
+        onStop = false;
+        playSpeed = new IM.Number(3);
+        diffTime = new IM.Number(0, 800);
+    }
+
+    public void StartPlay(string str)
+    {
+        Debug.Log("basketball animation clip name:" + str);
+        animation.transform.parent = GameSystem.Instance.mClient.mCurMatch.mCurScene.mBasket.transform.FindChild("ballRoot");
+        onPlaying = true;
+        onStop = false;
+        if (animation[str] != null)
+            animation[str].speed = (float)playSpeed;
+        animation.Play(str);
+    }
+
+    public void StopPlay()
+    {
+        animation.Stop();
+        onPlaying = false;
+        onStop = true;
+    }
 }
 
 public class UBasketball : MonoBehaviour, SparkEffect.ISparkTarget
@@ -115,6 +153,7 @@ public class UBasketball : MonoBehaviour, SparkEffect.ISparkTarget
 
 	public  IM.Number m_fTime;
 	private IM.Number m_fPrevTime;
+    private IM.Number tempDiff = IM.Number.zero;
 
 	public Player m_picker = null;
 
@@ -126,7 +165,7 @@ public class UBasketball : MonoBehaviour, SparkEffect.ISparkTarget
 	public ShootSolution m_shootSolution
 	{
 		get{ return _shootSolution; }
-		set{ 
+		set{
 			if( value == _shootSolution )
 				return;
 			_shootSolution = value; 
@@ -135,15 +174,28 @@ public class UBasketball : MonoBehaviour, SparkEffect.ISparkTarget
 				m_bShootSolutionDirty = true; 
 				m_fTime = IM.Number.zero;
 				m_fPrevTime = IM.Number.zero;
+                if (_shootSolution.m_animationType != ShootSolution.AnimationType.none)
+                    addAnimation = true;
+                //Debug.Log("set shootSolution! count:" + _shootSolution.m_ShootCurveList.Count);
 			}
 		}
 	}
 	private ShootSolution 		_shootSolution;
+    //private ShootSolution.LineCurve line;
 
 	public bool m_isLayup{get; private set;}
 	public bool m_isDunk{get; private set;}
 
-    private IM.Vector3 _position;
+    private IM.Vector3 _pos;
+    public IM.Vector3 _position
+    {
+        get { return _pos; }
+        set
+        {
+            //Logger.Log(string.Format("Set ball position, {0} -> {1}", _pos, value));
+            _pos = value;
+        }
+    }
     public IM.Vector3 position
     {
         get { return _position; }
@@ -180,7 +232,12 @@ public class UBasketball : MonoBehaviour, SparkEffect.ISparkTarget
 	private bool m_bShootSolutionDirty = false;
 	private List<Vector3> m_shootCurveKeys = new List<Vector3>();   //用于绘制曲线
 	private bool m_debugSuccess = false;
+    private MiddleAnimation middleAnimation;
+    private bool addAnimation = false;
+    private bool isInMiddleState = false;
+    private bool isStartAnimation = false;
 
+   
 	void Awake()
 	{
 	}
@@ -192,6 +249,7 @@ public class UBasketball : MonoBehaviour, SparkEffect.ISparkTarget
 
 		m_matOrig = GetComponent<Renderer>().material;
 		m_sparkEffect = new SparkEffect(this, 0.25f);
+        middleAnimation = new MiddleAnimation(transform);
 	}
 
 	public void SetEffect(BallState state, GameObject goEffect)
@@ -382,7 +440,7 @@ public class UBasketball : MonoBehaviour, SparkEffect.ISparkTarget
 		else if(onCatch != null && bCatch)
 			onCatch(this);
 
-		//Logger.Log("ball grab, player: " + grabber.m_id );
+		//Debug.Log("ball grab, player: " + grabber.m_id );
 	}
 	
 	public void Reset()
@@ -429,6 +487,20 @@ public class UBasketball : MonoBehaviour, SparkEffect.ISparkTarget
 		return lastCurve;
 	}
 
+    public ShootSolution.LineCurve CompleteLineCurve()
+    {
+        ShootSolution.LineCurve line = new ShootSolution.LineCurve();
+        ShootSimulation.Instance.CalculateLineCurve(ref line, m_shootSolution.m_vFinPos, m_shootSolution.m_vFinVel);
+        return line;
+    }
+
+    bool IsBomb()
+    {
+        if (m_shootSolution.m_vFinPos.z >
+            GameSystem.Instance.mClient.mCurMatch.mCurScene.mBasket.m_rim.center.z)
+            return true;
+        return false;
+    }
 	void _BuildShootCurves()
 	{
 		m_shootCurveKeys.Clear();
@@ -470,7 +542,7 @@ public class UBasketball : MonoBehaviour, SparkEffect.ISparkTarget
 	}
 
     //渲染层
-    void Update()
+    public void ViewUpdate()
     {
         //特效
 		if( m_stateEffect != null )
@@ -507,7 +579,7 @@ public class UBasketball : MonoBehaviour, SparkEffect.ISparkTarget
     }
 
     //逻辑层
-	public void Update(IM.Number deltaTime)
+	public void GameUpdate(IM.Number deltaTime)
 	{
 		//trick: if owner is nil
 		if( m_picker == null )
@@ -607,7 +679,7 @@ public class UBasketball : MonoBehaviour, SparkEffect.ISparkTarget
 		while( m_shootSolution.GetEvent(out eventId, out vecDelta, this, scene.mBasket, m_fPrevTime, m_fTime, iIter) )
 		{
 			iIter++;
-			//Logger.Log(eventId);
+			//Debug.Log(eventId);
 
 			if( eventId == BallEvent.eGoal )
 			{
@@ -617,7 +689,7 @@ public class UBasketball : MonoBehaviour, SparkEffect.ISparkTarget
 				if( m_castedSkill != null && m_actor != null )
 					m_actor.mStatistics.SkillUsageSuccess(m_castedSkill.skill.id, true);
 
-				Logger.Log("Goal.");
+				Debug.Log("Goal.");
 				break;
 			}
 			else if( eventId == BallEvent.eCollBoard )
@@ -626,21 +698,45 @@ public class UBasketball : MonoBehaviour, SparkEffect.ISparkTarget
 
 				m_vRotateAxis = Vector3.Cross(vecDelta, Vector3.up);
 				m_fAngleSpeed = (float)m_shootSolution.m_vInitVel.magnitude;
-				//Logger.Log("rebound: collide on board");
+				//Debug.Log("rebound: collide on board");
 				break;
 			}
 			else if( eventId == BallEvent.eCollRim )
 			{
-				m_collidedWithRim = true;
+                if (isStartAnimation)
+                    break;
+                if (!isInMiddleState)
+                {                    
+                    if (addAnimation)
+                        PlayAnimation();
+                    else
+                        isInMiddleState = false;
+                    break;
+                }
+                else
+                {
+                    m_collidedWithRim = true;
 
 				if( onRimCollision != null ) onRimCollision(this);
 
 				m_vRotateAxis = Vector3.Cross(vecDelta, Vector3.up);
 				m_fAngleSpeed = (float)m_shootSolution.m_vInitVel.magnitude;
-				//Logger.Log("rebound: collide on rim");
-				break;
+				//Debug.Log("rebound: collide on rim");
+                    break;
+                }
+				
 			}
 		}
+
+        //ÖÐ¼ä×´Ì¬¶¯»­²¥·Å
+        if (middleAnimation.onPlaying)
+        {
+            tempDiff += deltaTime;
+            m_fTime -= deltaTime;
+            if (tempDiff > middleAnimation.diffTime)
+                StopAnimation();
+            return;
+        }
 
 		if(m_shootSolution.GetPosition(m_fTime, out newPos))
 		{
@@ -665,7 +761,14 @@ public class UBasketball : MonoBehaviour, SparkEffect.ISparkTarget
 				m_bGoal = false;
 				if( onRebound != null ) onRebound(this);
 			}
+
+            //rest ball state
 			m_shootSolution = null;
+            tempDiff = IM.Number.zero;
+            isStartAnimation = false;
+            isInMiddleState = false;
+            addAnimation = false;
+
 			_CalcReboundPlacementPos(initVel, initPos);
 		}
 	}
@@ -680,8 +783,54 @@ public class UBasketball : MonoBehaviour, SparkEffect.ISparkTarget
 
 		_position += vel * deltaTime;
 	}
-	
-	void LateUpdate()
+
+    float GetAnimationStartTime(string str)
+    {
+        return 0f;
+    }
+
+    float GetAnimationSpeed(string str)
+    {
+        if (m_shootSolution != null)
+            Debug.Log("circle init |vec|" + m_shootSolution.m_vFinVel.magnitude);     
+        IM.Number radiusDiff = GameSystem.Instance.mClient.mCurMatch.mCurScene.mBasket.m_rim.radius - m_ballRadius;
+        Debug.Log("circle vec" +  2 * IM.Math.PI * radiusDiff * radiusDiff);
+        if (str == "ballCircle")
+            return 2f;
+        else if (str == "ballBounce")
+            return 0.8f;
+        else
+            return 1f;
+    }
+
+    void PlayAnimation()
+    {
+        isInMiddleState = true;
+        isStartAnimation = true;
+        string animationClip = _shootSolution.m_animationType.ToString();    
+        SetRootRotation();
+        middleAnimation.diffTime = _shootSolution.m_playTime;
+        if (_shootSolution.m_animationType == ShootSolution.AnimationType.ballCircle)
+            middleAnimation.playSpeed = _shootSolution.m_playSpeed * new IM.Number(1, 500);
+        else
+            middleAnimation.playSpeed = _shootSolution.m_playSpeed;
+        middleAnimation.StartPlay(animationClip);
+    }
+
+    void SetRootRotation()
+    {
+        Transform ballRoot = GameSystem.Instance.mClient.mCurMatch.mCurScene.mBasket.transform.FindChild("ballRoot");
+        if (_shootSolution.m_vFinVel.x == 0)
+            return;
+        ballRoot.transform.localRotation = (Quaternion)IM.Quaternion.AngleAxis(IM.Math.Atan(_shootSolution.m_vFinVel.z / _shootSolution.m_vFinVel.x) / IM.Math.PI * 180, IM.Vector3.up);
+        //Logger.Log("set rotation:" + ballRoot.transform.localRotation + "-----rotate a:" +
+        //    Mathf.Atan(_shootSolution.m_vFinVel.z / _shootSolution.m_vFinVel.x) + "---finaVel" + "(" + _shootSolution.m_vFinVel.x + "," + _shootSolution.m_vFinVel.z + ")");
+    }
+    void StopAnimation()
+    {
+        middleAnimation.StopPlay();
+    }
+	public void ViewLateUpdate()
 	{
 		if( GameSystem.Instance.mClient == null )
 			return;
@@ -700,12 +849,10 @@ public class UBasketball : MonoBehaviour, SparkEffect.ISparkTarget
                 speed = (float)m_shootSolution.m_vInitVel.magnitude;
             transform.position = Vector3.MoveTowards(curPos, targetPos, speed * Time.deltaTime);
             /*
-            Logger.Log(string.Format("Set ball view pos: {0} -> {1} targetPos:{2} speed:{3}",
+            Debug.Log(string.Format("Set ball view pos: {0} -> {1} targetPos:{2} speed:{3}",
                 curPos.ToString("F3"), transform.position.ToString("F3"), targetPos.ToString("F3"), speed.ToString("F3")));
             //*/
         }
-        else
-            _position = _owner.ballSocketPos;
 
 		if( m_ballState != BallState.eUseBall && m_ballState != BallState.eNone )
 			transform.Rotate(m_vRotateAxis, m_fAngleSpeed * Time.deltaTime * 150f, Space.World);

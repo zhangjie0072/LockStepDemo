@@ -52,7 +52,7 @@ public class PlayerState_BackCompete : PlayerState
         }
 
 		isCompeteWin = (m_match.m_context.m_backToBackWinnerId == m_player.m_roomPosId);
-		Logger.Log("BackCompete: " + isCompeteWin + " m_match.m_context.m_backToBackWinnerId: " + m_match.m_context.m_backToBackWinnerId );
+		Debug.Log("BackCompete: " + isCompeteWin + " m_match.m_context.m_backToBackWinnerId: " + m_match.m_context.m_backToBackWinnerId );
 
 		m_curAction = m_mapAnimType[m_animType];
 		PlayerAnimAttribute.AnimAttr attr = m_player.m_animAttributes.GetAnimAttrById(Command.BackToBack, m_curAction);

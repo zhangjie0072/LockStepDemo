@@ -12,11 +12,11 @@ public class ReceiverItem {
 		yield return new WaitForSeconds(delay);
 		if (receiver)
 		{
-			Logger.LogWarning("signal receiver is "+receiver.name);
+			Debug.LogWarning("signal receiver is "+receiver.name);
 			receiver.SendMessage (action);
 			}
 		else
-			Logger.LogWarning ("No receiver of signal \""+action+"\" on object "+sender.name+" ("+sender.GetType().Name+")", sender);
+			Debug.LogWarning ("No receiver of signal \""+action+"\" on object "+sender.name+" ("+sender.GetType().Name+")");
 	}
 }
 

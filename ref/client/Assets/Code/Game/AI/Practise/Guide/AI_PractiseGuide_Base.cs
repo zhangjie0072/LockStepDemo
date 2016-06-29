@@ -16,6 +16,6 @@ public class AI_PractiseGuide_Base : AIState
 	{
 		base.OnEnter(lastState);
 
-		Logger.Log("PractiseStep, AI enter " + m_eType + ". " + m_player.m_name);
+		Debug.Log("PractiseStep, AI enter " + m_eType + ". " + m_player.m_name);
 	}
 }

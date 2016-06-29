@@ -221,7 +221,7 @@
     <display_effect>
     </display_effect>
     <sound1>SY_show1</sound1>
-    <match_msg_id>43&amp;44&amp;45&amp;46&amp;47&amp;48&amp;49</match_msg_id>
+    <match_msg_id>55&amp;56&amp;57&amp;58&amp;59&amp;60&amp;61&amp;62&amp;63</match_msg_id>
     <name>山羊</name>
     <intro>街球传奇人物,身高1.85M，却能完成“一球双灌”的绝技，曾经有人看到过他连续反扣30多次。</intro>
     <gender>1</gender>
@@ -517,7 +517,7 @@
     <display_effect>
     </display_effect>
     <sound1>XFX_show1</sound1>
-    <match_msg_id>64&amp;65&amp;66&amp;67&amp;68&amp;69&amp;70</match_msg_id>
+    <match_msg_id>82&amp;83&amp;84&amp;85&amp;86&amp;87&amp;88&amp;89&amp;90</match_msg_id>
     <name>小飞侠</name>
     <intro>最好的得分手之一，突破、投篮、罚球、三分球他都驾轻就熟，几乎没有进攻盲区。</intro>
     <gender>1</gender>
@@ -718,7 +718,7 @@
     <display_effect>
     </display_effect>
     <sound1>WWK_show1</sound1>
-    <match_msg_id>57&amp;58&amp;59&amp;60&amp;61&amp;62&amp;63</match_msg_id>
+    <match_msg_id>73&amp;74&amp;75&amp;76&amp;77&amp;78&amp;79&amp;80&amp;81</match_msg_id>
     <name>薇薇卡</name>
     <intro>高强度的锻炼，培养出其良好的体质和运动力。没有规则的街头篮球，是她宣泄压力的战场。</intro>
     <gender>2</gender>
@@ -735,7 +735,7 @@
     <recruit_output>1:50</recruit_output>
     <access_way>
     </access_way>
-    <attrs>3:491&amp;2:495&amp;7:267&amp;5:80&amp;1:105&amp;6:147&amp;4:60&amp;17:113&amp;20:142&amp;14:304&amp;8:252&amp;13:351&amp;10:386&amp;11:80&amp;12:170&amp;15:81&amp;19:200&amp;22:140&amp;23:100&amp;18:0&amp;21:0&amp;16:58&amp;9:367&amp;24:329&amp;50:20</attrs>
+    <attrs>3:491&amp;2:495&amp;7:267&amp;5:80&amp;1:105&amp;6:147&amp;4:60&amp;17:199&amp;20:142&amp;14:304&amp;8:252&amp;13:351&amp;10:386&amp;11:80&amp;12:170&amp;15:81&amp;19:200&amp;22:140&amp;23:100&amp;18:0&amp;21:0&amp;16:58&amp;9:367&amp;24:329&amp;50:20</attrs>
   </Line>
   <Line>
     <switch>
@@ -1048,7 +1048,7 @@
     <display_effect>
     </display_effect>
     <sound1>howl_show1</sound1>
-    <match_msg_id>1&amp;2&amp;3&amp;4&amp;5&amp;6&amp;7</match_msg_id>
+    <match_msg_id>1&amp;2&amp;3&amp;4&amp;5&amp;6&amp;7&amp;8&amp;9</match_msg_id>
     <name>阿五</name>
     <intro>身材高大强壮，但却拥有柔和的手感，但在篮下对决中，坚毅性格使其称霸篮下而胜势不让。</intro>
     <gender>1</gender>
@@ -1084,7 +1084,7 @@
     <display_effect>
     </display_effect>
     <sound1>alice_show1</sound1>
-    <match_msg_id>8&amp;9&amp;10&amp;11&amp;12&amp;13&amp;14</match_msg_id>
+    <match_msg_id>10&amp;11&amp;12&amp;13&amp;14&amp;15&amp;16&amp;17&amp;18</match_msg_id>
     <name>艾莉丝</name>
     <intro>拥有超强的身体素质和弹跳能力，对扣篮有着执着的追求。乐观开朗的艾莉丝有相当巨大的潜力。</intro>
     <gender>2</gender>
@@ -1121,7 +1121,7 @@
     <display_effect>
     </display_effect>
     <sound1>francis_show1</sound1>
-    <match_msg_id>71&amp;72&amp;73&amp;74&amp;75&amp;76&amp;77</match_msg_id>
+    <match_msg_id>91&amp;92&amp;93&amp;94&amp;95&amp;96&amp;97&amp;98&amp;99</match_msg_id>
     <name>小瑞</name>
     <intro>速度攻势罕遇敌手，断球果敢强悍，投篮动作令人眼花缭乱，实力更让对手胆寒！</intro>
     <gender>1</gender>
@@ -1157,7 +1157,7 @@
     <display_effect>
     </display_effect>
     <sound1>GP_show1</sound1>
-    <match_msg_id>29&amp;30&amp;31&amp;32&amp;33&amp;34&amp;35</match_msg_id>
+    <match_msg_id>37&amp;38&amp;39&amp;40&amp;41&amp;42&amp;43&amp;44&amp;45</match_msg_id>
     <name>钢炮</name>
     <intro>18岁的他是有名的说唱歌手。但他更大的天赋在于街头篮球场。球场上的他有着无与伦比的组织能力。</intro>
     <gender>1</gender>
@@ -1174,7 +1174,7 @@
     <recruit_output>1:50</recruit_output>
     <access_way>
     </access_way>
-    <attrs>3:469&amp;2:475&amp;7:281&amp;5:98&amp;1:112&amp;6:160&amp;4:69&amp;17:113&amp;20:142&amp;14:360&amp;8:180&amp;13:342&amp;10:340&amp;11:105&amp;12:181&amp;15:100&amp;19:230&amp;22:140&amp;23:100&amp;18:0&amp;21:0&amp;16:58&amp;9:324&amp;24:380&amp;64:32</attrs>
+    <attrs>3:469&amp;2:475&amp;7:281&amp;5:98&amp;1:112&amp;6:160&amp;4:69&amp;17:199&amp;20:142&amp;14:360&amp;8:180&amp;13:342&amp;10:340&amp;11:105&amp;12:181&amp;15:100&amp;19:230&amp;22:140&amp;23:100&amp;18:0&amp;21:0&amp;16:58&amp;9:324&amp;24:380&amp;64:32</attrs>
   </Line>
   <Line>
     <switch>
@@ -1193,7 +1193,7 @@
     <display_effect>
     </display_effect>
     <sound1>TTS_show1</sound1>
-    <match_msg_id>50&amp;51&amp;52&amp;53&amp;54&amp;55&amp;56</match_msg_id>
+    <match_msg_id>64&amp;65&amp;66&amp;67&amp;68&amp;69&amp;70&amp;71&amp;72</match_msg_id>
     <name>泰图斯</name>
     <intro>沉默寡言的他很少向他人透露心声。所以他喜欢把情绪都发泄在球场上。称霸篮下更是他的目标。</intro>
     <gender>1</gender>
@@ -1229,7 +1229,7 @@
     <display_effect>
     </display_effect>
     <sound1>FLDL_show1</sound1>
-    <match_msg_id>22&amp;23&amp;24&amp;25&amp;26&amp;27&amp;28</match_msg_id>
+    <match_msg_id>28&amp;29&amp;30&amp;31&amp;32&amp;33&amp;34&amp;35&amp;36</match_msg_id>
     <name>佛莱德利</name>
     <intro>从小就热爱运动，接触街头篮球后更是爱上了这项运动。闲暇时乐于享受在篮下得分的感觉。</intro>
     <gender>1</gender>
@@ -1265,7 +1265,7 @@
     <display_effect>
     </display_effect>
     <sound1>ADL_show1</sound1>
-    <match_msg_id>15&amp;16&amp;17&amp;18&amp;19&amp;20&amp;21</match_msg_id>
+    <match_msg_id>19&amp;20&amp;21&amp;22&amp;23&amp;24&amp;25&amp;26&amp;27</match_msg_id>
     <name>安德鲁</name>
     <intro>英国贵族，小时候受家庭影响。造成了后来的叛逆。中投如教科书一样精准，拥有一颗永不服输的心。</intro>
     <gender>1</gender>
@@ -1301,7 +1301,7 @@
     <display_effect>
     </display_effect>
     <sound1>KX_show1</sound1>
-    <match_msg_id>36&amp;37&amp;38&amp;39&amp;40&amp;41&amp;42</match_msg_id>
+    <match_msg_id>46&amp;47&amp;48&amp;49&amp;50&amp;51&amp;52&amp;53&amp;54</match_msg_id>
     <name>凯茜</name>
     <intro>性格豪爽，从小就喜欢和男孩子一起玩耍。所以后来才会爱上街球运动。拥有超强的外线得分能力。</intro>
     <gender>2</gender>
@@ -1338,7 +1338,7 @@
     <display_effect>
     </display_effect>
     <sound1>HD_show2</sound1>
-    <match_msg_id>78&amp;79&amp;80&amp;81&amp;82&amp;83&amp;84</match_msg_id>
+    <match_msg_id>100&amp;101&amp;102&amp;103&amp;104&amp;105&amp;106&amp;107&amp;108</match_msg_id>
     <name>海盗</name>
     <intro>乐观的牙买加女孩儿，在国外打工的时候接触了街球运动，并发现了自己在篮球运动上的天赋。</intro>
     <gender>2</gender>

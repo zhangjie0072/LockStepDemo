@@ -63,12 +63,12 @@ public class BullFightConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
 		Read();
-		Logger.ConfigEnd(name1);
-		Logger.ConfigBegin(name2);
+		
+		Debug.Log("Config reading " + name2);
 		ReadConsume();
-		Logger.ConfigEnd(name2);
+		
     }
 
 	public BullFightLevel GetFightLevel( uint hard )
@@ -83,7 +83,7 @@ public class BullFightConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         
@@ -140,7 +140,7 @@ public class BullFightConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
         

@@ -45,6 +45,8 @@ UILadder =  {
     isBackInMatch = false,
     awardTip,                   -- 奖励提示.
     -- roomUserHolder = nil,
+    --刷新好友列表
+    m_bRefreshFriendList = false,
 }
 
 
@@ -86,7 +88,38 @@ function UILadder:Start()
     addOnClick(self.uiTabRight.gameObject, self:ClickLeftTab(false))
     addOnClick(self.uiRule.gameObject, self:ClickRule())
     UIEventListener.Get(self.uiAward.gameObject).onPress = LuaHelper.BoolDelegate(self:MakeOnAwardPress())
+    self.uiFriendsGrid.onCustomSort = function (x, y)
+        --[[
+            不再比赛状态排在前面
+            有首胜排在前面
+            好友度高排在前面
+            id低排在前面
+        ]]
+        if not x then return 1 end
+        if not y then return -1 end
+        local item1 = getLuaComponent(x)
+        local item2 = getLuaComponent(y)
+        local friendInfo1 = item1.friendInfo
+        local friendInfo2 = item2.friendInfo
 
+        --在线状态
+        if friendInfo1.online == 5 and friendInfo2.online ~= 5 then return 1 end
+        if friendInfo1.online ~= 5 and friendInfo2.online == 5 then return -1 end
+
+        --首胜状态
+        if item1.firstWinState and not item2.firstWinState then return -1 end
+        if not item1.firstWinState and item2.firstWinState then return 1 end
+
+        --比赛状态
+        local inMatch1  = (friendInfo1.online == Ladder.PS.MATCH or friendInfo1.online == Ladder.PS.GAME)
+        local inMatch2 = (friendInfo2.online == Ladder.PS.MATCH or friendInfo2.online == Ladder.PS.GAME)
+        if inMatch1 and not inMatch2 then return 1 end
+        if inMatch2 and not inMatch1 then return -1 end
+        --友好度
+        if friendInfo1.shinwakan ~= friendInfo2.shinwakan then return ((friendInfo1.shinwakan > friendInfo2.shinwakan) and 1 or -1) end
+        --id排序
+        return (friendInfo1.acc_id < friendInfo2.acc_id and -1 or 1)
+    end
     -- self:Refresh()
 end
 
@@ -111,7 +144,7 @@ function UILadder:Refresh()
     -- friend
     CommonFunction.ClearGridChild(self.uiFriendsGrid.transform)
 
-    local friendsTable = FriendData.Instance:GetList(FriendOperationType.FOT_QUERY)
+    local friendsTable = Friends.FriendList-- FriendData.Instance:GetList(FriendOperationType.FOT_QUERY)
     for k, v in pairs(friendsTable) do
         self:AddFriendList(v)
     end
@@ -430,6 +463,7 @@ function UILadder:AddFriendList(info)
     t.onClickInvite = self:ClickFriendInvite()
     t.isMaster = self.isMaster
     t:SetData(info)
+    t:SetParent(self)
     table.insert(self.friendsList, t)
     self.uiFriendsGrid.repositionNow = true
 end
@@ -574,8 +608,20 @@ function UILadder:ClickLeftTab(isLeft)
         self.uiFriendsGrid.gameObject:SetActive(self.uiTabLeft.transform:GetComponent("UIToggle").value)
     end
 end
-
-
+function UILadder:RefreshFriendList( ... )
+    -- body
+    if not self.m_bRefreshFriendList then
+        self.m_bRefreshFriendList = true
+        Scheduler.Instance:AddFrame(1,false,self:LateRefreshFriends())
+    end
+end
+function UILadder:LateRefreshFriends( ... )
+    -- body
+    return function ( ... )
+        self.m_bRefreshFriendList = false
+        self.uiFriendsGrid.repositionNow = true
+    end
+end
 function UILadder:ClickRule()
     return function()
         local rulePopup = getLuaComponent(createUI("MatchRulePopup"))

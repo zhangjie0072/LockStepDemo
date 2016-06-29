@@ -79,15 +79,15 @@ public class LadderConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
 		Read();
-		Logger.ConfigBegin(name2);
-		Logger.ConfigEnd(name1);
+		Debug.Log("Config reading " + name2);
+		
 		ReadSeason();
-		Logger.ConfigBegin(name3);
-		Logger.ConfigEnd(name2);
+		Debug.Log("Config reading " + name3);
+		
 		ReadReward();
-		Logger.ConfigEnd(name3);
+		
     }
 
 
@@ -96,7 +96,7 @@ public class LadderConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         
@@ -147,7 +147,7 @@ public class LadderConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
 
@@ -195,7 +195,7 @@ public class LadderConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name3);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name3);
+            Debug.LogError("LoadConfig failed: " + name3);
             return;
         }
 
@@ -256,7 +256,7 @@ public class LadderConfig
         if (!seasons.ContainsKey(season))
         {
             string log = string.Format("{0}.xml 没有找到 season={1}", GlobalConst.DIR_XML_LADDER_SEASON, season);
-            Logger.LogError(log);
+            Debug.LogError(log);
             return null;
         }
         else
@@ -270,7 +270,7 @@ public class LadderConfig
         if (!rewards.ContainsKey(winTimes))
         {
             string log = string.Format("{0}.xml 没有找到 winTimes={1}", GlobalConst.DIR_XML_LADDER_REWARD, winTimes);
-            Logger.LogError(log);
+            Debug.LogError(log);
             return null;
         }
         else

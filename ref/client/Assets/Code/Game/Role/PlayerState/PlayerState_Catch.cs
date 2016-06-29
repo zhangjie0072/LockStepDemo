@@ -108,7 +108,7 @@ public class PlayerState_Catch: PlayerState
 	public void OnCatch(UBasketball ball)
 	{
 		if( ball == null )
-			Logger.LogError("Catch: unable to find ball.");
+			Debug.LogError("Catch: unable to find ball.");
 
 		if( ball.m_castedSkill != null && ball.m_actor != null )
 			ball.m_actor.mStatistics.SkillUsageSuccess(ball.m_castedSkill.skill.id, true);
@@ -117,7 +117,7 @@ public class PlayerState_Catch: PlayerState
 		m_player.eventHandler.NotifyAllListeners(PlayerActionEventHandler.AnimEvent.eCatch);
 		ball.OnCatch();
 
-		Logger.Log("OnCatch");
+		Debug.Log("OnCatch");
 	}
 
 	public override void OnExit ()

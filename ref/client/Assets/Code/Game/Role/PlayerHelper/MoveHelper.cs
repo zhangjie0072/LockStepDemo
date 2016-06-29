@@ -5,7 +5,19 @@ public class MoveToHelper
 {
     public System.Action onMoveToTarget;
 
-    public IM.Vector3 targetPosition { private set; get; }
+    public IM.Vector3 targetPosition { get; private set; }
+    /*
+    {
+        get { return _targetPosition; }
+        private set
+        {
+            Logger.Log(string.Format("MoveHelper, set target, {0} {1}, {2}->{3}", 
+                _owner.m_team.m_side, _owner.m_id, _targetPosition, value));
+            _targetPosition = value;
+        }
+    }
+    private IM.Vector3 _targetPosition;
+    */
     public IM.Number movingSpeed;
 
     private Player _owner;
@@ -18,6 +30,7 @@ public class MoveToHelper
 
 	public void MoveTo( IM.Vector3 vTarget )
 	{
+        IM.Math.CheckRange(vTarget);
 		targetPosition = vTarget;
 		_bMoveToTarget = true;
 		_owner.m_moveType = MoveType.eMT_Run;
@@ -59,16 +72,20 @@ public class MoveToHelper
 			if( onMoveToTarget != null )
 				onMoveToTarget();
 			else
-				Logger.LogError("no move to msg received.");
+				Debug.LogError("no move to msg received.");
 		}
 		else
 		{
 			IM.Vector3 dirMove = GameUtils.HorizonalNormalized(targetPosition, _owner.position);
             IM.Number angle = IM.Vector3.FromToAngle(IM.Vector3.forward, dirMove);
 			IM.Vector3 vel;
-			IM.Number dir;
+			int dir;
 			GameUtils.AngleToDir(angle, out dir, out vel);
-			_owner.m_dir = (int)(float)(dir);
+            /*
+            Logger.Log(string.Format("MoveHelper, calc dir, {0} {1}, pos:{2}->{3} angle:{4} dir:{5}", 
+                _owner.m_team.m_side, _owner.m_id, _owner.position, targetPosition, angle, dir));
+            */
+			_owner.m_dir = dir;
 		}
 	}
 }

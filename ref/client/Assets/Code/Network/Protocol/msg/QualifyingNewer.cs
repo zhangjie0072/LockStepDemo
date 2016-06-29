@@ -200,6 +200,14 @@ namespace fogs.proto.msg
       get { return _losing_streak; }
       set { _losing_streak = value; }
     }
+    private uint _assist_first_win_times = default(uint);
+    [global::ProtoBuf.ProtoMember(25, IsRequired = false, Name=@"assist_first_win_times", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint assist_first_win_times
+    {
+      get { return _assist_first_win_times; }
+      set { _assist_first_win_times = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }

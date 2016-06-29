@@ -46,7 +46,7 @@ public class NetworkProfiler
 	void _OnTimeTracer(Pack pack)
 	{
 		TimeTracer timeTracer = Serializer.Deserialize<TimeTracer>(new MemoryStream(pack.buffer));
-		//Logger.Log("cycle pack cost: " + (m_curTime - timeTracer.sendTimeStamp) );
+		//Debug.Log("cycle pack cost: " + (m_curTime - timeTracer.sendTimeStamp) );
 		m_totalLatency += m_curTime - timeTracer.sendTimeStamp;
 		m_cnt++;
 

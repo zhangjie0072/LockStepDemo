@@ -11,19 +11,9 @@ public class MatchStateTipOff_PVP: MatchStateTipOff
         m_eState = MatchState.State.eTipOff;
     }
 
-	protected override void _OnEnableTipOff ()
-	{
-		m_stateMachine.SetState(State.ePlaying);
-	}
-
-	protected override void _OnCounterDone()
-	{
-		GameMsgSender.SendTipOff();
-	}
-
-	public void BeginTipOff()
-	{
-		_OnCounterDoneImp();
+    protected override void _OnCounterDone()
+    {
+       base._OnCounterDone();
 
 		if( m_match.m_config.type == GameMatch.Type.ePVP_1PLUS )
 		{
@@ -32,10 +22,8 @@ public class MatchStateTipOff_PVP: MatchStateTipOff
 			Player ballOwner = ball.m_owner;
 			if (ballOwner != null)
 			{
-				if (match_pvp.m_mainRole.m_team.m_role == GameMatch.MatchRole.eDefense)
-					match_pvp.SwitchMainrole(ballOwner.m_defenseTarget);
-				else
-					match_pvp.SwitchMainrole(ballOwner);
+                match_pvp.SwitchMainrole(ballOwner.m_defenseTarget);
+                match_pvp.SwitchMainrole(ballOwner);
 				m_match.m_cam.Positioning(true);
 			}
 		}
@@ -44,7 +32,8 @@ public class MatchStateTipOff_PVP: MatchStateTipOff
 		{
 			player.m_InfoVisualizer.SetActive(true);
 		}
-        m_match.m_mainRole.ShowIndicator(Color.yellow, true);
+        Color yellow = new Color(1f, 252f / 255, 10f / 255, 1);
+        m_match.mainRole.ShowIndicator(yellow, true);
 
 		m_match.AssumeDefenseTarget();
 	}

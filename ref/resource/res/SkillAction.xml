@@ -1,4 +1,4 @@
-<Data Count="175">
+<Data Count="182">
   <Line>
     <switch>#</switch>
     <id>表现ID</id>
@@ -115,11 +115,37 @@
   <Line>
     <switch>
     </switch>
+    <id>71001</id>
+    <interrupt>
+    </interrupt>
+    <play_key>basket&amp;forward&amp;292~68+1</play_key>
+    <action_id>dunk2</action_id>
+    <Effects_id>29:40</Effects_id>
+    <camera_animation>
+    </camera_animation>
+    <block_key>basket&amp;back</block_key>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
     <id>71010</id>
     <interrupt>
     </interrupt>
     <play_key>basket&amp;forward&amp;292~68+1</play_key>
     <action_id>dunkSingleHand</action_id>
+    <Effects_id>29:40</Effects_id>
+    <camera_animation>
+    </camera_animation>
+    <block_key>basket&amp;back</block_key>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>71011</id>
+    <interrupt>
+    </interrupt>
+    <play_key>basket&amp;forward&amp;292~68+1</play_key>
+    <action_id>dunkSingleHand2</action_id>
     <Effects_id>29:40</Effects_id>
     <camera_animation>
     </camera_animation>
@@ -983,6 +1009,18 @@
   <Line>
     <switch>
     </switch>
+    <id>32021</id>
+    <interrupt>
+    </interrupt>
+    <play_key>basket&amp;forward+1</play_key>
+    <action_id>dunktomahawk2</action_id>
+    <Effects_id>29:45:10</Effects_id>
+    <camera_animation>cameraD3201</camera_animation>
+    <block_key>basket&amp;back</block_key>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
     <id>32030</id>
     <interrupt>
     </interrupt>
@@ -1000,6 +1038,18 @@
     </interrupt>
     <play_key>basket&amp;forward+1</play_key>
     <action_id>dunkWindmillNear</action_id>
+    <Effects_id>17:29:45</Effects_id>
+    <camera_animation>cameraD3201</camera_animation>
+    <block_key>basket&amp;back</block_key>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>32041</id>
+    <interrupt>
+    </interrupt>
+    <play_key>basket&amp;forward+1</play_key>
+    <action_id>dunkWindmillNear2</action_id>
     <Effects_id>17:29:45</Effects_id>
     <camera_animation>cameraD3201</camera_animation>
     <block_key>basket&amp;back</block_key>
@@ -1049,6 +1099,18 @@
     </interrupt>
     <play_key>basket&amp;forward+1</play_key>
     <action_id>dunkHands</action_id>
+    <Effects_id>29:45:25</Effects_id>
+    <camera_animation>cameraD3207</camera_animation>
+    <block_key>basket&amp;back</block_key>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>32081</id>
+    <interrupt>
+    </interrupt>
+    <play_key>basket&amp;forward+1</play_key>
+    <action_id>dunkHands2</action_id>
     <Effects_id>29:45:25</Effects_id>
     <camera_animation>cameraD3207</camera_animation>
     <block_key>basket&amp;back</block_key>
@@ -1417,6 +1479,34 @@
     </interrupt>
     <play_key>4</play_key>
     <action_id>blockWithBall</action_id>
+    <Effects_id>9</Effects_id>
+    <camera_animation>
+    </camera_animation>
+    <block_key>
+    </block_key>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>36010</id>
+    <interrupt>
+    </interrupt>
+    <play_key>4</play_key>
+    <action_id>blockFlying</action_id>
+    <Effects_id>9</Effects_id>
+    <camera_animation>
+    </camera_animation>
+    <block_key>
+    </block_key>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>36020</id>
+    <interrupt>
+    </interrupt>
+    <play_key>4</play_key>
+    <action_id>blockChase</action_id>
     <Effects_id>9</Effects_id>
     <camera_animation>
     </camera_animation>

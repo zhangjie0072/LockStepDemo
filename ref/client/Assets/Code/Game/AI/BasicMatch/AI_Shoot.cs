@@ -43,18 +43,18 @@ public class AI_Shoot : AIState
 			{
 				skillID = DRIFT_SHOOT_ID;
 				actionID = LEFT_ACTION_ID;
-				Logger.Log("AIShoot, left drift shoot.");
+				Debug.Log("AIShoot, left drift shoot.");
 			}
 			else if (hasLeftDefender)
 			{
 				skillID = DRIFT_SHOOT_ID;
 				actionID = RIGHT_ACTION_ID;
-				Logger.Log("AIShoot, right drift shoot.");
+				Debug.Log("AIShoot, right drift shoot.");
 			}
 			else if (hasOuterDefender)
 			{
 				skillID = BACK_SHOOT_ID;
-				Logger.Log("AIShoot, back shoot.");
+				Debug.Log("AIShoot, back shoot.");
 			}
 		}
 
@@ -69,11 +69,11 @@ public class AI_Shoot : AIState
 		}
 		else if (skillID != 0)
 		{
-			Logger.Log("AIShoot, get shoot skill without filter.");
+			Debug.Log("AIShoot, get shoot skill without filter.");
 			m_player.m_toSkillInstance = m_player.m_skillSystem.GetValidSkillInMatch(Command.Shoot, true);
 		}
 		if (m_player.m_toSkillInstance == null)
-			Logger.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI Shoot");
+			Debug.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI Shoot");
 		m_player.m_bForceShoot = true;
 	}
 

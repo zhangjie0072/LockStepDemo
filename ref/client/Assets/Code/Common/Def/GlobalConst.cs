@@ -333,7 +333,6 @@ public static class GlobalConst
 	public static IM.Number OPEN_SHOOT_FAN_RADIUS = new IM.Number(2,500);
 	public static IM.Number OPEN_SHOOT_FAN_ANGLE = new IM.Number(80);
 
-	public static IM.Number ROTATE_ANGLE_SEC = new IM.Number(22, 500);
 	public static uint PVP_VALID_LATENCY = 100; //PVPÍøËÙÏÞÖÆ
 
     public static uint ALL_HEDGING_ID = 100;

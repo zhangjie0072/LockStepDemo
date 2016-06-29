@@ -75,7 +75,7 @@ public class RoleItemReady : MonoBehaviour
                 else if (role_id < 2000)
                     portAtlas += "_2";
                 else
-                    Logger.Log("cannot getPortrait by id=" + _role_id);
+                    Debug.Log("cannot getPortrait by id=" + _role_id);
 
                 _icon.atlas = ResourceLoadManager.Instance.GetAtlas(portAtlas);
                 _icon.spriteName = data.icon;

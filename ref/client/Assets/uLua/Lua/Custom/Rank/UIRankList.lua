@@ -9,6 +9,12 @@ UIRankList = {
 	uiAnimator,
 	myItem,
 	items,
+	uiMoreRanks,
+	uiMoreRankDlg,
+	uiGradeRankBtn,
+	uiAchevementRankBtn,
+	uiDataRankBtn,
+	uiCloseMRBtn,
 
 	-- variables
 	rankTypes, -- {rankType -> {btn, toggle, config, onSwitch}, ...}
@@ -41,6 +47,15 @@ function UIRankList:Awake()
 	self.rankTypes[RankType.RT_LADDER] = {btn = self.btnLadder}
 	self.rankTypes[RankType.RT_ACHIEVEMENT] = {btn = self.btnAchievement}
 
+	-- more ranks btn --
+	self.uiMoreRanks = self.transform:FindChild("Window/ranks_btn"):GetComponent("UIButton")
+	self.uiMoreRankDlg = self.transform:FindChild("MoreRanksDlg")
+	self.uiGradeRankBtn = self.uiMoreRankDlg:FindChild("dlg/Grid/grade_rank_btn"):GetComponent("UIButton")
+	self.uiAchevementRankBtn = self.uiMoreRankDlg:FindChild("dlg/Grid/achevement_rank_btn"):GetComponent("UIButton")
+	self.uiDataRankBtn = self.uiMoreRankDlg:FindChild("dlg/Grid/data_rank_btn"):GetComponent("UIButton")
+	self.uiCloseMRBtn = self.uiMoreRankDlg:FindChild("dlg/baner/close_btn"):GetComponent("UIButton")
+	-- more ranks btn --
+
 	for k, v in pairs(self.rankTypes) do
 		v.toggle = v.btn:GetComponent("UIToggle")
 		v.onSwitch = self:MakeOnSwitch(k)
@@ -64,6 +79,13 @@ function UIRankList:Awake()
 end
 
 function UIRankList:Start()
+	-- more ranks event --
+	addOnClick(self.uiMoreRanks.gameObject, self:OnMoreRanks())
+	addOnClick(self.uiGradeRankBtn.gameObject, self:OnGradeRank())
+	addOnClick(self.uiAchevementRankBtn.gameObject, self:OnAchevementRank())
+	addOnClick(self.uiDataRankBtn.gameObject, self:OnDataRank())
+	addOnClick(self.uiCloseMRBtn.gameObject, self:OnCloseMoreRank())
+
 	for k, v in pairs(self.rankTypes) do
 		v.config = GameSystem.Instance.RankConfig:GetConfig(k)
 		if not v.config then
@@ -75,6 +97,41 @@ function UIRankList:Start()
 
 	self.wrap.onInitializeItem = self.onUpdateItem
 end
+
+function UIRankList:OnMoreRanks()
+	return function(btn_go)
+		print ("more ranks")
+
+		self.uiMoreRankDlg.gameObject:SetActive(true)
+		self.uiMoreRankDlg:GetComponent("UIPanel").depth = self.tmMyRank.transform.parent:GetComponent("UIPanel").depth + 1
+	end
+end
+
+
+function UIRankList:OnGradeRank()
+	return function(btn_go)
+		print ("grade rank event")
+	end
+end
+
+function UIRankList:OnAchevementRank()
+	return function(btn_go)
+		print ("achevement rank event")
+	end
+end
+
+function UIRankList:OnDataRank()
+	return function(btn_go)
+		print ("data rank event")
+	end
+end
+
+function UIRankList:OnCloseMoreRank()
+	return function(btn_go)
+		self.uiMoreRankDlg.gameObject:SetActive(false)
+	end
+end
+
 
 function UIRankList:OnEnable()
 	RankList.onListRefreshed = self.onListRefreshed
@@ -149,14 +206,17 @@ end
 function UIRankList:MakeOnSwitch(rankType)
 	return function ()
 
+		print ("UIRankList:MakeOnSwitch(rankType)")
+		print (tostring(rankType) == 'RT_ACHIEVEMENT')
+
 		-- ranktypes: RT_ACHIEVEMENT RT_LADDER RT_QUALIFYING_NEW
-		if rankType == 'RT_ACHIEVEMENT' then
+		if tostring(rankType) == 'RT_ACHIEVEMENT' then
 			if not FunctionSwitchData.CheckSwith(FSID.rank_achievement) then return end
 		end
 
-		if rankType == 'RT_QUALIFYING_NEW' then
-			if not FunctionSwitchData.CheckSwith(FSID.rank_qualifying) then return end
-		end
+		-- if tostring(rankType) == 'RT_QUALIFYING_NEW' then
+		-- 	if not FunctionSwitchData.CheckSwith(FSID.rank_qualifying) then return end
+		-- end
 
 		self.curRankType = rankType
 		print('UIRankList:MakeOnSwitch',rankType)
@@ -166,7 +226,7 @@ function UIRankList:MakeOnSwitch(rankType)
 		-- 	RankList.ReqList(rankType)
 		-- else
 		local myRank = RankList.GetMyRankInfo(rankType)
-		if not myRank then 
+		if not myRank then
 			RankList.myRankInfos[rankType] = RankList.MakeMyRankInfo(rankType)
 			myRank = RankList.myRankInfos[rankType]
 		end

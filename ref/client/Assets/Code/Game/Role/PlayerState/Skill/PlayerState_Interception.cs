@@ -37,7 +37,7 @@ public class PlayerState_Interception : PlayerState_Skill
 		string action = _ParseAction(intercept.curAction.action_id, intercept.matchedKeyIdx);
 		PlayerAnimAttribute.AnimAttr animAttr = m_player.m_animAttributes.GetAnimAttrById(Command.Interception, action);
 		if (animAttr == null)
-			Logger.LogError("Can not find animAttr: " + m_curAction);
+			Debug.LogError("Can not find animAttr: " + m_curAction);
 		
 		PlayerAnimAttribute.KeyFrame keyFrame = animAttr.GetKeyFrame("OnBlock");
         IM.Number frameRate = m_player.animMgr.GetFrameRate(action);
@@ -76,7 +76,7 @@ public class PlayerState_Interception : PlayerState_Skill
 		
 		PlayerAnimAttribute.AnimAttr animAttr = m_player.m_animAttributes.GetAnimAttrById(Command.Interception, m_curAction);
 		if (animAttr == null)
-			Logger.LogError("Can not find animAttr: " + m_curAction);
+			Debug.LogError("Can not find animAttr: " + m_curAction);
 		
 		PlayerAnimAttribute.KeyFrame keyFrame = animAttr.GetKeyFrame("OnBlock");
         IM.Number frameRate = m_player.animMgr.GetFrameRate(m_curAction);
@@ -84,7 +84,7 @@ public class PlayerState_Interception : PlayerState_Skill
 		
 		IM.Vector3 ballPosWhenBlocked;
         if (!m_player.GetNodePosition(SampleNode.Ball, m_curAction, m_fEventTime, out ballPosWhenBlocked))
-            Logger.LogError("Can not get bone position");
+			Debug.LogError("Can not get bone position");
 		
 		Debugger.Instance.DrawSphere("block", (Vector3)ballPosWhenBlocked, Color.yellow);
 		
@@ -95,7 +95,7 @@ public class PlayerState_Interception : PlayerState_Skill
 		m_cachedAction = m_curAction;
 		m_curAction = "";
 
-		Logger.Log("animType: " + m_animType);
+		Debug.Log("animType: " + m_animType);
 		++m_player.mStatistics.data.interception;
 	}
 
@@ -108,7 +108,7 @@ public class PlayerState_Interception : PlayerState_Skill
 			IM.Number fDir = IM.Vector3.Cross(dirPasserToCatcher, dirPasserToInterceptor).y;
 			m_animType = fDir < IM.Number.zero ? AnimType.N_TYPE_0 : AnimType.N_TYPE_1;
 
-			Logger.Log("animType: " + m_animType);
+			Debug.Log("animType: " + m_animType);
 		}
 
 		return m_animType == AnimType.N_TYPE_0 ? lHandActionId : rHandActionId;
@@ -135,7 +135,7 @@ public class PlayerState_Interception : PlayerState_Skill
 
 	private void _OnBlock()
 	{
-		Logger.Log("onblock");
+		Debug.Log("onblock");
 
 		if( m_ball.m_owner != null )
 		{

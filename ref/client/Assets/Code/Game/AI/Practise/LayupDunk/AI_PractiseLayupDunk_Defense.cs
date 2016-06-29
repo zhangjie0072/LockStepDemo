@@ -55,7 +55,7 @@ public class AI_PractiseLayupDunk_Defense : AIState
 	
 	IM.Vector3 GetNPCStandPos()
 	{
-		IM.Vector3 dir = m_match.m_mainRole.position - m_basketCenter;
+		IM.Vector3 dir = m_match.mainRole.position - m_basketCenter;
 		dir.Normalize();
 		return m_basketCenter + dir * IM.Number.two;
 	}

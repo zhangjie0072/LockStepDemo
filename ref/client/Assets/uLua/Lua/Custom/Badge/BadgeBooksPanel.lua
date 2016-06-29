@@ -615,6 +615,9 @@ end
 --------------------------------------message sender -----------------
 function BadgeBooksPanel:EquipBadgeCallBack( ... )
 	return function(badgeId)
+		print ("BadgeBooksPanel:EquipBadgeCallBack( ... )")
+		if not FunctionSwitchData.CheckSwith(FSID.scrawl_wear) then return end
+
 		-- print("EquipBadgeCallBack:"..badgeId)
 		local req = {
 			badge_id = badgeId,

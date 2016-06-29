@@ -18,7 +18,7 @@ public class AI_DefenseBack : AIState
 	public override void OnEnter(AIState lastState)
 	{
 		base.OnEnter(lastState);
-		Logger.Log("Enter defense back");
+		Debug.Log("Enter defense back");
 	}
 
     public override void Update(IM.Number fDeltaTime)
@@ -73,7 +73,7 @@ public class AI_DefenseBack : AIState
 	public override void OnExit()
 	{
 		base.OnExit();
-		Logger.Log("Exit defense back.");
+		Debug.Log("Exit defense back.");
 	}
 
 	void DefenseBackToBack()

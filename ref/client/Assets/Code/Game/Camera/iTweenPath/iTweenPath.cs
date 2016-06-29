@@ -77,7 +77,7 @@ public class iTweenPath : MonoBehaviour
 				WSNodes[iNode] += paths[requestedName].transform.position;
 			return WSNodes.ToArray();
 		}else{
-			Logger.Log("No path with that name (" + requestedName + ") exists! Are you sure you wrote it correctly?");
+			Debug.Log("No path with that name (" + requestedName + ") exists! Are you sure you wrote it correctly?");
 			return null;
 		}
 	}
@@ -100,7 +100,7 @@ public class iTweenPath : MonoBehaviour
 				revNodes[iNode] += paths[requestedName].transform.position;
 			return revNodes.ToArray();
 		}else{
-			Logger.Log("No path with that name (" + requestedName + ") exists! Are you sure you wrote it correctly?");
+			Debug.Log("No path with that name (" + requestedName + ") exists! Are you sure you wrote it correctly?");
 			return null;
 		}
 	}

@@ -16,6 +16,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
     
 	public PlayerStatistics mStatistics;
 	public PlayerMovement[] mMovements;
+    public IM.Number m_Radius = new IM.Number(0, 700);
 	public interface PlayerBuildListener
 	{
 		void OnPlayerComplete(Player player);
@@ -28,8 +29,54 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 		eRight
 	}
 
+    //操作模式
+    public enum OperMode
+    {
+        None,
+        Input,  //输入（本机或网络）
+        AI,
+    }
+    public OperMode operMode
+    {
+        get { return _operMode; }
+        set
+        {
+            if (_operMode != value)
+            {
+                _operMode = value;
+                if (value == OperMode.None)
+                {
+                    if (m_inputDispatcher != null)
+                        m_inputDispatcher.m_enable = false;
+                    if (m_aiMgr != null)
+                        m_aiMgr.m_enable = false;
+                }
+                else if (value == OperMode.Input)
+                {
+                    if (m_inputDispatcher == null)
+                        m_inputDispatcher = new InputDispatcher(match, this);
+                    m_inputDispatcher.m_enable = true;
+                    if (m_aiMgr != null)
+                        m_aiMgr.m_enable = false;
+                }
+                else if (value == OperMode.AI)
+                {
+                    if (m_inputDispatcher != null)
+                        m_inputDispatcher.m_enable = false;
+                    if (m_aiMgr == null)
+                        m_aiMgr = match.CreateAISystem(this);
+                    m_aiMgr.m_enable = Debugger.Instance.m_bEnableAI;
+                }
+            }
+            Debug.LogFormat("Set oper mode of ({0} {1} {2}) to {3}", 
+                m_roleInfo.acc_id, m_team.m_side, m_id, value);
+        }
+    }
+    private OperMode _operMode = OperMode.None;
+
 	public GenderType			m_gender;
 
+    public GameMatch match;
 	public Team					m_team{ get; set; }
 	
     //玩家基础属性
@@ -83,11 +130,18 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 	{
 		get{return _dir;}
 		set{
+            /*
+            Logger.Log(string.Format("Set dir, {0} {1}, {2} -> {3}",
+                m_team.m_side, m_id, _dir, value));
+            */
 			_dir = value;
-			if( _dir == -1 )
-				moveDirection = IM.Vector3.zero;
-			else
-				moveDirection = IM.Quaternion.Euler(IM.Number.zero, new IM.Number(value) * GlobalConst.ROTATE_ANGLE_SEC, IM.Number.zero) * IM.Vector3.forward;
+            if (_dir == -1)
+                moveDirection = IM.Vector3.zero;
+            else
+            {
+                IM.Number angle = new IM.Number(value) * MoveController.ANGLE_PER_DIR;
+                moveDirection = IM.Quaternion.Euler(IM.Number.zero, angle, IM.Number.zero) * IM.Vector3.forward;
+            }
 		}
 	}
 
@@ -99,7 +153,13 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
     public IM.Vector3 moveDirection
     {
         get { return moveCtrl.moveDirection; }
-        set { moveCtrl.moveDirection = value; }
+        set { 
+            /*
+            Logger.Log(string.Format("Set moveDirection, {0} {1}, {2} -> {3}",
+                m_team.m_side, m_id, moveCtrl.moveDirection, value));
+            */
+            moveCtrl.moveDirection = value;
+        }
     }
 
     public IM.Vector3 position
@@ -194,7 +254,6 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 	public	IM.Number			m_LayupDistance	 = new IM.Number(4);
 
 	public Stamina				m_stamina {get; private set;}
-	public FightStatus			m_startPos = FightStatus.FS_NONE;
 
 	private bool				m_dirty = true;
 	private bool				m_tired = false;
@@ -265,16 +324,16 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
     public IM.Vector3 pelvisLocalPos;
     public IM.Vector3 pelvisPos;
 
-	public	AISystem			m_aiMgr;
+    public AISystem m_aiMgr { get; private set; }
 	public	AISystem_Assist		m_aiAssist;
 	public static Dictionary<PositionType, RoadPathManager.SectorArea> positionFavorSectors;
 	public RoadPathManager.SectorArea m_favorSectors { get { return positionFavorSectors[m_position]; } }
 
 	public static Dictionary<PositionType, RoadPathManager.SectorArea> positionBounceSectors;
 	public RoadPathManager.SectorArea m_bounceSectors { get { return positionBounceSectors[m_position]; } }
-	public	bool				m_bIsAI{private set{} get{ return m_aiMgr != null;} }
+    public bool m_bIsAI { get { return m_aiMgr != null && m_aiMgr.m_enable; } }
 
-	public 	InputDispatcher 	m_inputDispatcher;
+    public InputDispatcher m_inputDispatcher { get; private set; }
 	public	int					m_curInputDir;
 
 	private List<PlayerBuildListener> 		m_listeners = new List<PlayerBuildListener>();
@@ -287,7 +346,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
     public GameObject gameObject { get { return model != null ? model.gameObject : null; } }
     public Transform transform { get { return model != null ? model.gameObject.transform : null; } }
 
-    public MoveController moveCtrl = new MoveController();
+    public MoveController moveCtrl;
 	public SkillSystem			m_skillSystem{ get; private set; }
 
 	private GameObject			m_goEffectTired;
@@ -308,7 +367,6 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 
 	public SparkEffect			mSparkEffect{ get; private set; }
 
-	public bool					m_toTakeOver = false;
 	public bool					m_takingOver = false;
     public bool                 m_applyLogicPostion = true; 
 	public void RegisterListener( PlayerBuildListener listener )
@@ -333,8 +391,10 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 	public Player( RoleInfo roleInfo, Team team )
 	{
 		m_roleInfo = roleInfo;
+        Debug.Assert(roleInfo.acc_id != 0, "acc_id of RoleInfo shouldn't be 0");
 
 		m_blockable = new Blockable(this);
+        moveCtrl = new MoveController(this);
 
 		m_team = team;
 		team.AddMember(this);
@@ -360,7 +420,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 			NPCConfig config = GameSystem.Instance.NPCConfigData.GetConfigData(id);
             RoleBaseData2 caData = GameSystem.Instance.RoleBaseConfigData2.GetConfigData(config.shape);
 			if (caData == null)
-				Logger.LogError("Player ctor: role base config data not found. Role ID: " + config.shape);
+				Debug.LogError("Player ctor: role base config data not found. Role ID: " + config.shape);
 			m_name = config.name;
 			m_position = (PositionType)config.position;
 			m_shapeID = (int)config.shape;
@@ -586,7 +646,13 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
             if (GameSystem.Instance.mClient.mCurMatch.mCurScene.mGround.In3PointRange(position.xz, IM.Number.zero))
                 renderer.material.color = color;
             else
-                renderer.material.color = Color.red;
+            {
+                //renderer.material.color = Color.red;
+                Color blue = new Color(10f / 255, 228f / 255, 1, 1);
+                renderer.material.color = blue;
+            }
+
+
 	}
 
 	public void HideIndicator()
@@ -615,7 +681,8 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 			{
 				m_goBallOwnerIndicator = GameObject.Instantiate(m_resBallOwnerIndicator) as GameObject;
 				m_goBallOwnerIndicator.transform.parent = transform;
-				m_goBallOwnerIndicator.transform.localPosition = new Vector3(0f, 0.01f, 0f);
+				m_goBallOwnerIndicator.transform.localPosition = new Vector3(0f, 0.04f, 0f);
+				GameUtils.SetRenderQueue(m_goBallOwnerIndicator, RenderQueue.PlayGroundLine + 1);
 			}
 			m_goBallOwnerIndicator.SetActive(true);
 		}
@@ -644,21 +711,22 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 		if( m_toSkillInstance == null )
 			return;
 		Command cmd = (Command)m_toSkillInstance.skill.action_type;
-		if ( cmd == Command.PickAndRoll )
-			return;
+		if ( cmd == Command.PickAndRoll || (GameSystem.Instance.mClient.mPlayerManager.m_Players.Count != 2 &&
+            cmd == Command.CrossOver))
+			return; 
 		if (!(bCanPass && cmd == Command.Pass))
 			m_toSkillInstance = null;
 	}
 
     //渲染层
-	public void LateUpdate()
+	public void ViewLateUpdate()
 	{
 		if(gameObject == null )
 			return;
 
         //防守扇形区域
 		if( m_AOD != null )
-			m_AOD.Update();
+			m_AOD.ViewUpdate();
 
 		m_skillSystem.LateUpdate();
 
@@ -675,7 +743,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
             /*
             if (Time.timeScale != 0f)
             {
-                Logger.Log(string.Format("Set player view pos: {0} -> {1} targetPos:{2} speed:{3} dt:{4}",
+                Debug.Log(string.Format("Set player view pos: {0} -> {1} targetPos:{2} speed:{3} dt:{4}",
                     curPos.ToString("F3"), transform.position.ToString("F3"), targetPos.ToString("F3"),
                     velocity.ToString(), Time.deltaTime.ToString("F3")));
             }
@@ -688,7 +756,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
             /*
             if (Time.timeScale != 0f)
             {
-                Logger.Log(string.Format("Set player view rot: {0} -> {1} targetRot:{2} speed:{3} dt:{4}",
+                Debug.Log(string.Format("Set player view rot: {0} -> {1} targetRot:{2} speed:{3} dt:{4}",
                     curRot.ToString("F3"), transform.rotation.ToString("F3"), targetRot.ToString("F3"),
                     turningSpeed.ToString(), Time.deltaTime.ToString("F3")));
             }
@@ -700,8 +768,12 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 	}
 
     //逻辑层
-    public void LateUpdate(IM.Number deltaTime)
+    public void GameLateUpdate(IM.Number deltaTime)
     {
+        //防守扇形区域
+		if( m_AOD != null )
+			m_AOD.GameUpdate(deltaTime);
+
 		if( m_StateMachine.m_curState != null )
 			m_StateMachine.m_curState.LateUpdate(deltaTime);
 
@@ -709,7 +781,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
     }
 
     //渲染帧
-    public void Update()
+    public void ViewUpdate()
     {
 		if( gameObject == null )
 			return;
@@ -743,7 +815,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
     }
 
     //逻辑帧
-	public void Update(IM.Number fDeltaTime)
+	public void GameUpdate(IM.Number fDeltaTime)
 	{
         //与其他玩家碰撞
 		if( m_collider != null )
@@ -760,8 +832,10 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 			m_stamina.RecoverStamina(fDeltaTime);
 
 		//输入
-        if (m_inputDispatcher != null)
+        if (operMode == OperMode.Input)
             m_inputDispatcher.Update(fDeltaTime);
+        else
+			moveDirection = IM.Vector3.zero;
 
         //投篮力度
         if (shootStrength != null)
@@ -776,9 +850,10 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 			m_catchHelper.Update(fDeltaTime);
 		
         //AI
-		if( m_aiMgr != null &&
-			(m_inputDispatcher == null || !m_inputDispatcher.m_enable ||
-			m_inputDispatcher.inTakeOver || m_inputDispatcher.disableAIOnAction))
+        //if( m_aiMgr != null &&
+        //    (m_inputDispatcher == null || !m_inputDispatcher.m_enable ||
+        //    m_inputDispatcher.inTakeOver || m_inputDispatcher.disableAIOnAction))
+        if (operMode == OperMode.AI)
 			m_aiMgr.Update( fDeltaTime );
 
         //辅助AI
@@ -805,7 +880,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 			Command skillCmd = (Command)(m_toSkillInstance.skill.action_type);
 			PlayerState.State state = m_StateMachine.m_curState.m_eState;
 			if (skillCmd == Command.Pass && state != PlayerState.State.ePass)
-				Logger.LogError("Pass skill haven't been executed, current state: " + state + " ID:" + m_id);
+				Debug.LogError("Pass skill haven't been executed, current state: " + state + " ID:" + m_id);
 		}
 		*/
 
@@ -820,7 +895,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 		m_bWithBall = true;
 		m_ball = basketball;
 		basketball.OnGrab(this, bCatch);
-		//Logger.Log("player id: " + m_id + " grab ball.");
+		//Debug.Log("player id: " + m_id + " grab ball.");
 	}
 	
 	public void DropBall(UBasketball basketball)
@@ -837,7 +912,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 			if( player.m_AOD != null && player.m_AOD.visible )
 				player.m_AOD.visible = false;
 		}
-		//Logger.Log("player id: " + m_id + " drop ball.");
+		//Debug.Log("player id: " + m_id + " drop ball.");
 	}
 
 	public void Move(IM.Number deltaTime, IM.Vector3 velocity)
@@ -853,6 +928,10 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 
 	public void MoveTowards(IM.Vector3 dirFaceTo, IM.Number turningSpeed, IM.Number deltaTime, IM.Vector3 velocity)
 	{
+        /*
+        Logger.Log(string.Format("MoveTowards, {0} {1}, {2} {3} {4} {5}",
+            m_team.m_side, m_id, dirFaceTo, turningSpeed, deltaTime, velocity));
+        */
 		IM.Number step = turningSpeed * deltaTime;
 		dirFaceTo.y = IM.Number.zero;
 
@@ -927,6 +1006,8 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 			return false;
 		if( match.mCurScene == null || match.mCurScene.mBasket == null )
 			return false;
+		if( match.m_ruler.m_bToCheckBall )
+			return false;
 		//return GameUtils.HorizonalDistance( position, match.mCurScene.mBasket.transform.position ) < m_dunkDistance;
 		return true;
 	}
@@ -938,7 +1019,21 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 			return false;
 		if( match.mCurScene == null || match.mCurScene.mBasket == null )
 			return false;
+		if( match.m_ruler.m_bToCheckBall )
+			return false;
+		//return GameUtils.HorizonalDistance( position, match.mCurScene.mBasket.transform.position ) < m_LayupDistance;
+		return true;
+	}
 
+	public bool CanShoot()
+	{
+		GameMatch match = GameSystem.Instance.mClient.mCurMatch;
+		if( match == null )
+			return false;
+		if( match.mCurScene == null || match.mCurScene.mBasket == null )
+			return false;
+		if( match.m_ruler.m_bToCheckBall )
+			return false;
 		//return GameUtils.HorizonalDistance( position, match.mCurScene.mBasket.transform.position ) < m_LayupDistance;
 		return true;
 	}
@@ -950,7 +1045,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 
 		if( curExcSkill == null )
 		{
-			//Logger.LogError("can not find player: " + player.m_id + " current execute skill.");
+			//Debug.LogError("can not find player: " + player.m_id + " current execute skill.");
 			return null;
 		}
 
@@ -958,14 +1053,16 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 		Dictionary<string, uint> skillAttr = curLevel.additional_attrs;
 		if( skillAttr == null )
 		{
-			Logger.LogError("Can not build player: " + m_name + " ,can not fight skill data by skill id: " + curExcSkill.skill.id );
+			Debug.LogError("Can not build player: " + m_name + " ,can not fight skill data by skill id: " + curExcSkill.skill.id );
 			return null;
 		}
 
-		Logger.Log("Skill attr, ID:" + curExcSkill.skill.id);
+		Debug.Log("Skill attr, ID:" + curExcSkill.skill.id);
+        Debugger.Instance.m_steamer.message = "Skill attr,ID:" + curExcSkill.skill.id;
 		foreach (KeyValuePair<string, uint> pair in skillAttr)
 		{
-			Logger.Log(pair.Key + ": " + pair.Value);
+			Debug.Log(pair.Key + ": " + pair.Value);
+            Debugger.Instance.m_steamer.message = pair.Key + ": " + pair.Value;
 		}
 		
 		return skillAttr;
@@ -978,7 +1075,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 		
 		if( curExcSkill == null )
 		{
-			//Logger.LogError("can not find player: " + player.m_id + " current execute skill.");
+			//Debug.LogError("can not find player: " + player.m_id + " current execute skill.");
 			return null;
 		}
 		
@@ -986,14 +1083,14 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 		Dictionary<uint, SkillSpec> skillAttr = curLevel.parameters;
 		if( skillAttr == null )
 		{
-			Logger.LogError("Can not build player: " + m_name + " ,can not fight skill data by skill id: " + curExcSkill.skill.id );
+			Debug.LogError("Can not build player: " + m_name + " ,can not fight skill data by skill id: " + curExcSkill.skill.id );
 			return null;
 		}
 
 		SkillSpec result = null;
 		if( !skillAttr.TryGetValue( (uint)skillSpecParam, out result ) )
 		{
-			Logger.LogError("Can not find skill param: " + skillSpecParam + ". Current skill: " + curExcSkill.skill.id );
+			//Debug.LogError("Can not find skill param: " + skillSpecParam + ". Current skill: " + curExcSkill.skill.id );
 			return null;
 		}
 
@@ -1024,7 +1121,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 		Dictionary<string, uint> data = m_finalAttrs;
 		if( data == null )
 		{
-			Logger.LogError("Can not find data.");
+			Debug.LogError("Can not find data.");
 			return false;
 		}
 		IM.Number fDistPlayer2Ball = GameUtils.HorizonalDistance(position, ball.position);
@@ -1118,7 +1215,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 	public void PlayAnimation(string action)
 	{
         if (animMgr != null)
-            Logger.LogError("Player.PlayAnimation can not be called out of match.");
+            Debug.LogError("Player.PlayAnimation can not be called out of match.");
 		if (m_animation.GetComponent<Animation>()[action] == null)
 		{
 			string specialAction = GetSpecialAction(action);
@@ -1155,7 +1252,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
         string path = (isSpecial ? resSpecialAnimPath : resAnimPath) + name;
         AnimationClip clip = ResourceLoadManager.Instance.GetResources(path) as AnimationClip;
 		if (clip == null)
-			Logger.LogError("Action not exist. " + name);
+			Debug.LogError("Action not exist. " + name);
 		return clip;
 	}
 
@@ -1169,7 +1266,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 		Dictionary<string, uint> data = m_finalAttrs;
 		if( data == null )
 		{
-			Logger.LogError("Can not build player: " + m_name + " ,can not fight state by id: " + m_id );
+			Debug.LogError("Can not build player: " + m_name + " ,can not fight state by id: " + m_id );
 			return;
 		}
 		
@@ -1191,7 +1288,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
         //const int F_SQR = (int)(0.00648f * IM.Math.SQR_FACTOR);
         //const int C_SQR = (int)(2.88f * IM.Math.SQR_FACTOR);
         //IM.Number standardRunSpeedWOB = IM.Number.Raw(IM.Math.RndDiv(attrSpeed * F_SQR + C_SQR, IM.Math.FACTOR));
-        IM.Number standardRunSpeedWOB = (IM.Number)(attrSpeed * new IM.BigNumber(0, 006480) + new IM.Number(2, 880));
+        IM.Number standardRunSpeedWOB = (IM.Number)(attrSpeed * new IM.PrecNumber(0, 006480) + new IM.Number(2, 880));
 		runWithoutBall.mAttr.m_curSpeed = standardRunSpeedWOB;
 		runWithoutBall.mAttr.m_playSpeed = runWithoutBall.mAttr.m_curSpeed / runWithoutBall.mAttr.m_initSpeed * modelScaleInv;
 		
@@ -1278,7 +1375,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 		
 		m_dirty = false;
 
-		Logger.Log( "====================================\n"
+		Debug.Log( "====================================\n"
 		              + "player id: " + m_id + " data info: \n"
 		              + "lv: " + m_roleInfo.level + "\n"
 		              + "quality: " + m_roleInfo.quality + "\n"
@@ -1286,8 +1383,8 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 		string attrData = "";
 		foreach (KeyValuePair<string, uint> pair in m_attrData.attrs)
 			attrData += pair.Key + " : " + pair.Value + "\n";
-		Logger.Log(attrData);
-		Logger.Log("====================================");
+		Debug.Log(attrData);
+		Debug.Log("====================================");
 	}
 
 	/*
@@ -1351,7 +1448,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 
 	public void EnhanceAttr(IM.Number factor)
 	{
-		Logger.Log("Enhance attribute of " + m_name + ", factor: " + factor);
+		Debug.Log("Enhance attribute of " + m_name + ", factor: " + factor);
 		_finalAttrs.Clear();
 		if (factor != 1)
 		{
@@ -1364,7 +1461,7 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 				else
 					value = pair.Value;
 				_finalAttrs.Add(pair.Key, value);
-				//Logger.Log(pair.Key + ": " + value);
+				//Debug.Log(pair.Key + ": " + value);
 			}
 		}
 	}
@@ -1377,14 +1474,12 @@ public class Player :MatchStateMachine.Listener, IM.IRootMotionTarget
 
     void IM.IRootMotionTarget.Apply(IM.Vector3 movement, IM.Quaternion rotation)
     {
-        IM.Number deltaTime = IM.Number.Raw(TurnController.GAME_UPDATE_LENGTH * IM.Math.FACTOR / 1000);
-
-        this.turningSpeed = rotation.eulerAngles.y / deltaTime;
+        this.turningSpeed = rotation.eulerAngles.y / TurnController.deltaTime;
         this.rotation *= rotation;
 
         IM.Number length = movement.magnitude;
-        IM.Number speed = length / deltaTime;
-        Move(deltaTime, movement.normalized * speed);
+        IM.Number speed = length / TurnController.deltaTime;
+        Move(TurnController.deltaTime, movement.normalized * speed);
     }
 
     IM.Quaternion IM.IRootMotionTarget.GetInitRotation()

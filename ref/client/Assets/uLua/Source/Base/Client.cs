@@ -55,7 +55,7 @@
 //                transform.position = Vector3.one;
 //            }
 
-//            Logger.Log("c# cost time: " + (Time.realtimeSinceStartup - time));
+//            Debug.Log("c# cost time: " + (Time.realtimeSinceStartup - time));
 
 //            transform.position = Vector3.zero;
 //            luaMgr.CallLuaFunction("Test");            
@@ -70,7 +70,7 @@
 //                transform.Rotate(Vector3.up, 1);
 //            }
 
-//            Logger.Log("c# cost time: " + (Time.realtimeSinceStartup - time));            
+//            Debug.Log("c# cost time: " + (Time.realtimeSinceStartup - time));            
 //            luaMgr.CallLuaFunction("Test2", transform);    
 //        }
 
@@ -84,7 +84,7 @@
 //                v = new Vector3(i, i, i);
 //            }
 
-//            Logger.Log("c# cost time: " + (Time.realtimeSinceStartup - time));
+//            Debug.Log("c# cost time: " + (Time.realtimeSinceStartup - time));
 //            luaMgr.CallLuaFunction("Test3", transform);
 //        }
 
@@ -98,7 +98,7 @@
 //                GameObject go = new GameObject();
 //            }
 
-//            Logger.Log("c# cost time: " + (Time.realtimeSinceStartup - time));
+//            Debug.Log("c# cost time: " + (Time.realtimeSinceStartup - time));
 //            luaMgr.CallLuaFunction("Test4", transform);
 //        }
 
@@ -115,7 +115,7 @@
 //                sm.receiveShadows = false;
 //            }
 
-//            Logger.Log("c# cost time: " + (Time.realtimeSinceStartup - time));
+//            Debug.Log("c# cost time: " + (Time.realtimeSinceStartup - time));
 //            luaMgr.CallLuaFunction("Test5", transform);
 //        }
 //#pragma warning restore 219

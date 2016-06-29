@@ -12,7 +12,7 @@ MatchGuide = {
 function MatchGuide:Init(match)
 	self.match = match
 	self.ball = self.match.mCurScene.mBall
-	self.mainRole = self.match.m_mainRole
+	self.mainRole = self.match.mainRole
 	self.stealState = self.mainRole.m_StateMachine:GetState(PlayerState.State.eSteal)
 	self.timers = {}
 	self.remindedTip = {}
@@ -126,7 +126,7 @@ function MatchGuide:MakeOnPlayerStateChanged()
 			if not newState.m_success then
 				local dist2Ball = GameUtils.HorizonalDistance(self.mainRole.position, self.ball.position)
 				local reboundDist = PlayerState_Rebound.GetDefaultMaxDist(self.mainRole)
-				if dist2Ball.CompareTo(reboundDist) > 0 then
+				if dist2Ball:CompareTo(reboundDist) > 0 then
 					--篮板太远
 					self:ShowTip("ReboundTooFar", true, true)
 				elseif newState.tooLate then

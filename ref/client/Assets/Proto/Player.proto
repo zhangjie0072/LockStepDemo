@@ -68,10 +68,11 @@ message RoleInfo
 	optional uint32 fight_power					= 10; //战斗力
 	optional uint32 acc_id						= 11; //所属账号ID，主要用于PVP
 	optional MatchRoleData challenge_data		= 12; //挑战赛数据
-	optional MatchRoleData ladder_data			= 13; //天梯赛数据
-	optional MatchRoleData regular_data 		= 14; //常规赛数据
-	optional MatchRoleData qualifying_data 		= 15; //排位赛数据	
+	optional MatchRoleData ladder_data			= 13; //常规赛数据
+	optional MatchRoleData regular_data 		= 14; //--赛数据
+	optional MatchRoleData qualifying_data 		= 15; //巡回赛数据	
 	optional uint32 badge_book_id				= 16; //装备的涂鸦墙信息
+    optional MatchRoleData qualifying_newer_data = 17; //排位赛数据
 
 	//optional uint32 bias						= ; //偏好
 	//optional uint32 position					= ; //职业

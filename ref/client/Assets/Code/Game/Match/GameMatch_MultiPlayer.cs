@@ -11,12 +11,14 @@ using fogs.proto.config;
 /// </summary>
 public abstract class GameMatch_MultiPlayer : GameMatch, MatchStateMachine.Listener
 {
-    IM.Number SWITCH_CD_TIME = IM.Number.half;
-	IM.Number switchCD;
+	private IM.Number SWITCH_CD_TIME = IM.Number.half;
+	IM.Number[] switchCD = new IM.Number[2];
+	private bool restoreCamSpeed;
+	private bool ballHandlerRegistered = false;
 
-	bool restoreCamSpeed;
-
-	bool ballHandlerRegistered = false;
+	private Player m_ballOwner = null;
+	private Player m_lastSwitchPlayer = null;
+	private Player m_nextSwitchTarget = null;
 
 	public GameMatch_MultiPlayer(Config config)
 		:base(config)
@@ -26,8 +28,29 @@ public abstract class GameMatch_MultiPlayer : GameMatch, MatchStateMachine.Liste
 
 	virtual public void SwitchMainrole(Player target)
 	{
-		//if( m_mainRole.m_defenseTarget != null )
-		//	m_mainRole.m_defenseTarget.m_AOD.visible = false;
+        Player curMainRole = GetMainRole(target.m_roleInfo.acc_id);
+        //不能自己切自己
+		if( curMainRole == target)
+			return;
+
+        if (curMainRole != null)
+        {
+            //不能跨队切
+            if (curMainRole.m_team.m_side != target.m_team.m_side)
+                return;
+            target.operMode = Player.OperMode.Input;
+            if (curMainRole.m_inputDispatcher != null)
+                target.m_inputDispatcher.TransmitUncontrolInfo(curMainRole.m_inputDispatcher);
+            curMainRole.operMode = Player.OperMode.AI;
+            Debug.LogFormat("SwitchMainRole, Prev: {0} {1} {2}",
+                curMainRole.m_roleInfo.acc_id, curMainRole.m_team.m_side, curMainRole.m_id);
+        }
+        else
+            target.operMode = Player.OperMode.Input;
+
+        SetMainRole(target.m_roleInfo.acc_id, target);
+        Debug.LogFormat("SwitchMainRole, Cur: {0} {1} {2}",
+            target.m_roleInfo.acc_id, target.m_team.m_side, target.m_id);
 	}
 
 	public override void InitBallHolder()
@@ -43,16 +66,14 @@ public abstract class GameMatch_MultiPlayer : GameMatch, MatchStateMachine.Liste
 			Player offenserWithBall = m_offenseTeam.GetInitialBallHolder();
 			offenserWithBall.GrabBall(ball);
 			offenserWithBall.m_StateMachine.SetState(PlayerState.State.eHold);
-			if (offenserWithBall.m_team == m_mainRole.m_team)
-				SwitchMainrole(offenserWithBall);
-			else
-				SwitchMainrole(offenserWithBall.m_defenseTarget);
+            SwitchMainrole(offenserWithBall);
+            SwitchMainrole(offenserWithBall.m_defenseTarget);
 		}
 	}
 
 	public override void ResetPlayerPos()
 	{
-		bool r = UnityEngine.Random.value < 0.5f;
+		bool r = IM.Random.value < IM.Number.half;
 
 		Team leftTeam = null;
 		if( m_offenseTeam != null )
@@ -89,53 +110,80 @@ public abstract class GameMatch_MultiPlayer : GameMatch, MatchStateMachine.Liste
         }
 	}
 
-	public void OnSwitch()
+	public void OnSwitch(Team.Side side)
 	{
-		if (switchCD > IM.Number.zero)
+        if (side == Team.Side.eNone)
+            return;
+
+		if (switchCD[(int)side - 1] > IM.Number.zero)
 			return;
 		else
-			switchCD = SWITCH_CD_TIME;
+			switchCD[(int)side - 1] = SWITCH_CD_TIME;
 		
-		//Logger.Log("On Switch");
+		//Debug.Log("On Switch");
 		
 		//choose nearest player closed to ball
 		UBasketball ball = mCurScene.mBall;
 		if( ball == null )
 			return;
-		
-		Player target = null;
-		IM.Vector3 vBallPos; 
-		if( ball.m_owner == null )
-			vBallPos = ball.position;
-		else
-			vBallPos = ball.m_owner.position;
-		
-        IM.Number fMinDistance = IM.Number.max;
-		foreach( Player player in m_mainRole.m_team )
+
+		if( m_nextSwitchTarget != null )
 		{
-			if( player == m_mainRole )
-				continue;
-			IM.Number fDistance = GameUtils.HorizonalDistance(vBallPos, player.position);
-			if( fMinDistance < fDistance )
-				continue;
-			fMinDistance = fDistance;
-			target = player;
+			m_lastSwitchPlayer = mainRole;
+			SwitchMainrole(m_nextSwitchTarget);
+			m_nextSwitchTarget = mainRole.m_team.members.Find( (Player player)=>{ return player != m_lastSwitchPlayer && player != mainRole; } );
 		}
-		if( target == null )
-			return;
-		SwitchMainrole(target);
+		else
+		{
+			Player target = null;
+			IM.Vector3 vBallPos; 
+			if( ball.m_owner == null )
+				vBallPos = ball.position;
+			else
+				vBallPos = ball.m_owner.position;
+		
+            Team team = side == Team.Side.eHome ? m_homeTeam : m_awayTeam;
+            Player curMainRole = mainRole;
+            IM.Number fMinDistance = IM.Number.max;
+            foreach( Player player in team)
+			{
+                if( player == curMainRole )
+					continue;
+                IM.Number fDistance = GameUtils.HorizonalDistance(vBallPos, player.position);
+				if( fMinDistance < fDistance )
+					continue;
+				fMinDistance = fDistance;
+				target = player;
+			}
+			if( target == null )
+				return;
+			
+			m_lastSwitchPlayer = mainRole;
+			SwitchMainrole(target);
+			m_nextSwitchTarget = mainRole.m_team.members.Find( (Player player)=>{ return player != m_lastSwitchPlayer && player != target; } );
+		}
 		m_cam.m_UseSwitchSpeed = true;
 		restoreCamSpeed = true;
 	}
 
-	public override void Update (IM.Number deltaTime)
+	public override void GameUpdate (IM.Number deltaTime)
 	{
-		base.Update (deltaTime);
+		base.GameUpdate(deltaTime);
+
+		UBasketball ball = mCurScene.mBall;
+		if(ball != null && ball.m_owner != m_ballOwner )
+		{
+			m_lastSwitchPlayer = null;
+			m_nextSwitchTarget = null;
+			m_ballOwner = ball.m_owner;
+		}
 
 		_RefreshAOD();
 
-		if(switchCD > IM.Number.zero)
-			switchCD -= deltaTime;
+		if(switchCD[0] > IM.Number.zero)
+			switchCD[0] -= deltaTime;
+		if(switchCD[1] > IM.Number.zero)
+			switchCD[1] -= deltaTime;
 
 		if (restoreCamSpeed && m_cam.m_Staying)
 		{
@@ -148,6 +196,49 @@ public abstract class GameMatch_MultiPlayer : GameMatch, MatchStateMachine.Liste
 			mCurScene.mBall.onRebound += OnRebound;
 			mCurScene.mBall.onHitGround += OnHitGround;
 			ballHandlerRegistered = true;
+		}
+
+		if( m_uiMatch != null )
+		{
+			if (ball.m_owner == null)
+			{
+				m_uiMatch.leftBall.SetActive(false);
+				m_uiMatch.rightBall.SetActive(false);
+			}
+			else if (ball.m_owner.m_team == mainRole.m_team)
+			{
+				m_uiMatch.leftBall.SetActive(true);
+				m_uiMatch.rightBall.SetActive(false);
+			}
+			else
+			{
+				m_uiMatch.leftBall.SetActive(false);
+				m_uiMatch.rightBall.SetActive(true);
+			}
+		}
+
+		if( m_stateMachine.m_curState.m_eState != MatchState.State.eOpening && m_stateMachine.m_curState.m_eState != MatchState.State.eOverTime 
+		   && ball != null )
+		{
+			if( ball.m_owner != null )
+			{
+				Player owner = ball.m_owner;
+				SwitchMainrole(owner);
+			}
+			else if( ball.m_ballState == BallState.eUseBall_Pass )
+			{
+				Player interceptor = ball.m_interceptor;
+				if( interceptor == null )
+				{
+					Player owner = ball.m_catcher;
+					SwitchMainrole(owner);
+				}
+				else
+				{
+                    SwitchMainrole(interceptor);
+                    SwitchMainrole(interceptor.m_defenseTarget);
+				}
+			}
 		}
 	}
 
@@ -182,7 +273,7 @@ public abstract class GameMatch_MultiPlayer : GameMatch, MatchStateMachine.Liste
 			IM.Number dist2 = GameUtils.HorizonalDistance(p2.position, p1.m_defenseTarget.position);
             if (dist1 < new IM.Number(4, 350) && dist2 < new IM.Number(4, 350))
 			{
-				Logger.Log("Resume defense target.");
+				Debug.Log("Resume defense target.");
 				AssumeDefenseTarget();
 			}
 		}
@@ -192,7 +283,7 @@ public abstract class GameMatch_MultiPlayer : GameMatch, MatchStateMachine.Liste
 	{
 		if (newState.m_eState == MatchState.State.eBegin)
 		{
-			Logger.Log("Resume defense target.");
+			Debug.Log("Resume defense target.");
 			AssumeDefenseTarget();
 		}
 	}

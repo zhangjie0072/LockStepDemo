@@ -237,7 +237,7 @@ public class UpdateVersionScript : MonoBehaviour
 
     void OnApplicationPause(bool pause)
     {
-        Logger.Log("UpdateVersionScript/OnApplicationPause:" + pause);
+        Debug.Log("UpdateVersionScript/OnApplicationPause:" + pause);
         if (!pause)
             UIManager.AdaptiveUI();
     }

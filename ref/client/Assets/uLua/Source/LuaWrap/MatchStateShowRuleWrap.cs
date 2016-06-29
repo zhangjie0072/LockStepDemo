@@ -8,7 +8,7 @@ public class MatchStateShowRuleWrap
 		LuaMethod[] regs = new LuaMethod[]
 		{
 			new LuaMethod("OnEnter", OnEnter),
-			new LuaMethod("Update", Update),
+			new LuaMethod("GameUpdate", GameUpdate),
 			new LuaMethod("IsCommandValid", IsCommandValid),
 			new LuaMethod("New", _CreateMatchStateShowRule),
 			new LuaMethod("GetClassType", GetClassType),
@@ -61,12 +61,12 @@ public class MatchStateShowRuleWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int Update(IntPtr L)
+	static int GameUpdate(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		MatchStateShowRule obj = (MatchStateShowRule)LuaScriptMgr.GetNetObjectSelf(L, 1, "MatchStateShowRule");
 		IM.Number arg0 = (IM.Number)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Number));
-		obj.Update(arg0);
+		obj.GameUpdate(arg0);
 		return 0;
 	}
 

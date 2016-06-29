@@ -23,7 +23,7 @@ public class MatchStateFoul_PVP
 		}
 	}
 
-	override public void Update (IM.Number fDeltaTime)
+	override public void GameUpdate (IM.Number fDeltaTime)
 	{
         SetRoleCirleColor();
 		if( m_timeCounter >= m_waitTime )

@@ -64,7 +64,7 @@ public class ErrorDisplay : MonoBehaviour {
 
 		if (!string.IsNullOrEmpty(logFilename))
 		{
-			Logger.Log("Save log to file: " + logFilename);
+			Debug.Log("Save log to file: " + logFilename);
 			logFilename = string.Empty;
 		}
 	}

@@ -35,23 +35,23 @@ namespace IM
         public void Test(bool longTime)
         {
             PrepareSteps();
-            Logger.Log("--->IMath test, Begin unit: " + unitName);
+            Debug.Log("--->IMath test, Begin unit: " + unitName);
             foreach (Step step in steps)
             {
-                Logger.Log("*******>IMath test, Begin step: " + step.name);
+                Debug.Log("*******>IMath test, Begin step: " + step.name);
                 bool passed = step.test(longTime);
                 if (passed)
-                    Logger.Log("<*******IMath test, End step: " + step.name + " passed.");
+                    Debug.Log("<*******IMath test, End step: " + step.name + " passed.");
                 else
                 {
-                    Logger.LogError("<*******IMath test, End step: " + step.name + " failed.");
+                    Debug.LogError("<*******IMath test, End step: " + step.name + " failed.");
                     if (stopAtFail)
                         break;
                 }
                 if (IM.Test.Utils.interruptTest)
                     break;
             }
-            Logger.Log("<---IMath test, End unit: " + unitName);
+            Debug.Log("<---IMath test, End unit: " + unitName);
         }
     }
 }

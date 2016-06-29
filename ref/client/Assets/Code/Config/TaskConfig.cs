@@ -70,16 +70,16 @@ public class TaskDataConfig
             return;
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
 		ReadTaskMainData();
-		Logger.ConfigEnd(name1);
-		Logger.ConfigBegin(name2);
+		
+		Debug.Log("Config reading " + name2);
 		ReadTaskDailyData();
-		Logger.ConfigEnd(name2);
+		
 		//		ReadTaskLevelData();
-		Logger.ConfigBegin(name3);
+		Debug.Log("Config reading " + name3);
 		ReadTaskLinkData();
-		Logger.ConfigEnd(name3);
+		
     }
 
     //读取常规任务配置
@@ -88,7 +88,7 @@ public class TaskDataConfig
 		string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         taskMainConfig.Clear();
@@ -206,7 +206,7 @@ public class TaskDataConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
         taskDailyConfig.Clear();
@@ -292,7 +292,7 @@ public class TaskDataConfig
 //		string text = ResourceLoadManager.Instance.GetConfigText(name4);
 //		if (text == null)
 //		{
-//			Logger.LogError("LoadConfig failed: " + name4);
+//			Debug.LogError("LoadConfig failed: " + name4);
 //			return;
 //		}
 //		taskLevelConfig.Clear();
@@ -379,7 +379,7 @@ public class TaskDataConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name3);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name3);
+            Debug.LogError("LoadConfig failed: " + name3);
             return;
         }
         taskLinkConfig.Clear();

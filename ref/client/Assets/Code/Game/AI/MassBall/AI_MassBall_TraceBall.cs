@@ -83,7 +83,7 @@ public class AI_MassBall_TraceBall : AIState
 		}
 		if (list.Count == 0)
 			return null;
-		return list[Random.Range(0, list.Count - 1)];
+		return list[IM.Random.Range(0, list.Count - 1)];
 	}
 
 	private UBasketball SelectBestBall()
@@ -93,11 +93,11 @@ public class AI_MassBall_TraceBall : AIState
 		if (listMine.Count == 0)
 			return null;
 
-		List<KeyValuePair<UBasketball, IM.Number>> listRival = AIUtils.SortBallListByDistance(match.mCurScene.balls, match.m_mainRole.position);
+		List<KeyValuePair<UBasketball, IM.Number>> listRival = AIUtils.SortBallListByDistance(match.mCurScene.balls, match.mainRole.position);
 		if (listRival.Count == 0)
 			return null;
 
-		UBasketball rivalNearestSpecialBall = match.m_mainRole.m_bWithBall ? null : listRival.Find(AIUtils.IsSpecial).Key;
+		UBasketball rivalNearestSpecialBall = match.mainRole.m_bWithBall ? null : listRival.Find(AIUtils.IsSpecial).Key;
 		//Find my nearest catchable special ball
 		KeyValuePair<UBasketball, IM.Number> target = new KeyValuePair<UBasketball, IM.Number>();
 		foreach (KeyValuePair<UBasketball, IM.Number> pair in listMine)

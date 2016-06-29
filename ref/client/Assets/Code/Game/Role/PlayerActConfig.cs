@@ -47,7 +47,7 @@ public class AnimConfigItem
 		Regex reg = new Regex(@"(\w+):(\[*(\-*\w+\.*\d*\;*)*\]*)");
 		
 		MatchCollection collection = reg.Matches(param);
-		//Logger.Log( collection.Count );
+		//Debug.Log( collection.Count );
 		int count = collection.Count;
 		for( int idx = 0; idx != count ; idx++)
 		{
@@ -97,7 +97,7 @@ public class PlayerActConfig
 					string[] strConfigItems = strConfigContent.Split(',');
 					if( strConfigItems.Length < 4 )
 					{
-						Logger.LogError( "Invalid animConfig format: " + strConfigContent );
+						Debug.LogError( "Invalid animConfig format: " + strConfigContent );
 						break;
 					}
 					
@@ -125,7 +125,7 @@ public class PlayerActConfig
 		}
 		catch(IOException exp)
 		{
-			Logger.LogError( "读取动作文件配置失败: " + exp.Message );
+			Debug.LogError( "读取动作文件配置失败: " + exp.Message );
 		}
 		return false;
 	}

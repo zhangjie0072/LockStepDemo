@@ -33,7 +33,7 @@
 
         public void Apply(Vector3 curPos, Number curAngle, IM.Number ratio)
         {
-            //Logger.Log(string.Format("CalcRootMotion, LastPos:{0} CurPos:{1} LastAngle:{2} CurAngle:{3} Scale:{4}",
+            //Debug.Log(string.Format("CalcRootMotion, LastPos:{0} CurPos:{1} LastAngle:{2} CurAngle:{3} Scale:{4}",
             //    _lastPos, curPos, _lastAngle, curAngle, scale));
             _target.ResetRoot();
 
@@ -61,7 +61,7 @@
             else
                 deltaMove = _initRot * velocity * magnitude;
 
-            //Logger.Log(string.Format("CalcRootMotion, DeltaMoveRoot{0} DeltaMove{1} DeltaAngle{2} Ratio:{3} DirMove:{4}", 
+            //Debug.Log(string.Format("CalcRootMotion, DeltaMoveRoot{0} DeltaMove{1} DeltaAngle{2} Ratio:{3} DirMove:{4}", 
             //    deltaMoveRoot, deltaMove, deltaAngle, ratio, dirMove));
 
             _target.Apply(deltaMove * ratio, Quaternion.Euler(IM.Number.zero, deltaAngle, IM.Number.zero));

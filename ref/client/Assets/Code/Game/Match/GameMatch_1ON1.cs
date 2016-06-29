@@ -6,7 +6,7 @@ using LuaInterface;
 using fogs.proto.msg;
 
 /// <summary>
-/// 1v1比赛类型  目前只有【PVE】生涯第一关
+/// 1v1姣旇禌绫诲瀷  鐩墠鍙湁銆怭VE銆戠敓娑涓�鍏?
 /// </summary>
 public class GameMatch_1ON1 :GameMatch, MatchStateMachine.Listener
 {
@@ -15,24 +15,26 @@ public class GameMatch_1ON1 :GameMatch, MatchStateMachine.Listener
 	LuaFunction funcUpdate;
 	LuaFunction funcOnMatchStateChange;
 
-	Player rival { get { return m_mainRole.m_defenseTarget; } }
+    //TODO 閽堝PVP淇敼
+	Player rival { get { return mainRole.m_defenseTarget; } }
 
 	public GameMatch_1ON1(Config config)
 		:base(config)
 	{
 		GameSystem.Instance.mNetworkManager.ConnectToGS(config.type, "", 1);
 	}
-	
-	override public void OnSceneComplete ()
+
+	protected override void _OnLoadingCompleteImp ()
 	{
-		base.OnSceneComplete();
+		base._OnLoadingCompleteImp ();
+
 		mCurScene.CreateBall();
 
 		m_needTipOff = true;
 
         if (m_config == null)
         {
-            Logger.LogError("Match config file loading failed.");
+            Debug.LogError("Match config file loading failed.");
             return;
         }
 
@@ -40,21 +42,17 @@ public class GameMatch_1ON1 :GameMatch, MatchStateMachine.Listener
 		for( int idx = 0; idx != pm.m_Players.Count; idx++ )
 		{
 			Player player = pm.m_Players[idx];
-
-			player.m_aiMgr = new AISystem_Basic(this, player, AIState.Type.eInit, player.m_config.AIID);
-			player.m_aiMgr.m_enable = true;
-			
 			player.m_catchHelper = new CatchHelper(player);
 			player.m_catchHelper.ExtractBallLocomotion();
 			player.m_StateMachine.SetState(PlayerState.State.eStand, true);
-			player.m_InfoVisualizer.CreateStrengthBar();
 			player.m_InfoVisualizer.ShowStaminaBar(false);
+            player.operMode = Player.OperMode.AI;
 		}
 
-		m_mainRole = pm.GetPlayerById( uint.Parse(m_config.MainRole.id) );
-		m_mainRole.m_aiMgr.m_enable = false;
-		m_mainRole.m_InfoVisualizer.ShowStaminaBar(true);
-		m_mainRole.m_inputDispatcher = new InputDispatcher(this, m_mainRole);
+        //TODO 閽堝PVP淇敼
+		mainRole = pm.GetPlayerById( uint.Parse(m_config.MainRole.id) );
+		mainRole.m_InfoVisualizer.ShowStaminaBar(true);
+        mainRole.operMode = Player.OperMode.Input;
 
         AssumeDefenseTarget();
 
@@ -66,22 +64,21 @@ public class GameMatch_1ON1 :GameMatch, MatchStateMachine.Listener
 			rival.m_enableMovement = false;
 		}
 
-        m_mainRole.m_team.m_role = GameMatch.MatchRole.eOffense;
+        mainRole.m_team.m_role = GameMatch.MatchRole.eOffense;
         if (rival != null)
             rival.m_team.m_role = GameMatch.MatchRole.eDefense;
 
-        _UpdateCamera(m_mainRole);
-
-		m_mainTeam = m_mainRole.m_team;
-
-		LoadLua();
+        _UpdateCamera(mainRole);
 
 		m_stateMachine.m_matchStateListeners.Add(this);
+
+		LoadLua();
     }
 
 	protected override void OnLoadingComplete ()
 	{
 		base.OnLoadingComplete ();
+
 		if (m_config.needPlayPlot)
 		{
 			m_stateMachine.SetState(MatchState.State.ePlotBegin);
@@ -92,7 +89,7 @@ public class GameMatch_1ON1 :GameMatch, MatchStateMachine.Listener
 		}
 	}
 
-    public override void HandleGameBegin(Pack pack)
+    public override void OnGameBegin(GameBeginResp resp)
     {
         m_stateMachine.SetState(MatchState.State.eTipOff);
     }
@@ -111,9 +108,9 @@ public class GameMatch_1ON1 :GameMatch, MatchStateMachine.Listener
 		}
 	}
 
-	public override void Update(IM.Number deltaTime)
+	public override void GameUpdate(IM.Number deltaTime)
 	{
-		base.Update(deltaTime);
+		base.GameUpdate(deltaTime);
 		_RefreshAOD();
 
 		UBasketball ball = mCurScene.mBall;
@@ -124,7 +121,7 @@ public class GameMatch_1ON1 :GameMatch, MatchStateMachine.Listener
 				m_uiMatch.leftBall.SetActive(false);
 				m_uiMatch.rightBall.SetActive(false);
 			}
-			else if (ball.m_owner.m_team == m_mainRole.m_team)
+			else if (ball.m_owner.m_team == mainRole.m_team)
 			{
 				m_uiMatch.leftBall.SetActive(true);
 				m_uiMatch.rightBall.SetActive(false);

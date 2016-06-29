@@ -29,8 +29,8 @@ public class PractiseBehaviourShoot : PractiseBehaviour, PlayerActionEventHandle
         //GameObject center3PT = ResourceLoadManager.Instance.LoadPrefab("Prefab/DynObject/MatchPoints/3PTCenter") as GameObject;
         //match.m_mainRole.position = new IM.Vector3(center3PT.transform.position);
         //match.m_mainRole.forward = IM.Vector3.forward;
-        match.m_mainRole.position = GameSystem.Instance.MatchPointsConfig.ThreePTCenter.transform.position;
-        match.m_mainRole.forward = IM.Vector3.forward;
+        match.mainRole.position = GameSystem.Instance.MatchPointsConfig.ThreePTCenter.transform.position;
+        match.mainRole.forward = IM.Vector3.forward;
 		IM.Vector3 basketCenter = match.mCurScene.mBasket.m_vShootTarget;
 		basketCenter.y = IM.Number.zero;
 		npc.position = basketCenter - IM.Vector3.forward * IM.Number.half;
@@ -50,9 +50,9 @@ public class PractiseBehaviourShoot : PractiseBehaviour, PlayerActionEventHandle
 
 	protected override void OnMatchSetted()
 	{
-		match.m_mainRole.m_StateMachine.ReplaceState(new PlayerState_PrepareToShoot_ForceShoot(match.m_mainRole.m_StateMachine, match));
-		match.m_mainRole.shootStrength.mode = ShootStrength.Mode.Absolute;
-		match.m_mainRole.eventHandler.AddEventListener(this);
+		match.mainRole.m_StateMachine.ReplaceState(new PlayerState_PrepareToShoot_ForceShoot(match.mainRole.m_StateMachine, match));
+		match.mainRole.shootStrength.mode = ShootStrength.Mode.Absolute;
+		match.mainRole.eventHandler.AddEventListener(this);
 		npc = match.m_homeTeam.GetMember(1);
 		npc.eventHandler.AddEventListener(this);
 		match.mCurScene.mBasket.onGoal = OnGoal;
@@ -80,11 +80,11 @@ public class PractiseBehaviourShoot : PractiseBehaviour, PlayerActionEventHandle
 		}
 	}
 
-	protected override void OnUpdate()
+	public override void GameUpdate(IM.Number deltaTime)
 	{
-		base.OnUpdate();
+		base.GameUpdate(deltaTime);
 
-        match.HighlightButton(0, in_tutorial && IsCommandValid(Command.Shoot) && match.m_mainRole.m_bWithBall);
+        match.HighlightButton(0, in_tutorial && IsCommandValid(Command.Shoot) && match.mainRole.m_bWithBall);
 	}
 
 	private void ShowNPC()
@@ -103,7 +103,7 @@ public class PractiseBehaviourShoot : PractiseBehaviour, PlayerActionEventHandle
 
 	public void OnEvent(PlayerActionEventHandler.AnimEvent animEvent, Player sender, System.Object context)
 	{
-		if (animEvent == PlayerActionEventHandler.AnimEvent.eShoot && sender == match.m_mainRole)
+		if (animEvent == PlayerActionEventHandler.AnimEvent.eShoot && sender == match.mainRole)
 			OnShoot();
 	}
 
@@ -164,7 +164,7 @@ public class PractiseBehaviourShoot : PractiseBehaviour, PlayerActionEventHandle
 		match.ShowGuideTip();
 		match.ShowTipArrow();
 		match.tip = practise.tips[0];
-		match.m_mainRole.m_inputDispatcher.m_enable = false;
+		match.mainRole.m_inputDispatcher.m_enable = false;
 	}
 
 	private void Tip1()
@@ -173,7 +173,7 @@ public class PractiseBehaviourShoot : PractiseBehaviour, PlayerActionEventHandle
 		match.ShowGuideTip();
 		match.HideTipArrow();
 		match.tip = practise.tips[1];
-		match.m_mainRole.m_inputDispatcher.m_enable = true;
+		match.mainRole.m_inputDispatcher.m_enable = true;
 	}
 
 	private void Tip2()
@@ -182,7 +182,7 @@ public class PractiseBehaviourShoot : PractiseBehaviour, PlayerActionEventHandle
 		match.ShowGuideTip();
 		match.HideTipArrow();
 		match.tip = practise.tips[2];
-		match.m_mainRole.m_inputDispatcher.m_enable = true;
+		match.mainRole.m_inputDispatcher.m_enable = true;
 		match.ShowIconTip(false);
 	}
 
@@ -194,7 +194,7 @@ public class PractiseBehaviourShoot : PractiseBehaviour, PlayerActionEventHandle
 		match.ShowGuideTip();
 		match.ShowTipArrow();
 		match.tip = practise.tips[3];
-		match.m_mainRole.m_inputDispatcher.m_enable = false;
+		match.mainRole.m_inputDispatcher.m_enable = false;
 		match.ShowIconTip(false);
 	}
 
@@ -206,7 +206,7 @@ public class PractiseBehaviourShoot : PractiseBehaviour, PlayerActionEventHandle
 				Tip1();
 				break;
 			case Step.Tip3:
-				match.m_mainRole.m_inputDispatcher.m_enable = true;
+				match.mainRole.m_inputDispatcher.m_enable = true;
 				match.HideGuideTip();
 				FinishObjective(true);
 				ShowNPC();

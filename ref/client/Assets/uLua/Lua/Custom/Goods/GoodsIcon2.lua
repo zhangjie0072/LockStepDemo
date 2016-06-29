@@ -105,6 +105,9 @@ function GoodsIcon2:Refresh()
 	self.goodsLuaCom.hideLevel = not self.isDisplayLevel
 	self.goodsLuaCom.onClick = self:OnClick()
 	self.goodsLuaCom:Refresh()
+
+	child.transform:FindChild("SpecialEffect/Ef_Blink2"):GetComponent("ParticleSystemRenderer").material.renderQueue = 3023
+
 	-- level
 	local star = level % 6
 	self.uiStar.value = 1 - star * 0.2

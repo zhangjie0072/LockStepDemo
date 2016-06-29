@@ -45,11 +45,11 @@ public class BadgeSlotConfig{
         if (isLoadFinish == false) return;
         isLoadFinish = false;
 		lock (LockObject) { GameSystem.Instance.readConfigCnt += 1;}
-		Logger.ConfigBegin(name);
+		Debug.Log("Config reading " + name);
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            Debug.LogError("LoadConfig failed: " + name);
             return;
         }
 
@@ -71,7 +71,7 @@ public class BadgeSlotConfig{
             data.unlockCostGoodsNum = uint.Parse(node_line.SelectSingleNode("unlockCostGoodsNum").InnerText);
             configs.Add(data.id, data);
 		}
-		Logger.ConfigEnd(name);
+		
     }
     
     public Dictionary<uint,BadgeSlotBaseConfig> GetAllConfigs()

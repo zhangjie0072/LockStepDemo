@@ -161,7 +161,7 @@ function UIQLadder:Refresh()
     CommonFunction.ClearGridChild(self.uiFriendsGrid.transform)
 
     -- 异步加载好友 modify by Conglin
-    local friendsTable = FriendData.Instance:GetList(FriendOperationType.FOT_QUERY)
+    local friendsTable = Friends.FriendList-- FriendData.Instance:GetList(FriendOperationType.FOT_QUERY)
     local friendsArray = {}
     local friendsCount = 0
     for k, v in pairs(friendsTable) do
@@ -974,7 +974,9 @@ function UIQLadder:MatchInfoHandler()
                 self:DoClose()
             else
                 local team_info = {}
-                QualifyingNewerAI.CreateNPC(self.matchType)
+                local grade = resp.grade
+                print("1927 - <UIQLadder>  grade=",grade)
+                QualifyingNewerAI.CreateNPC(self.matchType, grade)
 
                 for i = 1, 3 do
                     local name = MainPlayer.Instance.Name
@@ -986,7 +988,9 @@ function UIQLadder:MatchInfoHandler()
                     table.insert(team_info, {name=name, acc_id=acc_id})
                 end
                 local session = resp.session_id
+
                 print("1927 - <UIQualifyingNewer>  session=",session)
+
 
                 local nextShowUIParams = {
                     teamInfo = team_info,

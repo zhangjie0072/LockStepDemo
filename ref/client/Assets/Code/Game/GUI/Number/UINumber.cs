@@ -38,7 +38,7 @@ public class UINumber : UIPopupElement
             m_atlas = ResourceLoadManager.Instance.GetAtlas("Atlas/NumberUI");
 		
 		if (m_atlas == null)
-			Logger.LogError ("atlas can not be loaded.");
+			Debug.LogError ("atlas can not be loaded.");
 	}
 	
 	// Update is called once per frame
@@ -76,7 +76,7 @@ public class UINumber : UIPopupElement
 		}
 		
 		if (!ret)
-			Logger.LogError ("GUINumber component owner must attached under UIRoot and layer must be the same");
+			Debug.LogError ("GUINumber component owner must attached under UIRoot and layer must be the same");
 		
 		return ret;
 	}
@@ -149,7 +149,7 @@ public class UINumber : UIPopupElement
 		float lastXPos = 0f;
 		
 		if( strNumber.Length > m_depthSectionCount )
-			Logger.LogWarning("number value: " + strNumber.Length + "exceed: " + m_depthSectionCount);
+			Debug.LogWarning("number value: " + strNumber.Length + "exceed: " + m_depthSectionCount);
 		
 		for (int idx = 0; idx != strNumber.Length; idx++) {
 			int iValue = (int)char.GetNumericValue (strNumber, idx);

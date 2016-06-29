@@ -108,9 +108,9 @@ function TopPanelManager:ShowPanel(panelName, subID, params)
             print("TopPanelManager, Call Refresh,", "Panel:", panelName, "sub ID:", subID)
             panelInfo.luaCom:Refresh(subID)
         end
-        if not params or not params.reStart then
-            GuideSystem.Instance:ReqBeginGuide(panelName)
-        end
+        -- if not params or not params.reStart then
+        --     GuideSystem.Instance:ReqBeginGuide(panelName)
+        -- end
         TopPanelManager.ValidateAllNextFrame(panelName)
     end
 

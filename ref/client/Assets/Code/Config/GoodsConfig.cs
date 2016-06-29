@@ -60,15 +60,15 @@ public class GoodsConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
 		ReadGoodsAttrData();
-		Logger.ConfigEnd(name1);
-		Logger.ConfigBegin(name2);
+		
+		Debug.Log("Config reading " + name2);
 		ReadGoodsUseData();
-		Logger.ConfigEnd(name2);
-		Logger.ConfigBegin(name3);
+		
+		Debug.Log("Config reading " + name3);
 		ReadGoodsCompositeData();
-		Logger.ConfigEnd(name3);
+		
         isReadFinish = true;
     }
 
@@ -77,7 +77,7 @@ public class GoodsConfig
         //string text = ResourceLoadManager.Instance.GetConfigText(name1);
         //if (text == null)
         //{
-        //    Logger.LogError("LoadConfig failed: " + name1);
+        //    Debug.LogError("LoadConfig failed: " + name1);
         //    return;
         //}
         goodsAttrConfig.Clear();
@@ -258,7 +258,7 @@ public class GoodsConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
         goodsUseConfig.Clear();
@@ -332,7 +332,7 @@ public class GoodsConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name3);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name3);
+            Debug.LogError("LoadConfig failed: " + name3);
             return;
         }
         goodsCompositeConfig.Clear();

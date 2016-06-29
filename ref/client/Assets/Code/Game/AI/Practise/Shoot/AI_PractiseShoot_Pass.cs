@@ -14,7 +14,7 @@ public class AI_PractiseShoot_Pass : AIState
 		List<SkillInstance> basicSkills = m_player.m_skillSystem.GetBasicSkillsByCommand(Command.Pass);
 		if( basicSkills.Count != 0 )
 			m_player.m_toSkillInstance = basicSkills[0];
-		m_player.m_passTarget = m_match.m_mainRole;
+		m_player.m_passTarget = m_match.mainRole;
 	}
 	
 	override public void Update(IM.Number fDeltaTime)

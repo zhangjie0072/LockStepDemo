@@ -1,4 +1,4 @@
-<Data Count="42">
+<Data Count="45">
   <Line>
     <switch>
     </switch>
@@ -6,9 +6,10 @@
     <name>球队初成</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>80</coord_x>
-    <coord_y>423</coord_y>
+    <frame>CareerItemDR</frame>
+    <icon>career_career_1005</icon>
+    <coord_x>40</coord_x>
+    <coord_y>70</coord_y>
     <next_section_id>10102</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
@@ -52,9 +53,10 @@
     <name>练习</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>37</coord_x>
-    <coord_y>153</coord_y>
+    <frame>CareerItemUR</frame>
+    <icon>career_career_1003</icon>
+    <coord_x>160</coord_x>
+    <coord_y>280</coord_y>
     <next_section_id>10103</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
@@ -98,9 +100,10 @@
     <name>磨合</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>338</coord_x>
-    <coord_y>46</coord_y>
+    <frame>CareerItemDD</frame>
+    <icon>career_career_1001</icon>
+    <coord_x>440</coord_x>
+    <coord_y>420</coord_y>
     <next_section_id>10104</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
@@ -144,9 +147,10 @@
     <name>帮手</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>679</coord_x>
-    <coord_y>63</coord_y>
+    <frame>CareerItemDR</frame>
+    <icon>career_career_1002</icon>
+    <coord_x>470</coord_x>
+    <coord_y>80</coord_y>
     <next_section_id>10105</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
@@ -179,7 +183,7 @@
     <npc_id3>20004</npc_id3>
     <assistant_id>0</assistant_id>
     <assistant_level>1</assistant_level>
-    <awards_id>4025&amp;9342</awards_id>
+    <awards_id>4025</awards_id>
     <game_mode_id>10104</game_mode_id>
     <icon_level>career_bg1_train</icon_level>
   </Line>
@@ -190,10 +194,11 @@
     <name>备战</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>427</coord_x>
-    <coord_y>262</coord_y>
-    <next_section_id>10106</next_section_id>
+    <frame>CareerItemUU</frame>
+    <icon>career_career_1004</icon>
+    <coord_x>780</coord_x>
+    <coord_y>200</coord_y>
+    <next_section_id>0</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -225,21 +230,22 @@
     <npc_id3>20004</npc_id3>
     <assistant_id>0</assistant_id>
     <assistant_level>1</assistant_level>
-    <awards_id>4025</awards_id>
+    <awards_id>4025&amp;9342</awards_id>
     <game_mode_id>10105</game_mode_id>
     <icon_level>career_bg1_train</icon_level>
   </Line>
   <Line>
     <switch>
     </switch>
-    <id>10106</id>
+    <id>10201</id>
     <name>练习I</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>644</coord_x>
-    <coord_y>445</coord_y>
-    <next_section_id>10107</next_section_id>
+    <frame>CareerItemUD</frame>
+    <icon>career_career_1005</icon>
+    <coord_x>60</coord_x>
+    <coord_y>390</coord_y>
+    <next_section_id>10202</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -248,7 +254,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>106</award_id>
+    <award_id>201</award_id>
     <sweep_award_id>2106</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -278,14 +284,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10107</id>
+    <id>10202</id>
     <name>不速之客</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>871</coord_x>
-    <coord_y>250</coord_y>
-    <next_section_id>0</next_section_id>
+    <frame>CareerItemDU</frame>
+    <icon>career_career_1003</icon>
+    <coord_x>110</coord_x>
+    <coord_y>120</coord_y>
+    <next_section_id>10203</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -294,7 +301,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>107</award_id>
+    <award_id>202</award_id>
     <sweep_award_id>2107</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -317,21 +324,22 @@
     <npc_id3>20004</npc_id3>
     <assistant_id>0</assistant_id>
     <assistant_level>1</assistant_level>
-    <awards_id>4025&amp;9412</awards_id>
+    <awards_id>4025</awards_id>
     <game_mode_id>10107</game_mode_id>
     <icon_level>career_bg1_train</icon_level>
   </Line>
   <Line>
     <switch>
     </switch>
-    <id>10201</id>
+    <id>10203</id>
     <name>塞尔特的挑战</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>-28</coord_x>
-    <coord_y>154</coord_y>
-    <next_section_id>10202</next_section_id>
+    <frame>CareerItemUL</frame>
+    <icon>career_career_1001</icon>
+    <coord_x>510</coord_x>
+    <coord_y>370</coord_y>
+    <next_section_id>10204</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -340,7 +348,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>201</award_id>
+    <award_id>203</award_id>
     <sweep_award_id>2201</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -370,14 +378,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10202</id>
+    <id>10204</id>
     <name>训练II</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>65</coord_x>
-    <coord_y>392</coord_y>
-    <next_section_id>10203</next_section_id>
+    <frame>CareerItemDL</frame>
+    <icon>career_career_1002</icon>
+    <coord_x>440</coord_x>
+    <coord_y>70</coord_y>
+    <next_section_id>10205</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -386,7 +395,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>202</award_id>
+    <award_id>204</award_id>
     <sweep_award_id>2202</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -416,14 +425,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10203</id>
+    <id>10205</id>
     <name>训练III</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>285</coord_x>
-    <coord_y>274</coord_y>
-    <next_section_id>10204</next_section_id>
+    <frame>CareerItemUU</frame>
+    <icon>career_career_1004</icon>
+    <coord_x>740</coord_x>
+    <coord_y>130</coord_y>
+    <next_section_id>0</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -432,7 +442,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>203</award_id>
+    <award_id>205</award_id>
     <sweep_award_id>2203</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -455,21 +465,22 @@
     <npc_id3>20004</npc_id3>
     <assistant_id>0</assistant_id>
     <assistant_level>1</assistant_level>
-    <awards_id>4025</awards_id>
+    <awards_id>4025&amp;9412</awards_id>
     <game_mode_id>10203</game_mode_id>
     <icon_level>career_bg1_park</icon_level>
   </Line>
   <Line>
     <switch>
     </switch>
-    <id>10204</id>
+    <id>10301</id>
     <name>报名</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>565</coord_x>
-    <coord_y>392</coord_y>
-    <next_section_id>10205</next_section_id>
+    <frame>CareerItemUR</frame>
+    <icon>career_career_1004</icon>
+    <coord_x>100</coord_x>
+    <coord_y>60</coord_y>
+    <next_section_id>10302</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -478,7 +489,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>204</award_id>
+    <award_id>301</award_id>
     <sweep_award_id>2204</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -501,21 +512,22 @@
     <npc_id3>20004</npc_id3>
     <assistant_id>0</assistant_id>
     <assistant_level>1</assistant_level>
-    <awards_id>4025&amp;9313</awards_id>
+    <awards_id>4025</awards_id>
     <game_mode_id>10204</game_mode_id>
     <icon_level>career_bg1_park</icon_level>
   </Line>
   <Line>
     <switch>
     </switch>
-    <id>10205</id>
+    <id>10302</id>
     <name>准备</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>518</coord_x>
-    <coord_y>154</coord_y>
-    <next_section_id>10206</next_section_id>
+    <frame>CareerItemDD</frame>
+    <icon>career_career_1003</icon>
+    <coord_x>100</coord_x>
+    <coord_y>330</coord_y>
+    <next_section_id>10303</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -524,7 +536,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>205</award_id>
+    <award_id>302</award_id>
     <sweep_award_id>2205</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -554,14 +566,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10206</id>
+    <id>10303</id>
     <name>准备I</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>808</coord_x>
-    <coord_y>274</coord_y>
-    <next_section_id>10207</next_section_id>
+    <frame>CareerItemUR</frame>
+    <icon>career_career_1005</icon>
+    <coord_x>400</coord_x>
+    <coord_y>180</coord_y>
+    <next_section_id>10304</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -570,7 +583,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>206</award_id>
+    <award_id>303</award_id>
     <sweep_award_id>2206</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -600,14 +613,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10207</id>
+    <id>10304</id>
     <name>魔术师</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>950</coord_x>
-    <coord_y>77</coord_y>
-    <next_section_id>0</next_section_id>
+    <frame>CareerItemDR</frame>
+    <icon>career_career_1001</icon>
+    <coord_x>520</coord_x>
+    <coord_y>420</coord_y>
+    <next_section_id>10305</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -616,7 +630,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>207</award_id>
+    <award_id>304</award_id>
     <sweep_award_id>2207</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -639,21 +653,22 @@
     <npc_id3>20004</npc_id3>
     <assistant_id>0</assistant_id>
     <assistant_level>1</assistant_level>
-    <awards_id>4025&amp;9313</awards_id>
+    <awards_id>4025</awards_id>
     <game_mode_id>10207</game_mode_id>
     <icon_level>career_bg1_park</icon_level>
   </Line>
   <Line>
     <switch>
     </switch>
-    <id>10301</id>
+    <id>10305</id>
     <name>再遇卡尔文</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>64</coord_x>
-    <coord_y>244</coord_y>
-    <next_section_id>10302</next_section_id>
+    <frame>CareerItemDU</frame>
+    <icon>career_career_1002</icon>
+    <coord_x>730</coord_x>
+    <coord_y>130</coord_y>
+    <next_section_id>0</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -662,7 +677,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>301</award_id>
+    <award_id>305</award_id>
     <sweep_award_id>2301</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -685,21 +700,22 @@
     <npc_id3>20004</npc_id3>
     <assistant_id>0</assistant_id>
     <assistant_level>1</assistant_level>
-    <awards_id>4025</awards_id>
+    <awards_id>4025&amp;9313</awards_id>
     <game_mode_id>10301</game_mode_id>
     <icon_level>career_bg1_beach</icon_level>
   </Line>
   <Line>
     <switch>
     </switch>
-    <id>10302</id>
+    <id>10401</id>
     <name>开战</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>274</coord_x>
-    <coord_y>426</coord_y>
-    <next_section_id>10303</next_section_id>
+    <frame>CareerItemUU</frame>
+    <icon>career_career_1002</icon>
+    <coord_x>60</coord_x>
+    <coord_y>390</coord_y>
+    <next_section_id>10402</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -708,7 +724,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>302</award_id>
+    <award_id>401</award_id>
     <sweep_award_id>2302</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -738,14 +754,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10303</id>
+    <id>10402</id>
     <name>战斗</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>578</coord_x>
-    <coord_y>426</coord_y>
-    <next_section_id>10304</next_section_id>
+    <frame>CareerItemDR</frame>
+    <icon>career_career_1004</icon>
+    <coord_x>110</coord_x>
+    <coord_y>120</coord_y>
+    <next_section_id>10403</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -754,7 +771,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>303</award_id>
+    <award_id>402</award_id>
     <sweep_award_id>2303</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -784,14 +801,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10304</id>
+    <id>10403</id>
     <name>爱丝的哥哥</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>368</coord_x>
-    <coord_y>216</coord_y>
-    <next_section_id>10305</next_section_id>
+    <frame>CareerItemDR</frame>
+    <icon>career_career_1003</icon>
+    <coord_x>510</coord_x>
+    <coord_y>370</coord_y>
+    <next_section_id>10404</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -800,7 +818,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>304</award_id>
+    <award_id>403</award_id>
     <sweep_award_id>2304</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -823,21 +841,22 @@
     <npc_id3>20004</npc_id3>
     <assistant_id>0</assistant_id>
     <assistant_level>1</assistant_level>
-    <awards_id>4025&amp;9333</awards_id>
+    <awards_id>4025</awards_id>
     <game_mode_id>10304</game_mode_id>
     <icon_level>career_bg1_beach</icon_level>
   </Line>
   <Line>
     <switch>
     </switch>
-    <id>10305</id>
+    <id>10404</id>
     <name>理由</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>578</coord_x>
-    <coord_y>77</coord_y>
-    <next_section_id>10306</next_section_id>
+    <frame>CareerItemDR</frame>
+    <icon>career_career_1005</icon>
+    <coord_x>440</coord_x>
+    <coord_y>70</coord_y>
+    <next_section_id>10405</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -846,7 +865,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>305</award_id>
+    <award_id>404</award_id>
     <sweep_award_id>2305</sweep_award_id>
     <one_star_id>7</one_star_id>
     <one_star_value>180</one_star_value>
@@ -876,14 +895,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10306</id>
+    <id>10405</id>
     <name>回忆</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>808</coord_x>
-    <coord_y>274</coord_y>
-    <next_section_id>10307</next_section_id>
+    <frame>CareerItemUU</frame>
+    <icon>career_career_1001</icon>
+    <coord_x>740</coord_x>
+    <coord_y>130</coord_y>
+    <next_section_id>0</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -892,7 +912,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>306</award_id>
+    <award_id>405</award_id>
     <sweep_award_id>2306</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -915,21 +935,22 @@
     <npc_id3>20004</npc_id3>
     <assistant_id>0</assistant_id>
     <assistant_level>1</assistant_level>
-    <awards_id>4025</awards_id>
+    <awards_id>4025&amp;9233</awards_id>
     <game_mode_id>10306</game_mode_id>
     <icon_level>career_bg1_beach</icon_level>
   </Line>
   <Line>
     <switch>
     </switch>
-    <id>10307</id>
+    <id>10501</id>
     <name>卡罗莉</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>950</coord_x>
-    <coord_y>77</coord_y>
-    <next_section_id>0</next_section_id>
+    <frame>CareerItemDR</frame>
+    <icon>career_career_1001</icon>
+    <coord_x>100</coord_x>
+    <coord_y>60</coord_y>
+    <next_section_id>10502</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -938,7 +959,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>307</award_id>
+    <award_id>501</award_id>
     <sweep_award_id>2307</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -961,21 +982,22 @@
     <npc_id3>20004</npc_id3>
     <assistant_id>0</assistant_id>
     <assistant_level>1</assistant_level>
-    <awards_id>4025&amp;9233</awards_id>
+    <awards_id>4025</awards_id>
     <game_mode_id>10307</game_mode_id>
     <icon_level>career_bg1_beach</icon_level>
   </Line>
   <Line>
     <switch>
     </switch>
-    <id>10401</id>
+    <id>10502</id>
     <name>燃烧的斗志</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>63</coord_x>
-    <coord_y>359</coord_y>
-    <next_section_id>10402</next_section_id>
+    <frame>CareerItemUD</frame>
+    <icon>career_career_1005</icon>
+    <coord_x>100</coord_x>
+    <coord_y>330</coord_y>
+    <next_section_id>10503</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -984,7 +1006,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>401</award_id>
+    <award_id>502</award_id>
     <sweep_award_id>2401</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -1014,14 +1036,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10402</id>
+    <id>10503</id>
     <name>星期二</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>63</coord_x>
-    <coord_y>91</coord_y>
-    <next_section_id>10403</next_section_id>
+    <frame>CareerItemDR</frame>
+    <icon>career_career_1003</icon>
+    <coord_x>400</coord_x>
+    <coord_y>180</coord_y>
+    <next_section_id>10504</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -1030,7 +1053,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>402</award_id>
+    <award_id>503</award_id>
     <sweep_award_id>2402</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -1060,14 +1083,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10403</id>
+    <id>10504</id>
     <name>午夜</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>356</coord_x>
-    <coord_y>77</coord_y>
-    <next_section_id>10404</next_section_id>
+    <frame>CareerItemDR</frame>
+    <icon>career_career_1004</icon>
+    <coord_x>520</coord_x>
+    <coord_y>420</coord_y>
+    <next_section_id>10505</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -1076,7 +1100,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>403</award_id>
+    <award_id>504</award_id>
     <sweep_award_id>2403</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -1106,14 +1130,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10404</id>
+    <id>10505</id>
     <name>怀恩多特王者</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>356</coord_x>
-    <coord_y>320</coord_y>
-    <next_section_id>10405</next_section_id>
+    <frame>CareerItemDL</frame>
+    <icon>career_career_1002</icon>
+    <coord_x>730</coord_x>
+    <coord_y>130</coord_y>
+    <next_section_id>0</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -1122,7 +1147,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>404</award_id>
+    <award_id>505</award_id>
     <sweep_award_id>2404</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -1152,14 +1177,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10405</id>
+    <id>10601</id>
     <name>生死兄弟</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>628</coord_x>
-    <coord_y>451</coord_y>
-    <next_section_id>10406</next_section_id>
+    <frame>CareerItemDR</frame>
+    <icon>career_career_1003</icon>
+    <coord_x>40</coord_x>
+    <coord_y>70</coord_y>
+    <next_section_id>10602</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -1168,7 +1194,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>405</award_id>
+    <award_id>601</award_id>
     <sweep_award_id>2405</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -1198,14 +1224,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10406</id>
+    <id>10602</id>
     <name>意志</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>660</coord_x>
-    <coord_y>216</coord_y>
-    <next_section_id>10407</next_section_id>
+    <frame>CareerItemUU</frame>
+    <icon>career_career_1002</icon>
+    <coord_x>160</coord_x>
+    <coord_y>280</coord_y>
+    <next_section_id>10603</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -1214,7 +1241,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>406</award_id>
+    <award_id>602</award_id>
     <sweep_award_id>2406</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -1244,14 +1271,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10407</id>
+    <id>10603</id>
     <name>新的挑战</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>918</coord_x>
-    <coord_y>138</coord_y>
-    <next_section_id>0</next_section_id>
+    <frame>CareerItemDU</frame>
+    <icon>career_career_1001</icon>
+    <coord_x>440</coord_x>
+    <coord_y>420</coord_y>
+    <next_section_id>10604</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -1260,7 +1288,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>407</award_id>
+    <award_id>603</award_id>
     <sweep_award_id>2407</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -1283,21 +1311,22 @@
     <npc_id3>20004</npc_id3>
     <assistant_id>0</assistant_id>
     <assistant_level>1</assistant_level>
-    <awards_id>4025&amp;9214</awards_id>
+    <awards_id>4025</awards_id>
     <game_mode_id>10407</game_mode_id>
     <icon_level>career_bg1_roof</icon_level>
   </Line>
   <Line>
     <switch>
     </switch>
-    <id>10501</id>
+    <id>10604</id>
     <name>时隔五年</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>80</coord_x>
-    <coord_y>423</coord_y>
-    <next_section_id>10502</next_section_id>
+    <frame>CareerItemUL</frame>
+    <icon>career_career_1005</icon>
+    <coord_x>470</coord_x>
+    <coord_y>80</coord_y>
+    <next_section_id>10605</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -1306,7 +1335,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>501</award_id>
+    <award_id>604</award_id>
     <sweep_award_id>2501</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -1336,14 +1365,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10502</id>
+    <id>10605</id>
     <name>期许</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>37</coord_x>
-    <coord_y>153</coord_y>
-    <next_section_id>10503</next_section_id>
+    <frame>CareerItemUR</frame>
+    <icon>career_career_1004</icon>
+    <coord_x>780</coord_x>
+    <coord_y>200</coord_y>
+    <next_section_id>0</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -1352,7 +1382,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>502</award_id>
+    <award_id>605</award_id>
     <sweep_award_id>2502</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -1375,21 +1405,22 @@
     <npc_id3>20004</npc_id3>
     <assistant_id>0</assistant_id>
     <assistant_level>1</assistant_level>
-    <awards_id>4025</awards_id>
+    <awards_id>4025&amp;9214</awards_id>
     <game_mode_id>10502</game_mode_id>
     <icon_level>career_bg2_community</icon_level>
   </Line>
   <Line>
     <switch>
     </switch>
-    <id>10503</id>
+    <id>10701</id>
     <name>新开始</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>338</coord_x>
-    <coord_y>46</coord_y>
-    <next_section_id>10504</next_section_id>
+    <frame>CareerItemUR</frame>
+    <icon>career_career_1003</icon>
+    <coord_x>100</coord_x>
+    <coord_y>60</coord_y>
+    <next_section_id>10702</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -1398,7 +1429,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>503</award_id>
+    <award_id>701</award_id>
     <sweep_award_id>2503</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -1428,14 +1459,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10504</id>
+    <id>10702</id>
     <name>罗杰斯传奇</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>679</coord_x>
-    <coord_y>63</coord_y>
-    <next_section_id>10505</next_section_id>
+    <frame>CareerItemDU</frame>
+    <icon>career_career_1002</icon>
+    <coord_x>100</coord_x>
+    <coord_y>330</coord_y>
+    <next_section_id>10703</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -1444,7 +1476,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>504</award_id>
+    <award_id>702</award_id>
     <sweep_award_id>2504</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -1467,21 +1499,22 @@
     <npc_id3>20004</npc_id3>
     <assistant_id>0</assistant_id>
     <assistant_level>1</assistant_level>
-    <awards_id>4025&amp;9234</awards_id>
+    <awards_id>4025</awards_id>
     <game_mode_id>10504</game_mode_id>
     <icon_level>career_bg2_community</icon_level>
   </Line>
   <Line>
     <switch>
     </switch>
-    <id>10505</id>
+    <id>10703</id>
     <name>顽强</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>427</coord_x>
-    <coord_y>262</coord_y>
-    <next_section_id>10506</next_section_id>
+    <frame>CareerItemDU</frame>
+    <icon>career_career_1005</icon>
+    <coord_x>400</coord_x>
+    <coord_y>180</coord_y>
+    <next_section_id>10704</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -1490,7 +1523,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>505</award_id>
+    <award_id>703</award_id>
     <sweep_award_id>2505</sweep_award_id>
     <one_star_id>7</one_star_id>
     <one_star_value>180</one_star_value>
@@ -1520,14 +1553,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10506</id>
+    <id>10704</id>
     <name>拼搏</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>644</coord_x>
-    <coord_y>445</coord_y>
-    <next_section_id>10507</next_section_id>
+    <frame>CareerItemDD</frame>
+    <icon>career_career_1001</icon>
+    <coord_x>520</coord_x>
+    <coord_y>420</coord_y>
+    <next_section_id>10705</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -1536,7 +1570,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>506</award_id>
+    <award_id>704</award_id>
     <sweep_award_id>2506</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -1566,13 +1600,14 @@
   <Line>
     <switch>
     </switch>
-    <id>10507</id>
+    <id>10705</id>
     <name>鬼斧</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>871</coord_x>
-    <coord_y>250</coord_y>
+    <frame>CareerItemDD</frame>
+    <icon>career_career_1004</icon>
+    <coord_x>730</coord_x>
+    <coord_y>130</coord_y>
     <next_section_id>0</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
@@ -1582,7 +1617,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>507</award_id>
+    <award_id>705</award_id>
     <sweep_award_id>2507</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -1612,14 +1647,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10601</id>
+    <id>10801</id>
     <name>恶人</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>-28</coord_x>
-    <coord_y>154</coord_y>
-    <next_section_id>10602</next_section_id>
+    <frame>CareerItemUR</frame>
+    <icon>career_career_1001</icon>
+    <coord_x>60</coord_x>
+    <coord_y>390</coord_y>
+    <next_section_id>10802</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -1628,7 +1664,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>601</award_id>
+    <award_id>801</award_id>
     <sweep_award_id>2601</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -1658,14 +1694,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10602</id>
+    <id>10802</id>
     <name>激怒</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>65</coord_x>
-    <coord_y>392</coord_y>
-    <next_section_id>10603</next_section_id>
+    <frame>CareerItemUL</frame>
+    <icon>career_career_1004</icon>
+    <coord_x>110</coord_x>
+    <coord_y>120</coord_y>
+    <next_section_id>10803</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -1674,7 +1711,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>602</award_id>
+    <award_id>802</award_id>
     <sweep_award_id>2602</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -1704,14 +1741,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10603</id>
+    <id>10803</id>
     <name>惊吓</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>285</coord_x>
-    <coord_y>274</coord_y>
-    <next_section_id>10604</next_section_id>
+    <frame>CareerItemUR</frame>
+    <icon>career_career_1005</icon>
+    <coord_x>510</coord_x>
+    <coord_y>370</coord_y>
+    <next_section_id>10804</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -1720,7 +1758,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>603</award_id>
+    <award_id>803</award_id>
     <sweep_award_id>2603</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -1750,14 +1788,15 @@
   <Line>
     <switch>
     </switch>
-    <id>10604</id>
+    <id>10804</id>
     <name>狂傲的狂牛</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>565</coord_x>
-    <coord_y>392</coord_y>
-    <next_section_id>10605</next_section_id>
+    <frame>CareerItemUR</frame>
+    <icon>career_career_1003</icon>
+    <coord_x>440</coord_x>
+    <coord_y>70</coord_y>
+    <next_section_id>10805</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -1766,7 +1805,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>604</award_id>
+    <award_id>804</award_id>
     <sweep_award_id>2604</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -1789,21 +1828,22 @@
     <npc_id3>20004</npc_id3>
     <assistant_id>0</assistant_id>
     <assistant_level>1</assistant_level>
-    <awards_id>4025&amp;9314</awards_id>
+    <awards_id>4025</awards_id>
     <game_mode_id>10604</game_mode_id>
     <icon_level>career_bg2_sitew</icon_level>
   </Line>
   <Line>
     <switch>
     </switch>
-    <id>10605</id>
+    <id>10805</id>
     <name>首尾</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>518</coord_x>
-    <coord_y>154</coord_y>
-    <next_section_id>10606</next_section_id>
+    <frame>CareerItemDR</frame>
+    <icon>career_career_1002</icon>
+    <coord_x>740</coord_x>
+    <coord_y>130</coord_y>
+    <next_section_id>0</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -1812,7 +1852,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>605</award_id>
+    <award_id>805</award_id>
     <sweep_award_id>2605</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -1835,21 +1875,22 @@
     <npc_id3>20004</npc_id3>
     <assistant_id>0</assistant_id>
     <assistant_level>1</assistant_level>
-    <awards_id>4025</awards_id>
+    <awards_id>4025&amp;9314</awards_id>
     <game_mode_id>10605</game_mode_id>
     <icon_level>career_bg2_sitew</icon_level>
   </Line>
   <Line>
     <switch>
     </switch>
-    <id>10606</id>
+    <id>10901</id>
     <name>绚烂</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>808</coord_x>
-    <coord_y>274</coord_y>
-    <next_section_id>10607</next_section_id>
+    <frame>CareerItemDR</frame>
+    <icon>career_career_1004</icon>
+    <coord_x>40</coord_x>
+    <coord_y>70</coord_y>
+    <next_section_id>10902</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
     <daily_times>0</daily_times>
@@ -1858,7 +1899,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>606</award_id>
+    <award_id>901</award_id>
     <sweep_award_id>2606</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>
@@ -1888,13 +1929,155 @@
   <Line>
     <switch>
     </switch>
-    <id>10607</id>
+    <id>10902</id>
     <name>林疯狂</name>
     <type>0</type>
     <role_gift>0</role_gift>
-    <icon>career_common</icon>
-    <coord_x>950</coord_x>
-    <coord_y>77</coord_y>
+    <frame>CareerItemUR</frame>
+    <icon>career_career_1001</icon>
+    <coord_x>160</coord_x>
+    <coord_y>280</coord_y>
+    <next_section_id>10903</next_section_id>
+    <costing>0</costing>
+    <sweep_card>0</sweep_card>
+    <daily_times>0</daily_times>
+    <buy_consume>10001</buy_consume>
+    <member_need>3</member_need>
+    <space_need>3</space_need>
+    <condition_id>11</condition_id>
+    <condition_value>1</condition_value>
+    <award_id>902</award_id>
+    <sweep_award_id>2607</sweep_award_id>
+    <one_star_id>11</one_star_id>
+    <one_star_value>1</one_star_value>
+    <two_star_id>1</two_star_id>
+    <two_star_value>4</two_star_value>
+    <three_star_id>1</three_star_id>
+    <three_star_value>8</three_star_value>
+    <plot_begin_id>0</plot_begin_id>
+    <plot_end_id>0</plot_end_id>
+    <plot_intro>本关卡只可通关一次，通关后无法重复进行。</plot_intro>
+    <scene>
+    </scene>
+    <music>Bg/xisijie</music>
+    <time>120</time>
+    <team_side>1</team_side>
+    <home_score>0</home_score>
+    <guest_score>0</guest_score>
+    <npc_id1>20002</npc_id1>
+    <npc_id2>20003</npc_id2>
+    <npc_id3>20004</npc_id3>
+    <assistant_id>0</assistant_id>
+    <assistant_level>1</assistant_level>
+    <awards_id>4025</awards_id>
+    <game_mode_id>10607</game_mode_id>
+    <icon_level>career_bg2_sitew</icon_level>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>10903</id>
+    <name>首尾</name>
+    <type>0</type>
+    <role_gift>0</role_gift>
+    <frame>CareerItemDD</frame>
+    <icon>career_career_1003</icon>
+    <coord_x>440</coord_x>
+    <coord_y>420</coord_y>
+    <next_section_id>10904</next_section_id>
+    <costing>0</costing>
+    <sweep_card>0</sweep_card>
+    <daily_times>0</daily_times>
+    <buy_consume>10001</buy_consume>
+    <member_need>3</member_need>
+    <space_need>3</space_need>
+    <condition_id>11</condition_id>
+    <condition_value>1</condition_value>
+    <award_id>903</award_id>
+    <sweep_award_id>2605</sweep_award_id>
+    <one_star_id>11</one_star_id>
+    <one_star_value>1</one_star_value>
+    <two_star_id>1</two_star_id>
+    <two_star_value>4</two_star_value>
+    <three_star_id>1</three_star_id>
+    <three_star_value>8</three_star_value>
+    <plot_begin_id>0</plot_begin_id>
+    <plot_end_id>0</plot_end_id>
+    <plot_intro>本关卡只可通关一次，通关后无法重复进行。</plot_intro>
+    <scene>
+    </scene>
+    <music>Bg/xisijie</music>
+    <time>120</time>
+    <team_side>1</team_side>
+    <home_score>0</home_score>
+    <guest_score>0</guest_score>
+    <npc_id1>20002</npc_id1>
+    <npc_id2>20003</npc_id2>
+    <npc_id3>20004</npc_id3>
+    <assistant_id>0</assistant_id>
+    <assistant_level>1</assistant_level>
+    <awards_id>4025</awards_id>
+    <game_mode_id>10605</game_mode_id>
+    <icon_level>career_bg2_sitew</icon_level>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>10904</id>
+    <name>绚烂</name>
+    <type>0</type>
+    <role_gift>0</role_gift>
+    <frame>CareerItemDU</frame>
+    <icon>career_career_1005</icon>
+    <coord_x>470</coord_x>
+    <coord_y>80</coord_y>
+    <next_section_id>10905</next_section_id>
+    <costing>0</costing>
+    <sweep_card>0</sweep_card>
+    <daily_times>0</daily_times>
+    <buy_consume>10001</buy_consume>
+    <member_need>3</member_need>
+    <space_need>3</space_need>
+    <condition_id>11</condition_id>
+    <condition_value>1</condition_value>
+    <award_id>904</award_id>
+    <sweep_award_id>2606</sweep_award_id>
+    <one_star_id>11</one_star_id>
+    <one_star_value>1</one_star_value>
+    <two_star_id>1</two_star_id>
+    <two_star_value>4</two_star_value>
+    <three_star_id>1</three_star_id>
+    <three_star_value>8</three_star_value>
+    <plot_begin_id>0</plot_begin_id>
+    <plot_end_id>0</plot_end_id>
+    <plot_intro>本关卡只可通关一次，通关后无法重复进行。</plot_intro>
+    <scene>
+    </scene>
+    <music>Bg/xisijie</music>
+    <time>120</time>
+    <team_side>1</team_side>
+    <home_score>0</home_score>
+    <guest_score>0</guest_score>
+    <npc_id1>20002</npc_id1>
+    <npc_id2>20003</npc_id2>
+    <npc_id3>20004</npc_id3>
+    <assistant_id>0</assistant_id>
+    <assistant_level>1</assistant_level>
+    <awards_id>4025</awards_id>
+    <game_mode_id>10606</game_mode_id>
+    <icon_level>career_bg2_sitew</icon_level>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>10905</id>
+    <name>林疯狂</name>
+    <type>0</type>
+    <role_gift>0</role_gift>
+    <frame>CareerItemUL</frame>
+    <icon>career_career_1002</icon>
+    <coord_x>780</coord_x>
+    <coord_y>200</coord_y>
     <next_section_id>0</next_section_id>
     <costing>0</costing>
     <sweep_card>0</sweep_card>
@@ -1904,7 +2087,7 @@
     <space_need>3</space_need>
     <condition_id>11</condition_id>
     <condition_value>1</condition_value>
-    <award_id>607</award_id>
+    <award_id>905</award_id>
     <sweep_award_id>2607</sweep_award_id>
     <one_star_id>11</one_star_id>
     <one_star_value>1</one_star_value>

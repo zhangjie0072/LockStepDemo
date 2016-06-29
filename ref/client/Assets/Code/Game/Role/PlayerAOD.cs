@@ -20,6 +20,7 @@ public class AOD
 		eValid,
 		eBest
 	}
+    public Zone m_zone { get; private set; }
 	
 	public Player owner{ get; private set; }
 	
@@ -85,8 +86,19 @@ public class AOD
 		return tmpZone;
 	}
 
+    //Âß¼­²ã
+    public void GameUpdate(IM.Number deltaTime)
+    {
+		if( owner == null )
+			return;
+
+		Player defenseTarget = owner.m_defenseTarget; 
+        if (defenseTarget != null)
+            m_zone = GetStateByPos(defenseTarget.position);
+    }
+
     //äÖÈ¾²ã
-	public void Update()
+	public void ViewUpdate()
 	{
 		if( owner == null )
 			return;
@@ -102,14 +114,11 @@ public class AOD
 		if( renderer == null )
 			return;
 
-		Player defenseTarget = owner.m_defenseTarget; 
-        Zone zone = GetStateByPos(defenseTarget.position);
-		
-		if( zone == Zone.eInvalid )
+		if( m_zone == Zone.eInvalid )
 			renderer.material.color = GameUtils.red;
-		else if( zone == Zone.eValid )
+		else if( m_zone == Zone.eValid )
 			renderer.material.color = GameUtils.yellow;
-		else if( zone == Zone.eBest )
+		else if( m_zone == Zone.eBest )
 			renderer.material.color = GameUtils.green;
 		renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, 0.5f);
 

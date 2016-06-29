@@ -63,12 +63,12 @@ public class GameModeConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
 		LoadConfig();
-		Logger.ConfigEnd(name1);
-		Logger.ConfigBegin(name2);
+		
+		Debug.Log("Config reading " + name2);
 		LoadComboBonus();
-		Logger.ConfigEnd(name2);
+		
     }
 
 	public GameMode GetGameMode(uint ID)
@@ -99,7 +99,7 @@ public class GameModeConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         modes.Clear();
@@ -185,7 +185,7 @@ public class GameModeConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
 		XmlDocument doc = CommonFunction.LoadXmlConfig(GlobalConst.DIR_XML_COMBO_BONUS, text);

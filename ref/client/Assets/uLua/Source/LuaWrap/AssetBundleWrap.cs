@@ -108,6 +108,15 @@ public class AssetBundleWrap
 			LuaScriptMgr.PushObject(L, o);
 			return 1;
 		}
+		else if (count == 3)
+		{
+			string arg0 = LuaScriptMgr.GetLuaString(L, 1);
+			uint arg1 = (uint)LuaScriptMgr.GetNumber(L, 2);
+			ulong arg2 = (ulong)LuaScriptMgr.GetNumber(L, 3);
+			AssetBundleCreateRequest o = AssetBundle.LoadFromFileAsync(arg0,arg1,arg2);
+			LuaScriptMgr.PushObject(L, o);
+			return 1;
+		}
 		else
 		{
 			LuaDLL.luaL_error(L, "invalid arguments to method: AssetBundle.LoadFromFileAsync");
@@ -133,6 +142,15 @@ public class AssetBundleWrap
 			string arg0 = LuaScriptMgr.GetLuaString(L, 1);
 			uint arg1 = (uint)LuaScriptMgr.GetNumber(L, 2);
 			AssetBundle o = AssetBundle.LoadFromFile(arg0,arg1);
+			LuaScriptMgr.Push(L, o);
+			return 1;
+		}
+		else if (count == 3)
+		{
+			string arg0 = LuaScriptMgr.GetLuaString(L, 1);
+			uint arg1 = (uint)LuaScriptMgr.GetNumber(L, 2);
+			ulong arg2 = (ulong)LuaScriptMgr.GetNumber(L, 3);
+			AssetBundle o = AssetBundle.LoadFromFile(arg0,arg1,arg2);
 			LuaScriptMgr.Push(L, o);
 			return 1;
 		}

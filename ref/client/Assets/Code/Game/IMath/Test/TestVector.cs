@@ -183,7 +183,6 @@ namespace IM.Test
                     from.Normalize();
                     to.y = Number.zero;
                     to.Normalize();
-                    int dot = Vector3.Dot(from, to);
                     Number crossy = Vector3.Cross(from, to).y;
                     return Vector3.FromToAngle(from, to);
                 },

@@ -29,7 +29,7 @@ public class PlayerState_BodyThrowCatch : PlayerState_Skill
 		m_validStateTransactions.Remove(Command.CutIn);
 		m_validStateTransactions.Remove(Command.BackToBack);
 		m_validStateTransactions.Remove(Command.Defense);
-		m_validStateTransactions.Remove(Command.JockeyForPosition);
+		m_validStateTransactions.Remove(Command.Boxout);
 		m_validStateTransactions.Remove(Command.MoveStep);
 	}
 
@@ -63,7 +63,7 @@ public class PlayerState_BodyThrowCatch : PlayerState_Skill
 
         Dictionary<string, uint> data = m_player.m_finalAttrs;
         if( data == null )
-            Logger.LogError("Can not build player: " + m_player.m_name + " ,can not find state by id: " + m_player.m_id );
+				Debug.LogError("Can not build player: " + m_player.m_name + " ,can not find state by id: " + m_player.m_id );
 
         IM.Number fDistCurPlayer2Ball = GameUtils.HorizonalDistance(m_ball.position, m_player.position);
         IM.Number fMaxDist = GetMaxDistance(m_player);

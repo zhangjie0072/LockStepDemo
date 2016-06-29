@@ -62,11 +62,11 @@ public class ArticleStrengthConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name);
+		Debug.Log("Config reading " + name);
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            Debug.LogError("LoadConfig failed: " + name);
             return;
         }
         XmlDocument xmlDoc = CommonFunction.LoadXmlConfig(GlobalConst.DIR_XML_ARTICLE_STRENGTH, text);
@@ -90,6 +90,6 @@ public class ArticleStrengthConfig
             }
             configs.Add(data.position, data);
 		}
-		Logger.ConfigEnd(name);
+		
     }
 }

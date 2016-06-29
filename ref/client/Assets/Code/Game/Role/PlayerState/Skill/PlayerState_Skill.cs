@@ -36,21 +36,21 @@ public class PlayerState_Skill : PlayerState
 		base.OnEnter(lastState);
 		if( m_curExecSkill == null )
 		{
-			Logger.LogError("SkillState: no reference skill, check config.");
+			Debug.LogError("SkillState: no reference skill, check config.");
 			return;
 		}
 		m_curAction = _ParseAction(m_curExecSkill.curAction.action_id, m_curExecSkill.matchedKeyIdx);
 
-		//Logger.Log("current execute skill: " + m_curExecSkill.skill.id + " action id: " + m_curExecSkill.curAction.action_id + " type: " + m_curExecSkill.skill.action_type);
+		//Debug.Log("current execute skill: " + m_curExecSkill.skill.id + " action id: " + m_curExecSkill.curAction.action_id + " type: " + m_curExecSkill.skill.action_type);
 		//double animLength = (double)m_stateMachine.m_Animation[m_curAction].length;
 		//m_fSpeedComp = (float)(animLength / (animLength - m_curExecSkill.networkTimeComp));
 		//m_fSpeedComp = Mathf.Clamp(m_fSpeedComp, 0.0f, 2.0f);
 		//m_stateMachine.m_Animation[m_curAction].speed = m_fSpeedComp;
-		//Logger.Log("Complement time is: " + m_curExecSkill.networkTimeComp + " anim speed: " + m_fSpeedComp);
+		//Debug.Log("Complement time is: " + m_curExecSkill.networkTimeComp + " anim speed: " + m_fSpeedComp);
 		m_player.m_skillSystem.ResetSkillEffects(m_curExecSkill, m_curAction);
 		if (!string.IsNullOrEmpty(m_curExecSkill.curAction.camera_animation) && 
-			(m_player == m_match.m_mainRole || m_player.m_team == m_match.m_mainRole.m_team) 
-            && !MainPlayer.Instance.inPvpJoining)
+			m_player.m_team == m_match.mainRole.m_team &&
+            !MainPlayer.Instance.inPvpJoining)
         {
 			UCamCtrl_SkillAction.Play(m_player, m_curExecSkill.curAction.camera_animation);
         }
@@ -78,7 +78,7 @@ public class PlayerState_Skill : PlayerState
 		else if( strActions.Length == 1 )
 			resultAction = actionConfig;
 		else
-			Logger.LogError("Invalid action input.");
+			Debug.LogError("Invalid action input.");
 
 		string[] hands = resultAction.Split('&');
 		if( hands.Length > 1 )

@@ -34,11 +34,11 @@ public class ConstStringConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name);
+		UnityEngine.Debug.Log("Config reading " + name);
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            UnityEngine.Debug.LogError("LoadConfig failed: " + name);
             return;
         }
         constStringConfig.Clear();
@@ -66,7 +66,7 @@ public class ConstStringConfig
                 constStringConfig.Add(data.name, data.info);
             }
 		}
-		Logger.ConfigEnd(name);
+		
     }
 
     //根据文字名字返回内容

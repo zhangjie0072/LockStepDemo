@@ -14,7 +14,7 @@ public class MatchStateBegin_PVP
 	public override void OnEnter (MatchState lastState)
 	{
 		base.OnEnter (lastState);
-		Logger.Log("PVP Begin");
+		Debug.Log("PVP Begin");
 
 		if( m_match.m_bOverTime && m_match.m_uiMatch == null )
 		{
@@ -29,10 +29,8 @@ public class MatchStateBegin_PVP
 			Player ballOwner = ball.m_owner;
 			if (ballOwner != null)
 			{
-				if (match_pvp.m_mainRole.m_team.m_role == GameMatch.MatchRole.eDefense)
-					match_pvp.SwitchMainrole(ballOwner.m_defenseTarget);
-				else
-					match_pvp.SwitchMainrole(ballOwner);
+                match_pvp.SwitchMainrole(ballOwner.m_defenseTarget);
+                match_pvp.SwitchMainrole(ballOwner);
 				m_match.m_cam.Positioning(true);
 			}
 		}
@@ -41,6 +39,7 @@ public class MatchStateBegin_PVP
 		{
 			player.m_InfoVisualizer.SetActive(true);
 		}
-        m_match.m_mainRole.ShowIndicator(Color.yellow, true);
+        Color yellow = new Color(1f, 252f / 255, 10f / 255, 1);
+        m_match.mainRole.ShowIndicator(yellow, true);
 	}
 }

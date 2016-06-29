@@ -46,12 +46,12 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 		return false;
 	}
 
-    public override IM.BigNumber AdjustShootRate(Player shooter, IM.BigNumber rate)
+    public override IM.PrecNumber AdjustShootRate(Player shooter, IM.PrecNumber rate)
 	{
 		if (curStep.mustGoal)
-            return IM.BigNumber.one;
+            return IM.PrecNumber.one;
 		else if (curStep.cantGoal)
-            return IM.BigNumber.zero;
+            return IM.PrecNumber.zero;
 		return rate;
 	}
 
@@ -68,7 +68,7 @@ public class PractiseBehaviourGuide : PractiseBehaviour
             return IM.Number.one;
 		return rate;
 	}
-    public override ShootSolution GetShootSolution(UBasket basket, Area area, Player shooter, IM.BigNumber rate)
+    public override ShootSolution GetShootSolution(UBasket basket, Area area, Player shooter, IM.PrecNumber rate)
 	{
 		if (curStep.mustGoal || curStep.cantGoal)
 		{
@@ -102,11 +102,9 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 		for (int i = 0; i < playerList.Count; ++i)
 		{
 			Player player = playerList[i];
-			if (player.m_inputDispatcher == null)
-				player.m_inputDispatcher = new InputDispatcher(match, player);
-			if (player.m_aiMgr == null)
-				player.m_aiMgr = new AISystem_PractiseGuide(match, player, AIState.Type.ePractiseGuide_Idle);
+            player.operMode = Player.OperMode.AI;
 			(player.m_aiMgr as AISystem_PractiseGuide).index = i;
+            player.operMode = Player.OperMode.None;
 			if (player.m_AOD == null)
 				player.m_AOD = new AOD(player);
 			player.m_StateMachine.onStateChanged += OnPlayerStateChanged;
@@ -114,6 +112,8 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 
 		Animator animator = match.m_uiController.GetComponent<Animator>();
 		Object.Destroy(animator);
+
+        match.turnManager.onNewTurn += OnNewTurn;
 	}
 
 	protected override void OnFirstStart()
@@ -179,47 +179,60 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 		base.OnStart();
 	}
 
-	protected override void OnUpdate()
+    public override void ViewUpdate(float deltaTime)
+    {
+        base.ViewUpdate(deltaTime);
+
+#if !UNITY_IPHONE && !UNITY_ANDROID
+        if (Input.GetKeyDown(KeyCode.J) || Input.GetKeyUp(KeyCode.J))
+        {
+            if (IsCommandValid(match.m_uiController.m_btns[0].cmd))
+                RestoreTimeScale();
+        }
+
+        if (Input.GetKeyDown(KeyCode.K) || Input.GetKeyUp(KeyCode.K))
+        {
+            if (IsCommandValid(match.m_uiController.m_btns[1].cmd))
+                RestoreTimeScale();
+        }
+
+        if (Input.GetKeyDown(KeyCode.L) || Input.GetKeyUp(KeyCode.L))
+        {
+            if (IsCommandValid(match.m_uiController.m_btns[2].cmd))
+                RestoreTimeScale();
+        }
+
+        if (Input.GetKeyDown(KeyCode.I) || Input.GetKeyUp(KeyCode.I))
+        {
+            if (IsCommandValid(match.m_uiController.m_btns[3].cmd))
+                RestoreTimeScale();
+        }
+
+        if (Input.GetKey(KeyCode.J))
+            UnhighlightButton(match.m_uiController.m_btns[0].btn.gameObject);
+        if (Input.GetKey(KeyCode.K))
+            UnhighlightButton(match.m_uiController.m_btns[1].btn.gameObject);
+        if (Input.GetKey(KeyCode.L))
+            UnhighlightButton(match.m_uiController.m_btns[2].btn.gameObject);
+        if (Input.GetKey(KeyCode.I))
+            UnhighlightButton(match.m_uiController.m_btns[3].btn.gameObject);
+
+#else
+        foreach (UController.Button btn in match.m_uiController.m_btns)
+        {
+            if (btn != null && btn.btn != null && btn.btn.isPressed)
+                UnhighlightButton(btn.btn.gameObject);
+        }
+#endif
+    }
+
+	public override void GameUpdate(IM.Number deltaTime)
 	{
-		base.OnUpdate();
+		base.GameUpdate(deltaTime);
 
 		if (curStep != null)
 		{
-			stepRunningTime += Time.deltaTime;
-
-#if !UNITY_IPHONE && !UNITY_ANDROID
-			if (Input.GetKeyDown(KeyCode.J))
-				OnBtnPress(match.m_uiController.m_btns[0].btn.gameObject, true);
-			if (Input.GetKeyUp(KeyCode.J))
-				OnBtnPress(match.m_uiController.m_btns[0].btn.gameObject, false);
-			if (Input.GetKey(KeyCode.J))
-				UnhighlightButton(match.m_uiController.m_btns[0].btn.gameObject);
-			if (Input.GetKeyDown(KeyCode.K))
-				OnBtnPress(match.m_uiController.m_btns[1].btn.gameObject, true);
-			if (Input.GetKeyUp(KeyCode.K))
-				OnBtnPress(match.m_uiController.m_btns[1].btn.gameObject, false);
-			if (Input.GetKey(KeyCode.K))
-				UnhighlightButton(match.m_uiController.m_btns[1].btn.gameObject);
-			if (Input.GetKeyDown(KeyCode.L))
-				OnBtnPress(match.m_uiController.m_btns[2].btn.gameObject, true);
-			if (Input.GetKeyUp(KeyCode.L))
-				OnBtnPress(match.m_uiController.m_btns[2].btn.gameObject, false);
-			if (Input.GetKey(KeyCode.L))
-				UnhighlightButton(match.m_uiController.m_btns[2].btn.gameObject);
-			if (Input.GetKeyDown(KeyCode.I))
-				OnBtnPress(match.m_uiController.m_btns[3].btn.gameObject, true);
-			if (Input.GetKeyUp(KeyCode.I))
-				OnBtnPress(match.m_uiController.m_btns[3].btn.gameObject, false);
-			if (Input.GetKey(KeyCode.I))
-				UnhighlightButton(match.m_uiController.m_btns[3].btn.gameObject);
-
-#else
-			foreach (UController.Button btn in match.m_uiController.m_btns)
-			{
-				if (btn != null && btn.btn != null && btn.btn.isPressed)
-					UnhighlightButton(btn.btn.gameObject);
-			}
-#endif
+			stepRunningTime += (float)deltaTime;
 
 			if (HasCondition(PractiseStepCondition.OnGround))
 			{
@@ -448,7 +461,7 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 
 	void RunStep()
 	{
-		Logger.Log("PractiseStep: Run step:" + curStep.ID + " " + curStep.name);
+		Debug.Log("PractiseStep: Run step:" + curStep.ID + " " + curStep.name);
 
 		stepFailed = false;
 
@@ -467,14 +480,14 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 		SetScreenEffect();
 		SetSceneEffect();
 		SetSceneTip();
-		SetPause();
+		SetTimeScale();
 
 		stepRunningTime = 0f;
 	}
 
 	void EndStep()
 	{
-		Logger.Log("PractiseStep, End step:" + curStep.ID + " Success:" + !stepFailed);
+		Debug.Log("PractiseStep, End step:" + curStep.ID + " Success:" + !stepFailed);
 
 		if (!stepFailed)
 			EndObjective();
@@ -503,7 +516,7 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 		UnhighlightButton();
 
 		readyStepID = stepFailed ? curStep.failNext : curStep.next;
-		Logger.Log("PractiseStep, Ready step:" + readyStepID);
+		Debug.Log("PractiseStep, Ready step:" + readyStepID);
 		curStep = null;
 		if (!stepFailed && readyStepID == 0)
 			StartCoroutine(Step_Over());
@@ -513,7 +526,7 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 	{
 		if (curStep.startObjective.Key == 0)
 			return;
-		Logger.Log("PractiseStep, step:" + curStep.ID + " Start objective: " + curStep.startObjective.Key + ", " + curStep.startObjective.Value);
+		Debug.Log("PractiseStep, step:" + curStep.ID + " Start objective: " + curStep.startObjective.Key + ", " + curStep.startObjective.Value);
 		GameObject item;
 		if (objectives.TryGetValue(curStep.startObjective.Key, out item))
 		{
@@ -525,7 +538,7 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 	{
 		if (curStep.endObjective == 0)
 			return;
-		Logger.Log("PractiseStep, step:" + curStep.ID + " End objective: " + curStep.endObjective);
+		Debug.Log("PractiseStep, step:" + curStep.ID + " End objective: " + curStep.endObjective);
 		GameObject effectFinish = CommonFunction.InstantiateObject(prefabObjFinish, UIManager.Instance.m_uiRootBasePanel.transform);
 		Object.Destroy(effectFinish, 2f);
 		GameObject item;
@@ -537,7 +550,7 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 
 		FirstFightGuideModuleReq req = new FirstFightGuideModuleReq();
 		req.sub_id = (GuideFightAction)curStep.endObjective;
-		Logger.Log("sub_id: " + req.sub_id);
+		Debug.Log("sub_id: " + req.sub_id);
 
 		GameSystem.Instance.mNetworkManager.m_platConn.SendPack<FirstFightGuideModuleReq>(0, req, MsgID.FirstFightGuideModuleReqID);
 
@@ -559,7 +572,7 @@ public class PractiseBehaviourGuide : PractiseBehaviour
         if (player != null)
             plot.Show(1, player.m_id, curStep.dialog, DIALOG_DELAY);
         else
-            Logger.LogError("get player failed by index " + curStep.dialogRole);
+            Debug.LogError("get player failed by index " + curStep.dialogRole);
 	}
 
 	void ShowVoiceover()
@@ -673,7 +686,7 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 					player.m_bMovedWithBall = false;
                 if (curStep.timeScale == 0)
                     //player.Update(new IM.Number(Time.deltaTime));//不明白此处的意思，先暂时改为0
-                    player.Update(IM.Number.zero);
+                    player.GameUpdate(IM.Number.zero);
                 
 			}
 		}
@@ -698,7 +711,7 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 
 	void SetBehaviour()
 	{
-		//bool hasController = false;
+		bool hasController = false;
 		for (int i = 0; i < playerList.Count; ++i)
 		{
 			Player player = playerList[i];
@@ -707,31 +720,31 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 			{
 				if (behaviour == PractiseStepBehaviour.PlayerControl)
 				{
-					//hasController = true;
-					player.m_inputDispatcher.m_enable = true;
+					hasController = true;
+                    player.operMode = Player.OperMode.Input;
 					player.m_inputDispatcher.m_enableMove = curStep.canMove;
                     InputReader.Instance.player = player;
+                    InputReader.Instance.enabled = true;
 					if (curStep.timeScale == 0f)
 						InputReader.Instance.Update(match);
-					player.m_aiMgr.m_enable = false;
-                    player.ShowIndicator(Color.yellow, true);
+                    Color yellow = new Color(1f, 252f / 255, 10f / 255, 1);
+                    player.ShowIndicator(yellow, true);
 					match.m_cam.m_trLook = player.gameObject.transform;
 				}
 				else
 				{
-					player.m_inputDispatcher.m_enable = false;
-					player.m_aiMgr.m_enable = true;
+                    player.operMode = Player.OperMode.AI;
 					player.HideIndicator();
 				}
 			}
 			else
 			{
-				player.m_inputDispatcher.m_enable = false;
-				player.m_aiMgr.m_enable = false;
+                player.operMode = Player.OperMode.None;
 				player.HideIndicator();
 			}
 		}
-		//match.m_uiController.gameObject.SetActive(hasController);
+        if (!hasController)
+            InputReader.Instance.enabled = false;
 	}
 
 	void SetActionHint()
@@ -768,7 +781,7 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 		{
 			GameObject prefab = ResourceLoadManager.Instance.GetResources("Prefab/GUI/" + curStep.screenEffect) as GameObject;
 			if (prefab == null)
-				Logger.LogError("PractiseStep, Can not find screen effect:" + curStep.screenEffect + " step: " + curStep.ID);
+				Debug.LogError("PractiseStep, Can not find screen effect:" + curStep.screenEffect + " step: " + curStep.ID);
 			GameObject effect = Object.Instantiate(prefab) as GameObject;
 			effects.Add(effect);
 			effect.transform.SetParent(UIManager.Instance.m_uiRootBasePanel.transform, false);
@@ -782,7 +795,7 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 				if (collider != null)
 					UIEventListener.Get(collider.gameObject).onClick += OnClickScreenEffect;
 				else
-					Logger.LogError("No box collider in screen effect. step: " + curStep.ID);
+					Debug.LogError("No box collider in screen effect. step: " + curStep.ID);
 			}
 		}
 	}
@@ -795,7 +808,7 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 			{
 				GameObject prefab = ResourceLoadManager.Instance.LoadPrefab("Prefab/Indicator/" + pair.Value);
 				if (prefab == null)
-					Logger.LogError("PractiseStep, Can not find scene effect:" + pair.Value + " step: " + curStep.ID);
+					Debug.LogError("PractiseStep, Can not find scene effect:" + pair.Value + " step: " + curStep.ID);
 				GameObject effect = Object.Instantiate(prefab) as GameObject;
 				effects.Add(effect);
 				if (!string.IsNullOrEmpty(pair.Key))
@@ -825,14 +838,22 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 		}
 	}
 
-	void SetPause()
+	void SetTimeScale()
 	{
 		GameSystem.Instance.mClient.timeScale = curStep.timeScale;
+        VirtualGameServer.Instance.timeScale = curStep.timeScale;
 		if (curStep.timeScale == 0f)
 		{
 			match.m_uiController.UpdateBtnCmd();
 		}
 	}
+
+    void RestoreTimeScale()
+    {
+        GameSystem.Instance.mClient.timeScale = 1f;
+        VirtualGameServer.Instance.timeScale = 1f;
+        VirtualGameServer.Instance.Resume();
+    }
 
 	bool HasCondition(PractiseStepCondition cond)
 	{
@@ -851,7 +872,7 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 			{
 				if (pair.Key == cond && validator(pair.Value))
 				{
-					Logger.Log("PractiseStep, Fail condition:" + cond + " matched. step:" + curStep.ID);
+					Debug.Log("PractiseStep, Fail condition:" + cond + " matched. step:" + curStep.ID);
 					stepFailed = true;
 					stepFinished = true;
 					return;
@@ -864,7 +885,7 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 			{
 				if (pair.Key == cond && validator(pair.Value))
 				{
-					Logger.Log("PractiseStep, End condition:" + cond + " matched. step:" + curStep.ID);
+					Debug.Log("PractiseStep, End condition:" + cond + " matched. step:" + curStep.ID);
 					stepFinished = true;
 					return;
 				}
@@ -876,7 +897,7 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 	{
 		Player player = GameSystem.Instance.mClient.mPlayerManager.GetPlayerByIndex(index);
 		if (player == null)
-			Logger.LogError("PractiseStep, Can't find player, index: " + index + " step: " + curStep.ID);
+			Debug.LogError("PractiseStep, Can't find player, index: " + index + " step: " + curStep.ID);
 		return player;
 	}
 
@@ -892,14 +913,14 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 			obj = GameObject.Find(tagOrName);
 		}
 		if (obj == null)
-			Logger.LogError("PractiseStep, Can't find scene obj, name or tag: " + tagOrName + " step:" + curStep.ID);
+			Debug.LogError("PractiseStep, Can't find scene obj, name or tag: " + tagOrName + " step:" + curStep.ID);
 		return obj;
 	}
 
 	private void OnPlotNext()
 	{
 		if (string.IsNullOrEmpty(curStep.dialog))
-			Logger.LogError("PractiseStep, OnPlotNext, cur step has no dialog. Step: " + curStep.ID);
+			Debug.LogError("PractiseStep, OnPlotNext, cur step has no dialog. Step: " + curStep.ID);
 		stepFinished = true;
 	}
 
@@ -907,20 +928,42 @@ public class PractiseBehaviourGuide : PractiseBehaviour
 	{
 	}
 
+    private void OnNewTurn(FrameInfo turn)
+    {
+        ClientInput input = turn.info[0];
+        Command command = (Command)input.cmd;
+        if (command == Command.Block)
+            Debug.DebugBreak();
+        ValidateCondition(PractiseStepCondition.ButtonPress,
+            (param) =>
+            {
+                Command cmd = (Command)(param[0]);
+                return command == cmd;
+            });
+    }
+
 	private void OnBtnPress(GameObject go, bool press)
 	{
 		if (stepFinished || curStep == null)
 			return;
+        foreach (UController.Button btn in match.m_uiController.m_btns)
+        {
+            if (btn.btn.gameObject == go)
+            {
+                if (IsCommandValid(btn.cmd))
+                    RestoreTimeScale();
+            }
+        }
 		//UnhighlightButton(go);
+        /*
 		ValidateCondition(press ? PractiseStepCondition.ButtonPress : PractiseStepCondition.ButtonRelease,
 			(param) =>
 			{
 				Command cmd = (Command)(param[0]);
-				if (cmd == Command.Block)
-					Debug.DebugBreak();
 				UController.Button btn = match.m_uiController.GetButton(cmd);
 				return btn.btn.gameObject == go && btn.cmd == cmd;
 			});
+        */
 	}
 
 	private void UnhighlightButton(GameObject go = null)

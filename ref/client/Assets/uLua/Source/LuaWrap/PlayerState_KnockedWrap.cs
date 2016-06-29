@@ -9,6 +9,7 @@ public class PlayerState_KnockedWrap
 		{
 			new LuaMethod("OnEnter", OnEnter),
 			new LuaMethod("Update", Update),
+			new LuaMethod("OnExit", OnExit),
 			new LuaMethod("New", _CreatePlayerState_Knocked),
 			new LuaMethod("GetClassType", GetClassType),
 		};
@@ -16,6 +17,7 @@ public class PlayerState_KnockedWrap
 		LuaField[] fields = new LuaField[]
 		{
 			new LuaField("m_bKnockedRecover", get_m_bKnockedRecover, set_m_bKnockedRecover),
+			new LuaField("m_bToHoldBall", get_m_bToHoldBall, set_m_bToHoldBall),
 		};
 
 		LuaScriptMgr.RegisterLib(L, "PlayerState_Knocked", typeof(PlayerState_Knocked), regs, fields, typeof(PlayerState));
@@ -76,6 +78,30 @@ public class PlayerState_KnockedWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_m_bToHoldBall(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		PlayerState_Knocked obj = (PlayerState_Knocked)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name m_bToHoldBall");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index m_bToHoldBall on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.m_bToHoldBall);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_m_bKnockedRecover(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -100,6 +126,30 @@ public class PlayerState_KnockedWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_m_bToHoldBall(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		PlayerState_Knocked obj = (PlayerState_Knocked)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name m_bToHoldBall");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index m_bToHoldBall on a nil value");
+			}
+		}
+
+		obj.m_bToHoldBall = LuaScriptMgr.GetBoolean(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int OnEnter(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
@@ -116,6 +166,15 @@ public class PlayerState_KnockedWrap
 		PlayerState_Knocked obj = (PlayerState_Knocked)LuaScriptMgr.GetNetObjectSelf(L, 1, "PlayerState_Knocked");
 		IM.Number arg0 = (IM.Number)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Number));
 		obj.Update(arg0);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int OnExit(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		PlayerState_Knocked obj = (PlayerState_Knocked)LuaScriptMgr.GetNetObjectSelf(L, 1, "PlayerState_Knocked");
+		obj.OnExit();
 		return 0;
 	}
 }

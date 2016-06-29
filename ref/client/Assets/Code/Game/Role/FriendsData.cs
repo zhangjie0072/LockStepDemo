@@ -19,7 +19,7 @@ public class FriendData
     }
 
     /// <summary>
-    /// 好友列表
+    /// 好友列表	放到lua中
     /// </summary>
     public List<FriendInfo> friend_list;
     /// <summary>
@@ -128,7 +128,7 @@ public class FriendData
     {
         if (resp.result != 0)
         {
-            Logger.Log(string.Format("好友操作 Type:{0} Error:{1} ", resp.type, resp.result));
+            Debug.Log(string.Format("好友操作 Type:{0} Error:{1} ", resp.type, resp.result));
             CommonFunction.ShowErrorMsg((ErrorID)resp.result);
             return;
         }
@@ -143,104 +143,117 @@ public class FriendData
                 {
                     RemoveByAccID(gift_list, resp.op_friend.acc_id);
                     gift_list.Add(resp.op_friend); //xxx收到礼物
-                    this.ListChanged(FriendOperationType.FOT_QUERY_GIFT);
-                    Logger.Log(string.Format("{0}送的礼物已收到！", resp.op_friend.name));
+//				this.ListChanged(FriendOperationType.FOT_QUERY_GIFT);
+					Scheduler.Instance.AddFrame(1,false,ListQueryGiftChanged);
+                    Debug.Log(string.Format("{0}送的礼物已收到！", resp.op_friend.name));
                 }
                 else
                 {
-                    if (resp.friend != null)
-                    {
-                        foreach (var fri in resp.friend)
-                        {
-                            var f = from n in friend_list where n.acc_id == fri.acc_id select n;
-                            foreach (var v2 in f)
-                            {
-                                v2.present_flag = 1;
-                            }
-                        }
-                    }
-                    this.ListChanged(FriendOperationType.FOT_QUERY);
+//                    if (resp.friend != null)
+//                    {
+//                        foreach (var fri in resp.friend)
+//                        {
+//                            var f = from n in friend_list where n.acc_id == fri.acc_id select n;
+//                            foreach (var v2 in f)
+//                            {
+//                                v2.present_flag = 1;
+//                            }
+//                        }
+//                    }
+					Scheduler.Instance.AddFrame(1,false,ListQueryChanged);
+//                    this.ListChanged(FriendOperationType.FOT_QUERY);
                 }
                 break;
             case FriendOperationType.FOT_ADD:
-                RemoveByAccID(friend_list, resp.op_friend.acc_id);
-                friend_list.Add(resp.op_friend);
-                this.ListChanged(FriendOperationType.FOT_QUERY);
+//                RemoveByAccID(friend_list, resp.op_friend.acc_id);
+//                friend_list.Add(resp.op_friend);
+//				this.ListChanged(FriendOperationType.FOT_QUERY);
+				Scheduler.Instance.AddFrame(1,false,ListQueryChanged);
                 if(this.RemoveByAccID(apply_list, resp.op_friend.acc_id)) //添加好友，需要删除申请列表中对应的记录
-                    this.ListChanged(FriendOperationType.FOT_QUERY_APPLY);
-                Logger.Log(string.Format("{0}已加入好友列表！", resp.op_friend.name));
-                CommonFunction.ShowTip(string.Format(CommonFunction.GetConstString("STR_FRIENDS_TIPS_ADD"), resp.op_friend.name));
+//				this.ListChanged(FriendOperationType.FOT_QUERY_APPLY);
+				Scheduler.Instance.AddFrame(1,false,ListQueryApplyChanged);
+                Debug.Log(string.Format("{0}已加入好友列表！", resp.op_friend.name));
                 break;
             case FriendOperationType.FOT_BLACK:
                 RemoveByAccID(black_list, resp.op_friend.acc_id);
                 black_list.Add(resp.op_friend);
-                this.ListChanged(FriendOperationType.FOT_QUERY_BLACK);
-                Logger.Log(string.Format("{0}已被加入黑名单！", resp.op_friend.name));
+//			this.ListChanged(FriendOperationType.FOT_QUERY_BLACK);
+				Scheduler.Instance.AddFrame(1,false,ListQueryBlackChanged);
+                Debug.Log(string.Format("{0}已被加入黑名单！", resp.op_friend.name));
                 CommonFunction.ShowTip(string.Format(CommonFunction.GetConstString("STR_FRIENDS_TIPS_BLACK_ADD"), resp.op_friend.name));
                 break;
             case FriendOperationType.FOT_GETAWARDS:
                 foreach(var fri in resp.friend)
                     this.RemoveByAccID(gift_list, fri.acc_id);
-                this.ListChanged(FriendOperationType.FOT_QUERY_GIFT);
-                Logger.Log(string.Format("你已查收领取礼物！"));
+//			this.ListChanged(FriendOperationType.FOT_QUERY_GIFT);
+				Scheduler.Instance.AddFrame(1,false,ListQueryGiftChanged);
+                Debug.Log(string.Format("你已查收领取礼物！"));
                 CommonFunction.ShowTip(CommonFunction.GetConstString("STR_FRIENDS_TIPS_GET_GIFT"));
                 break;
             case FriendOperationType.FOT_AGREE_APPLY:
                 this.RemoveByAccID(apply_list, resp.op_friend.acc_id);
-                this.RemoveByAccID(friend_list, resp.op_friend.acc_id);
-                friend_list.Add(resp.op_friend);
-                this.ListChanged(FriendOperationType.FOT_QUERY_APPLY);
-                Logger.Log(string.Format("你同意{0}已加入好友列表！", resp.op_friend.name));
-                CommonFunction.ShowTip(string.Format(CommonFunction.GetConstString("STR_FRIENDS_TIPS_AGREE"), resp.op_friend.name));
+//                this.RemoveByAccID(friend_list, resp.op_friend.acc_id);
+//                friend_list.Add(resp.op_friend);
+//			this.ListChanged(FriendOperationType.FOT_QUERY_APPLY);
+				Scheduler.Instance.AddFrame(1,false,ListQueryApplyChanged);
+                Debug.Log(string.Format("你同意{0}已加入好友列表！", resp.op_friend.name));
                 break;
             case FriendOperationType.FOT_IGNORE_APPLY:
                 this.RemoveByAccID(apply_list, resp.op_friend.acc_id);
-                this.ListChanged(FriendOperationType.FOT_QUERY_APPLY);
-                Logger.Log(string.Format("已忽略[{0}]好友申请信息！", resp.op_friend.name));
+//			this.ListChanged(FriendOperationType.FOT_QUERY_APPLY);
+				Scheduler.Instance.AddFrame(1,false,ListQueryApplyChanged);
+                Debug.Log(string.Format("已忽略[{0}]好友申请信息！", resp.op_friend.name));
                 break;
             case FriendOperationType.FOT_APPLY:
                 this.RemoveByAccID(apply_list, resp.op_friend.acc_id);
                 if (apply_list.Count >= maxFriendsApply)
                     apply_list.RemoveAt(0);
                 apply_list.Add(resp.op_friend);
-                this.ListChanged(FriendOperationType.FOT_QUERY_APPLY);
-                Logger.Log(string.Format("{0}申请加您为好友！", resp.op_friend.name));
+//			this.ListChanged(FriendOperationType.FOT_QUERY_APPLY);
+				Scheduler.Instance.AddFrame(1,false,ListQueryApplyChanged);
+                Debug.Log(string.Format("{0}申请加您为好友！", resp.op_friend.name));
                 break;
             case FriendOperationType.FOT_DEL_FRIEND:
-                this.RemoveByAccID(friend_list, resp.op_friend.acc_id);
-                this.ListChanged(FriendOperationType.FOT_QUERY);
-                Logger.Log(string.Format("{0}已从好友列表中移除！", resp.op_friend.name));
+//                this.RemoveByAccID(friend_list, resp.op_friend.acc_id);
+			//                this.ListChanged(FriendOperationType.FOT_QUERY);
+				Scheduler.Instance.AddFrame(1,false,ListQueryChanged);
+                Debug.Log(string.Format("{0}已从好友列表中移除！", resp.op_friend.name));
                 //CommonFunction.ShowTip(string.Format(CommonFunction.GetConstString("STR_FRIENDS_TIPS_DEL"), resp.op_friend.name));
                 break;
             case FriendOperationType.FOT_DEL_BLACK:
                 this.RemoveByAccID(black_list, resp.op_friend.acc_id);
-                this.ListChanged(FriendOperationType.FOT_QUERY_BLACK);
-                Logger.Log(string.Format("{0}已从黑名单中移除！", resp.op_friend.name));
+//			this.ListChanged(FriendOperationType.FOT_QUERY_BLACK);
+				Scheduler.Instance.AddFrame(1,false,ListQueryBlackChanged);
+                Debug.Log(string.Format("{0}已从黑名单中移除！", resp.op_friend.name));
                 CommonFunction.ShowTip(string.Format(CommonFunction.GetConstString("STR_FRIENDS_TIPS_BLACK_DEL"), resp.op_friend.name));
                 break;
             case FriendOperationType.FOT_QUERY:
-                friend_list.Clear();
-                friend_list.AddRange(resp.friend);
-                this.ListChanged(FriendOperationType.FOT_QUERY);
-                Logger.Log(string.Format("获取到{0}位好友信息！", friend_list.Count));
+//                friend_list.Clear();
+//                friend_list.AddRange(resp.friend);
+//			this.ListChanged(FriendOperationType.FOT_QUERY);
+				Scheduler.Instance.AddFrame(1,false,ListQueryChanged);
+//                Debug.Log(string.Format("获取到{0}位好友信息！", friend_list.Count));
                 break;
             case FriendOperationType.FOT_QUERY_BLACK:
                 black_list.Clear();
                 black_list.AddRange(resp.friend);
-                this.ListChanged(FriendOperationType.FOT_QUERY_BLACK);
-                Logger.Log(string.Format("获取到{0}位黑名单信息！", black_list.Count));
+//			this.ListChanged(FriendOperationType.FOT_QUERY_BLACK);
+				Scheduler.Instance.AddFrame(1,false,ListQueryBlackChanged);
+                Debug.Log(string.Format("获取到{0}位黑名单信息！", black_list.Count));
                 break;
             case FriendOperationType.FOT_QUERY_APPLY:
                 apply_list.Clear();
                 apply_list.AddRange(resp.friend);
-                this.ListChanged(FriendOperationType.FOT_QUERY_APPLY);
-                Logger.Log(string.Format("获取到{0}位好友申请信息！", apply_list.Count));
+//			this.ListChanged(FriendOperationType.FOT_QUERY_APPLY);
+				Scheduler.Instance.AddFrame(1,false,ListQueryApplyChanged);
+                Debug.Log(string.Format("获取到{0}位好友申请信息！", apply_list.Count));
                 break;
             case FriendOperationType.FOT_QUERY_GIFT:
                 gift_list.Clear();
                 gift_list.AddRange(resp.friend);
-                this.ListChanged(FriendOperationType.FOT_QUERY_GIFT);
-                Logger.Log(string.Format("获取到{0}位礼物信息！", gift_list.Count));
+//			this.ListChanged(FriendOperationType.FOT_QUERY_GIFT);
+				Scheduler.Instance.AddFrame(1,false,ListQueryGiftChanged);
+                Debug.Log(string.Format("获取到{0}位礼物信息！", gift_list.Count));
                 break;
             default:
                 break;
@@ -266,13 +279,28 @@ public class FriendData
             _changedCallBackList.Remove(callback);
         }
     }
-
+	public void ListQueryChanged()
+	{
+		ListChanged(FriendOperationType.FOT_QUERY);
+	}
+	public void ListQueryApplyChanged()
+	{
+		ListChanged(FriendOperationType.FOT_QUERY_APPLY);
+	}
+	public void ListQueryGiftChanged()
+	{
+		ListChanged(FriendOperationType.FOT_QUERY_GIFT);
+	}
+	public void ListQueryBlackChanged()
+	{
+		ListChanged(FriendOperationType.FOT_QUERY_BLACK);
+	}
     public void ListChanged(FriendOperationType t)
     {
         if (this.onListChanged != null)
         {
             onListChanged(t);
-            Logger.Log("ListChanged:" + t.ToString());
+            Debug.Log("ListChanged:" + t.ToString());
         }
     }
 

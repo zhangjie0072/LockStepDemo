@@ -37,8 +37,8 @@ public class GameMatch_GrabZone : GameMatch
     private static IM.Number RADIAL_NEAR = BASKET_DIST - new IM.Number(8, 750);
     private static IM.Number RADIAL_MIDDLE = BASKET_DIST - new IM.Number(6, 200);
     public IM.Number RADIAL_FAR = BASKET_DIST - new IM.Number(3, 650);
-    private static IM.Number ANGLE_SEG = new IM.Number(44, 63);
-    private static IM.Number ANGLE_SEG_SIDE = new IM.Number(22, 55);
+    private static IM.Number ANGLE_SEG = new IM.Number(44, 630);
+    private static IM.Number ANGLE_SEG_SIDE = new IM.Number(23, 055);
     public static int ZONE_COUNT = 11;
 
     public IM.Number ZONE_ARRIVE_TIME_DIFF_THRESHOLD;
@@ -67,57 +67,60 @@ public class GameMatch_GrabZone : GameMatch
 
 	}
 
-	override public void OnSceneComplete()
+	protected override void _OnLoadingCompleteImp ()
 	{
-		base.OnSceneComplete();
+		base._OnLoadingCompleteImp ();
 
 		if (m_config == null)
 		{
-			Logger.LogError("Match config file loading failed.");
+			Debug.LogError("Match config file loading failed.");
 			return;
 		}
 
+        //TODO 针对PVP修改
 		//main role
 		PlayerManager pm = GameSystem.Instance.mClient.mPlayerManager;
-		m_mainRole = pm.GetPlayerById( uint.Parse(m_config.MainRole.id) );
-		m_mainRole.m_StateMachine.ReplaceState(new PlayerState_Stand_Simple(m_mainRole.m_StateMachine, this));
-		m_mainRole.m_inputDispatcher = new InputDispatcher(this, m_mainRole);
-		m_mainRole.m_catchHelper = new CatchHelper(m_mainRole);
-		m_mainRole.m_catchHelper.ExtractBallLocomotion();
-		m_mainRole.m_StateMachine.SetState(PlayerState.State.eStand, true);
-		m_mainRole.m_InfoVisualizer.CreateStrengthBar();
-		m_mainRole.m_InfoVisualizer.ShowStaminaBar(true);
-		m_mainRole.m_team.m_role = GameMatch.MatchRole.eOffense;
-		m_mainRole.m_alwaysForbiddenPickup = false;
+		mainRole = pm.GetPlayerById( uint.Parse(m_config.MainRole.id) );
+		mainRole.m_StateMachine.ReplaceState(new PlayerState_Stand_Simple(mainRole.m_StateMachine, this));
+        mainRole.operMode = Player.OperMode.Input;
+		mainRole.m_catchHelper = new CatchHelper(mainRole);
+		mainRole.m_catchHelper.ExtractBallLocomotion();
+		mainRole.m_StateMachine.SetState(PlayerState.State.eStand, true);
+		mainRole.m_team.m_role = GameMatch.MatchRole.eOffense;
+		mainRole.m_alwaysForbiddenPickup = false;
 
-		//m_mainRole.m_aiMgr = new AISystem_Basic(this, m_mainRole, AIState.Type.eGrabZone_Init);
+		//mainRole.m_aiMgr = new AISystem_Basic(this, mainRole, AIState.Type.eGrabZone_Init);
 
 		//npc
-		Team oppoTeam = m_mainRole.m_team.m_side == Team.Side.eAway ? m_homeTeam : m_awayTeam;
+		Team oppoTeam = mainRole.m_team.m_side == Team.Side.eAway ? m_homeTeam : m_awayTeam;
 		npc = oppoTeam.GetMember(0);
 		npc.m_StateMachine.ReplaceState(new PlayerState_Stand_Simple(npc.m_StateMachine, this));
 		npc.m_StateMachine.ReplaceState(new PlayerState_Knocked_NoHold(npc.m_StateMachine, this));
 		if (npc.model != null)
 			npc.model.EnableGrey();
-		npc.m_aiMgr = new AISystem_GrabZone(this, npc, AIState.Type.eGrabZone_Init, m_config.NPCs[0].AIID);
 		npc.m_team.m_role = GameMatch.MatchRole.eDefense;
+        npc.operMode = Player.OperMode.AI;
 
 		npc.m_alwaysForbiddenPickup = false;
 
-		_UpdateCamera(m_mainRole);
-
+		_UpdateCamera(mainRole);
 
 		CreateZoneIndicator();
 
 		mCurScene.mGround.AddZoneConstrain( new GrabPointConstrain(this) );
 	}
+
+    public override AISystem CreateAISystem(Player player)
+    {
+		return new AISystem_GrabZone(this, player, AIState.Type.eGrabZone_Init, m_config.NPCs[0].AIID);
+    }
 	protected override void OnLoadingComplete ()
 	{
 		base.OnLoadingComplete ();
 		m_stateMachine.SetState(m_config.needPlayPlot ? MatchState.State.ePlotBegin : MatchState.State.eShowRule);
 	}
 
-    public override void HandleGameBegin(Pack pack)
+    public override void OnGameBegin(GameBeginResp resp)
     {
         m_stateMachine.SetState(MatchState.State.eBegin);
     }
@@ -159,9 +162,10 @@ public class GameMatch_GrabZone : GameMatch
 
 	public override void ResetPlayerPos()
 	{
+        //TODO 针对PVP修改
         GrabZonePos grabZonePos = GameSystem.Instance.MatchPointsConfig.GrabZonePos;
-        m_mainRole.position = grabZonePos.mainRole_transform.position;
-		m_mainRole.forward = IM.Vector3.forward;
+        mainRole.position = grabZonePos.mainRole_transform.position;
+		mainRole.forward = IM.Vector3.forward;
         npc.position = grabZonePos.npc_transform.position;
 		npc.forward = IM.Vector3.forward;
 
@@ -182,7 +186,9 @@ public class GameMatch_GrabZone : GameMatch
 			{
 				ball.m_owner.DropBall(ball);
 			}
-			ball.SetInitPos(grabZonePos.balls_transform[i].position);
+            IM.Vector3 tempPos = grabZonePos.balls_transform[i].position;
+            tempPos.y = ball.m_ballRadius;
+			ball.SetInitPos(tempPos);
 			ball.m_ballState = BallState.eLoseBall;
 		}
 
@@ -195,11 +201,12 @@ public class GameMatch_GrabZone : GameMatch
 
 	public override void ConstrainMovementOnBegin(IM.Number fCurTime)
 	{
+        //TODO 针对PVP修改
 		if (m_ruler.prepareTime < fCurTime)
 			return;
         GrabZonePos grabZonePos = GameSystem.Instance.MatchPointsConfig.GrabZonePos;
-        m_mainRole.position = grabZonePos.mainRole_transform.position;
-		m_mainRole.forward = IM.Vector3.forward;
+        mainRole.position = grabZonePos.mainRole_transform.position;
+		mainRole.forward = IM.Vector3.forward;
         npc.position = grabZonePos.npc_transform.position;
 		npc.forward = IM.Vector3.forward;
 	}
@@ -235,9 +242,9 @@ public class GameMatch_GrabZone : GameMatch
 	}
 	*/
 
-	public override void Update(IM.Number deltaTime)
+	public override void GameUpdate(IM.Number deltaTime)
 	{
-		base.Update(deltaTime);
+		base.GameUpdate(deltaTime);
 
 		if (m_bTimeUp)
 			npc.m_aiMgr.m_enable = false;
@@ -287,7 +294,6 @@ public class GameMatch_GrabZone : GameMatch
 		matRival = ResourceLoadManager.Instance.GetResources("Prefab/Indicator/Zone_Rival") as Material;
 		matRival.renderQueue = RenderQueue.IndicatorAod + 1;
 	}
-
 	public int DetectZone(IM.Vector3 pos)
 	{
 		int zone = 0;
@@ -298,7 +304,7 @@ public class GameMatch_GrabZone : GameMatch
 		dir.Normalize();
         IM.Number angle = IM.Vector3.Angle(IM.Vector3.right, dir);
 		int radialSection = ((angle - ANGLE_SEG_SIDE) / ANGLE_SEG).floorToInt + 1;
-		//Logger.Log("section: " + radialSection);
+        Debug.Log("player standing on section: " + radialSection);
 		if (radialSection == 0 || radialSection == 4)
 		{
 			if (horiDist <= HORI_NEAR)
@@ -327,7 +333,8 @@ public class GameMatch_GrabZone : GameMatch
 		{
 			MeshRenderer renderer = zoneRenderer[zone];
 			int owner = zoneOwnership[zone];
-			if (ball.m_actor == m_mainRole)
+            //TODO 针对PVP修改
+			if (ball.m_actor == mainRole)
 			{
 				if (owner == 0)
 				{
@@ -372,8 +379,8 @@ public class GameMatch_GrabZone : GameMatch
 
 	private void OnShoot(UBasketball ball)
 	{
-		if (ball.m_actor == m_mainRole)
-			shootZones[ball] = DetectZone(m_mainRole.position);
+		if (ball.m_actor == mainRole)
+			shootZones[ball] = DetectZone(mainRole.position);
 		else
 			shootZones[ball] = DetectZone(npc.position);
 	}

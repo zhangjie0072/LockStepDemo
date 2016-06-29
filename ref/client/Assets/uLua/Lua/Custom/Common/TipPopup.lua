@@ -137,7 +137,6 @@ function TipPopup:Refresh()
 
 	self:ShowEquipDetail(goodsdata.category, goodsdata.sub_category)
 	self:ShowBadgeDetail(goodsdata)
-	addOnClick(self.gameObject,self:OnClick())
 end
 
 function TipPopup:ShowBadgeDetail(goodsdata)
@@ -216,12 +215,6 @@ function TipPopup:ShowEquipDetail(category, sub_category)
 				end
 			end
 		end
-	end
-end
-
-function TipPopup:OnClick()
-	return function ()
-		NGUITools.Destroy(self.gameObject)
 	end
 end
 

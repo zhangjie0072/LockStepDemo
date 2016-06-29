@@ -95,7 +95,7 @@ public class UIJoystick : MonoBehaviour
                     }
                     else
                     {
-                        Logger.LogWarning("Double Tab on Joystick but no Receiver or MethodName available");
+                        Debug.LogWarning("Double Tab on Joystick but no Receiver or MethodName available");
                     }
                 }
                 else

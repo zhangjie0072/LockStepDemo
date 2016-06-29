@@ -56,7 +56,7 @@ public class UICenterOnChild_Modify : MonoBehaviour
 
 			if (mDrag == null)
 			{
-				Logger.LogWarning(GetType() + " requires " + typeof(UIDraggablePanel) + " on a parent object in order to work", this);
+				Debug.LogWarning(GetType() + " requires " + typeof(UIDraggablePanel) + " on a parent object in order to work", this);
 				enabled = false;
 				return;
 			}

@@ -270,7 +270,7 @@ function TaskItem:SetData(data)
         --self.uiBgDown.color = Color.New(214/255,193/255,108/255,1)
         self.uiBackSele.gameObject:SetActive(true)
         -- NGUITools.SetActive(self.uiButtonRedDot.gameObject, true)
-        self.uiButtonBg.normalSprite = 'com_button_yellow7up'
+        self.uiButtonBg.normalSprite = 'com_button_newyellow02'
         self.uiButtonShade.gameObject:SetActive(false)
     else
         local ur, ug, ub = 241, 217, 165	--任务未完成rgb值
@@ -280,8 +280,8 @@ function TaskItem:SetData(data)
         self.uiBackSele.gameObject:SetActive(false)
         self.uiButtonShade.gameObject:SetActive(true)
         -- NGUITools.SetActive(self.uiButtonRedDot.gameObject, false)
-        self.uiButtonBg.normalSprite = 'com_button_yellow7down'
-        self.uiButtonShade.spriteName = 'com_button_yellow7down'
+        self.uiButtonBg.normalSprite = 'com_button_newgary02'
+        self.uiButtonShade.spriteName = 'com_button_newgary02'
         --self.uiBgUp.color = Color.New(241/255,217/255,165/255,1)
         --self.uiBgDown.color = Color.New(210/255,170/255,83/255,1)
     end

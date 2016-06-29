@@ -254,7 +254,8 @@ public class AIUtils
 			system.SetTransaction(AIState.Type.eDunk, totalWeight * dunkWeight);
 			usedWeight += dunkWeight;
 		}
-		system.SetTransaction(AIState.Type.eShoot, totalWeight * (IM.Number.one - usedWeight));
+		if( player.CanShoot() )
+		    system.SetTransaction(AIState.Type.eShoot, totalWeight * (IM.Number.one - usedWeight));
 	}
 
 	public static bool IsAttacking(Player player)
@@ -614,7 +615,7 @@ public class AIUtils
 		if( !PlayerState_Block.InBlockArea(target, player, vShootTarget) )
 			return false;
 
-		//Logger.Log("CanBlock, Dev:" + deviation + " Timing:" + timingRatio);
+		//Debug.Log("CanBlock, Dev:" + deviation + " Timing:" + timingRatio);
 		PlayerState curState = target.m_StateMachine.m_curState;
 		if (AIUtils.IsAttacking(target))
 		{
@@ -644,14 +645,14 @@ public class AIUtils
 					endTime -= framePrepare.frame / frameRate;
 				}
 			}
-			//Logger.Log("CanBlock, Before deviation, BeginTime:" + beginTime + " EndTime:" + endTime);
+			//Debug.Log("CanBlock, Before deviation, BeginTime:" + beginTime + " EndTime:" + endTime);
 			IM.Number length = endTime - beginTime;
 			IM.Number timeDev = length * deviation;
 			beginTime -= timeDev;
 			endTime -= timeDev;
 			IM.Number curTime = curState.time;
 			bool canBlock = (beginTime + length * timingRatio) <= curTime && curTime <= endTime;
-			//Logger.Log("CanBlock, " + beginTime + " " + endTime + " " + length + " " + curTime + " " + canBlock);
+			//Debug.Log("CanBlock, " + beginTime + " " + endTime + " " + length + " " + curTime + " " + canBlock);
 			return canBlock;
 		}
 		return false;

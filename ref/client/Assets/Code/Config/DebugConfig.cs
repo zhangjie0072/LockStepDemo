@@ -26,7 +26,7 @@ public class DebugConfig
             isLoadFinish = false;
             lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-			Logger.ConfigBegin(name);
+			Debug.Log("Config reading " + name);
             string text = ResourceLoadManager.Instance.GetConfigText(name);
 			//¶ÁÈ¡ÒÔ¼°´¦ÀíXMLÎÄ±¾µÄÀà
 			XmlDocument xmlDoc = CommonFunction.LoadXmlConfig(GlobalConst.DIR_XML_DEBUG, text);
@@ -56,11 +56,11 @@ public class DebugConfig
 					Debugger.Instance.m_bEnableTiming = bool.Parse(element.InnerText);
 				}
 			}
-			Logger.ConfigEnd(name);
+			
 		}
 		catch( XmlException exp )
 		{
-			Logger.Log("load debug config failed: " + exp.Message );
+			Debug.Log("load debug config failed: " + exp.Message );
 		}
 	}
 }

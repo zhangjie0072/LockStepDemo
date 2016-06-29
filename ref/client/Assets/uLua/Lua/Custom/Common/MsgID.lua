@@ -274,6 +274,9 @@ MsgID = {
     ReadMailRespID = 0x01204,
     GetAttachmentID = 0x01205,
     GetAttachmentRespID = 0x01206,
+    GetBulkAttachmentID = 0x01207,  --批量领取附件
+    GetBulkAttachmentRespID = 0x01208,
+
 
     -- 斗牛比赛.
     GetBullFightNpcReqID			= 0x01210,
@@ -386,7 +389,9 @@ MsgID = {
     UpdatePlayerInfoID				= 0x0845;
     NotifyOffLineInfoToPlayerID		= 0x0846;
     SearchFriendID					= 0x0847;
-    SearchFriendRespID				= 0x0848;
+    SearchFriendRespID				= 0x0848;    
+    UpdateFriendInfoID              = 0x0849;
+
 
     -- 徽章系统
     BadgeUnlockSlotReqID			= 0x1350,

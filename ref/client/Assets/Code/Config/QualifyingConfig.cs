@@ -85,15 +85,15 @@ public class QualifyingConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
 		ReadQualifyingAwards();
-		Logger.ConfigBegin(name2);
-		Logger.ConfigEnd(name1);
+		Debug.Log("Config reading " + name2);
+		
 		ReadQualifyingRobot();
-		Logger.ConfigBegin(name3);
-		Logger.ConfigEnd(name2);
+		Debug.Log("Config reading " + name3);
+		
 		ReadConsume();
-		Logger.ConfigEnd(name3);
+		
     }
 
 
@@ -159,7 +159,7 @@ public class QualifyingConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         
@@ -210,7 +210,7 @@ public class QualifyingConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name3);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name3);
+            Debug.LogError("LoadConfig failed: " + name3);
             return;
         }
         
@@ -250,7 +250,7 @@ public class QualifyingConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
         
@@ -318,7 +318,7 @@ public class QualifyingConfig
         //    }
         //}
         //return data;
-        Logger.Log("---------------qualifydata:" + DayAwardsData.Find(x => rank >= x.rank_min && rank <= x.rank_max).rank_min);
+        Debug.Log("---------------qualifydata:" + DayAwardsData.Find(x => rank >= x.rank_min && rank <= x.rank_max).rank_min);
         return DayAwardsData.Find(x => rank >= x.rank_min && rank <= x.rank_max);
 
     }

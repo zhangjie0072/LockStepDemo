@@ -1,5 +1,5 @@
 ﻿using System;
-using UE = UnityEngine;
+//using UE = UnityEngine;
 
 namespace IM
 {
@@ -24,7 +24,7 @@ namespace IM
             {
                 Math.CheckRange(this);
 
-                int dot = Dot(this, this);
+                int dot = _Dot(this, this);
                 int sqrt = Math.Sqrt(dot);
                 return Number.Raw(sqrt);
             }
@@ -36,7 +36,7 @@ namespace IM
             {
                 Math.CheckRange(this);
 
-                return Dot(this, this);
+                return _Dot(this, this);
             }
         }
 
@@ -87,16 +87,6 @@ namespace IM
             this.y = y;
             this.z = z;
         }
-
-#if UNITY_EDITOR
-        public static Vector3 FromUnity(UnityEngine.Vector3 vec)
-        {
-            Number x = Number.FromUnity(vec.x);
-            Number y = Number.FromUnity(vec.y);
-            Number z = Number.FromUnity(vec.z);
-            return new Vector3(x,y,z);
-        }
-#endif
 
         public static Vector3 operator + (Vector3 lhs, Vector3 rhs)
         {
@@ -157,7 +147,7 @@ namespace IM
             this = normalized;
         }
 
-        public static int Dot(Vector3 lhs, Vector3 rhs)
+        static int _Dot(Vector3 lhs, Vector3 rhs)
         {
             Math.CheckRange(lhs);
             Math.CheckRange(rhs);
@@ -168,9 +158,9 @@ namespace IM
             return xTmp + yTmp + zTmp;
         }
 
-        public static Number DotForNumber(Vector3 lhs,Vector3 rhs)
+        public static Number Dot(Vector3 lhs,Vector3 rhs)
         {
-            return Number.Raw(Dot(lhs, rhs) / Math.FACTOR);
+            return Number.Raw(_Dot(lhs, rhs) / Math.FACTOR);
         }
 
 
@@ -291,7 +281,7 @@ namespace IM
             lhs.Normalize();
             rhs.Normalize();
             //Number radians = Math.Acos(Number.Raw(Math.Clamp(Math.RndDiv(Dot(lhs, rhs), Math.FACTOR), -Math.FACTOR, Math.FACTOR)));
-            Number radians = Math.Acos(Number.Raw(Math.Clamp(Dot(lhs, rhs) / Math.FACTOR, -Math.FACTOR, Math.FACTOR)));
+            Number radians = Math.Acos(Number.Raw(Math.Clamp(_Dot(lhs, rhs) / Math.FACTOR, -Math.FACTOR, Math.FACTOR)));
             return radians;
         }
 

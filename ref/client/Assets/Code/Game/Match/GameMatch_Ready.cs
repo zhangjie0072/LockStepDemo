@@ -21,33 +21,26 @@ public class GameMatch_Ready
         m_gameMathCountEnable = false;
 	}
 	
-	override public void OnSceneComplete ()
+	protected override void _OnLoadingCompleteImp ()
 	{
-		base.OnSceneComplete();
+		base._OnLoadingCompleteImp ();
 		mCurScene.CreateBall();
 
 		if( m_config == null )
 		{
-			Logger.LogError("Match config file loading failed.");
+			Debug.LogError("Match config file loading failed.");
 			return;
 		}
 
-		m_mainRole = GameSystem.Instance.mClient.mPlayerManager.GetPlayerById(uint.Parse(m_config.MainRole.id));
-		m_mainRole.m_inputDispatcher = new InputDispatcher(this, m_mainRole);
-		m_mainRole.m_InfoVisualizer = new PlayerInfoVisualizer(m_mainRole);
-		m_mainRole.m_InfoVisualizer.CreateStrengthBar();
-		m_mainRole.m_InfoVisualizer.ShowStaminaBar(true);
-		m_mainRole.m_team.m_role = GameMatch.MatchRole.eOffense;
-		m_mainRole = GameSystem.Instance.mClient.mPlayerManager.GetPlayerById(uint.Parse(m_config.MainRole.id));
-		m_mainRole.m_inputDispatcher = new InputDispatcher(this, m_mainRole);
-		m_mainRole.m_InfoVisualizer = new PlayerInfoVisualizer(m_mainRole);
-		m_mainRole.m_InfoVisualizer.CreateStrengthBar();
-		m_mainRole.m_InfoVisualizer.ShowStaminaBar(true);
-		m_mainRole.m_team.m_role = GameMatch.MatchRole.eOffense;
-		m_mainRole.position = GameSystem.Instance.MatchPointsConfig.BeginPos.offenses_transform[0].position;
-		m_mainRole.GrabBall( mCurScene.mBall);
+		mainRole = GameSystem.Instance.mClient.mPlayerManager.GetPlayerById(uint.Parse(m_config.MainRole.id));
+        mainRole.operMode = Player.OperMode.Input;
+		mainRole.m_InfoVisualizer = new PlayerInfoVisualizer(mainRole);
+		mainRole.m_team.m_role = GameMatch.MatchRole.eOffense;
+		mainRole.position = GameSystem.Instance.MatchPointsConfig.BeginPos.offenses_transform[0].position;
+		mainRole.GrabBall( mCurScene.mBall);
 
-        _UpdateCamera(m_mainRole);
+        _UpdateCamera(mainRole);
+
 		_CreateGUI();
 
         GameMsgSender.SendGameBegin();
@@ -55,7 +48,7 @@ public class GameMatch_Ready
 		mCurScene.mBasket.onGoal = OnGoal;
 	}
 
-    public override void HandleGameBegin(Pack pack)
+    public override void OnGameBegin(GameBeginResp resp)
     {
 		m_stateMachine.SetState(MatchState.State.eBegin);
     }
@@ -71,10 +64,8 @@ public class GameMatch_Ready
 		Player player = _GeneratePlayerData(mem);
         if ((FightStatus)mem.pos == FightStatus.FS_MAIN)
         {
-            player.m_inputDispatcher = new InputDispatcher(this, player);
 			player.m_InfoVisualizer = new PlayerInfoVisualizer(player);
-            player.m_InfoVisualizer.CreateStrengthBar();
-			player.m_InfoVisualizer.ShowStaminaBar(true);
+            player.operMode = Player.OperMode.Input;
         }
         player.m_team.m_role = GameMatch.MatchRole.eOffense;
         return player;
@@ -84,31 +75,17 @@ public class GameMatch_Ready
     {
         if (main_role != null)
         {
-            m_mainRole.position = GameSystem.Instance.MatchPointsConfig.BeginPos.offenses_transform[0].position;
-            m_mainRole.GrabBall( mCurScene.mBall);
-            m_cam.m_trLook = m_mainRole.transform;
+            mainRole.position = GameSystem.Instance.MatchPointsConfig.BeginPos.offenses_transform[0].position;
+            mainRole.GrabBall( mCurScene.mBall);
+            m_cam.m_trLook = mainRole.transform;
             if (m_uiController == null)
                 CreateUIController();
             else
             {
-                InputReader.Instance.player = m_mainRole;
+                InputReader.Instance.player = mainRole;
             }
 
 			ResetPlayerPos();
-        }
-    }
-
-    public void RemoveMainRole()
-    {
-        if (m_mainRole != null)
-        {
-            if( m_mainRole.m_bWithBall )
-                m_mainRole.DropBall( mCurScene.mBall );
-            m_mainRole.Release();
-            m_mainRole = null;
-            m_cam.m_trLook = mCurScene.mBasket.transform;
-            NGUITools.Destroy(m_uiController.gameObject);
-            m_uiController = null;
         }
     }
 

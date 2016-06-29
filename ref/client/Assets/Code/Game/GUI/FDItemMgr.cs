@@ -51,7 +51,7 @@ public class FDItemMgr
             }
         }
 
-        Logger.LogError("cannnot find in FDItemMgr for fashionId=" + fashionId);
+        Debug.LogError("cannnot find in FDItemMgr for fashionId=" + fashionId);
         return null;
     }
 

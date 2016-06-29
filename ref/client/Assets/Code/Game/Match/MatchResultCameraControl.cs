@@ -19,7 +19,7 @@ public class MatchResultCameraControl
 
 		if( m_match.m_camFollowPath == null )
 		{
-			Logger.LogError("m_camFollowPath == null.");
+			Debug.LogError("m_camFollowPath == null.");
 			return;
 		}
 

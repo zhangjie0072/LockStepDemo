@@ -68,11 +68,10 @@ public class ShootMatchConfig
         string text = ResourceLoadManager.Instance.GetConfigText(GlobalConst.DIR_XML_SHOOT_MATCH);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + GlobalConst.DIR_XML_SHOOT_MATCH);
+            Debug.LogError("LoadConfig failed: " + GlobalConst.DIR_XML_SHOOT_MATCH);
             return;
         }
 
-		Logger.ConfigEnd(GlobalConst.DIR_XML_SHOOT_MATCH);
         shootMatch.Clear();
 
         XmlDocument xmlDoc = CommonFunction.LoadXmlConfig(GlobalConst.DIR_XML_SHOOT_MATCH, text);
@@ -130,7 +129,7 @@ public class ShootMatchConfig
             }
             shootMatch.Add(level);
 		}
-		Logger.ConfigBegin(GlobalConst.DIR_XML_SHOOT_MATCH);
+		Debug.Log("Config reading " + GlobalConst.DIR_XML_SHOOT_MATCH);
     }
 
 

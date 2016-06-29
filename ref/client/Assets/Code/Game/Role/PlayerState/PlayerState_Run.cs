@@ -163,7 +163,7 @@ public class PlayerState_Run : PlayerState
 				m_stateMachine.SetState(PlayerState.State.eRush);
 				return;
 			}
-			else if( m_match.m_mainRole == m_player || m_player.m_bIsAI )
+			else if( m_match.mainRole == m_player || m_player.m_bIsAI )
                 m_match.ShowTips((Vector3)m_player.position + Vector3.up, CommonFunction.GetConstString("MATCH_TIPS_NOT_ENOUGH_STAMINA"), GlobalConst.MATCH_TIP_COLOR_RED);
 		}
 		else if( m_player.m_moveType == MoveType.eMT_Defense )
@@ -175,7 +175,7 @@ public class PlayerState_Run : PlayerState
 		Type newType = _GetRunAction();
 		if( newType != m_type )
 		{
-			//Logger.Log("change run type: " + m_type + " to: " + newType );
+			//Debug.Log("change run type: " + m_type + " to: " + newType );
 			m_type = newType;
 			m_player.m_StateMachine.SetState(this, true);
 		}
@@ -230,7 +230,7 @@ public class PlayerState_Run : PlayerState
 		else
 			m_player.MoveTowards(new IM.Vector3(-dirMove.x, IM.Number.zero, -dirMove.z), m_turningSpeed, fDeltaTime, dirMove * m_fRunSpeed);
 
-        if( IM.Vector3.Angle(m_player.moveDirection, m_lastMoveDir) > GlobalConst.ROTATE_ANGLE_SEC - IM.Number.one )
+        if( IM.Vector3.Angle(m_player.moveDirection, m_lastMoveDir) > MoveController.ANGLE_PER_DIR - IM.Number.one )
         {
             m_lastMoveDir = m_player.moveDirection;
         }

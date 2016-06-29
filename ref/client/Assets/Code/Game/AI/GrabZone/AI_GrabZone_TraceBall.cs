@@ -57,11 +57,11 @@ public class AI_GrabZone_TraceBall : AIState
 			if (match.level != GameMatch.Level.Easy)
 			{
 				//Is this ball catchable.
-				if (!match.m_mainRole.m_bWithBall)
+				if (!match.mainRole.m_bWithBall)
 				{
 					if (!CanArriveBeforePlayer(target.position))
 					{
-						List<KeyValuePair<UBasketball, IM.Number>> listRival = AIUtils.SortBallListByDistance(match.mCurScene.balls, match.m_mainRole.position);
+						List<KeyValuePair<UBasketball, IM.Number>> listRival = AIUtils.SortBallListByDistance(match.mCurScene.balls, match.mainRole.position);
 						if (listRival[0].Key == target)
 						{
 							if (list.Count > 1)
@@ -80,7 +80,7 @@ public class AI_GrabZone_TraceBall : AIState
 	private void OnShoot(UBasketball ball)
 	{
 		//if (ball != targetBall)
-		//	Logger.LogError("Not target ball.");
+		//	Debug.LogError("Not target ball.");
 
 		ball.onShoot -= OnShoot;
 		targetBall = null;
@@ -96,7 +96,7 @@ public class AI_GrabZone_TraceBall : AIState
 	public override void OnPlayerCollided(Player colPlayer)
 	{
 		base.OnPlayerCollided(colPlayer);
-		Logger.Log("AI_GrabZone_TraceBall.OnPlayerCollided.");
+		Debug.Log("AI_GrabZone_TraceBall.OnPlayerCollided.");
 		m_system.SetTransaction(AIState.Type.eGrabZone_AvoidDefender);
 	}
 }

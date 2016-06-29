@@ -56,7 +56,7 @@ end
 function ChallengeResultItem:Start()
 	addOnClick(self.uiAddFriend.gameObject, self:OnAddFriend())
 	--自己或已经是好友了，不再显示加好友标记
-	local isFri = FriendData.Instance:IsFriend(self.id)
+	local isFri = Friends.IsFriend(self.id)--FriendData.Instance:IsFriend(self.id)
 	if self.id == MainPlayer.Instance.AccountID or isFri then
 		NGUITools.SetActive(self.uiAddFriend.gameObject, false)
 	end

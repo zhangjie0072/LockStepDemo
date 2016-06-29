@@ -34,7 +34,7 @@ public class UILogin
 
         //ButtonNotice.gameObject.SetActive(false);
 
-        Logger.Log("1927 - Set visiable false in UiLogin");
+        Debug.Log("1927 - Set visiable false in UiLogin");
         ButtonCancle.gameObject.SetActive(false);
         ButtonSwitch.gameObject.SetActive(false);
 

@@ -5,7 +5,7 @@ using fogs.proto.msg;
 public class PlayerState_Layup:  PlayerState_Skill
 {
 	private	bool	m_bRateFixed = false;
-	private IM.BigNumber	m_layupRate = IM.BigNumber.zero;
+	private IM.PrecNumber	m_layupRate = IM.PrecNumber.zero;
 
 	private bool	m_bMoving = false;
 	private IM.Number	m_movingTime = IM.Number.zero;
@@ -19,10 +19,10 @@ public class PlayerState_Layup:  PlayerState_Skill
 	static HedgingHelper layupMiddleHedging = new HedgingHelper("LayupMiddle");
 
 
-    static IM.BigNumber layupMiddleMultiply = GameSystem.Instance.HedgingConfig.GetRatio("multiply", "LayupMiddle");
-    static IM.BigNumber layupNearMultiply = GameSystem.Instance.HedgingConfig.GetRatio("multiply", "LayupNear");
-    static IM.BigNumber layupMiddleAdd = GameSystem.Instance.HedgingConfig.GetRatio("add", "LayupMiddle");
-    static IM.BigNumber layupNearAdd = GameSystem.Instance.HedgingConfig.GetRatio("add", "LayupNear");
+    static IM.PrecNumber layupMiddleMultiply = GameSystem.Instance.HedgingConfig.GetRatio("multiply", "LayupMiddle");
+    static IM.PrecNumber layupNearMultiply = GameSystem.Instance.HedgingConfig.GetRatio("multiply", "LayupNear");
+    static IM.PrecNumber layupMiddleAdd = GameSystem.Instance.HedgingConfig.GetRatio("add", "LayupMiddle");
+    static IM.PrecNumber layupNearAdd = GameSystem.Instance.HedgingConfig.GetRatio("add", "LayupNear");
 	public PlayerState_Layup (PlayerStateMachine owner, GameMatch match):base(owner,match)
 	{
 		m_eState = State.eLayup;
@@ -44,7 +44,7 @@ public class PlayerState_Layup:  PlayerState_Skill
 		PlayerAnimAttribute.AnimAttr layupAttr = m_player.m_animAttributes.GetAnimAttrById(Command.Layup, m_curAction);
 		if( layupAttr == null )
 		{
-			Logger.LogError("Current action: " + m_curAction + " in layup, skill id: " + m_curExecSkill.skill.id);
+			Debug.LogError("Current action: " + m_curAction + " in layup, skill id: " + m_curExecSkill.skill.id);
 		}
 
         IM.Number frameRate = m_player.animMgr.GetFrameRate(m_curAction);
@@ -72,9 +72,9 @@ public class PlayerState_Layup:  PlayerState_Skill
         m_movingTimeThreshold = kf_mts.frame / frameRate;
 
 		IM.Vector3 vMovePos2Bakset = m_vMovePos - m_player.position;
-        IM.Number fSameDir = new IM.Number(IM.Vector3.Dot(vMovePos2Bakset, vPlayer2Basket));
+        IM.Number fSameDir = IM.Vector3.Dot(vMovePos2Bakset, vPlayer2Basket);
 		bool bRush = false;
-		if( vPlayer2Basket.magnitude < vMovePos2Bakset.magnitude || fSameDir < IM.Number.zero || kf_mts.frame == 0 )
+		if( vPlayer2Basket.magnitude < vMovePos2Bakset.magnitude || fSameDir < 0 || kf_mts.frame == 0 )
 			m_speed = IM.Vector3.zero;
 		else
 		{
@@ -89,7 +89,7 @@ public class PlayerState_Layup:  PlayerState_Skill
 		m_player.GetNodePosition(SampleNode.Root, m_curAction, kf_layup.frame / frameRate, out vPosLayup );
 		m_player.GetNodePosition(SampleNode.Root, m_curAction, kf_leaveGround.frame / frameRate, out vPosLeaveGround );
         if (vPosLayup == vPosLeaveGround)
-            Logger.LogError("PlayerState_Layup, vPosLayup equals vPosLeaveGround");
+            Debug.LogError("PlayerState_Layup, vPosLayup equals vPosLeaveGround");
 
         //TODO 这段代码不知道什么意思，待探讨
 		//IM.Vector3 posLeaveGround = m_player.position + IM.Vector3.DotForNumber(vPosLeaveGround, dirPlayerToBasket) * dirPlayerToBasket;
@@ -97,7 +97,7 @@ public class PlayerState_Layup:  PlayerState_Skill
 
 		IM.Number deltaDistance = (vPosLayup - vPosLeaveGround).magnitude;
         if (deltaDistance == IM.Number.zero)
-            Logger.LogError("PlayerState_Layup, DeltaDistance is 0.");
+            Debug.LogError("PlayerState_Layup, DeltaDistance is 0.");
 		IM.Number fOrigLayupOffset = vToBasketOffset.x - deltaDistance;
 		IM.Number fPlayer2Basket = vPlayer2Basket.magnitude;
 		IM.Number fLayupDist = fPlayer2Basket - fOrigLayupOffset;
@@ -134,12 +134,12 @@ public class PlayerState_Layup:  PlayerState_Skill
 		if( m_curExecSkill.skill.side_effects.TryGetValue((int)SkillSideEffect.Type.eShootRate, out effect) )
 			fSideEffect = effect.value;
 		//else
-		//	Logger.Log("No side effect data.");
+		//	Debug.Log("No side effect data.");
 
 		Dictionary<string, uint> data = m_player.m_finalAttrs;
 		if( data == null )
 		{
-			Logger.LogError("Can not build player: " + m_player.m_name + " ,can not fight state by id: " + m_player.m_id );
+			Debug.LogError("Can not build player: " + m_player.m_name + " ,can not fight state by id: " + m_player.m_id );
 			return;
 		}
 		Dictionary<string, uint> skillAttr = m_player.GetSkillAttribute();

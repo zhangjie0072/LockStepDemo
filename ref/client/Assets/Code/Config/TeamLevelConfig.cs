@@ -54,11 +54,11 @@ public class TeamLevelConfig
             return;
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
-		Logger.ConfigBegin(name);
+		Debug.Log("Config reading " + name);
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            Debug.LogError("LoadConfig failed: " + name);
             return;
         }
         TeamLevelDatas.Clear();
@@ -182,7 +182,7 @@ public class TeamLevelConfig
                 TeamLevelDatas.Add(level, data);
             }
         }
-		Logger.ConfigEnd(name);
+		
     }
 
     public uint GetMaxExp(uint level)

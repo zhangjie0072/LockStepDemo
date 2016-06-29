@@ -71,7 +71,7 @@ function Awake(self)
 
     self.goIconShine = getChildGameObject(self.transform, "Middle/Icon")
     self.btnBack = getLuaComponent(createUI("ButtonBack", self.transform:FindChild("Top/ButtonBack")))
-    self.btnBack.delay = 0.47
+    --self.btnBack.delay = 0.47
     Object.DontDestroyOnLoad(self.btnBack.gameObject)
 
     self.uiComboGrid = getComponentInChild(self.transform, "Middle/WinningStreak/Grid", "UIGrid")
@@ -327,7 +327,7 @@ function Refresh(self)
     print(self.uiName, "combo win:", self.qualifying.combo_win)
     local lightNum = self.qualifying.combo_win % #self.streakLights
     local winningStreakFull = (lightNum == 0 and self.qualifying.winning_streak > 0)
-    if self.animator.enabled then
+    if self.animator and self.animator.enabled then
         if self.showIncStarAnim then
             if winningStreakFull then
                 self.showWinningStreakStarAnim = true
@@ -585,7 +585,10 @@ function MatchInfoHandler(self)
             else
                 local team_info = {}
 
-                QualifyingNewerAI.CreateNPC(self.matchType)
+                local grade = resp.grade
+                print("1927 - <UIQualifyingNewer>  grade=",grade)
+
+                QualifyingNewerAI.CreateNPC(self.matchType, grade)
 
                 for i = 1, 3 do
                     local name = MainPlayer.Instance.Name

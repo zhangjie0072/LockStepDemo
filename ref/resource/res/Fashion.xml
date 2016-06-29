@@ -841,7 +841,7 @@
     <shape_id1>Skin_FM_1_Hair_32006</shape_id1>
     <bone_id1>0</bone_id1>
     <body_type2>Girlbody1</body_type2>
-    <shape_id2>Skin_FG_1_Hair_42006</shape_id2>
+    <shape_id2>Skin_FM_1_Hair_32006</shape_id2>
     <bone_id2>0</bone_id2>
     <body_type3>
     </body_type3>
@@ -7098,7 +7098,7 @@
     <id>1200503</id>
     <body_type1>Girlbody1</body_type1>
     <shape_id1>Skin_FG_1_Lower_2401</shape_id1>
-    <bone_id1>13&amp;14&amp;15&amp;16&amp;17&amp;19</bone_id1>
+    <bone_id1>13</bone_id1>
     <body_type2>
     </body_type2>
     <shape_id2>
@@ -9971,11 +9971,12 @@
     </bone_id6>
   </Line>
   <Line>
-    <switch>#</switch>
+    <switch>
+    </switch>
     <id>1100304</id>
     <body_type1>Manbody1</body_type1>
-    <shape_id1>Skin_FM_1_Shoes_1300</shape_id1>
-    <bone_id1>20</bone_id1>
+    <shape_id1>Skin_FM_1_Shoes_1803</shape_id1>
+    <bone_id1>0</bone_id1>
     <body_type2>
     </body_type2>
     <shape_id2>

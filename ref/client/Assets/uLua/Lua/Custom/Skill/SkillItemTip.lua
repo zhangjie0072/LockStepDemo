@@ -94,13 +94,6 @@ function SkillItemTip:Refresh()
 	else
 		error('goodsAttr is null !')
 	end
-	addOnClick(self.gameObject,self:OnClick())
-end
-
-function SkillItemTip:OnClick()
-	return function ()
-		NGUITools.Destroy(self.gameObject)
-	end
 end
 
 -----------------------------------------------------------------

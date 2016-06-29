@@ -44,9 +44,9 @@ UICareer = {
 
 -----------------------------------------------------------------
 function UICareer:Awake()
-    local tm = self.transform:FindChild("Bottom")
+    local tm = self.transform:FindChild("ButtomRight/Bottom")
     self.uiBtnMenu = createUI("ButtonMenu",self.transform:FindChild("Top/ButtonMenu"))
-    self.uiTopNode = self.transform:FindChild("Top")
+    self.uiTopNode = self.transform:FindChild("TopLeft")
     self.uiAwardArea = tm.transform:FindChild("AwardBoxArea")
     self.uiStarProgress= tm:FindChild("AwardBoxArea/Prog1"):GetComponent("UIProgressBar")
     self.uibtnBag1 = getChildGameObject(tm, "AwardBoxArea/Bag1")
@@ -62,8 +62,8 @@ function UICareer:Awake()
     self.uiChapterNO = getComponentInChild(tm, "Chapter/NO", "MultiLabel")
     print("self.uiChapterNO:",self.uiChapterNO)
     self.uiChapterTitle = getComponentInChild(tm, "Chapter/Title", "MultiLabel")
-    self.uibtnPrev = self.transform:FindChild("Prev").gameObject
-    self.uibtnNext = self.transform:FindChild("Next").gameObject
+    self.uibtnPrev = self.transform:FindChild("Left/Prev").gameObject
+    self.uibtnNext = self.transform:FindChild("Right/Next").gameObject
     --btn
     -- self.uibgArrow = self.transform:FindChild("bg/bg/arrow"):GetComponent("UISprite")
     -- self.uicareerBtnsMember = self.transform:FindChild("CareerBottomBtns/grid/member"):GetComponent("UIButton")
@@ -83,6 +83,7 @@ function UICareer:Awake()
     -- addOnClick(self.bg_bg.gameObject, self:click_left_show())
 
     self.uiAnimator = self.transform:GetComponent('Animator')
+    self.sectionIDs = {}
     print("UICareer animator:",self.uiAnimator)
 end
 
@@ -256,14 +257,15 @@ function UICareer:RefreshAward()
     local num3 = self.chapterConfig.gold_value
     local getNum = self.chapter.star_num
     self.uiNameGet.text = getNum
-    print("num1:",num1,"num2:",num2,"num3:",num3,"getNum:",getNum)
-    local bronze_value = math.max(math.min(self.chapter.star_num / num1, 1),0) /3
-    local silver_value = math.max(math.min((self.chapter.star_num - num1)
-                                    / (num2 - num1), 1), 0) / 3
-    local gold_value = math.max(math.min((self.chapter.star_num - num2)
-                                    / (num3 - num2), 1), 0) / 3
-    self.uiStarProgress.value =bronze_value + silver_value + gold_value
-    print("bronze_value:",bronze_value,"silver_value:",silver_value,"gold_value:",gold_value)
+    -- print("num1:",num1,"num2:",num2,"num3:",num3,"getNum:",getNum)
+    -- local bronze_value = math.max(math.min(self.chapter.star_num / num1, 1),0) /3
+    -- local silver_value = math.max(math.min((self.chapter.star_num - num1)
+    --                                 / (num2 - num1), 1), 0) / 3
+    -- local gold_value = math.max(math.min((self.chapter.star_num - num2)
+    --                                 / (num3 - num2), 1), 0) / 3
+    -- self.uiStarProgress.value = bronze_value + silver_value + gold_value
+    -- print("bronze_value:",bronze_value,"silver_value:",silver_value,"gold_value:",gold_value)
+    self.uiStarProgress.value = getNum / 15
     print("value:",self.uiStarProgress.value)
     self.uiStarNum1.text = num1
     self.uiStarNum2.text = num2
@@ -805,10 +807,39 @@ function UICareer:Create_Chapter(chapterID,map)
     --ResourceLoadManager.Instance:LoadAloneImage("Texture/"..chapterConfig.area, self:OnBgTextureLoad(), self:OnBgTextureLoadFailed(), ResourceLoadType.AssetBundle)
     background:GetComponent("UITexture").mainTexture = ResourceLoadManager.Instance:GetResources("Texture/"..chapterConfig.area, true)
     local prevCoordX, prevCoordY
-    local sectionID = chapterConfig.first_section_id
-    while sectionID ~= 0 do
+
+    local secId = chapterConfig.first_section_id
+    self.sectionIDs[chapterID] = {}
+    table.insert(self.sectionIDs[chapterID], secId)
+    while secId ~= 0 do
+        local sectionConfig = GameSystem.Instance.CareerConfigData:GetSectionData(secId)
+        if string.find(sectionConfig.next_section_id, "&") then
+            local ID = Split(sectionConfig.next_section_id, '&')
+            secId = tonumber(ID[1])
+        else
+            secId = tonumber(sectionConfig.next_section_id)
+        end
+        if secId ~= 0 then
+            table.insert(self.sectionIDs[chapterID], secId)
+        end
+    end
+
+    for k, v in pairs(self.sectionIDs[chapterID]) do
+        print("1927 - <UICareer> ddss k, v=",k, v)
+    end
+
+
+    -- while sectionID ~= 0 do
+    secId = chapterConfig.first_section_id
+
+    local asyncItem = map:GetComponent("AsyncItem")
+
+    asyncItem.OnCreateItem = function(index,  parent)
+        print("1927 - <UICareer>  index, parent, parent.name=",index, parent, parent.name)
+        local sectionID = self.sectionIDs[chapterID][index + 1]
+        print("1927 - <UICareer>  sectionID=",sectionID)
         local sectionConfig = GameSystem.Instance.CareerConfigData:GetSectionData(sectionID)
-        local item = getLuaComponent(createUI("CareerSectionItem", map.transform))
+        local item = getLuaComponent(createUI("CareerSectionItem", parent))
         item.gameObject.name = "CareerSectionItem" .. sectionID
         self.boxcollider[chapterID][i] = item.gameObject:GetComponent("BoxCollider")
         i = i + 1
@@ -819,52 +850,46 @@ function UICareer:Create_Chapter(chapterID,map)
         UIEventListener.Get( item.gameObject).onDrag = LuaHelper.VectorDelegate(self:MoveDrag())
         item.transform.localPosition = Vector3.New(sectionConfig.coord_x, sectionConfig.coord_y, 0)
         NGUITools.AdjustDepth(item.gameObject, 1)
-        if prevCoordX and prevCoordY then
-            local line = createUI("SectionLine", map.transform)
-            local v1 = Vector3.New(prevCoordX, prevCoordY, 0)
-            local v2 = Vector3.New(sectionConfig.coord_x, sectionConfig.coord_y, 0)
-            local v3 = v2 - v1
-            line.transform.right = v3:Normalize()
-            line.transform.localPosition = (v1 + v2) / 2
-            line:GetComponent("UIWidget").width = v3:Magnitude()
-        end
-        if boss_sectionID ~= 0 and MainPlayer.Instance:CheckSection(chapterID, boss_sectionID) then
-            --创建图标和连线
-            local sectionConfig = GameSystem.Instance.CareerConfigData:GetSectionData(boss_sectionID)
-            local item = getLuaComponent(createUI("CareerSectionItem", map.transform))
-            item.gameObject.name = "CareerSectionItem" .. boss_sectionID
-            self.boxcollider[chapterID][i] = item.gameObject:GetComponent("BoxCollider")
-            i = i + 1
-            item.chapterID = chapterID
-            item.sectionID = boss_sectionID
-            item.is_boss = true
-            item.onClick = self:MakeOnSectionClick()
-            UIEventListener.Get( item.gameObject).onPress = LuaHelper.BoolDelegate(self:MoveOnPress())
-            UIEventListener.Get( item.gameObject).onDrag = LuaHelper.VectorDelegate(self:MoveDrag())
-            item.transform.localPosition = Vector3.New(sectionConfig.coord_x, sectionConfig.coord_y, 0)
-            NGUITools.AdjustDepth(item.gameObject, 1)
-            -- if prevCoordX and prevCoordY then
-            --	local line = createUI("SectionLine", map.transform)
-            --	line:GetComponent("UISprite").spriteName = "career_line_02"
-            --	local v1 = Vector3.New(prevCoordX, prevCoordY, 0)
-            --	local v2 = Vector3.New(sectionConfig.coord_x, sectionConfig.coord_y, 0)
-            --	local v3 = v2 - v1
-            --	line.transform.right = v3:Normalize()
-            --	line.transform.localPosition = (v1 + v2) / 2
-            --	line:GetComponent("UIWidget").width = v3:Magnitude()
-            -- end
-        end
-        prevCoordX = sectionConfig.coord_x
-        prevCoordY = sectionConfig.coord_y
-        boss_sectionID = 0
-        if string.find(sectionConfig.next_section_id, "&") then
-            local ID = Split(sectionConfig.next_section_id, '&')
-            sectionID = tonumber(ID[1])
-            boss_sectionID = tonumber(ID[2])
-        else
-            sectionID = tonumber(sectionConfig.next_section_id)
-        end
+        -- if boss_sectionID ~= 0 and MainPlayer.Instance:CheckSection(chapterID, boss_sectionID) then
+        --     local sectionConfig = GameSystem.Instance.CareerConfigData:GetSectionData(boss_sectionID)
+        --     local item = getLuaComponent(createUI("CareerSectionItem", map.transform))
+        --     item.gameObject.name = "CareerSectionItem" .. boss_sectionID
+        --     self.boxcollider[chapterID][i] = item.gameObject:GetComponent("BoxCollider")
+        --     i = i + 1
+        --     item.chapterID = chapterID
+        --     item.sectionID = boss_sectionID
+        --     item.is_boss = true
+        --     item.onClick = self:MakeOnSectionClick()
+        --     UIEventListener.Get( item.gameObject).onPress = LuaHelper.BoolDelegate(self:MoveOnPress())
+        --     UIEventListener.Get( item.gameObject).onDrag = LuaHelper.VectorDelegate(self:MoveDrag())
+        --     item.transform.localPosition = Vector3.New(sectionConfig.coord_x, sectionConfig.coord_y, 0)
+        --     NGUITools.AdjustDepth(item.gameObject, 1)
+        --     -- if prevCoordX and prevCoordY then
+        --     --	local line = createUI("SectionLine", map.transform)
+        --     --	line:GetComponent("UISprite").spriteName = "career_line_02"
+        --     --	local v1 = Vector3.New(prevCoordX, prevCoordY, 0)
+        --     --	local v2 = Vector3.New(sectionConfig.coord_x, sectionConfig.coord_y, 0)
+        --     --	local v3 = v2 - v1
+        --     --	line.transform.right = v3:Normalize()
+        --     --	line.transform.localPosition = (v1 + v2) / 2
+        --     --	line:GetComponent("UIWidget").width = v3:Magnitude()
+        --     -- end
+        -- end
+        -- prevCoordX = sectionConfig.coord_x
+        -- prevCoordY = sectionConfig.coord_y
+        -- boss_sectionID = 0
+        -- if string.find(sectionConfig.next_section_id, "&") then
+        --     local ID = Split(sectionConfig.next_section_id, '&')
+        --     sectionID = tonumber(ID[1])
+        --     boss_sectionID = tonumber(ID[2])
+        -- else
+        --     sectionID = tonumber(sectionConfig.next_section_id)
+        -- end
+        return item.gameObject
     end
+
+    asyncItem:SetItemsCounter(#self.sectionIDs[chapterID])
+    -- end
     self.mapTable[chapterID] = map
 end
 

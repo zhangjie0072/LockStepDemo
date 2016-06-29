@@ -294,6 +294,7 @@ message StartMatchResp
 	optional uint32 game_port						= 8; //GameServer的Port
 	optional uint32 room_id							= 9; //RoomID
 	optional uint32 aver_time						= 10;//匹配平均花费时间
+    optional uint32 team_flag                       = 11; //组队标记 0单人 1组队
 }
 
 //通知匹配成功信息
@@ -303,8 +304,10 @@ message NotifyMatchInfo
 	repeated UserInfo team_info			= 2;
 	repeated UserInfo rival_info		= 3;
 	optional uint32 time				= 4; //匹配花费时间
-   optional uint32 ai_flag				= 5; // 0 - 不是, 1 - 是
+    optional uint32 ai_flag				= 5; // 0 - 不是, 1 - 是
     optional uint64 session_id          = 6;
+    optional uint32 team_flag           = 7; //组队标记 0单人 1组队
+    optional uint32 grade               = 8; //段位
 }
 
 // 退出选人界面
@@ -361,6 +364,7 @@ message CancelMatchResp
 	required uint32 result				= 3; //
     required uint32 time                = 4; //匹配花费时间
     optional uint32 flag                = 5; //
+    optional uint32 team_flag           = 6; //组队标记 0单人 1组队
 }
 
 //创建比赛

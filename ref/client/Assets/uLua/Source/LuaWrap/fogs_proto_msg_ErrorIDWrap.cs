@@ -129,6 +129,7 @@ public class fogs_proto_msg_ErrorIDWrap
 		new LuaMethod("TARGET_IN_FRIENDS", GetTARGET_IN_FRIENDS),
 		new LuaMethod("TARGET_IS_NOT_EXIST", GetTARGET_IS_NOT_EXIST),
 		new LuaMethod("NOT_FRIEND_CAN_PRESENT", GetNOT_FRIEND_CAN_PRESENT),
+		new LuaMethod("TARGET_IN_SEND_APPLY", GetTARGET_IN_SEND_APPLY),
 		new LuaMethod("FRIEND_OFFLINE", GetFRIEND_OFFLINE),
 		new LuaMethod("FRIEND_IN_MATCH", GetFRIEND_IN_MATCH),
 		new LuaMethod("INVITE_OUT_DUE", GetINVITE_OUT_DUE),
@@ -1056,6 +1057,13 @@ public class fogs_proto_msg_ErrorIDWrap
 	static int GetNOT_FRIEND_CAN_PRESENT(IntPtr L)
 	{
 		LuaScriptMgr.Push(L, fogs.proto.msg.ErrorID.NOT_FRIEND_CAN_PRESENT);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetTARGET_IN_SEND_APPLY(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, fogs.proto.msg.ErrorID.TARGET_IN_SEND_APPLY);
 		return 1;
 	}
 

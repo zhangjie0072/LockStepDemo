@@ -110,7 +110,7 @@ public class GameMatchConfig
 		}
 		catch( XmlException exp )
 		{
-			Logger.Log("load camera config failed: " + exp.Message );
+			Debug.Log("load camera config failed: " + exp.Message );
 		}
 	}
 	*/
@@ -145,12 +145,12 @@ public class GameMatchConfig
         isLoadFinish = false;
         GameSystem.Instance.readConfigCnt += 1;
 
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
 		ReadGroundConfig();
-		Logger.ConfigEnd(name1);
-		Logger.ConfigBegin(name2);
+		
+		Debug.Log("Config reading " + name2);
 		ReadPlayerAttributesConfig();
-		Logger.ConfigEnd(name2);
+		
         ReadMatchConfig();
     }
 
@@ -159,7 +159,7 @@ public class GameMatchConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         try
@@ -213,7 +213,7 @@ public class GameMatchConfig
         }
         catch (XmlException exp)
         {
-            Logger.Log("load camera config failed: " + exp.Message);
+            Debug.Log("load camera config failed: " + exp.Message);
         }
     }
 
@@ -222,7 +222,7 @@ public class GameMatchConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
 
@@ -288,7 +288,7 @@ public class GameMatchConfig
         }
         catch (XmlException exp)
         {
-            Logger.LogError("load player config failed: " + exp.Message);
+            Debug.LogError("load player config failed: " + exp.Message);
         }
     }
 
@@ -356,7 +356,7 @@ public class GameMatchConfig
                 animAttr.keyFrame.Add(kf);
             }
             if (attrs.ContainsKey(animAttr.strAnim))
-                Logger.LogError("AnimInfo same key: " + animAttr.strAnim);
+                Debug.LogError("AnimInfo same key: " + animAttr.strAnim);
             attrs.Add(animAttr.strAnim, animAttr);
         }
         playerAttributes.animItemAttrs.Add(node.Name, attrs);
@@ -391,11 +391,11 @@ public class GameMatchConfig
                 //    name = name9;
                 //    break;
 			}
-			Logger.ConfigBegin(name);
+			Debug.Log("Config reading " + name);
             string text = ResourceLoadManager.Instance.GetConfigText(name);
             if (text == null)
             {
-                Logger.LogError("LoadConfig failed: " + name);
+                Debug.LogError("LoadConfig failed: " + name);
                 return;
             }
             try
@@ -449,9 +449,9 @@ public class GameMatchConfig
             }
             catch (XmlException exp)
             {
-                Logger.Log("load match config failed: " + exp.Message);
+                Debug.Log("load match config failed: " + exp.Message);
 			}
-			Logger.ConfigEnd(name);
+			
         }
     }
 	
@@ -473,7 +473,7 @@ public class GameMatchConfig
 				matchData.remoteList.Add(tm);
 			else
 			{
-				Logger.Log( ToString() + ": Invalid config." );
+				Debug.Log( ToString() + ": Invalid config." );
 				return;
 			}
 		}
@@ -523,7 +523,7 @@ public class GameMatchConfig
 		}
 		catch( Exception exp )
 		{
-			Logger.Log("load playground failed: " + exp.Message);
+			Debug.Log("load playground failed: " + exp.Message);
 		}
 	}
 	
@@ -549,77 +549,77 @@ public class GameMatchConfig
                     foreach (KeyValuePair<string, PlayerAnimAttribute.AnimAttr> attr in animItem.Value)
 	                {
 		                if(player.m_animAttributes.m_dunkNear.ContainsKey(attr.Key))
-                            Logger.LogError("AnimInfo same key: " + attr.Key);
+                            Debug.LogError("AnimInfo same key: " + attr.Key);
                         player.m_animAttributes.m_dunkNear.Add(attr.Key, attr.Value);
 	                }
                 else if (animItem.Key == "Dunk_Far")
                     foreach (KeyValuePair<string, PlayerAnimAttribute.AnimAttr> attr in animItem.Value)
 	                {
                         if (player.m_animAttributes.m_dunkFar.ContainsKey(attr.Key))
-                            Logger.LogError("AnimInfo same key: " + attr.Key);
+                            Debug.LogError("AnimInfo same key: " + attr.Key);
                         player.m_animAttributes.m_dunkFar.Add(attr.Key, attr.Value);
 	                }
                 else if (animItem.Key == "Layup_Near")
                     foreach (KeyValuePair<string, PlayerAnimAttribute.AnimAttr> attr in animItem.Value)
                     {
                         if (player.m_animAttributes.m_layupNear.ContainsKey(attr.Key))
-                            Logger.LogError("AnimInfo same key: " + attr.Key);
+                            Debug.LogError("AnimInfo same key: " + attr.Key);
                         player.m_animAttributes.m_layupNear.Add(attr.Key, attr.Value);
                     }
                 else if (animItem.Key == "Layup_Far")
                     foreach (KeyValuePair<string, PlayerAnimAttribute.AnimAttr> attr in animItem.Value)
                     {
                         if (player.m_animAttributes.m_layupFar.ContainsKey(attr.Key))
-                            Logger.LogError("AnimInfo same key: " + attr.Key);
+                            Debug.LogError("AnimInfo same key: " + attr.Key);
                         player.m_animAttributes.m_layupFar.Add(attr.Key, attr.Value);
                     }
                 else if (animItem.Key == "Rebound")
                     foreach (KeyValuePair<string, PlayerAnimAttribute.AnimAttr> attr in animItem.Value)
                     {
                         if (player.m_animAttributes.m_rebound.ContainsKey(attr.Key))
-                            Logger.LogError("AnimInfo same key: " + attr.Key);
+                            Debug.LogError("AnimInfo same key: " + attr.Key);
                         player.m_animAttributes.m_rebound.Add(attr.Key, attr.Value);
                     }
                 else if (animItem.Key == "Catch")
                     foreach (KeyValuePair<string, PlayerAnimAttribute.AnimAttr> attr in animItem.Value)
                     {
                         if (player.m_animAttributes.m_catch.ContainsKey(attr.Key))
-                            Logger.LogError("AnimInfo same key: " + attr.Key);
+                            Debug.LogError("AnimInfo same key: " + attr.Key);
                         player.m_animAttributes.m_catch.Add(attr.Key, attr.Value);
                     }
                 else if (animItem.Key == "Block")
                     foreach (KeyValuePair<string, PlayerAnimAttribute.AnimAttr> attr in animItem.Value)
                     {
                         if (player.m_animAttributes.m_block.ContainsKey(attr.Key))
-                            Logger.LogError("AnimInfo same key: " + attr.Key);
+                            Debug.LogError("AnimInfo same key: " + attr.Key);
                         player.m_animAttributes.m_block.Add(attr.Key, attr.Value);
                     }
                 else if (animItem.Key == "Shoot")
                     foreach (KeyValuePair<string, PlayerAnimAttribute.AnimAttr> attr in animItem.Value)
                     {
                         if (player.m_animAttributes.m_shoot.ContainsKey(attr.Key))
-                            Logger.LogError("AnimInfo same key: " + attr.Key);
+                            Debug.LogError("AnimInfo same key: " + attr.Key);
                         player.m_animAttributes.m_shoot.Add(attr.Key, attr.Value);
                     }
                 else if (animItem.Key == "CrossOver")
                     foreach (KeyValuePair<string, PlayerAnimAttribute.AnimAttr> attr in animItem.Value)
                     {
                         if (player.m_animAttributes.m_crossOver.ContainsKey(attr.Key))
-                            Logger.LogError("AnimInfo same key: " + attr.Key);
+                            Debug.LogError("AnimInfo same key: " + attr.Key);
                         player.m_animAttributes.m_crossOver.Add(attr.Key, attr.Value);
                     }
                 else if (animItem.Key == "BackToBack")
                     foreach (KeyValuePair<string, PlayerAnimAttribute.AnimAttr> attr in animItem.Value)
                     {
                         if (player.m_animAttributes.m_backToBack.ContainsKey(attr.Key))
-                            Logger.LogError("AnimInfo same key: " + attr.Key);
+                            Debug.LogError("AnimInfo same key: " + attr.Key);
                         player.m_animAttributes.m_backToBack.Add(attr.Key, attr.Value);
                     }
                 else if (animItem.Key == "Interception")
                     foreach (KeyValuePair<string, PlayerAnimAttribute.AnimAttr> attr in animItem.Value)
                     {
                         if (player.m_animAttributes.m_interception.ContainsKey(attr.Key))
-                            Logger.LogError("AnimInfo same key: " + attr.Key);
+                            Debug.LogError("AnimInfo same key: " + attr.Key);
                         player.m_animAttributes.m_interception.Add(attr.Key, attr.Value);
                     }
             }
@@ -627,7 +627,7 @@ public class GameMatchConfig
 		}
 		catch( Exception exp )
 		{
-			Logger.LogError("load player attributes failed: " + exp.Message );
+			Debug.LogError("load player attributes failed: " + exp.Message );
 		}
 	}
 
@@ -660,13 +660,13 @@ public class GameMatchConfig
                 }
                 else 
                 {
-                    Logger.LogError("Match Config is null!");
+                    Debug.LogError("Match Config is null!");
                 }
             }
 		}
 		catch( Exception exp )
 		{
-			Logger.Log("load match config failed: " + exp.Message );
+			Debug.Log("load match config failed: " + exp.Message );
 		}
 	}
 

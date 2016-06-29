@@ -85,7 +85,7 @@ public class MainPlayer : Singleton<MainPlayer>
         }
         else
         {
-            Logger.LogWarning("Remove delegate faile with name " + uiName);
+            Debug.LogWarning("Remove delegate faile with name " + uiName);
         }
     }
 
@@ -268,19 +268,19 @@ public class MainPlayer : Singleton<MainPlayer>
                 AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
 
                 int hhp = (int)Hp;
-                //Logger.Log("MainPlayer hhp=" + hhp);
+                //Debug.Log("MainPlayer hhp=" + hhp);
                 PushConfig pushConfig = GameSystem.Instance.pushConfig;
                 string date = string.Format("{0}", hhp);
-                //Logger.Log("MainPlayer date=" + date);
+                //Debug.Log("MainPlayer date=" + date);
                 string maxHp = GameSystem.Instance.TeamLevelConfigData.GetMaxHP(MainPlayer.Instance.Level).ToString();
                 object[] datas = new object[] { pushConfig._hpId, 4, date, maxHp,0, pushConfig._hpStr };
                 // object[] datas = new object[] { id, type, item.date, item.time, online, item.content };
-                //Logger.Log("MainPlayer Call RecvPush1=");
+                //Debug.Log("MainPlayer Call RecvPush1=");
                 if( pushConfig._hpStr != null && pushConfig._hpStr.CompareTo("") != 0 )
                 {
                     jo.Call("RecvPush", datas);
                 }
-                //Logger.Log("MainPlayer Call RecvPush2=");
+                //Debug.Log("MainPlayer Call RecvPush2=");
             }
 #endif
 
@@ -423,6 +423,7 @@ public class MainPlayer : Singleton<MainPlayer>
     public LotteryInfo LotteryInfo;
     //排位赛信息
     public QualifyingInfo QualifyingInfo;
+	public uint assist_first_win_times;
     //斗牛比赛
     public BullFight BullFight;
     public int BullFightHard
@@ -577,6 +578,16 @@ public class MainPlayer : Singleton<MainPlayer>
     public Action onNewChatMessage;
     public List<int> ChatWordsNum = new List<int>();
     public List<ChatBroadcast> WorldChatList = new List<ChatBroadcast>();
+	//好友聊天
+	public Action onFriendChatMessage;
+	//c#层不存储好友聊天信息，这个信息放到Lua层管理
+	public ChatBroadcast FriendChatMessage;
+	//队伍频道
+	public Action OnTeamChatMessage;
+	public ChatBroadcast TeamChatMessage;
+	//联盟频道
+	public Action OnLeagueChatMessage;
+	public ChatBroadcast LeagueChatMessage;
     //图鉴
     public List<uint> MapIDInfo = new List<uint>();
     public List<uint> NewMapIDList = new List<uint>();
@@ -657,7 +668,7 @@ public class MainPlayer : Singleton<MainPlayer>
 
         if (AccountID != info.acc_id)
         {
-            Logger.Log("Error -- SetBaseInfo error occurs: " + AccountID + " -- " + info.acc_id);
+            Debug.Log("Error -- SetBaseInfo error occurs: " + AccountID + " -- " + info.acc_id);
             AccountID = info.acc_id;
         }
 
@@ -686,7 +697,7 @@ public class MainPlayer : Singleton<MainPlayer>
         trialTotalScore = info.new_comer_trial_info.total_score;
 		pvp_regular = info.pvp_regular;
 		qualifying_new = info.qualifying_new;
-
+		assist_first_win_times = info.assist_first_win_times;
 
         if (info.badge_info != null)
         {
@@ -698,6 +709,7 @@ public class MainPlayer : Singleton<MainPlayer>
 		{
 			foreach (RoleInfo roleInfo in info.extra_info.roles)
 			{
+                roleInfo.acc_id = MainPlayer.Instance.AccountID;
 				Player role = new Player(roleInfo, new Team(Team.Side.eNone));
 				PlayerList.Add(role);
 			}
@@ -721,7 +733,7 @@ public class MainPlayer : Singleton<MainPlayer>
                 }
                 else
                 {
-                    Logger.LogError("SetBaseInfo VipExpGoodsBuyInfo already has key =" + storeGoods.id);
+                    Debug.LogError("SetBaseInfo VipExpGoodsBuyInfo already has key =" + storeGoods.id);
                 }
             }
         }
@@ -790,17 +802,17 @@ public class MainPlayer : Singleton<MainPlayer>
                                                      goods.GetUUID()
                     );
 
-                    Logger.Log(debugInfo);
+                    Debug.Log(debugInfo);
                 }
                 else if (goods.GetCategory() == GoodsCategory.GC_EXERCISE)
                 {
                     TrainingList.Add(goods.GetUUID(), goods);
-                    Logger.Log("get training good=" + goods.GetID());
+                    Debug.Log("get training good=" + goods.GetID());
                 }
                 else if (goods.GetCategory() == GoodsCategory.GC_MATERIAL)
                 {
                     MaterialList.Add(goods.GetUUID(), goods);
-                    Logger.Log("get material good=" + goods.GetID());
+                    Debug.Log("get material good=" + goods.GetID());
                 }
                 //涂鸦goods数据
                 else if (goods.GetCategory() == GoodsCategory.GC_BADGE)
@@ -860,7 +872,7 @@ public class MainPlayer : Singleton<MainPlayer>
             QualifyingNewerInfo = info.qualifying_newer;
         }
 
-        Logger.Log("1927 QualifyingNewerInfo.ranking" + QualifyingNewerInfo.ranking);
+        Debug.Log("1927 QualifyingNewerInfo.ranking" + QualifyingNewerInfo.ranking);
 
         QualifyingNewerScore = info.qualifying_newer_score;
         QualifyingNewerTime = info.qualifying_newer_time;
@@ -1012,7 +1024,6 @@ public class MainPlayer : Singleton<MainPlayer>
             activityInfo.gift[i] = 1;
         }
 
-        FriendData.Instance.Init();
     }
     
 
@@ -1024,7 +1035,7 @@ public class MainPlayer : Singleton<MainPlayer>
     {
 		//Captain = GetRole(_captainID);
 		//if( Captain == null )
-		//	Logger.LogError("xxx");
+		//	Debug.LogError("xxx");
     }
 
     public bool HasRole(uint roleId)
@@ -1066,6 +1077,7 @@ public class MainPlayer : Singleton<MainPlayer>
         {
             if (PlayerList[i].m_roleInfo.id == info.id)
             {
+                info.acc_id = MainPlayer.Instance.AccountID;
 				PlayerList[i].m_roleInfo = info;
                 break;
             }
@@ -1121,7 +1133,7 @@ public class MainPlayer : Singleton<MainPlayer>
 		Player player = GetRole(roleId);
 		if( player == null )
 		{
-			Logger.LogError("can not find player: " + roleId);
+			Debug.LogError("can not find player: " + roleId);
 			return;
 		}
 		player.m_roleInfo.level = level;
@@ -1210,6 +1222,7 @@ public class MainPlayer : Singleton<MainPlayer>
 		Player player = PlayerList.Find((Player inPlayer) =>{ return inPlayer.m_roleInfo.id == info.id; });
 		if ( player == null )
         {
+            info.acc_id = MainPlayer.Instance.AccountID;
 			player = new Player(info, new Team(Team.Side.eNone));
 			PlayerList.Add(player);
             RoleInfo role = player.m_roleInfo;
@@ -1601,7 +1614,7 @@ public class MainPlayer : Singleton<MainPlayer>
                 goodsItemList = BadgeGoodsList;
                 break;
 			default:
-				Logger.Log("Error goods category, ID: " + goods.GetID());
+				Debug.Log("Error goods category, ID: " + goods.GetID());
 				break;
         }
         uint stackNum = GameSystem.Instance.GoodsConfigData.GetgoodsAttrConfig(goodsID).stack_num;
@@ -2117,7 +2130,7 @@ public class MainPlayer : Singleton<MainPlayer>
         RoleInfo rInfo = GetRole2(roleId);
         if (rInfo == null)
         {
-            Logger.LogError("GetExerciseInfo error for not exist roleId=" + roleId);
+            Debug.LogError("GetExerciseInfo error for not exist roleId=" + roleId);
             return null;
         }
 
@@ -2515,7 +2528,7 @@ public class MainPlayer : Singleton<MainPlayer>
         {
             IM.Number multiAttrValue = IM.Number.zero;
             uint v = GetAttrValue(roleInfo, item.id, out multiAttrValue, equipInfo, squadInfo);
-            v = (uint)(v * (1.0f + (float)allHedgingMulti / 1000));
+            v = (uint)(v * (IM.Number.one + new IM.Number((int)allHedgingMulti) / new IM.Number(1000))).floorToInt;
             if (item.type != AttributeType.HEDGINGLEVEL)
                 ret.Add(item.symbol, v);
             else
@@ -2530,14 +2543,14 @@ public class MainPlayer : Singleton<MainPlayer>
         //SkillPromoteAttr(roleInfo, hedgeLevelAttrs);
         FashionPromoteAttr(roleInfo, hedgeLevelAttrs, rivalAttr);
         GetBadgeBookAttrByBookId(hedgeLevelAttrs,book);
-        Logger.Log("Hedging level, calc begin. Role ID: " + roleInfo.id);
+        Debug.Log("Hedging level, calc begin. Role ID: " + roleInfo.id);
         CalcPromoteAttr(attrData, hedgeLevelAttrs);
 
         IM.Number preFightCapacity = IM.Number.zero;
         preFightCapacity = attrData.fightingCapacity;
 		CalcFightingCapacity(roleInfo.id, roleInfo.star, attrData);
 		//foreach (KeyValuePair<string, uint> pair in attrData.attrs)
-		//	Logger.Log(pair.Key + " : " + pair.Value);
+		//	Debug.Log(pair.Key + " : " + pair.Value);
         if (RoleFightPower.ContainsKey(roleInfo.id))
         {
             if (RoleFightPower[roleInfo.id] != attrData.fightingCapacity)
@@ -2587,13 +2600,13 @@ public class MainPlayer : Singleton<MainPlayer>
             talent = value * (1 + talent);
             value = talent.ceilToInt;
             /*
-            float levelFactor = GameSystem.Instance.RoleLevelConfigData.GetFactor(roleInfo.level);
-            float qualityFactor = GameSystem.Instance.qualityAttrCorConfig.GetFactor(roleInfo.id, roleInfo.quality);
+            IM.Number levelFactor = GameSystem.Instance.RoleLevelConfigData.GetFactor(roleInfo.level);
+            IM.Number qualityFactor = GameSystem.Instance.qualityAttrCorConfig.GetFactor(roleInfo.id, roleInfo.quality);
             value = value * levelFactor * qualityFactor;
 
             //装备属性
             value += GetEquipmentAttr(roleInfo.id, attrID, equipInfo, squadInfo);
-            float talent = GameSystem.Instance.RoleBaseConfigData2.GetTalent(roleInfo.id);
+            IM.Number talent = GameSystem.Instance.RoleBaseConfigData2.GetTalent(roleInfo.id);
 
             //套装属性
             uint addnAttr = 0;
@@ -2602,8 +2615,8 @@ public class MainPlayer : Singleton<MainPlayer>
             uint allHedgingAddn = 0;
             uint allHedgingMulti = 0;
             GetEquipmentSuitAttr(roleInfo.id, GlobalConst.ALL_HEDGING_ID, out allHedgingAddn, out allHedgingMulti, equipInfo, squadInfo); //全部对冲属性系数 
-            multiAttrValue = (value + addnAttr) * (float)(allHedgingMulti + multiAttr) / 1000;
-            value = (value + addnAttr) * (talent + (float)multiAttr / 1000);
+            multiAttrValue = (value + addnAttr) * (IM.Number)(allHedgingMulti + multiAttr) / 1000;
+            value = (value + addnAttr) * (talent + (IM.Number)multiAttr / 1000);
              */
         }
         /*
@@ -2778,7 +2791,7 @@ public class MainPlayer : Singleton<MainPlayer>
         IM.Number positionFactor = GameSystem.Instance.CommonConfig.GetNumber("g" + position + "FCFactor");
 
 		attrData.fightingCapacity = attrSum * (1 + star * starFactor) * positionFactor;
-		//Logger.Log("Fighting capacity of role " + id + " is " + attrData.fightingCapacity);
+		//Debug.Log("Fighting capacity of role " + id + " is " + attrData.fightingCapacity);
 	}
 
     public void SendFightPowerChange()
@@ -2822,7 +2835,7 @@ public class MainPlayer : Singleton<MainPlayer>
         RoleBaseData2 roleData2 = GameSystem.Instance.RoleBaseConfigData2.GetConfigData(id);
         if(roleData2== null)
         {
-            Logger.LogError("cannot find baseFighting for id=" + id);
+            Debug.LogError("cannot find baseFighting for id=" + id);
             return IM.Number.zero;
         }
         AttrData attrData = new AttrData();
@@ -2836,7 +2849,7 @@ public class MainPlayer : Singleton<MainPlayer>
                 value = value * roleData2.talent_value;
             }
 
-            attrData.attrs.Add(kv.Key, Convert.ToUInt32((float)value));
+            attrData.attrs.Add(kv.Key, Convert.ToUInt32(value.floorToInt));
         }
         CalcFightingCapacity(id, (uint)roleData2.init_star, attrData);
         return attrData.fightingCapacity;
@@ -2960,7 +2973,7 @@ public class MainPlayer : Singleton<MainPlayer>
         //    uint symbolID = attr.Key - 100;
         //    uint hedgeID = attr.Key;
         //    uint hedgeValue = attr.Value;
-        //    float factor = GameSystem.Instance.HedgingConfig.GetHedgeLevelFactor(hedgeID);
+        //    IM.Number factor = GameSystem.Instance.HedgingConfig.GetHedgeLevelFactor(hedgeID);
         //    string symbol = GameSystem.Instance.AttrNameConfigData.GetAttrSymbol(symbolID);
         //    attrData.attrs[symbol] = (uint)Math.Floor(attrData.attrs[symbol] * (1 + hedgeValue * factor));
         //}
@@ -2990,16 +3003,16 @@ public class MainPlayer : Singleton<MainPlayer>
             HedgingConfig.hedgeLevelData data = GameSystem.Instance.HedgingConfig.GetHedgeLevelFactor(attr.Key);
             if (data != null)
             {
-                float factor = data.factor;
+                IM.PrecNumber factor = data.factor;
                 uint attrID = data.oppositeID;
                 string symbol = GameSystem.Instance.AttrNameConfigData.GetAttrSymbol(attrID);
                 if (attrData.attrs.ContainsKey(symbol))
                 {
                     if (attr.Value != 0)
-                        Logger.Log(string.Format("Hedging level, before: {0} -> {1}", symbol, attrData.attrs[symbol]));
-                    attrData.attrs[symbol] = (uint)Math.Round(attrData.attrs[symbol] * (1 + attr.Value * factor));
+                        Debug.Log(string.Format("Hedging level, before: {0} -> {1}", symbol, attrData.attrs[symbol]));
+                    attrData.attrs[symbol] = (uint)(attrData.attrs[symbol] * (1 + attr.Value * factor)).roundToInt;
                     if (attr.Value != 0)
-                        Logger.Log(string.Format("Hedging level, after: {0} -> {1}", symbol, attrData.attrs[symbol]));
+                        Debug.Log(string.Format("Hedging level, after: {0} -> {1}", symbol, attrData.attrs[symbol]));
                 }
             }
         }
@@ -3192,7 +3205,7 @@ public class MainPlayer : Singleton<MainPlayer>
         TimeSpan toNow = new TimeSpan(iTime);
         s = s.Add(toNow);
         uint currentDay = uint.Parse(s.ToString("dd"));
-        Logger.Log("currentDay = " + currentDay);
+        Debug.Log("currentDay = " + currentDay);
         if (currentDay == 1 && signInfo != null)
         {
             signInfo.sign_list.Clear();
@@ -3218,7 +3231,7 @@ public class MainPlayer : Singleton<MainPlayer>
 				MainPlayer.Instance.NewComerSign.sign_list.Clear();
 				foreach (uint signState in resp.info.sign_list)
 				{
-					//Logger.Log("signState :" + signState);
+					//Debug.Log("signState :" + signState);
 					MainPlayer.Instance.NewComerSign.sign_list.Add(signState);
 				}
 			}
@@ -3257,10 +3270,10 @@ public class MainPlayer : Singleton<MainPlayer>
         string playerLevel = MainPlayer.Instance.Level.ToString();
        
 	
-		Logger.Log ("----roleId=" + roleId);
-		Logger.Log ("----roleName=" + roleName );
-		Logger.Log ("----serverId=" + serverId );
-		Logger.Log ("servername=" + serverName );
+		Debug.Log ("----roleId=" + roleId);
+		Debug.Log ("----roleName=" + roleName );
+		Debug.Log ("----serverId=" + serverId );
+		Debug.Log ("servername=" + serverName );
 #endif
 
 #if IOS_SDK
@@ -3319,7 +3332,7 @@ public class MainPlayer : Singleton<MainPlayer>
 
     public void SendGoodsLog(string updateType, string itemId, string itemName, int itemCount, string custom)
     {
-        //Logger.Log("##SendGoodsLog CreateStep=" + CreateStep);
+        //Debug.Log("##SendGoodsLog CreateStep=" + CreateStep);
         // Make sure player has registered alreayd.
 #if IOS_SDK
          sendGoodsLog((int)Level,(int)Vip,updateType,itemId, itemName, itemCount, custom);
@@ -3336,7 +3349,7 @@ public class MainPlayer : Singleton<MainPlayer>
 
     public void SendPlayerLog( string propKey, string propValue, string rangeAbility )
     {
-        //Logger.Log("##SendPlayerLog CreateStep=" + CreateStep);
+        //Debug.Log("##SendPlayerLog CreateStep=" + CreateStep);
 #if IOS_SDK
 		sendPlayerLog((int)Level, (int)Vip, propKey, propValue, rangeAbility);
 #endif
@@ -3352,25 +3365,25 @@ public class MainPlayer : Singleton<MainPlayer>
 
 	public void SendGiftExchangeCode(String giftCode, String url, String extendParams)
 	{
-		Logger.Log("##SendGiftExchangeCode giftCode=" + giftCode);
+		Debug.Log("##SendGiftExchangeCode giftCode=" + giftCode);
 #if IOS_SDK
 		//SendGiftExchangeCode(giftCode, url, extendParams);
 #endif
 		
 #if ANDROID_SDK
-		Logger.Log("##SendGiftExchangeCode 12 giftCode=" + giftCode);
+		Debug.Log("##SendGiftExchangeCode 12 giftCode=" + giftCode);
 		AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
 		AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
 		
 		object[] datas = new object[] { giftCode, url, extendParams};
 		jo.Call("SendGiftExchangeCode",datas);
-		Logger.Log("##SendGiftExchangeCode finish giftCode=" + giftCode);
+		Debug.Log("##SendGiftExchangeCode finish giftCode=" + giftCode);
 #endif
 	}
 
 	public void OpenPlayerPlat()
 	{
-        Logger.Log("OpenPlayerPlat called");
+        Debug.Log("OpenPlayerPlat called");
 #if IOS_SDK
 		openPlayerPlat();
 #endif
@@ -3410,11 +3423,11 @@ public class MainPlayer : Singleton<MainPlayer>
         {
             GoodsAttrConfig goodAttrConfig = GameSystem.Instance.GoodsConfigData.GetgoodsAttrConfig(_buyItemId);
 
-            Logger.Log("ConfirmBuy id=" + _buyItemId);
-            Logger.Log("ConfirmBuy _buyItemNum=" + _buyItemNum);
-            Logger.Log("ConfirmBuy _buyItemCost=" + _buyItemCost);
-            Logger.Log("ConfirmBuy _buyItemCost/_buyItemNum=" + (_buyItemCost / _buyItemNum));
-            Logger.Log("ConfirmBuy goodAttrConfig.name=" + goodAttrConfig.name);
+            Debug.Log("ConfirmBuy id=" + _buyItemId);
+            Debug.Log("ConfirmBuy _buyItemNum=" + _buyItemNum);
+            Debug.Log("ConfirmBuy _buyItemCost=" + _buyItemCost);
+            Debug.Log("ConfirmBuy _buyItemCost/_buyItemNum=" + (_buyItemCost / _buyItemNum));
+            Debug.Log("ConfirmBuy goodAttrConfig.name=" + goodAttrConfig.name);
             TDGAItem.OnPurchase(goodAttrConfig.name, (int)_buyItemNum, _buyItemCost/_buyItemNum);
         }
 #endif
@@ -3469,7 +3482,7 @@ public class MainPlayer : Singleton<MainPlayer>
             VipExpGoodsBuyInfo[goodsId] = BuyTims;
             return;
         }
-        Logger.LogError("SetVipExpGoodsBuyTimes failed to set goodsId=" + goodsId);
+        Debug.LogError("SetVipExpGoodsBuyTimes failed to set goodsId=" + goodsId);
     }
 
     //新手试炼数据

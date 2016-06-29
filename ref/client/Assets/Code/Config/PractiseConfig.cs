@@ -72,11 +72,11 @@ public class PractiseConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name);
+		Debug.Log("Config reading " + name);
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            Debug.LogError("LoadConfig failed: " + name);
             return;
         }
         configs.Clear();
@@ -119,6 +119,6 @@ public class PractiseConfig
             configs.Add(data.ID, data);
             uint.TryParse(xe.SelectSingleNode("is_activity").InnerText, out data.is_activity);
 		}
-		Logger.ConfigEnd(name);
+		
     }
 }

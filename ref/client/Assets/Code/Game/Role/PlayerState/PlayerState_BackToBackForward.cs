@@ -97,7 +97,7 @@ public class PlayerState_BackToBackForward : PlayerState
                 }
                 else if (targetState == State.eStand || targetState == State.eRun || targetState == State.eRush )
                 {
-                    Logger.Log("Defender state: " + targetState);
+						Debug.Log("Defender state: " + targetState);
                     bKnocked = true;
                 }
             }

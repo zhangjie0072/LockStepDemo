@@ -224,7 +224,7 @@ public static class LuaBinding
 
 			GenLuaBinder();
 			GenLuaDelegates();
-			Logger.Log("Generate lua binding files over");
+			Debug.Log("Generate lua binding files over");
 			AssetDatabase.Refresh();    
 		}
 	}
@@ -267,7 +267,7 @@ public static class LuaBinding
 
         GenLuaBinder();
         GenLuaDelegates();
-        Logger.Log("Generate lua binding files over");
+        Debug.Log("Generate lua binding files over");
         AssetDatabase.Refresh();        
     }
 

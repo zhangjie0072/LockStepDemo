@@ -11,7 +11,7 @@ function TipPopupMulti:Awake()
 end
 
 function TipPopupMulti:Start()
-	addOnClick(self.gameObject,self:OnClick())
+
 end
 --ref UIQualifyingNew.lua.ShowAwardTip
 --data数据为{{id,num}。。。}
@@ -33,12 +33,6 @@ function TipPopupMulti:SetData( data )
 end
 function TipPopupMulti:Refresh()
 
-end
-
-function TipPopupMulti:OnClick()
-	return function ()
-		NGUITools.Destroy(self.gameObject)
-	end
 end
 
 return TipPopupMulti

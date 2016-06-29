@@ -63,11 +63,11 @@ public class AttrReduceConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name);
+		UnityEngine.Debug.Log("Config reading " + name);
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            UnityEngine.Debug.LogError("LoadConfig failed: " + name);
             return;
         }
         
@@ -103,7 +103,7 @@ public class AttrReduceConfig
 			}
 			config.Add(entry);
 		}
-		Logger.ConfigEnd(name);
+		
 	}
 
 	public Dictionary<string, AttrReduceItem> GetItems(GameMatch.LeagueType leagueType, uint sectionID, uint level, PositionType position)

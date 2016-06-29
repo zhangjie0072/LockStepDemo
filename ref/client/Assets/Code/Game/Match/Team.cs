@@ -83,7 +83,7 @@ public class Team
 	public Player GetInitialBallHolder()
 	{
 		Player holder = GetMember(initialBallHolderIndex);
-		Logger.Log(m_side + " InitialBallHolder: " + initialBallHolderIndex + " " + holder.m_name);
+		Debug.Log(m_side + " InitialBallHolder: " + initialBallHolderIndex + " " + holder.m_name);
 		++initialBallHolderIndex;
 		if (initialBallHolderIndex >= GetMemberCount())
 			initialBallHolderIndex = 0;
@@ -107,38 +107,21 @@ public class Team
 		return players;
 	}
 
-	public void SortMember(bool bByPosition = false)
+	public void SortMember()
 	{
-		if( !bByPosition )
-		{
-			m_members.Sort((p1, p2) =>
-			{
-				int prior1 = positionPriority[(int)(p1.m_position)];
-				int prior2 = positionPriority[(int)(p2.m_position)];
-				if (prior1 < prior2)
-					return 1;
-				else if (prior1 > prior2)
-					return -1;
-				else
-					return 0;
-			});
-		}
-		else
-		{
-			m_members.Sort((p1, p2) =>
-			{
-				int prior1 = (int)p1.m_startPos;
-				int prior2 = (int)p2.m_startPos;
-				if (prior1 > prior2)
-					return 1;
-				else if (prior1 < prior2)
-					return -1;
-				else
-					return 0;
-			});
-		}
+        m_members.Sort((p1, p2) =>
+        {
+            int prior1 = positionPriority[(int)(p1.m_position)];
+            int prior2 = positionPriority[(int)(p2.m_position)];
+            if (prior1 < prior2)
+                return 1;
+            else if (prior1 > prior2)
+                return -1;
+            else
+                return 0;
+        });
 
-		//Logger.Log(" team seq: " + m_members[0].m_position  + " " + m_members[0].m_startPos + " " + m_members[1].m_position + " " + m_members[1].m_startPos  + " " + m_members[2].m_position + " " + m_members[2].m_startPos);
+		Debug.Log(" team seq: " + m_members[0].m_position  + " " + m_members[1].m_position + " " + m_members[2].m_position);
 	}
 }
 

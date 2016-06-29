@@ -15,11 +15,11 @@ public class LuaMgr : Singleton<LuaMgr>
     {
         System.DateTime time = System.DateTime.Now;
         _luaScriptMgr = new LuaScriptMgr();
-        Logger.Log("【Time】LuaMgr>>>new LuaScriptMgr=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+        Debug.Log("【Time】LuaMgr>>>new LuaScriptMgr=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
 
         time = System.DateTime.Now;
         _luaScriptMgr.Start();
-        Logger.Log("【Time】LuaMgr>>>_luaScriptMgr.Start=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+        Debug.Log("【Time】LuaMgr>>>_luaScriptMgr.Start=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
 
         string init = "require 'common/functions'\n" +
 						"require 'pbc/protobuf'\n" +
@@ -28,7 +28,7 @@ public class LuaMgr : Singleton<LuaMgr>
 
         time = System.DateTime.Now;
         _luaScriptMgr.DoString(init);
-        Logger.Log("【Time】LuaMgr>>>_luaScriptMgr.DoString=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
+        Debug.Log("【Time】LuaMgr>>>_luaScriptMgr.DoString=>" + (System.DateTime.Now - time).TotalSeconds.ToString());
 
         tblTime = LuaScriptMgr.Instance.GetLuaTable("Time");
 		funcSetFixedDelta = tblTime["SetFixedDelta"] as LuaFunction;

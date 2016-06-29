@@ -38,7 +38,7 @@ public class AI_PickAndRoll : AIState
 	{
 		m_player.m_toSkillInstance = m_player.m_skillSystem.GetValidSkillInMatch(Command.PickAndRoll, true);
 		if (m_player.m_toSkillInstance == null)
-			Logger.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI PickAndRoll");
+			Debug.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI PickAndRoll");
 	}
 
 	void Exit()

@@ -16,7 +16,7 @@ public class PlayerInfoVisualizer
 	private float 		m_YState = 0.0f;
 
 	private UIStaminaBar	m_uiStaminaBar;
-	public StrengthBar 	m_strengthBar;
+	private StrengthBar 	m_strengthBar;
 
 	UITweener m_nameFadeAway;
 
@@ -71,6 +71,9 @@ public class PlayerInfoVisualizer
 			m_uiStaminaBar.m_attachedPlayer = m_owner;
 			m_uiStaminaBar.gameObject.SetActive(false);
 		}
+
+        CreateStrengthBar();
+        ShowStrengthBar(false);
 	}
 
 	public void SetActive(bool bActive)
@@ -176,7 +179,7 @@ public class PlayerInfoVisualizer
 		m_goState.transform.localPosition = pos;
 	}
 
-    public void CreateStrengthBar()
+    void CreateStrengthBar()
     {
         GameObject obj = GameSystem.Instance.mClient.mUIManager.CreateUI("Prefab/GUI/StrengthBar", m_goPlayerInfo.transform);
 		obj.transform.localPosition = Vector3.zero;
@@ -184,7 +187,7 @@ public class PlayerInfoVisualizer
         m_strengthBar.player = m_owner;
     }
 
-	public void DestroyStrengthBar()
+	void DestroyStrengthBar()
 	{
 		NGUITools.Destroy(m_strengthBar.gameObject);
 		m_strengthBar = null;
@@ -196,6 +199,13 @@ public class PlayerInfoVisualizer
 			return;
 		NGUITools.SetActive(m_uiStaminaBar.gameObject, bShow);
 	}
+
+    public void ShowStrengthBar(bool bShow)
+    {
+        if (m_strengthBar == null)
+            return;
+		NGUITools.SetActive(m_strengthBar.gameObject, bShow);
+    }
 
 	void OnTimerHideName()
 	{

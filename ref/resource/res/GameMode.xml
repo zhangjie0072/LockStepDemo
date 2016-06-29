@@ -1,4 +1,4 @@
-<Data Count="156">
+<Data Count="159">
   <Line>
     <switch>#</switch>
     <id>生涯玩法ID</id>
@@ -180,7 +180,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10106</id>
+    <id>10201</id>
     <level>1</level>
     <type>104</type>
     <map_npc>0</map_npc>
@@ -212,7 +212,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10107</id>
+    <id>10202</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -242,7 +242,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10201</id>
+    <id>10203</id>
     <level>1</level>
     <type>106</type>
     <map_npc>0</map_npc>
@@ -274,7 +274,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10202</id>
+    <id>10204</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -304,7 +304,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10203</id>
+    <id>10205</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -334,7 +334,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10204</id>
+    <id>10301</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -364,7 +364,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10205</id>
+    <id>10302</id>
     <level>1</level>
     <type>100</type>
     <map_npc>0</map_npc>
@@ -391,7 +391,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10206</id>
+    <id>10303</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -421,7 +421,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10207</id>
+    <id>10304</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -451,7 +451,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10301</id>
+    <id>10305</id>
     <level>1</level>
     <type>106</type>
     <map_npc>0</map_npc>
@@ -483,7 +483,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10302</id>
+    <id>10401</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -513,7 +513,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10303</id>
+    <id>10402</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -543,7 +543,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10304</id>
+    <id>10403</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -573,7 +573,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10305</id>
+    <id>10404</id>
     <level>1</level>
     <type>101</type>
     <map_npc>0</map_npc>
@@ -605,7 +605,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10306</id>
+    <id>10405</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -635,7 +635,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10307</id>
+    <id>10501</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -665,7 +665,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10401</id>
+    <id>10502</id>
     <level>1</level>
     <type>103</type>
     <map_npc>0</map_npc>
@@ -697,7 +697,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10402</id>
+    <id>10503</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -727,7 +727,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10403</id>
+    <id>10504</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -757,7 +757,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10404</id>
+    <id>10505</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -787,7 +787,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10405</id>
+    <id>10601</id>
     <level>1</level>
     <type>100</type>
     <map_npc>0</map_npc>
@@ -814,7 +814,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10406</id>
+    <id>10602</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -844,7 +844,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10407</id>
+    <id>10603</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -874,7 +874,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10501</id>
+    <id>10604</id>
     <level>1</level>
     <type>105</type>
     <map_npc>0</map_npc>
@@ -906,7 +906,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10502</id>
+    <id>10605</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -936,7 +936,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10503</id>
+    <id>10701</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -966,7 +966,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10504</id>
+    <id>10702</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -996,7 +996,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10505</id>
+    <id>10703</id>
     <level>1</level>
     <type>101</type>
     <map_npc>0</map_npc>
@@ -1028,7 +1028,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10506</id>
+    <id>10704</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -1058,7 +1058,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10507</id>
+    <id>10705</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -1088,7 +1088,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10601</id>
+    <id>10801</id>
     <level>1</level>
     <type>104</type>
     <map_npc>0</map_npc>
@@ -1120,7 +1120,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10602</id>
+    <id>10802</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -1150,7 +1150,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10603</id>
+    <id>10803</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -1180,7 +1180,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10604</id>
+    <id>10804</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -1210,7 +1210,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10605</id>
+    <id>10805</id>
     <level>1</level>
     <type>105</type>
     <map_npc>0</map_npc>
@@ -1242,7 +1242,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10606</id>
+    <id>10901</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -1272,7 +1272,7 @@
   <Line>
     <switch>
     </switch>
-    <id>10607</id>
+    <id>10902</id>
     <level>1</level>
     <type>6</type>
     <map_npc>0</map_npc>
@@ -1291,6 +1291,96 @@
     <unmapped_npc1>50101</unmapped_npc1>
     <unmapped_npc2>50102</unmapped_npc2>
     <unmapped_npc3>50103</unmapped_npc3>
+    <additional_info>0</additional_info>
+    <AI_delay>0</AI_delay>
+    <rush_stamina>0</rush_stamina>
+    <skill_prob>
+    </skill_prob>
+    <reposition_dist>0</reposition_dist>
+    <extra_level_info>0</extra_level_info>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>10903</id>
+    <level>1</level>
+    <type>6</type>
+    <map_npc>0</map_npc>
+    <time>120</time>
+    <scene>20501</scene>
+    <npc_C>
+    </npc_C>
+    <npc_PF>
+    </npc_PF>
+    <npc_PG>
+    </npc_PG>
+    <npc_SF>
+    </npc_SF>
+    <npc_SG>
+    </npc_SG>
+    <unmapped_npc1>50104</unmapped_npc1>
+    <unmapped_npc2>50105</unmapped_npc2>
+    <unmapped_npc3>50106</unmapped_npc3>
+    <additional_info>0</additional_info>
+    <AI_delay>0</AI_delay>
+    <rush_stamina>0</rush_stamina>
+    <skill_prob>
+    </skill_prob>
+    <reposition_dist>0</reposition_dist>
+    <extra_level_info>0</extra_level_info>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>10904</id>
+    <level>1</level>
+    <type>6</type>
+    <map_npc>0</map_npc>
+    <time>120</time>
+    <scene>20501</scene>
+    <npc_C>
+    </npc_C>
+    <npc_PF>
+    </npc_PF>
+    <npc_PG>
+    </npc_PG>
+    <npc_SF>
+    </npc_SF>
+    <npc_SG>
+    </npc_SG>
+    <unmapped_npc1>50107</unmapped_npc1>
+    <unmapped_npc2>50108</unmapped_npc2>
+    <unmapped_npc3>50109</unmapped_npc3>
+    <additional_info>0</additional_info>
+    <AI_delay>0</AI_delay>
+    <rush_stamina>0</rush_stamina>
+    <skill_prob>
+    </skill_prob>
+    <reposition_dist>0</reposition_dist>
+    <extra_level_info>0</extra_level_info>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>10905</id>
+    <level>1</level>
+    <type>6</type>
+    <map_npc>0</map_npc>
+    <time>120</time>
+    <scene>20501</scene>
+    <npc_C>
+    </npc_C>
+    <npc_PF>
+    </npc_PF>
+    <npc_PG>
+    </npc_PG>
+    <npc_SF>
+    </npc_SF>
+    <npc_SG>
+    </npc_SG>
+    <unmapped_npc1>50110</unmapped_npc1>
+    <unmapped_npc2>50111</unmapped_npc2>
+    <unmapped_npc3>50112</unmapped_npc3>
     <additional_info>0</additional_info>
     <AI_delay>0</AI_delay>
     <rush_stamina>0</rush_stamina>

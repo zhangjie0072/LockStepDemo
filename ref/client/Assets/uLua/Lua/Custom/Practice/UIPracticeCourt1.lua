@@ -145,10 +145,10 @@ end
 --  5. The value Name in front each Line will be CHANGED for other SHORT appropriate name.       --
 ---------------------------------------------------------------------------------------------------
 function UIPracticeCourt1:UiParse()
-    self.uiBackBtn       = self.transform:FindChild("Top/ButtonBack"):GetComponent("Transform")
-    self.uiFreePractice1  = self.transform:FindChild("Middle/FreePractice1")
-    self.uiFreePractice = self.transform:FindChild("Middle/FreePractice")
-    self.uiPracticeMatch = self.transform:FindChild("Middle/PracticeMatch")
+    self.uiBackBtn       = self.transform:FindChild("TopLeft/ButtonBack"):GetComponent("Transform")
+    self.uiFreePractice1  = self.transform:FindChild("Middle/1/FreePractice1")
+    self.uiFreePractice = self.transform:FindChild("Middle/2/FreePractice")
+    self.uiPracticeMatch = self.transform:FindChild("Middle/3/PracticeMatch")
 
 end
 

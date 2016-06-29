@@ -45,9 +45,6 @@ public enum SampleNode
 
 public class AnimationSampleManager : Singleton<AnimationSampleManager>
 {
-    static string[] NODE_NAMES = {"root", "Bip001 R Hand", "Bip001 Pelvis", "ball"};
-
-    static IM.Number SAMPLE_INTERVAL = new IM.Number(0, 050);
     const string XML_ASSET_NAME = "Config/Player/AnimationSample";
     const string XML_FILE_NAME = "Assets/Resources/" + XML_ASSET_NAME + ".xml";
 
@@ -61,7 +58,7 @@ public class AnimationSampleManager : Singleton<AnimationSampleManager>
     {
         AnimData data = null;
         if (!datas.TryGetValue(name, out data))
-            Logger.LogError("AnimationSampleManager, no animation data for clip: " + name);
+            Debug.LogError("AnimationSampleManager, no animation data for clip: " + name);
         return data;
     }
 
@@ -71,84 +68,9 @@ public class AnimationSampleManager : Singleton<AnimationSampleManager>
     }
 
 #if UNITY_EDITOR
-    public void Sample(GameObject go, AnimationClip clip)
+    public void AddAnimData(string name, AnimData data)
     {
-        //Logger.Log("Sample motion, Clip:" + clip.name + " GameObject:" + go.name);
-
-        AnimData animData = new AnimData();
-
-        animData.sampleDatas = new List<SampleData>();
-        datas.Add(clip.name, animData);
-
-        animData.frameRate = IM.Number.FromUnity(clip.frameRate);
-        animData.wrapMode = clip.wrapMode;
-
-        Dictionary<SampleNode, Transform> transforms = new Dictionary<SampleNode, Transform>();
-        for (int i = 0; i < (int)SampleNode.Count; ++i)
-        {
-            string nodeName = NODE_NAMES[i];
-            Transform transform = GameUtils.FindChildRecursive(go.transform, nodeName);
-            transforms.Add((SampleNode)i, transform);
-        }
-
-        Transform root = transforms[SampleNode.Root];
-
-        //Logger.Log(clip.averageDuration);
-        for (IM.Number t = IM.Number.zero; ; t += SAMPLE_INTERVAL)
-        {
-            SampleData data = new SampleData();
-
-            float time = Mathf.Min((float)t, clip.averageDuration);
-            clip.SampleAnimation(go, time);
-            data.time = IM.Number.FromUnity(time);
-
-            data.nodes = new Dictionary<SampleNode, SampleNodeData>();
-            for (int i = 0; i < (int)SampleNode.Count; ++i)
-            {
-                SampleNode node = (SampleNode)i;
-                Transform transform = transforms[node];
-                Vector3 curPos = transform.position;
-                Quaternion curRot = transform.rotation;
-
-                SampleNodeData nodeData = new SampleNodeData();
-                if (node == SampleNode.Root)    //Root节点采样相对于Player的位置
-                {
-                    nodeData.position = IM.Vector3.FromUnity(curPos);
-                    nodeData.horiAngle = IM.Number.FromUnity(curRot.eulerAngles.y);
-                }
-                else    //其他节点采样相对于Root的位置
-                {
-                    nodeData.position = IM.Vector3.FromUnity(root.transform.InverseTransformPoint(transform.position));
-                }
-                //Logger.Log(string.Format("Sample, clip:{0} node:{1} time:{2} pos:{3} angle:{4}",
-                //    clip.name, node, time, nodeData.position, nodeData.horiAngle));
-
-                data.nodes.Add(node, nodeData);
-            }
-
-            animData.sampleDatas.Add(data);
-
-            if ((float)t >= clip.averageDuration)
-                break;
-        }
-
-
-        //Animation event
-        animData.eventDatas = new List<AnimEventData>();
-        AnimationEvent[] events = AnimationUtility.GetAnimationEvents(clip);
-        for (int i = 0; i < events.Length; ++i)
-        {
-            AnimationEvent evt = events[i];
-            AnimEventData eventData = new AnimEventData();
-            eventData.funcName = evt.functionName;
-            eventData.time = IM.Number.FromUnity(evt.time);
-            eventData.intParameter = evt.intParameter;
-            eventData.floatParameter = IM.Number.FromUnity(evt.floatParameter);
-            eventData.stringParameter = evt.stringParameter;
-            animData.eventDatas.Add(eventData);
-            evt.messageOptions = SendMessageOptions.DontRequireReceiver;
-        }
-        AnimationUtility.SetAnimationEvents(clip, events);
+        datas.Add(name, data);
     }
 
     public void SaveToXml()

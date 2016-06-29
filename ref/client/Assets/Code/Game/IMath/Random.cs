@@ -19,9 +19,9 @@ namespace IM
         {
             return IM.Number.Raw(Range(min.raw, max.raw));
         }
-        public static IM.BigNumber Range(IM.BigNumber min,IM.BigNumber max)
+        public static IM.PrecNumber Range(IM.PrecNumber min,IM.PrecNumber max)
         {
-            return IM.BigNumber.Raw(Range(min.raw, max.raw));
+            return IM.PrecNumber.Raw(Range(min.raw, max.raw));
         }
         public static IM.Number value
         {
@@ -30,11 +30,11 @@ namespace IM
                 return Range(IM.Number.zero, IM.Number.one);
             }
         }
-        public static IM.BigNumber bigValue
+        public static IM.PrecNumber bigValue
         {
             get
             {
-                return Range(IM.BigNumber.zero, IM.BigNumber.one);
+                return Range(IM.PrecNumber.zero, IM.PrecNumber.one);
             }
         }
         //设置种子，相同种子的随机数生成序列是一样的
@@ -45,6 +45,7 @@ namespace IM
             {
                 _seed = value;
                 random = new Random(value);
+                Debug.Log("IM.Random set seed: " + value);
             }
         }
 
@@ -63,6 +64,7 @@ namespace IM
                 state = tempState;
             else
                 state = tempState + M;
+            //Logger.Log("IM.Random RandomInt: " + state);
             return state;
         }
         public long RandomInt(long min, long max)

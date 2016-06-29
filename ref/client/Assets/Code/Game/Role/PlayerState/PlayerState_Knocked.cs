@@ -4,8 +4,9 @@ using fogs.proto.msg;
 public class PlayerState_Knocked : PlayerState
 {
 	public 	bool	m_bKnockedRecover = false;
+	public	bool	m_bToHoldBall = false;
 
-	protected IM.Number	m_rateHoldBall = new IM.Number(0,300);
+	protected float	m_rateHoldBall = 0.3f;
 
 	public PlayerState_Knocked (PlayerStateMachine owner, GameMatch match):base(owner,match)
 	{
@@ -22,12 +23,10 @@ public class PlayerState_Knocked : PlayerState
 
 	override public void OnEnter ( PlayerState lastState )
 	{
-        //bool bHoldBall = Random.value < m_rateHoldBall;
-        bool bHoldBall = true;
         if( m_player.m_eHandWithBall == Player.HandWithBall.eLeft )
-            m_animType = bHoldBall ? AnimType.B_TYPE_0 : AnimType.B_TYPE_1;
+				m_animType = m_bToHoldBall ? AnimType.B_TYPE_0 : AnimType.B_TYPE_1;
         else if( m_player.m_eHandWithBall == Player.HandWithBall.eRight )
-            m_animType = bHoldBall ? AnimType.B_TYPE_2 : AnimType.B_TYPE_3;
+				m_animType = m_bToHoldBall ? AnimType.B_TYPE_2 : AnimType.B_TYPE_3;
         else
             m_animType = AnimType.N_TYPE_0;
 
@@ -52,6 +51,12 @@ public class PlayerState_Knocked : PlayerState
 				m_player.Move(fDeltaTime, -m_player.forward * IM.Number.two);
 		}
 	}
+	public override void OnExit ()
+	{
+		base.OnExit ();
+		m_bToHoldBall = false;
+	}
+
 }
 
 

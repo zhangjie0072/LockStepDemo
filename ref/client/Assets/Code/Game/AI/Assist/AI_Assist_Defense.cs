@@ -15,22 +15,25 @@ public class AI_Assist_Defense : AIState
 
 		Player target = m_player.m_defenseTarget;
 		IM.Vector3 dirTargetToBasket = GameUtils.HorizonalNormalized(m_match.mCurScene.mBasket.m_vShootTarget, target.position);
-		IM.Vector3 targetPos = target.position + dirTargetToBasket * IM.Number.two;
+		IM.Number fDistDefTargetToBasket = GameUtils.HorizonalDistance(target.position, m_match.mCurScene.mBasket.m_vShootTarget);
+		IM.Number fDistDefToBasket = GameUtils.HorizonalDistance(m_player.position, m_match.mCurScene.mBasket.m_vShootTarget);
+
+        IM.Vector3 targetPos = target.position + dirTargetToBasket * IM.Math.Max(fDistDefTargetToBasket / new IM.Number(3, 500), IM.Number.half);
 		IM.Vector3 vecPlayerToTarget = targetPos - m_player.position;
         IM.Number distToTargetPos = vecPlayerToTarget.magnitude;
-		if (distToTargetPos < new IM.Number(0,100))
+		if (distToTargetPos < new IM.Number(0, 100))
 		{
 			m_player.m_dir = -1;
 			m_player.m_moveHelper.StopMove(MoveType.eMT_Defense);
 		}
 		else
 		{
-			IM.Number dir;
+			int dir;
 			IM.Vector3 vel;
             //IM.Number angle = IM.Quaternion.FromToRotation(IM.Vector3.forward, vecPlayerToTarget.normalized).eulerAngles.y;
             IM.Number angle = IM.Vector3.FromToAngle(IM.Vector3.forward, vecPlayerToTarget.normalized);
 			GameUtils.AngleToDir(angle, out dir, out vel);
-			m_player.m_dir = (int)(float)dir;
+			m_player.m_dir = dir;
 			m_player.m_moveType = distToTargetPos < new IM.Number(4) ? MoveType.eMT_Run : MoveType.eMT_Rush;
 		}
 
@@ -38,7 +41,8 @@ public class AI_Assist_Defense : AIState
 		{
 			m_player.m_toSkillInstance = null;
 		}
-        else if (m_player.m_inputDispatcher._autoDefTakeOver.InTakeOver 
+        else if (m_player.m_inputDispatcher != null
+            && m_player.m_inputDispatcher._autoDefTakeOver.InTakeOver 
             && AIUtils.IsAttacking(target) 
             && m_player.m_StateMachine.m_curState.m_eState != PlayerState.State.eDisturb
             && !(m_player.m_StateMachine.m_curState is PlayerState_Skill)

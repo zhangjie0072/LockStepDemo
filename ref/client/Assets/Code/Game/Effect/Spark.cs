@@ -23,7 +23,7 @@ public class SparkEffect
 		m_target = target;
 		m_sparkTimer = new GameUtils.Timer4View(fInterval, _Spark, iCount);
 		m_sparkTimer.stop = true;
-        Shader shader = Shader.Find("Diffuse");
+		Shader shader = Shader.Find("Diffuse");
         m_matSpark = new Material(shader);
 	}
 

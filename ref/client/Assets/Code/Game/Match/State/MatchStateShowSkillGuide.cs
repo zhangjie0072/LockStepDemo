@@ -39,9 +39,9 @@ public class MatchStateShowSkillGuide : MatchState
 		timer.stop = false;
 	}
 	
-	override public void Update (IM.Number fDeltaTime)
+	override public void GameUpdate (IM.Number fDeltaTime)
 	{
-		base.Update(fDeltaTime);
+		base.GameUpdate(fDeltaTime);
 
 		timer.Update(fDeltaTime);
 	}

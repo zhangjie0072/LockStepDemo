@@ -23,12 +23,13 @@ public class AI_ReboundStorm_Positioning : AIState
 		npcReboundAttr = GameSystem.Instance.ReboundAttrConfigData.GetReboundAttr(m_player.m_position);
 		if (npcReboundAttr == null)
 		{
-			Logger.LogError("Rebound height config error.");
+			Debug.LogError("Rebound height config error.");
 		}
-		playerReboundAttr = GameSystem.Instance.ReboundAttrConfigData.GetReboundAttr(match.m_mainRole.m_position);
+        //TODO Õë¶ÔPVPÐÞ¸Ä
+		playerReboundAttr = GameSystem.Instance.ReboundAttrConfigData.GetReboundAttr(match.mainRole.m_position);
 		if (playerReboundAttr == null)
 		{
-			Logger.LogError("Rebound height config error.");
+			Debug.LogError("Rebound height config error.");
 		}
 	}
 
@@ -70,16 +71,16 @@ public class AI_ReboundStorm_Positioning : AIState
 	{
 		ShootSolution.SShootCurve curve = ball.CompleteLastCurve();
 		IM.Number ballMaxHeight = curve.GetHighestPosition().y;
-		//Logger.Log("Ball max height: " + ballMaxHeight);
+		//Debug.Log("Ball max height: " + ballMaxHeight);
 		IM.Number npcReboundBallHeight = AIUtils.GetNPCReboundBallHeight(npcReboundAttr.maxHeight, playerReboundAttr.maxHeight, ballMaxHeight,
 			match.npcHeightScale, match.playerHeightScale, match.ballHeightScale);
-		//Logger.Log("NPC rebound ball height: " + npcReboundBallHeight);
+		//Debug.Log("NPC rebound ball height: " + npcReboundBallHeight);
         IM.Number time1, time2;
         curve.GetTimeByHeight(npcReboundBallHeight, out time1, out time2);
         IM.Number ballFlyTime = time2;
-		//Logger.Log("Ball fly time: " + ballFlyTime);
+		//Debug.Log("Ball fly time: " + ballFlyTime);
 		if (ballFlyTime < -new IM.Number(0,1))
-			Logger.LogError("Ball fly time error.");
+			Debug.LogError("Ball fly time error.");
 
 		SkillInstance basicRebound = m_player.m_skillSystem.GetBasicSkillsByCommand(Command.Rebound)[0];
 		string basicActionId = basicRebound.skill.actions[0].action_id;

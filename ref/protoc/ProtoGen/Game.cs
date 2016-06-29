@@ -2531,6 +2531,14 @@ namespace fogs.proto.msg
       get { return _away_position; }
       set { _away_position = value; }
     }
+    private uint _seed = default(uint);
+    [global::ProtoBuf.ProtoMember(10, IsRequired = false, Name=@"seed", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint seed
+    {
+      get { return _seed; }
+      set { _seed = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -2769,73 +2777,6 @@ namespace fogs.proto.msg
     {
       get { return _char_id; }
       set { _char_id = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ClientInput")]
-  public partial class ClientInput : global::ProtoBuf.IExtensible
-  {
-    public ClientInput() {}
-    
-    private uint _dir = default(uint);
-    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"dir", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(uint))]
-    public uint dir
-    {
-      get { return _dir; }
-      set { _dir = value; }
-    }
-    private uint _cmd = default(uint);
-    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"cmd", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(uint))]
-    public uint cmd
-    {
-      get { return _cmd; }
-      set { _cmd = value; }
-    }
-    private uint _acc_id = default(uint);
-    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"acc_id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(uint))]
-    public uint acc_id
-    {
-      get { return _acc_id; }
-      set { _acc_id = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"FrameInfo")]
-  public partial class FrameInfo : global::ProtoBuf.IExtensible
-  {
-    public FrameInfo() {}
-    
-    private readonly global::System.Collections.Generic.List<fogs.proto.msg.ClientInput> _info = new global::System.Collections.Generic.List<fogs.proto.msg.ClientInput>();
-    [global::ProtoBuf.ProtoMember(1, Name=@"info", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<fogs.proto.msg.ClientInput> info
-    {
-      get { return _info; }
-    }
-  
-    private uint _frameNum = default(uint);
-    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"frameNum", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(uint))]
-    public uint frameNum
-    {
-      get { return _frameNum; }
-      set { _frameNum = value; }
-    }
-    private double _time = default(double);
-    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"time", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(double))]
-    public double time
-    {
-      get { return _time; }
-      set { _time = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)

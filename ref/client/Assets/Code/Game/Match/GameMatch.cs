@@ -207,7 +207,7 @@ public abstract class GameMatch
         {
         }
     }
-
+	public bool m_bLoadingComplete{ get; private set; }
 	public LeagueType leagueType { get { return m_config.leagueType; } }
 	
 	public Team	m_homeTeam;
@@ -224,7 +224,7 @@ public abstract class GameMatch
     /**比赛倒计时间功能开启enable*/
     public bool m_gameMathCountEnable = true;
     /**进攻24秒常量*/
-    public IM.Number MAX_COUNT24_TIME = new IM.Number(14);
+    public IM.Number MAX_COUNT24_TIME = new IM.Number(140);
     private IM.Number _count24TimeSec;
     /**进攻24秒*/
     public IM.Number m_count24Time {
@@ -282,39 +282,67 @@ public abstract class GameMatch
     /**当前场景*/
 	public GameScene mCurScene{ get; protected set; }
 
-	public Player m_mainRole
+    //每个账号对应一个MainRole，代表正在操作的球员
+    private Dictionary<uint, Player> _mainRole = new Dictionary<uint, Player>();
+    //本机账号对应的MainRole
+    public Player mainRole {
+        get { return GetMainRole(MainPlayer.Instance.AccountID); }
+        set { SetMainRole(MainPlayer.Instance.AccountID, value); } 
+    }
+    public bool IsMainRole(Player player)
+    {
+        return player == GetMainRole(player.m_roleInfo.acc_id);
+    }
+	public Player GetMainRole(uint acc_id)
 	{
-		get { return _mainRole; }
-		protected set
+        Player player = null;
+        _mainRole.TryGetValue(acc_id, out player);
+        return player;
+    }
+
+    public void SetMainRole(uint acc_id, Player newMainRole)
+    {
+        Color yellow = new Color(1f, 252f / 255, 10f / 255, 1);
+        bool isPassTarget = false;
+        Player curMainRole = GetMainRole(acc_id);
+        if (curMainRole != null)
+        {
+            curMainRole.HideIndicator();
+            if ( curMainRole.m_StateMachine != null && curMainRole.m_StateMachine.m_curState != null &&
+                curMainRole.m_StateMachine.m_curState.m_eState == PlayerState.State.ePass &&
+                curMainRole.m_passTarget == newMainRole && !newMainRole.m_bWithBall)
+                isPassTarget = true;
+        }
+        _mainRole[acc_id] = newMainRole;
+        if (isPassTarget)
 		{
-			bool isPassTarget = false;
-			if (_mainRole != null)
-			{
-				_mainRole.HideIndicator();
-				if ( _mainRole.m_StateMachine != null && _mainRole.m_StateMachine.m_curState != null && value != null &&
-					_mainRole.m_StateMachine.m_curState.m_eState == PlayerState.State.ePass &&
-					_mainRole.m_passTarget == value &&
-					!value.m_bWithBall)
-					isPassTarget = true;
-			}
-			_mainRole = value;
-			if (isPassTarget)
-			{
-				_mainRole.ShowIndicator(Color.yellow, false);
-				UBasketball.BallDelegate onCatch = null;
-				onCatch = (UBasketball ball) =>
-				{
-					ball.onCatch -= onCatch;
-                    _mainRole.ShowIndicator(Color.yellow, true);
-				};
-				mCurScene.mBall.onCatch += onCatch;
-			}
-			else
-			{
-                _mainRole.ShowIndicator(Color.yellow, true);
-			}
-		}
-	}
+		    newMainRole.ShowIndicator(yellow, false);
+            UBasketball.BallDelegate onCatch = null;
+            onCatch = (UBasketball ball) =>
+            {
+                ball.onCatch -= onCatch;
+                newMainRole.ShowIndicator(yellow, true);
+            };
+            mCurScene.mBall.onCatch += onCatch;
+        }
+        else
+        {
+            newMainRole.ShowIndicator(yellow, true);
+        }
+        //如果是本机账号
+        if (acc_id == MainPlayer.Instance.AccountID)
+        {
+            InputReader.Instance.player = newMainRole;
+            _UpdateCamera(newMainRole);
+            if (curMainRole != null)
+            {
+                curMainRole.m_InfoVisualizer.ShowStaminaBar(false);
+                curMainRole.m_InfoVisualizer.ShowStrengthBar(false);
+            }
+            newMainRole.m_InfoVisualizer.ShowStaminaBar(true);
+            newMainRole.m_InfoVisualizer.ShowStrengthBar(true);
+        }
+    }
 	
 	public ReboundHelper reboundHelper = new ReboundHelper();
 
@@ -357,7 +385,6 @@ public abstract class GameMatch
 
 	protected UnityEngine.Object m_resTips;
 	protected ArrayList	m_goTips = new ArrayList();
-	protected Team 	m_mainTeam;
 	protected bool	m_bShowGoalUIEffect = true;
 
 	private GameObject	m_preloadCamera;
@@ -369,7 +396,6 @@ public abstract class GameMatch
 	private GameObject m_basketTipNode;
 	private bool m_outscored = false;
 	
-	private Player _mainRole;
 	private int _awayScore = 0;
 	private int _homeScore = 0;
 
@@ -379,7 +405,9 @@ public abstract class GameMatch
 	public GameMatch(Config config)
 	{
 		m_stateMachine = CreateMatchStateMachine();
-		 
+
+		m_bLoadingComplete = false;
+
 		m_homeTeam = new Team(Team.Side.eHome);
 		m_awayTeam = new Team(Team.Side.eAway);
 	
@@ -406,9 +434,9 @@ public abstract class GameMatch
 
 		m_context = new GameMatchContext();
 
-		_CreatePlayersData();
+		CheatingDeath.Instance.mAntiSpeedUp.m_toWatch = true;
 
-        VirtualGameServer.Instance.Reset();
+		_CreatePlayersData();
 
         turnManager = new TurnManager();
 
@@ -421,7 +449,7 @@ public abstract class GameMatch
 		MatchMsg msg = GameSystem.Instance.matchMsgConfig.matchMsgs.Find( (MatchMsg inMsg)=>{return inMsg.id == resp.id;} );
 		if( msg == null )
 		{
-			Logger.LogError("Unable to find msg.");
+			Debug.LogError("Unable to find msg.");
 			return;
 		}
 		GameMatch curMatch = GameSystem.Instance.mClient.mCurMatch;
@@ -439,13 +467,18 @@ public abstract class GameMatch
 		if (clip != null)
 			AudioManager.Instance.PlaySound(clip);
 		else
-			Logger.LogWarning("Sound file " + msg.audio_src + " not found");
+			Debug.LogWarning("Sound file " + msg.audio_src + " not found");
 	}		
 
 	protected virtual MatchStateMachine CreateMatchStateMachine()
 	{
 		return new MatchStateMachine(this);
 	}
+
+    public virtual AISystem CreateAISystem(Player player)
+    {
+        return new AISystem_Basic(this, player, AIState.Type.eInit, player.m_config.AIID);
+    }
 
 	public virtual void CreateUI()
 	{
@@ -459,7 +492,12 @@ public abstract class GameMatch
 
 	virtual public void OnDestroy()
 	{
-        VirtualGameServer.Instance.Stop();
+        if (VirtualGameServer.Instance != null)
+        {
+            VirtualGameServer.Instance.Stop();
+            VirtualGameServer.Instance = null;
+        }
+		CheatingDeath.Instance.mAntiSpeedUp.EndWatch();
 	}
 
     public Config GetConfig()
@@ -473,28 +511,50 @@ public abstract class GameMatch
 		Scene sceneInfo = GameSystem.Instance.SceneConfig.GetConfig( m_config.sceneId );
 		if( sceneInfo == null )
 		{
-			Logger.LogError("No scene config: " + m_config.sceneId);
+			Debug.LogError("No scene config: " + m_config.sceneId);
 			return;
 		}
 		
 		mCurScene = new GameScene( sceneInfo );
 		mCurScene.RegisterListener(this);
-		
+
+		//loading begin
+		if(  leagueType != LeagueType.ePVP && 
+			(leagueType != LeagueType.eRegular1V1 || m_config.type == Type.eCareer3On3) &&
+			(leagueType != LeagueType.eQualifyingNew || m_config.type == Type.eCareer3On3) &&
+			(leagueType != LeagueType.eQualifyingNewer ||m_config.type == Type.eCareer3On3) 
+		)
+		{
+			UIChallengeLoading loading = UIManager.Instance.CreateUI("UIChallengeLoading_1").GetComponent<UIChallengeLoading>();
+			UIManager.Instance.BringPanelForward(loading.gameObject);
+			loading.LoadFromMatch(sceneInfo.resourceId, this);
+			if( leagueType == LeagueType.ePractise || m_config.type == GameMatch.Type.eReady || m_config.type == GameMatch.Type.eFreePractice )
+				loading.Refresh(true);
+			else
+			{
+				PlaySoundManager.Instance.PlaySound(MatchSoundEvent.EnterLoading);
+				loading.Refresh(false);
+			}
+		}
+
 		m_ruler = new GameRuler(this);
 		
         //string path = GlobalConst.DIR_XML_SHOOT_SOLUTION + "shootsolutionset";
 		if( !GameSystem.Instance.shootSolutionManager.LoadShootSolutionSet(false) )
-			Logger.LogError("Failed to load shoot solution set.");
+			Debug.LogError("Failed to load shoot solution set.");
 		
 		mCurScene.onDebugDraw += RoadPathManager.Instance.OnDebugDraw;
 	}
     /**战斗场景加载完成*/
-	virtual public void OnSceneComplete ()
+	public void OnSceneComplete ()
 	{
+		UIChallengeLoading goLoading = UIManager.Instance.m_uiRootBasePanel.GetComponentInChildren<UIChallengeLoading>();
+		goLoading.OnSceneLoaded();
+
 		m_shadowEffect = ResourceLoadManager.Instance.LoadPrefab("prefab/effect/shadow");
 		if( m_config == null )
 		{
-			Logger.LogError("Match config file loading failed.");
+			Debug.LogError("Match config file loading failed.");
 			return;
 		}
 
@@ -536,31 +596,15 @@ public abstract class GameMatch
 		m_camFollowPath = goMatchCamera.GetComponent<UCamCtrl_FollowPath>();
 		if (m_camFollowPath == null)
 			m_camFollowPath = goMatchCamera.AddComponent<UCamCtrl_FollowPath>();
-
         /*
 		m_preloadCamera = new GameObject("Preload Camera");
 		Camera cam = m_preloadCamera.AddComponent<Camera>();
 		cam.targetTexture = new RenderTexture(32,32,1);
 		cam.cullingMask = LayerMask.NameToLayer("preload");
 		*/
-
         m_resTips = ResourceLoadManager.Instance.LoadPrefab("prefab/gui/UIMatchTips");
-        List<string> UiNames = new List<string>();
-        UiNames.Add("Prefab/GUI/MatchTipAnim");
-        UiNames.Add("Prefab/GUI/MatchTipScoreDiff");
-        UiNames.Add("Prefab/GUI/PlayerTip");
-        UiNames.Add("Prefab/GUI/circle");
-        UiNames.Add("Prefab/GUI/GroundDown");
-        UiNames.Add("Prefab/GUI/Hit_1");
-        UiNames.Add("Prefab/GUI/pre_3pt");
-        UiNames.Add("Prefab/GUI/RebPlacement");
 
-       PlayerManager pm = GameSystem.Instance.mClient.mPlayerManager;
-		foreach( Player player in pm )
-			_CreateTeamMember(player);
-
-        UIChallengeLoading goLoading = UIManager.Instance.m_uiRootBasePanel.GetComponentInChildren<UIChallengeLoading>();
-        goLoading.LoadResources(UiNames, pm);
+		_OnSceneComplete();
 
 		GameObject inGameInfoPanel = new GameObject("inGameInfoPanel");
 		m_uiInGamePanel = inGameInfoPanel.AddComponent<UIPanel>();
@@ -570,29 +614,26 @@ public abstract class GameMatch
 		m_uiInGamePanel.transform.localScale = Vector3.one;
 		GameUtils.SetLayerRecursive(inGameInfoPanel.transform, LayerMask.NameToLayer("GUI"));
 		goLoading.onComplete += OnLoadingComplete;
-
-        /*string prefabName = "Prefab/GUI/MatchTipAnim";
-		ResourceLoadManager.Instance.LoadPrefab(prefabName);
-		prefabName = "Prefab/GUI/MatchTipScoreDiff";
-		ResourceLoadManager.Instance.LoadPrefab(prefabName);
-		prefabName = "Prefab/GUI/PlayerTip";
-		ResourceLoadManager.Instance.LoadPrefab(prefabName);
-		prefabName = "prefab/indicator/circle";
-		ResourceLoadManager.Instance.LoadPrefab(prefabName);
-		prefabName = "prefab/effect/GroundDown";
-		ResourceLoadManager.Instance.LoadPrefab(prefabName);
-		prefabName = "prefab/effect/Hit_1";
-		ResourceLoadManager.Instance.LoadPrefab(prefabName);
-        prefabName = "Prefab/indicator/pre_3pt";
-		ResourceLoadManager.Instance.LoadPrefab(prefabName);
-		prefabName = "Prefab/indicator/RebPlacement";
-		ResourceLoadManager.Instance.LoadPrefab(prefabName);*/
     }
+
+	virtual protected void _OnSceneComplete()
+	{
+		UIChallengeLoading goLoading = UIManager.Instance.m_uiRootBasePanel.GetComponentInChildren<UIChallengeLoading>();
+
+		PlayerManager pm = GameSystem.Instance.mClient.mPlayerManager;
+		goLoading.LoadCharacter(pm, this);
+		goLoading.LoadUI(this);
+	}
 
 	virtual protected void OnLoadingComplete()
 	{
+		_OnLoadingCompleteImp();
+		m_bLoadingComplete = true;
 	}
 
+	virtual protected void _OnLoadingCompleteImp()
+	{
+	}
 
 	virtual protected void OnRimCollision(UBasket basket, UBasketball ball)
 	{
@@ -600,11 +641,7 @@ public abstract class GameMatch
 
 	protected void _CreateGUI()
 	{
-		//UIControl
-        if (m_mainRole != null)
-        {
-            CreateUIController();
-        }
+        CreateUIController();
 
 		CreateCustomGUI();
 
@@ -617,7 +654,39 @@ public abstract class GameMatch
 		matchAchievementItemPrefab = ResourceLoadManager.Instance.LoadPrefab("Prefab/GUI/MatchAchievementItem") as GameObject;
 	}
 
-	protected virtual void CreateCustomGUI()
+    protected virtual void OnCancelExit(GameObject go)
+    {
+        GameSystem.Instance.mClient.pause = false;
+    }
+
+	public virtual void GetUIList(out List<string> lst_uiNames)
+	{
+		lst_uiNames = new List<string>();
+		lst_uiNames.Add("Prefab/GUI/MatchTipAnim");
+		lst_uiNames.Add("Prefab/GUI/MatchTipScoreDiff");
+		lst_uiNames.Add("Prefab/GUI/PlayerTip");
+		lst_uiNames.Add("Prefab/GUI/circle");
+		lst_uiNames.Add("Prefab/GUI/GroundDown");
+		lst_uiNames.Add("Prefab/GUI/Hit_1");
+		lst_uiNames.Add("Prefab/GUI/pre_3pt");
+		lst_uiNames.Add("Prefab/GUI/RebPlacement");
+	}
+
+    protected virtual LuaComponent PopPauseDlg(Transform parent, UIEventListener.VoidDelegate outClick, UIEventListener.VoidDelegate continueClick)
+    {
+        GameObject go = ResourceLoadManager.Instance.LoadPrefab("Prefab/GUI/UIPause") as GameObject;
+        GameObject go_clone = CommonFunction.InstantiateObject(go, parent);
+        go_clone.transform.localPosition = go_clone.transform.localPosition;
+
+        LuaComponent popup_message = go_clone.GetComponent<LuaComponent>();
+        popup_message.table.Set("outClicked", outClick);
+        popup_message.table.Set("continueClicked", continueClick);
+        NGUITools.BringForward(go_clone);
+
+        return popup_message;
+    }
+
+    protected virtual void CreateCustomGUI()
 	{
         if (m_uiMatch != null) return;
 		GameObject uiMatch = GameSystem.Instance.mClient.mUIManager.CreateUI("UIMatch");  
@@ -663,8 +732,10 @@ public abstract class GameMatch
             AddCount24Listener(playState);
 		}
 		else
-			Logger.LogError("create match UI failed.");
+			Debug.LogError("create match UI failed.");
 	}
+    
+
 
     protected virtual void CreateUIController()
     {
@@ -677,18 +748,24 @@ public abstract class GameMatch
         if (uiController != null)
             GameSystem.Instance.mClient.mInputManager.mJoystick = uiController.GetComponentInChildren<UIJoystick>();
         else
-            Logger.Log("Error -- create UI controller failed.");
+            Debug.Log("Error -- create UI controller failed.");
 
         m_uiController = uiController.GetComponentInChildren<UController>();
-        InputReader.Instance.player = m_mainRole;
         //m_uiController.onAutoDefenseChanged = (state) => AutoDefTakeOver.Enabled = state;
     }
 
-    public abstract void HandleGameBegin(Pack pack);
+    public void HandleGameBegin(Pack pack)
+    {
+        GameBeginResp resp = ProtoBuf.Serializer.Deserialize<GameBeginResp>(new MemoryStream(pack.buffer));
+        IM.Random.seed = (int)resp.seed;
+        OnGameBegin(resp);
+    }
+
+    public abstract void OnGameBegin(GameBeginResp resp);
 	
     public virtual void FixedUpdate()
     {
-		if( mCurScene == null || mCurScene.mGround == null ) 
+		if( !m_bLoadingComplete )
 			return;
 
 		if (m_uiMatch != null)
@@ -724,21 +801,24 @@ public abstract class GameMatch
 		MatchState curState = m_stateMachine.m_curState;
 		if( curState != null && curState.m_eState == MatchState.State.ePlaying)
 		{
-			foreach(Player player in m_mainRole.m_defenseTarget.m_team)
+			foreach(Player player in mainRole.m_defenseTarget.m_team)
 				player.m_AOD.visible = false;
 			
-			Player target = m_mainRole.m_defenseTarget;
-			if( m_mainRole != null && target != null && mCurScene.mBall != null && mCurScene.mBall.m_owner != null)
+			Player target = mainRole.m_defenseTarget;
+			if( mainRole != null && target != null && mCurScene.mBall != null && mCurScene.mBall.m_owner != null)
 			{
 				if (target != null && target.m_AOD != null)
-					target.m_AOD.visible = (m_mainRole.m_team.m_role == GameMatch.MatchRole.eDefense);
+					target.m_AOD.visible = (mainRole.m_team.m_role == GameMatch.MatchRole.eDefense);
 			}
 		}
 	}
 
     //逻辑帧
-	virtual public void Update(IM.Number deltaTime)
+	virtual public void GameUpdate(IM.Number deltaTime)
     {
+		if( !m_bLoadingComplete )
+			return;
+
         if (mCurScene == null)
             return;
         if (m_ruler != null && m_ruler.timer != null)
@@ -756,11 +836,12 @@ public abstract class GameMatch
 
         if (needCount && m_gameMathCountTimer != null && !m_gameMatchCountStop && m_gameMathCountEnable)
         {
-            m_gameMathCountTimer.Update(deltaTime);
             if (m_uiMatch != null)
             {
+                gameMatchTime = m_gameMathCountTimer.Remaining(); 
                 m_uiMatch.UpdateTime((float)m_gameMathCountTimer.Remaining());
             }
+            m_gameMathCountTimer.Update(deltaTime);
         }
 
         //进攻倒计时
@@ -785,29 +866,26 @@ public abstract class GameMatch
         //比赛状态机
         if (m_stateMachine == null)
             return;
-        m_stateMachine.Update(deltaTime);
+        m_stateMachine.GameUpdate(deltaTime);
 
         //球员
-		MatchState curState = m_stateMachine.m_curState;
-		if( curState != null 
-		   && curState.m_eState != MatchState.State.eOpening
-		   && curState.m_eState != MatchState.State.eOverTime
-		   )
-		{
-			PlayerManager pm = GameSystem.Instance.mClient.mPlayerManager;
-			if (pm != null)
-			{
-				foreach (Player pl in pm)
-					pl.Update(deltaTime);
-			}
-		}
+        PlayerManager pm = GameSystem.Instance.mClient.mPlayerManager;
+        if (pm != null)
+        {
+            foreach (Player pl in pm)
+                pl.GameUpdate(deltaTime);
+        }
 
         //球
         foreach (UBasketball ball in mCurScene.balls)
         {
-            ball.Update(deltaTime);
+            ball.GameUpdate(deltaTime);
         }
-
+        foreach (UBasketball ball in mCurScene.removeBalls)
+        {
+            mCurScene.balls.Remove(ball);
+        }
+        mCurScene.removeBalls.Clear();
         //抢篮板队列
 		reboundHelper.Update(deltaTime);
         /*
@@ -818,7 +896,7 @@ public abstract class GameMatch
     }
 
     //渲染帧
-	virtual public void Update()
+	virtual public void ViewUpdate()
     {
         //背景音乐
         if (m_bgSoundPlayer != null)
@@ -830,33 +908,39 @@ public abstract class GameMatch
         //显示比分
 		if (m_uiMatch != null)
 		{
-			m_uiMatch.leftScore	 = m_mainRole.m_team.m_side == Team.Side.eHome ? m_homeScore : m_awayScore;
-			m_uiMatch.rightScore = m_mainRole.m_team.m_side == Team.Side.eHome ? m_awayScore : m_homeScore;
+			m_uiMatch.leftScore	 = mainRole.m_team.m_side == Team.Side.eHome ? m_homeScore : m_awayScore;
+			m_uiMatch.rightScore = mainRole.m_team.m_side == Team.Side.eHome ? m_awayScore : m_homeScore;
 		}
 
         //比赛状态机
         if (m_stateMachine == null)
             return;
-        m_stateMachine.Update(Time.deltaTime);
+        m_stateMachine.ViewUpdate(Time.deltaTime);
 
         //玩家
         PlayerManager pm = GameSystem.Instance.mClient.mPlayerManager;
         if (pm != null)
         {
             foreach (Player pl in pm)
-                pl.Update();
+                pl.ViewUpdate();
+        }
+
+        //球
+        foreach (UBasketball ball in mCurScene.balls)
+        {
+            ball.ViewUpdate();
         }
     }
 
     //逻辑层
-    virtual public void LateUpdate(IM.Number deltaTime)
+    virtual public void GameLateUpdate(IM.Number deltaTime)
     {
         PlayerManager pm = GameSystem.Instance.mClient.mPlayerManager;
         if (pm != null)
         {
             foreach (Player player in pm)
             {
-                player.LateUpdate(deltaTime);
+                player.GameLateUpdate(deltaTime);
 
                 IM.Vector3 vPos = player.moveCtrl.position;
                 mCurScene.mGround.BoundInZone(ref vPos);
@@ -868,22 +952,20 @@ public abstract class GameMatch
     }
 
     //渲染层
-    virtual public void LateUpdate()
+    virtual public void ViewLateUpdate()
     {
         PlayerManager pm = GameSystem.Instance.mClient.mPlayerManager;
         if (pm != null)
         {
             foreach (Player pl in pm)
-                pl.LateUpdate();
+                pl.ViewLateUpdate();
         }
-    }
 
-	virtual protected void _OnTestKeyDown()
-	{
-	}
-
-    public void OnPostRender()
-    {
+        //球
+        foreach (UBasketball ball in mCurScene.balls)
+        {
+            ball.ViewLateUpdate();
+        }
     }
 
 	public void ShowMatchTip(string tipSprite, bool hasBG)
@@ -930,6 +1012,8 @@ public abstract class GameMatch
 	}
     public void ShowMatchPromptTip(bool isScore, string str = "", int scoreDiff = 0)
     {
+        //篮板风暴中，m_uiMatch为null会导致出错,目前暂时做一个非空判断
+        if (m_uiMatch == null) return;
         GameObject prompt = m_uiMatch.transform.FindChild("Prompt").gameObject;
         if (isScore)
         {    
@@ -956,7 +1040,7 @@ public abstract class GameMatch
 		if (!EnablePlayerTips())
 			return;
 
-		if (player != m_mainRole)
+		if (player != mainRole)
 			return;
 
 		GameObject prefab = ResourceLoadManager.Instance.LoadPrefab("Prefab/GUI/PlayerTip") as GameObject;
@@ -971,7 +1055,7 @@ public abstract class GameMatch
 		if (!EnablePlayerTips())
 			return;
 
-		if (player != m_mainRole)
+		if (player != mainRole)
 			return;
 
 		m_basketTipNode = NGUITools.AddChild(m_tipPanel);
@@ -1164,14 +1248,14 @@ public abstract class GameMatch
 	}
 
     /**调整投篮命中率*/
-	public virtual IM.BigNumber AdjustShootRate(Player shooter, IM.BigNumber rate)
+	public virtual IM.PrecNumber AdjustShootRate(Player shooter, IM.PrecNumber rate)
 	{
-		if (neverWin && shooter.m_team == m_mainRole.m_team)
+		if (neverWin && shooter.m_team == mainRole.m_team)
 		{
 			Area area = mCurScene.mGround.GetArea(shooter);
 			int score = GetScore(area == Area.eFar ? 3 : 2);
-			int myScore = m_mainRole.m_team == m_homeTeam ? m_homeScore : m_awayScore;
-			int rivalScore = m_mainRole.m_team == m_homeTeam ? m_awayScore : m_homeScore;
+			int myScore = mainRole.m_team == m_homeTeam ? m_homeScore : m_awayScore;
+			int rivalScore = mainRole.m_team == m_homeTeam ? m_awayScore : m_homeScore;
             if (myScore + score > rivalScore)
                 return IM.Number.zero;
 		}
@@ -1191,7 +1275,7 @@ public abstract class GameMatch
 	}
 
     /**获取投篮曲线*/
-    public virtual ShootSolution GetShootSolution(UBasket basket, Area area, Player shooter, IM.BigNumber rate, ShootSolution.Type type)
+    public virtual ShootSolution GetShootSolution(UBasket basket, Area area, Player shooter, IM.PrecNumber rate, ShootSolution.Type type)
 	{
 		string attrName = "";
 		switch(area)
@@ -1208,9 +1292,10 @@ public abstract class GameMatch
 		}
         //TODO
         //float fCleanShotRate = 0.35f + shooter.m_finalAttrs[attrName] * 0.00291f;
-        IM.BigNumber fCleanShotRate = new IM.Number(0,350) + shooter.m_finalAttrs[attrName] * new IM.BigNumber(0,002910);
+        //空心球
+        IM.PrecNumber fCleanShotRate = new IM.Number(0,350) + shooter.m_finalAttrs[attrName] * new IM.PrecNumber(0,002910);
 
-		IM.BigNumber fRam = IM.Random.bigValue;
+		IM.PrecNumber fRam = IM.Random.bigValue;
 		if (type != ShootSolution.Type.Dunk)
 		{
 			string message = "Shoot rate: " + rate + " , Clean shot rate: " + fCleanShotRate + " random value: " + fRam;
@@ -1219,7 +1304,7 @@ public abstract class GameMatch
 		ShootSolution solution = GameSystem.Instance.shootSolutionManager.GetShootSolution(
 			basket.m_rim.center , shooter.position, fRam < rate, type, fRam < fCleanShotRate);
 		if ((fRam < rate) != solution.m_bSuccess)
-			Logger.LogError("Shoot solution: " + solution.m_id + " success flag error.");
+			Debug.LogError("Shoot solution: " + solution.m_id + " success flag error.");
 		return solution;
 	}
 
@@ -1241,7 +1326,7 @@ public abstract class GameMatch
             return m_awayTeam;
         else
         {
-            if (m_mainRole.m_team == m_homeTeam)
+            if (mainRole.m_team == m_homeTeam)
                 return m_awayTeam;
             else
                 return m_homeTeam;
@@ -1294,8 +1379,7 @@ public abstract class GameMatch
         bool in3PT = false;
         do
         {
-            //position = new Vector3(UnityEngine.Random.Range(-8.0f, 8.0f), 0, UnityEngine.Random.Range(0.0f, 14.0f));
-            position = new IM.Vector3(IM.Random.Range(-new IM.Number(0,800),new IM.Number(0,800)) , IM.Number.zero,IM.Random.Range(IM.Number.zero,new IM.Number(14)));
+            position = new IM.Vector3(IM.Random.Range(-new IM.Number(8),new IM.Number(8)) , IM.Number.zero,IM.Random.Range(IM.Number.zero,new IM.Number(14)));
             in3PT = mCurScene.mGround.In3PointRange(position.xz);
         }
         while (!in3PT);
@@ -1310,9 +1394,9 @@ public abstract class GameMatch
 			m_stateMachine.m_curState.m_eState == MatchState.State.eBegin)
 			return;
 
-		int myScore = m_mainRole.m_team == m_homeTeam ? m_homeScore : m_awayScore;
-		int rivalScore = m_mainRole.m_team == m_homeTeam ? m_awayScore : m_homeScore;
-		bool isMySide = isHome == (m_mainRole.m_team == m_homeTeam);
+		int myScore = mainRole.m_team == m_homeTeam ? m_homeScore : m_awayScore;
+		int rivalScore = mainRole.m_team == m_homeTeam ? m_awayScore : m_homeScore;
+		bool isMySide = isHome == (mainRole.m_team == m_homeTeam);
 
 		if (myScore <= 3 && rivalScore <= 3)
 			return;
@@ -1382,7 +1466,7 @@ public abstract class GameMatch
 			ShowBasketTip(ball.m_actor, "gameInterface_tip_3point");
             if (m_bOverTime)
 				PlaySoundManager.Instance.PlaySound(MatchSoundEvent.Critical);
-            else if (ball.m_actor == m_mainRole || EnableNPCGoalSound())
+            else if (ball.m_actor == mainRole || EnableNPCGoalSound())
 				PlaySoundManager.Instance.PlaySound(MatchSoundEvent.FarShoot);
 		}
 		else if (ball.m_pt == GlobalConst.PT_2)
@@ -1400,7 +1484,7 @@ public abstract class GameMatch
 			{
                 if (m_bOverTime)
 					PlaySoundManager.Instance.PlaySound(MatchSoundEvent.Critical);
-                else if (ball.m_actor == m_mainRole || EnableNPCGoalSound())
+                else if (ball.m_actor == mainRole || EnableNPCGoalSound())
 					PlaySoundManager.Instance.PlaySound(MatchSoundEvent.Dunk);
 			}
 			else
@@ -1412,7 +1496,7 @@ public abstract class GameMatch
 
                 if (m_bOverTime)
 					PlaySoundManager.Instance.PlaySound(MatchSoundEvent.Critical);
-                else if (ball.m_actor == m_mainRole || EnableNPCGoalSound())
+                else if (ball.m_actor == mainRole || EnableNPCGoalSound())
 					PlaySoundManager.Instance.PlaySound(MatchSoundEvent.NormalShoot);
 			}
 		}
@@ -1454,11 +1538,11 @@ public abstract class GameMatch
 		{
 			highestAchievement[type] = curValue;
 		}
-		//Logger.Log("***Player: " + playerStatistics.player.m_name + " type: " + type + " value: " + curValue);
+		//Debug.Log("***Player: " + playerStatistics.player.m_name + " type: " + type + " value: " + curValue);
 		MatchAchievement achievement = GameSystem.Instance.MatchAchievementConfig.GetMatchAchievement(type, curValue);
 		if (achievement != null && (achievement.level > level || achievement.level == 3))	//New achievement
 		{
-			//Logger.Log("Match achievement completed, type: " + type + ", level: " + achievement.level + " value: " + curValue);
+			//Debug.Log("Match achievement completed, type: " + type + ", level: " + achievement.level + " value: " + curValue);
 			completion[type] = achievement.level;
 			MatchAchievementItem[] items = m_tipPanel.GetComponentsInChildren<MatchAchievementItem>();
 			foreach (MatchAchievementItem item in items)
@@ -1645,6 +1729,7 @@ public abstract class GameMatch
 					//member.roleInfo.star = MainPlayer.Instance.GetRole2(member.roleInfo.id).star;
 				}
 			}
+            member.roleInfo.acc_id = MainPlayer.Instance.AccountID;
 		}
 		AttrData attrData = null;
 		string name = string.Empty;
@@ -1862,11 +1947,12 @@ public abstract class GameMatch
 		Player player = _GenerateTeamMember(member, name);
 		if( attrData != null )
 			player.m_attrData = attrData;
+        player.match = this;
 
 		const int iMainRoleIdLength = 4;
 		const int iNPCIdLength = 5;
 		if( member.id.Length > iNPCIdLength )
-			Logger.LogError("Invalid npc id.");
+			Debug.LogError("Invalid npc id.");
 			
 		member.bIsNPC = member.id.Length > iMainRoleIdLength;
 		if( member.bIsNPC )
@@ -1889,7 +1975,7 @@ public abstract class GameMatch
     }
 
     /**创建队员*/
-    public void _CreateTeamMember(Player player)
+    public void CreateTeamMember(Player player)
     {
         GameSystem.Instance.gameMatchConfig.LoadPlayerAttributes(player);
         player.mStatistics = new PlayerStatistics(player, this);
@@ -1900,7 +1986,7 @@ public abstract class GameMatch
 		RoleShape roleShape = GameSystem.Instance.RoleShapeConfig.GetConfig((uint)player.m_shapeID);
 		if( roleShape == null )
 		{
-			Logger.LogError("No role shape data found for player: " + player.m_shapeID);
+			Debug.LogError("No role shape data found for player: " + player.m_shapeID);
 			return;
 		}
 
@@ -1919,21 +2005,26 @@ public abstract class GameMatch
 
         if (m_shadowEffect != null)
         {
-            GameObject shadow = GameObject.Instantiate(m_shadowEffect) as GameObject;
-            shadow.transform.parent = player.transform;
-            shadow.transform.localPosition = new Vector3(0.0f, 0.02f, 0.0f);
+            //去除脚下阴影
+            //GameObject shadow = GameObject.Instantiate(m_shadowEffect) as GameObject;
+            //shadow.transform.parent = player.m_eventHandler.transform;
+            //shadow.transform.localPosition = new Vector3(0.0f, 0.02f, 0.0f);
         }
 
         if (m_stateMachine != null)
             m_stateMachine.m_matchStateListeners.Add(player);
 
-		Logger.Log("create a new team member: " + player.m_roomPosId);
+		Debug.Log("create a new team member: " + player.m_roomPosId);
     }
 
+    //根据来自服务器的Player数据创建Player
 	protected virtual void _CreateRoomUser(PlayerData playerData)
 	{
 		foreach(RoleInfo roleInfo in playerData.roles )
 		{
+            if (roleInfo.acc_id == 0)
+                roleInfo.acc_id = playerData.acc_id;
+            Debug.Assert(roleInfo.acc_id != 0);
 			uint roleId = roleInfo.id;
 			Config.TeamMember tm = new Config.TeamMember();
 			tm.team = playerData.is_home_field == 0 ? Team.Side.eHome : Team.Side.eAway;
@@ -1984,31 +2075,24 @@ public abstract class GameMatch
             if (playerData.acc_id == MainPlayer.Instance.AccountID)
             {
 				newPlayer = _GeneratePlayerData(tm, false);
-				_CreateTeamMember(newPlayer);
+				CreateTeamMember(newPlayer);
             }
             else
             { 
 				newPlayer = _GeneratePlayerData(tm, true);
-				_CreateTeamMember(newPlayer);
+				CreateTeamMember(newPlayer);
             }
 			newPlayer.m_roleInfo.acc_id = playerData.acc_id;
 
-			if( playerData.acc_id == MainPlayer.Instance.AccountID && m_mainRole == null )
+			if( playerData.acc_id == MainPlayer.Instance.AccountID)
 			{
-				m_mainRole = newPlayer;
-				m_mainTeam = m_mainRole.m_team;
+				mainRole = newPlayer;
 			}
 			if( m_config.type == Type.ePVP_3On3 )
 			{
 				newPlayer.m_name = tm.team_name;
 				if( newPlayer.m_InfoVisualizer != null )
 					newPlayer.m_InfoVisualizer.m_uiName.text = tm.team_name;
-			}
-			else if (m_config.type == Type.eAsynPVP3On3)
-			{
-				newPlayer.m_aiMgr = new AISystem_Basic(this, newPlayer);
-				newPlayer.m_aiMgr.m_enable = (newPlayer != m_mainRole);
-				newPlayer.m_InfoVisualizer.CreateStrengthBar();
 			}
 
 			if( newPlayer.m_catchHelper == null )
@@ -2031,7 +2115,7 @@ public abstract class GameMatch
 
     virtual public void AssumeDefenseTarget()
     {
-		Logger.Log("AssumeDefenseTarget");
+		Debug.Log("AssumeDefenseTarget");
         int count = m_homeTeam.GetMemberCount();
         for (int idx = 0; idx != count; idx++)
         {
@@ -2042,7 +2126,7 @@ public abstract class GameMatch
 			m_awayTeam.GetMember(idx).m_defTargetSwitched = false;
             m_homeTeam.GetMember(idx).m_defenseTarget = m_awayTeam.GetMember(idx);
 			m_homeTeam.GetMember(idx).m_defTargetSwitched = false;
-			Logger.Log(m_homeTeam.GetMember(idx).m_name + "<->" + m_awayTeam.GetMember(idx).m_name);
+			Debug.Log(m_homeTeam.GetMember(idx).m_name + "<->" + m_awayTeam.GetMember(idx).m_name);
 
 			if( m_awayTeam.GetMember(idx).m_AOD == null )
             	m_awayTeam.GetMember(idx).m_AOD = new AOD(m_awayTeam.GetMember(idx));
@@ -2086,7 +2170,7 @@ public abstract class GameMatch
 	{
 		if (neverWin)
 		{
-			Player defenseTarget = m_mainRole.m_defenseTarget;
+			Player defenseTarget = mainRole.m_defenseTarget;
 			if (defenseTarget != null)
 			{
 				foreach (Player member in defenseTarget.m_team.members)
@@ -2097,13 +2181,16 @@ public abstract class GameMatch
 			return;
 		}
 		IM.Number fcRatio = m_strongTeam.fightingCapacity / m_weakTeam.fightingCapacity;
-		Logger.Log("FC: " + m_strongTeam.fightingCapacity + " " + m_weakTeam.fightingCapacity + " Ratio: " + fcRatio);
+		Debug.Log("FC: " + m_strongTeam.fightingCapacity + " " + m_weakTeam.fightingCapacity + " Ratio: " + fcRatio);
 		int expectedScoreDiff = GameSystem.Instance.FightingCapacityConfig.GetExpectedScoreDiff(fcRatio);
-		if (GetMatchType() == Type.eBullFight)
+		if (GetMatchType() == Type.eBullFight ||
+            GetMatchType() == Type.eCareer1On1 )
+        {
 			expectedScoreDiff = (int)(expectedScoreDiff * 0.5f);
+        }
 		int realScoreDiff = m_strongTeamScore - m_weakTeamScore;
 		int enhanceLevel = expectedScoreDiff - realScoreDiff;
-		Logger.Log("Expected score diff: " + expectedScoreDiff + " Real score diff: " + realScoreDiff + " Enhance level: " + enhanceLevel);
+		Debug.Log("Expected score diff: " + expectedScoreDiff + " Real score diff: " + realScoreDiff + " Enhance level: " + enhanceLevel);
 		IM.Number factor = GameSystem.Instance.FightingCapacityConfig.GetEnhanceFactor(enhanceLevel);
 		foreach (Player member in m_strongTeam.members)
 		{
@@ -2113,15 +2200,22 @@ public abstract class GameMatch
 
     public virtual void ProcessTurn(FrameInfo turn, IM.Number deltaTime)
     {
-        ClientInput input = turn.info.Find(i => i.acc_id == MainPlayer.Instance.AccountID);
-        if (input != null)
+        foreach (Player player in GameSystem.Instance.mClient.mPlayerManager)
         {
-            InputDirection dir = (InputDirection)input.dir;
-            Command cmd = (Command)input.cmd;
-            //Logger.Log(string.Format("ProcessTurn, {0} Dir:{1} Cmd:{2}", turn.frameNum, dir, cmd));
-            Player player = InputReader.Instance.player;
-            player.m_inputDispatcher.dir = dir;
-            player.m_inputDispatcher.cmd = cmd;
+            if (player.m_inputDispatcher == null)
+                continue;
+            ClientInput input = turn.info.Find(i => i.acc_id == player.m_roleInfo.acc_id);
+            if (input != null)
+            {
+                InputDirection dir = (InputDirection)input.dir;
+                Command cmd = (Command)input.cmd;
+                /*
+                Debug.Log(string.Format("ProcessTurn, {0} Team:{1} Player:{2} Dir:{3} Cmd:{4}",
+                    turn.frameNum, player.m_team.m_side, player.m_id, dir, cmd));
+                //*/
+                player.m_inputDispatcher.dir = dir;
+                player.m_inputDispatcher.cmd = cmd;
+            }
         }
     }
 }

@@ -88,13 +88,13 @@ public class AnimationManager
     {
         _curInfo.speed = speed;
         _animation[_curInfo.clipName].speed = (float)speed;
-        //Logger.Log("Set speed " + curPlayInfo.clipName + " " + speed + " " + _animation[curPlayInfo.clipName].speed);
+        //Debug.Log("Set speed " + curPlayInfo.clipName + " " + speed + " " + _animation[curPlayInfo.clipName].speed);
     }
 
     public bool IsPlaying(string clip)
     {
         PlayInfo playInfo = GetPlayInfo(clip);
-        //Logger.Log("IsPlaying of " + clip + " is " + playInfo.isPlaying);
+        //Debug.Log("IsPlaying of " + clip + " is " + playInfo.isPlaying);
         return playInfo.isPlaying;
     }
 
@@ -122,7 +122,7 @@ public class AnimationManager
     {
         AnimationState state = _animation[clip];
         if (state == null)
-            Logger.LogError("There is no animation: " + clip);
+            Debug.LogError("There is no animation: " + clip);
         return state.clip.name;
     }
 
@@ -134,7 +134,7 @@ public class AnimationManager
     }
     public PlayInfo Play(string clip, bool enableRootMotion)
     {
-        //Logger.Log(Time.frameCount + " AnimationManager, Play " + clip);
+        //Debug.Log(Time.frameCount + " AnimationManager, Play " + clip);
 
         foreach (PlayInfo playInfo in _prevInfos)
             playInfo.Reset();
@@ -165,7 +165,7 @@ public class AnimationManager
     }
     public PlayInfo CrossFade(string clip, bool enableRootMotion)
     {
-        //Logger.Log(Time.frameCount + " AnimationManager, CrossFade " + clip);
+        //Debug.Log(Time.frameCount + " AnimationManager, CrossFade " + clip);
 
         //*
         if (_curInfo != null && !IsPlaying(_curInfo.clipName) && _curInfo.clipName != clip)
@@ -173,14 +173,14 @@ public class AnimationManager
             //有新的动画进入混合时，如果当前的动画正在反播，将其速度设置为0，并设置到最一帧，重启播放。否则混合可能失效
             if (_curInfo.speed < IM.Number.zero)
             {
-                _curInfo.speed = IM.Number.zero;
+                //_curInfo.speed = IM.Number.zero;
                 _curInfo.time = IM.Number.zero;
                 _animation[_curInfo.clipName].speed = 0f;
                 _animation[_curInfo.clipName].time = 0f;
             }
             else    //如果是正播，设置到最后一帧，速度设置为0
             {
-                _curInfo.speed = IM.Number.zero;
+                //_curInfo.speed = IM.Number.zero;
                 _curInfo.time = _curInfo.animData.duration;
                 _animation[_curInfo.clipName].speed = 0f;
                 _animation[_curInfo.clipName].time = _animation[_curInfo.clipName].length;
@@ -222,7 +222,7 @@ public class AnimationManager
         pos = IM.Vector3.zero;
         horiAngle = IM.Number.zero;
         if (node != SampleNode.Root && calcRootMotion)
-            Logger.LogError("RootMotion must calc on Root node.");
+            Debug.LogError("RootMotion must calc on Root node.");
         if (_curInfo == null)
             return;
 
@@ -260,7 +260,7 @@ public class AnimationManager
                 pos += position * ratio;
                 horiAngle += angle * ratio;
                 /*
-                Logger.Log(string.Format(Time.frameCount + 
+                Debug.Log(string.Format(Time.frameCount + 
                     " GetNodePos blend, {0} node:{8} weight:{1} {6} ratio:{2} pos:{3} speed:{4} time:{5} isPlaying:{7}",
                     GetOriginName(prevInfo.clipName), prevInfo.blendWeight, ratio, position,
                     _animation[prevInfo.clipName].speed, _animation[prevInfo.clipName].time,
@@ -280,7 +280,7 @@ public class AnimationManager
             pos += curPosition * curRatio;
             horiAngle += curAngle * curRatio;
             /*
-                Logger.Log(string.Format(Time.frameCount + 
+                Debug.Log(string.Format(Time.frameCount + 
                     " GetNodePos blend, {0}, node:{8}, weight:{1} {4} ratio:{2} pos:{3} speed:{5} time:{6} isPlaying:{7}",
                     GetOriginName(_curInfo.clipName), _curInfo.blendWeight, curRatio, curPosition,
                     _animation[_curInfo.clipName].weight, _animation[_curInfo.clipName].speed,
@@ -302,7 +302,7 @@ public class AnimationManager
             }
         }
         /*
-        Logger.Log(string.Format(Time.frameCount + 
+        Debug.Log(string.Format(Time.frameCount + 
             " GetNodePos, clip:{0} node:{1} time:{2} - {3} pos:{4} key:{5} - {6}",
             _animation[_curInfo.clipName].clip.name, node, _curInfo.time,
             _animation[_curInfo.clipName].time,// % _animation[_curInfo.clipName].length,
@@ -460,6 +460,8 @@ public class AnimationManager
         //Ball
         _player.ballSocketLocalPos = GetNodePosition(SampleNode.Ball);
         _player.ballSocketPos = _player.TransformNodePosition(SampleNode.Ball, _player.ballSocketLocalPos);
+        if (_player.m_bWithBall)
+            _player.m_ball._position = _player.ballSocketPos;
         //RHand
         _player.rHandLocalPos = GetNodePosition(SampleNode.RHand);
         _player.rHandPos = _player.TransformNodePosition(SampleNode.RHand, _player.rHandLocalPos);
@@ -498,7 +500,7 @@ public class AnimationManager
     //修正显示层位置
     static void FixView(Animation animation, PlayInfo playInfo)
     {
-        //Logger.Log(string.Format("Fix view, clip:{0} time:{1} -> {2}",
+        //Debug.Log(string.Format("Fix view, clip:{0} time:{1} -> {2}",
         //    playInfo.clipName, animation[playInfo.clipName].time, playInfo.time));
         animation[playInfo.clipName].time = (float)playInfo.time;
         animation[playInfo.clipName].clip.SampleAnimation(animation.gameObject, (float)playInfo.time);
@@ -582,7 +584,7 @@ public class AnimationManager
         else if (wrapMode == WrapMode.Loop)
             realTime = elapsedTime % duration;
         else
-            Logger.LogError("Unsupported wrap mode: " + wrapMode);
+            Debug.LogError("Unsupported wrap mode: " + wrapMode);
         return realTime;
     }
 

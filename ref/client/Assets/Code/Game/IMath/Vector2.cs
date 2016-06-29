@@ -1,5 +1,4 @@
 ﻿using System;
-using UE = UnityEngine;
 
 namespace IM
 {
@@ -20,12 +19,12 @@ namespace IM
             {
                 Math.CheckRange(this);
 
-                int dot = Dot(this, this);
+                int dot = _Dot(this, this);
                 int sqrt = Math.Sqrt(dot);
                 return Number.Raw(sqrt);
             }
         }
-        public Vector3 xz
+        public Vector3 x0z
         {
             get
             {
@@ -33,7 +32,7 @@ namespace IM
             }
         }
 
-        public Vector3 xy
+        public Vector3 xy0
         {
             get
             {
@@ -47,7 +46,7 @@ namespace IM
             {
                 Math.CheckRange(this);
 
-                return Dot(this, this);
+                return _Dot(this, this);
             }
         }
 
@@ -134,7 +133,7 @@ namespace IM
             this = normalized;
         }
 
-        public static int Dot(Vector2 lhs, Vector2 rhs)
+        static int _Dot(Vector2 lhs, Vector2 rhs)
         {
             Math.CheckRange(lhs);
             Math.CheckRange(rhs);
@@ -144,6 +143,10 @@ namespace IM
             return xTmp + yTmp;
         }
 
+        public static Number Dot(Vector2 lhs, Vector2 rhs)
+        {
+            return Number.Raw(_Dot(lhs, rhs) / Math.FACTOR);
+        }
 
         public static Number Distance(Vector2 lhs, Vector2 rhs)
         {
@@ -165,7 +168,7 @@ namespace IM
 
             lhs.Normalize();
             rhs.Normalize();
-            Number radians = Math.Acos(Number.Raw(Math.Clamp(Dot(lhs, rhs) / Math.FACTOR, -Math.FACTOR, Math.FACTOR)));
+            Number radians = Math.Acos(Number.Raw(Math.Clamp(_Dot(lhs, rhs) / Math.FACTOR, -Math.FACTOR, Math.FACTOR)));
             return radians;
         }
 

@@ -30,7 +30,7 @@ public class NetLoading : MonoBehaviour
 				if (info != null)
 					info.gameObject.SetActive(!isReLogin);
 			}
-			//Logger.Log("Set isReLogin to:" + value);
+			//Debug.Log("Set isReLogin to:" + value);
 		}
 	}
 	[HideInInspector]
@@ -41,14 +41,14 @@ public class NetLoading : MonoBehaviour
 		{
 			if (!_play && value)
 			{
-				Logger.Log("Show NetLoading");
+				Debug.Log("Show NetLoading");
 				remainTime = isReLogin ? ReLoginWaitTime : MaxWaitTime;
 				gameObject.SetActive(true);
 				info.gameObject.SetActive(!isReLogin);
 			}
 			else if (_play && !value)
 			{
-				Logger.Log("Hide NetLoading");
+				Debug.Log("Hide NetLoading");
 				gameObject.SetActive(false);
 			}
 			GameSystem.Instance.mClient.pause = value;

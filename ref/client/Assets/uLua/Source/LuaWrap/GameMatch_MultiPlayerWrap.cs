@@ -11,7 +11,7 @@ public class GameMatch_MultiPlayerWrap
 			new LuaMethod("InitBallHolder", InitBallHolder),
 			new LuaMethod("ResetPlayerPos", ResetPlayerPos),
 			new LuaMethod("OnSwitch", OnSwitch),
-			new LuaMethod("Update", Update),
+			new LuaMethod("GameUpdate", GameUpdate),
 			new LuaMethod("OnMatchStateChange", OnMatchStateChange),
 			new LuaMethod("GetClassType", GetClassType),
 		};
@@ -63,19 +63,20 @@ public class GameMatch_MultiPlayerWrap
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int OnSwitch(IntPtr L)
 	{
-		LuaScriptMgr.CheckArgsCount(L, 1);
+		LuaScriptMgr.CheckArgsCount(L, 2);
 		GameMatch_MultiPlayer obj = (GameMatch_MultiPlayer)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch_MultiPlayer");
-		obj.OnSwitch();
+		Team.Side arg0 = (Team.Side)LuaScriptMgr.GetNetObject(L, 2, typeof(Team.Side));
+		obj.OnSwitch(arg0);
 		return 0;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int Update(IntPtr L)
+	static int GameUpdate(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		GameMatch_MultiPlayer obj = (GameMatch_MultiPlayer)LuaScriptMgr.GetNetObjectSelf(L, 1, "GameMatch_MultiPlayer");
 		IM.Number arg0 = (IM.Number)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Number));
-		obj.Update(arg0);
+		obj.GameUpdate(arg0);
 		return 0;
 	}
 

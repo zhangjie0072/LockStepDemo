@@ -36,12 +36,12 @@ public class SpecialActionConfig
             return;
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
-		Logger.ConfigBegin(name1);
+		UnityEngine.Debug.Log("Config reading " + name1);
         ReadPositionAction();
-		Logger.ConfigEnd(name1);
-		Logger.ConfigBegin(name2);
+		
+		UnityEngine.Debug.Log("Config reading " + name2);
 		ReadRoleAction();
-		Logger.ConfigEnd(name2);
+		
     }
 
     void ReadPositionAction()
@@ -49,7 +49,7 @@ public class SpecialActionConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            UnityEngine.Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         
@@ -76,7 +76,7 @@ public class SpecialActionConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            UnityEngine.Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
         

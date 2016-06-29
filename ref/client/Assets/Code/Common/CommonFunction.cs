@@ -55,7 +55,7 @@ public static class CommonFunction
     {
         if (prefab == null)
             return null;
-        //Logger.Log("------------InstantiateObject() -- " + prefab.name);
+        //Debug.Log("------------InstantiateObject() -- " + prefab.name);
         GameObject clone = GameObject.Instantiate(prefab) as GameObject;
         if (clone != null && parent != null)
         {
@@ -275,17 +275,17 @@ public static class CommonFunction
             {
                 case LogType.Log:
                     {
-                        Logger.Log(vInfo);
+                        Debug.Log(vInfo);
                         break;
                     }
                 case LogType.Warning:
                     {
-                        Logger.LogWarning(vInfo);
+                        Debug.LogWarning(vInfo);
                         break;
                     }
                 case LogType.Error:
                     {
-                        Logger.LogError(vInfo);
+                        Debug.LogError(vInfo);
                         break;
                     }
             }

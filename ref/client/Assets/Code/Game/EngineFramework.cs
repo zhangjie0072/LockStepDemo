@@ -5,9 +5,13 @@ public class EngineFramework : MonoBehaviour
 {
     public static int frameCount { get; private set; }   //Update次数
     public static int fixedUpdateCount { get; private set; }   //fixedUpdate次数
-
     void Awake()
     {
+        LoggerHandler.Init();
+        LoggerNet.StartNetService();
+
+        Debugger.Instance.Init();
+
         DontDestroyOnLoad(this);
         GameSystem.Instance.mEngineFramework = this;
         GameSystem.Instance.Start();
@@ -51,9 +55,15 @@ public class EngineFramework : MonoBehaviour
         {
             GameSystem.Instance.mClient.mUIManager.LoginCtrl.thread2.Abort();
         }
+
+        if(LoggerNet.receiveThread != null && LoggerNet.receiveThread.IsAlive)
+        {
+            LoggerNet.receiveThread.Abort();
+        }
+
         GameSystem.Instance.Exit();
 
-        Logger.Log("Game quits normally.");
+        Debug.Log("Game quits normally.");
     }
 
     void OnLevelWasLoaded(int level)
@@ -79,7 +89,7 @@ public class EngineFramework : MonoBehaviour
 
     void OnApplicationPause(bool pause)
     {
-        Logger.Log("OnApplicationPause:" + pause);
+        Debug.Log("OnApplicationPause:" + pause);
         GameSystem.Instance.appPaused = pause;
         if (!pause)
             UIManager.AdaptiveUI();

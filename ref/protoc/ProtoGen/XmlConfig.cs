@@ -1174,6 +1174,14 @@ namespace fogs.proto.config
       get { return _icon_level; }
       set { _icon_level = value; }
     }
+    private string _frame = "";
+    [global::ProtoBuf.ProtoMember(42, IsRequired = false, Name=@"frame", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string frame
+    {
+      get { return _frame; }
+      set { _frame = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -1339,6 +1347,98 @@ namespace fogs.proto.config
     {
       get { return _next_dialog_id; }
       set { _next_dialog_id = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"PropWarningConfig")]
+  public partial class PropWarningConfig : global::ProtoBuf.IExtensible
+  {
+    public PropWarningConfig() {}
+    
+    private string _name = "";
+    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"name", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string name
+    {
+      get { return _name; }
+      set { _name = value; }
+    }
+    private uint _id = default(uint);
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint id
+    {
+      get { return _id; }
+      set { _id = value; }
+    }
+    private uint _num_min = default(uint);
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"num_min", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint num_min
+    {
+      get { return _num_min; }
+      set { _num_min = value; }
+    }
+    private uint _num_max = default(uint);
+    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"num_max", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint num_max
+    {
+      get { return _num_max; }
+      set { _num_max = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"PublicMailConfig")]
+  public partial class PublicMailConfig : global::ProtoBuf.IExtensible
+  {
+    public PublicMailConfig() {}
+    
+    private string _sender_name = "";
+    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"sender_name", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string sender_name
+    {
+      get { return _sender_name; }
+      set { _sender_name = value; }
+    }
+    private string _sender_psw = "";
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"sender_psw", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string sender_psw
+    {
+      get { return _sender_psw; }
+      set { _sender_psw = value; }
+    }
+    private string _sender_server = "";
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"sender_server", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string sender_server
+    {
+      get { return _sender_server; }
+      set { _sender_server = value; }
+    }
+    private string _sender_addr = "";
+    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"sender_addr", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string sender_addr
+    {
+      get { return _sender_addr; }
+      set { _sender_addr = value; }
+    }
+    private string _receiver_addr = "";
+    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"receiver_addr", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string receiver_addr
+    {
+      get { return _receiver_addr; }
+      set { _receiver_addr = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)

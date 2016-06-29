@@ -141,7 +141,7 @@ function HandleNotifyGameStart(buf)
         matchConfig.leagueType	= GameMatch.LeagueType.ePVP
         matchConfig.type		= GameMatch.Type.ePVP_3On3
         matchConfig.sceneId		= challenge.scene_id
-        matchConfig.MatchTime	= 180
+        matchConfig.MatchTime	= IM.Number.New(180)
         matchConfig.session_id	= session_id
         matchConfig.ip			= challenge.game_ip
         matchConfig.port		= challenge.game_port

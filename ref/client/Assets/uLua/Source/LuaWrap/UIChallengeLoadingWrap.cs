@@ -10,9 +10,12 @@ public class UIChallengeLoadingWrap
 	{
 		LuaMethod[] regs = new LuaMethod[]
 		{
+			new LuaMethod("OnSceneLoaded", OnSceneLoaded),
 			new LuaMethod("LoadFromMatch", LoadFromMatch),
 			new LuaMethod("Refresh", Refresh),
-			new LuaMethod("LoadResources", LoadResources),
+			new LuaMethod("LoadScene", LoadScene),
+			new LuaMethod("LoadCharacter", LoadCharacter),
+			new LuaMethod("LoadUI", LoadUI),
 			new LuaMethod("New", _CreateUIChallengeLoading),
 			new LuaMethod("GetClassType", GetClassType),
 			new LuaMethod("__eq", Lua_Eq),
@@ -41,6 +44,7 @@ public class UIChallengeLoadingWrap
 			new LuaField("myName", get_myName, set_myName),
 			new LuaField("rivalName", get_rivalName, set_rivalName),
 			new LuaField("onComplete", get_onComplete, set_onComplete),
+			new LuaField("m_curLoadingStep", get_m_curLoadingStep, set_m_curLoadingStep),
 			new LuaField("pvp", get_pvp, set_pvp),
 			new LuaField("disConnected", get_disConnected, set_disConnected),
 			new LuaField("pvpPlusEndResp", get_pvpPlusEndResp, set_pvpPlusEndResp),
@@ -570,6 +574,30 @@ public class UIChallengeLoadingWrap
 		}
 
 		LuaScriptMgr.Push(L, obj.onComplete);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_m_curLoadingStep(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		UIChallengeLoading obj = (UIChallengeLoading)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name m_curLoadingStep");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index m_curLoadingStep on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.m_curLoadingStep);
 		return 1;
 	}
 
@@ -1259,6 +1287,30 @@ public class UIChallengeLoadingWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_m_curLoadingStep(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		UIChallengeLoading obj = (UIChallengeLoading)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name m_curLoadingStep");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index m_curLoadingStep on a nil value");
+			}
+		}
+
+		obj.m_curLoadingStep = (LoadingStep)LuaScriptMgr.GetNetObject(L, 3, typeof(LoadingStep));
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_pvp(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -1427,6 +1479,15 @@ public class UIChallengeLoadingWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int OnSceneLoaded(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		UIChallengeLoading obj = (UIChallengeLoading)LuaScriptMgr.GetUnityObjectSelf(L, 1, "UIChallengeLoading");
+		obj.OnSceneLoaded();
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int LoadFromMatch(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 3);
@@ -1448,13 +1509,32 @@ public class UIChallengeLoadingWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int LoadResources(IntPtr L)
+	static int LoadScene(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		UIChallengeLoading obj = (UIChallengeLoading)LuaScriptMgr.GetUnityObjectSelf(L, 1, "UIChallengeLoading");
+		obj.LoadScene();
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int LoadCharacter(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 3);
 		UIChallengeLoading obj = (UIChallengeLoading)LuaScriptMgr.GetUnityObjectSelf(L, 1, "UIChallengeLoading");
-		List<string> arg0 = (List<string>)LuaScriptMgr.GetNetObject(L, 2, typeof(List<string>));
-		PlayerManager arg1 = (PlayerManager)LuaScriptMgr.GetNetObject(L, 3, typeof(PlayerManager));
-		obj.LoadResources(arg0,arg1);
+		PlayerManager arg0 = (PlayerManager)LuaScriptMgr.GetNetObject(L, 2, typeof(PlayerManager));
+		GameMatch arg1 = (GameMatch)LuaScriptMgr.GetNetObject(L, 3, typeof(GameMatch));
+		obj.LoadCharacter(arg0,arg1);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int LoadUI(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 2);
+		UIChallengeLoading obj = (UIChallengeLoading)LuaScriptMgr.GetUnityObjectSelf(L, 1, "UIChallengeLoading");
+		GameMatch arg0 = (GameMatch)LuaScriptMgr.GetNetObject(L, 2, typeof(GameMatch));
+		obj.LoadUI(arg0);
 		return 0;
 	}
 

@@ -88,15 +88,15 @@ public class VipPrivilegeConfig
             return;
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
 		ReadVipPrivilege();
-		Logger.ConfigEnd(name1);
-		Logger.ConfigBegin(name2);
+		
+		Debug.Log("Config reading " + name2);
 		ReadVipPrivilegeState();
-		Logger.ConfigEnd(name2);
-		Logger.ConfigBegin(name3);
+		
+		Debug.Log("Config reading " + name3);
 		ReadRecharge();
-		Logger.ConfigEnd(name3);
+		
     }
 	
     public VipData GetVipData(uint level)
@@ -122,7 +122,7 @@ public class VipPrivilegeConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         
@@ -240,7 +240,7 @@ public class VipPrivilegeConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
         
@@ -309,7 +309,7 @@ public class VipPrivilegeConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name3);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name3);
+            Debug.LogError("LoadConfig failed: " + name3);
             return;
         }
         
@@ -343,7 +343,7 @@ public class VipPrivilegeConfig
 					state.states.Add(xel.InnerText);
 				}
             }
-			Logger.Log("level="+level);
+			Debug.Log("level="+level);
             vipStates.Add(level, state);
         }
     }
@@ -378,12 +378,12 @@ public class VipPrivilegeConfig
     public uint GetBuyhp_times(uint level)
     {
 
-        //Logger.Log("--------------------buyhptimes:"+Vipdatas[level].hp_times);
+        //Debug.Log("--------------------buyhptimes:"+Vipdatas[level].hp_times);
         foreach (KeyValuePair<uint, VipData> a in Vipdatas)
         {
-            Logger.Log("-------key=" + a.Key);
+            Debug.Log("-------key=" + a.Key);
         }
-        Logger.Log("------------level=" + level);
+        Debug.Log("------------level=" + level);
         return Vipdatas[level].hp_times;
     }
 
@@ -395,7 +395,7 @@ public class VipPrivilegeConfig
     public uint GetBuygold_times(uint level)
     {
 
-        Logger.Log("--------------------buygoldtimes:" + Vipdatas[level].gold_times);
+        Debug.Log("--------------------buygoldtimes:" + Vipdatas[level].gold_times);
         return Vipdatas[level].gold_times;
     }
 

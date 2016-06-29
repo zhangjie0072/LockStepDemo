@@ -25,7 +25,8 @@ message LoginAndlogoutLog
 
 message onlineUserCountLogInfo
 {
-	optional uint32 player_count			= 1;//玩家人数
+    optional uint32 server_index            = 1;
+	optional uint32 player_count			= 2;//玩家人数
 }
 
 //在线人数统计
@@ -42,6 +43,18 @@ message createCharacterLogInfo
 	optional uint32 acc_id					= 1;
 	optional string name					= 2;
 	optional uint32 captainID				= 3;
+}
+
+//发送公网邮件
+message SendPublicEmail
+{
+	optional string user_name               = 1;
+	optional string password				= 2;
+	optional string smtp_server				= 3;
+	optional string mail_to					= 4;
+	optional string mail_from				= 5;
+	optional string subject					= 6;
+	optional string mail_body				= 7;
 }
 
 //创建角色表
@@ -219,6 +232,7 @@ message MatchingInfo
 	optional uint32 match_type					= 2;
 	optional uint32 op_type						= 3; //1:匹配  2:取消匹配
 	optional uint32 score						= 4; //比赛积分
+    optional uint32 team_flag                   = 5; //组队标记  0 单人  1组队
 }
 
 //匹配花费时间
@@ -237,6 +251,7 @@ message MatchingTimeInfo
 	optional uint32 time						= 3;
 	optional uint32 score						= 4; //比赛积分
     optional uint32 flag                        = 5; //flag:0 为正常匹配到人  flag:1 是取消匹配或离线
+    optional uint32 team_flag                   = 6; //组队标记  0 单人  1组队
 }
 //第一场战斗指引子模块日志记录
 message FirstFightGuideModuleLog

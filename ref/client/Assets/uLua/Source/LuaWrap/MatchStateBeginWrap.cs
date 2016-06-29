@@ -8,7 +8,7 @@ public class MatchStateBeginWrap
 		LuaMethod[] regs = new LuaMethod[]
 		{
 			new LuaMethod("OnEnter", OnEnter),
-			new LuaMethod("Update", Update),
+			new LuaMethod("GameUpdate", GameUpdate),
 			new LuaMethod("OnExit", OnExit),
 			new LuaMethod("IsCommandValid", IsCommandValid),
 			new LuaMethod("New", _CreateMatchStateBegin),
@@ -62,12 +62,12 @@ public class MatchStateBeginWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int Update(IntPtr L)
+	static int GameUpdate(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		MatchStateBegin obj = (MatchStateBegin)LuaScriptMgr.GetNetObjectSelf(L, 1, "MatchStateBegin");
 		IM.Number arg0 = (IM.Number)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Number));
-		obj.Update(arg0);
+		obj.GameUpdate(arg0);
 		return 0;
 	}
 

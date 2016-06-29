@@ -20,9 +20,10 @@ public class AI_Pass
 
 		if( m_toPass == null )
 		{
-			if (m_match.m_mainRole.m_team == m_player.m_team && 
-				m_match.m_mainRole.m_StateMachine.m_curState.m_eState == PlayerState.State.eRequireBall)
-				m_toPass = m_match.m_mainRole;
+            Player mainRole = m_match.GetMainRole(m_player.m_roleInfo.acc_id);
+			if (mainRole != null && mainRole.m_team == m_player.m_team && mainRole != m_player &&
+				mainRole.m_StateMachine.m_curState.m_eState == PlayerState.State.eRequireBall)
+				m_toPass = mainRole;
 			else
 				m_toPass = AIUtils.ChoosePassTarget(m_player);
 		}
@@ -31,7 +32,7 @@ public class AI_Pass
 		m_player.m_toSkillInstance = m_player.m_skillSystem.GetValidSkillInMatch(Command.Pass, true);
 		noPassSkill = (m_player.m_toSkillInstance == null);
 		if (noPassSkill)
-			Logger.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI Pass");
+			Debug.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI Pass");
 	}
 	
 	override public void Update(IM.Number fDeltaTime)

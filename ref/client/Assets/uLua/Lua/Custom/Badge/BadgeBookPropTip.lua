@@ -11,7 +11,7 @@ function BadgeBookPropTip:Awake( ... )
 end
 
 function BadgeBookPropTip:Start( ... )
-	addOnClick(self.gameObject,self:OnClick())
+
 end
 
 function BadgeBookPropTip:FixedUpdate( ... )
@@ -58,12 +58,6 @@ end
 
 function BadgeBookPropTip:OnDestroy( ... )
 	-- body
-end
-
-function BadgeBookPropTip:OnClick()
-    return function ()
-        NGUITools.Destroy(self.gameObject)
-    end
 end
 
 return BadgeBookPropTip

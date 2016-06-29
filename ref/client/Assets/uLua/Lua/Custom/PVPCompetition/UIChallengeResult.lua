@@ -17,6 +17,11 @@ UIChallengeResult = UIChallengeResult or
     homeName,
     awayScore,
     awayName,
+    --帮好友拿首胜
+    assist_awards,
+    assist_first_win_times,
+    shiwakan_percent,
+    assist_num,
     level,
     exp,
     totalExp,
@@ -33,6 +38,8 @@ UIChallengeResult = UIChallengeResult or
     uiRoleIcon,
     lblGoldNumMax,
     lblExpNumMax,
+    ExpGoodsicon1,
+    GoldGoodsicon1,
 
     --animation
     totalStars,
@@ -123,6 +130,11 @@ function UIChallengeResult:Awake( ... )
 
     self.ParticleLevelUp = getComponentInChild(transform, "Window/Result/Settled1/Exp/E_Particle111", "ParticleSystem")
 
+    self.ExpGoodsicon1 = transform:FindChild("Window/Result/Settled1/ExpGoodsicon1")
+    self.GoldGoodsicon1 = transform:FindChild("Window/Result/Settled1/GoldGoodsicon1")
+    self.LblExpGoodsicon1 = transform:FindChild("Window/Result/Settled1/ExpGoodsicon1/AssistFirstWin/percent"):GetComponent('UILabel')
+    self.LblGoldGoodsicon1 = transform:FindChild("Window/Result/Settled1/GoldGoodsicon1/AssistFirstWin/percent"):GetComponent('UILabel')
+
 
     self.tfWinIconBackShade = transform:FindChild("Window/Result/Top/Result/BackShade")
     self.tfShowNext = transform:FindChild("Window/Result/ShowNext")
@@ -201,14 +213,14 @@ function UIChallengeResult:Start( ... )
     end
     self.labelHomeScore1.text = tostring(self.homeScore)
     self.labelTheyScore1.text = tostring(self.awayScore)
-
     self.lblName.text = MainPlayer.Instance.Name
     local t = getLuaComponent(createUI("CareerRoleIcon",self.uiRoleIcon))
     local enum = MainPlayer.Instance.SquadInfo:GetEnumerator()
     enum:MoveNext()
     t.id = enum.Current.role_id
     t.showPosition = false
-
+    self.lblFriestGold.text = ''
+    self.lblFriestExp.text = ''
     --获得物品
     if self.awards then
         local numAwards = {}
@@ -245,6 +257,11 @@ function UIChallengeResult:Start( ... )
                             self.lblFriestGold.text = first_str
                             self.getGoldvalue = self.getGoldvalue + val.value
                             NGUITools.SetActive(self.lblFriestGold.gameObject, true)
+                                --首胜友好度
+                            if self.shiwakan_percent > 0 then 
+                                NGUITools.SetActive(self.GoldGoodsicon1.gameObject,true)
+                                self.LblGoldGoodsicon1.text = self.shiwakan_percent..'%'
+                            end
                         end
                         break
                     end
@@ -264,6 +281,8 @@ function UIChallengeResult:Start( ... )
                            self.lblGoldNumMax.text = uptoStr
                            self.getGoldvalue = v[2]
                            print('-------getGoldvalue2:' .. self.getGoldvalue)
+                            NGUITools.SetActive(self.GoldGoodsicon1.gameObject,false)
+                            self.LblGoldGoodsicon1.text = ''
                         end
                     end
                 end
@@ -276,6 +295,75 @@ function UIChallengeResult:Start( ... )
             item.hideNum = false
         end
         self.finalGold = self.getGoldvalue
+    end
+    --发的是0 不是协助好友，如果保存的和发过来的值一样说明上一次已经满了
+    print(self.uiName,',prev assist win ',Friends.AssistFirstWin,',Current assist win ',self.assist_first_win_times,',shiwakan_percent ',self.shiwakan_percent)
+    local firstwintimes = self.assist_first_win_times or 0
+    if Friends.AssistFriendFirstWin < firstwintimes then 
+        --协助好友拿首胜获得物品
+        if self.assist_awards then
+            local numAwards = {}
+            local goodsAwards = {}
+            self.getGoldvalue = 0
+            local enum = self.assist_awards:GetEnumerator()
+            while enum:MoveNext() do
+                local id = enum.Current.id
+                local value = enum.Current.value
+                print(self.uiName, "Award:", id, value)
+                if id < 100 then
+                    table.insert(numAwards, {id, value})
+                end
+            end
+
+            for _, v in ipairs(numAwards) do
+
+                local first_str = ''
+                if self.assist_num == 1 then 
+                    first_str = string.format(getCommonStr("STR_FIRST_WIN_AWARD2"), v[2])
+                elseif self.assist_num > 0 then 
+                    first_str = string.format(getCommonStr("STR_FIRST_WIN_AWARD2"), v[2]/self.assist_num )..'*'..self.assist_num 
+                end
+                if self.assist_num > 0 then  
+                    if v[1] == 2 then
+                        self.lblFriestGold.text = self.lblFriestGold.text..' '..first_str
+                        NGUITools.SetActive(self.lblFriestGold.gameObject, true)
+                            --首胜友好度
+                        if self.shiwakan_percent > 0 then 
+                            NGUITools.SetActive(self.GoldGoodsicon1.gameObject,true)
+                            self.LblGoldGoodsicon1.text = self.shiwakan_percent..'%'
+                        else
+                            NGUITools.SetActive(self.GoldGoodsicon1.gameObject,false)
+                        end
+                    elseif v[1] == 5 then
+                        self.lblFriestExp.text =  ' '..first_str
+                        NGUITools.SetActive(self.lblFriestExp.gameObject, true)
+                            --首胜友好度
+                        if self.shiwakan_percent > 0 then 
+                            NGUITools.SetActive(self.ExpGoodsicon1.gameObject,true)
+                            self.LblExpGoodsicon1.text = self.shiwakan_percent..'%'
+                        else
+                            NGUITools.SetActive(self.ExpGoodsicon1.gameObject, false)
+                        end
+                    end
+                else
+                    NGUITools.SetActive(self.ExpGoodsicon1.gameObject, false)
+                    NGUITools.SetActive(self.GoldGoodsicon1.gameObject,false)
+                end
+               
+
+            end
+        end
+        Friends.AssistFriendFirstWin = self.assist_first_win_times
+    else
+        NGUITools.SetActive(self.GoldGoodsicon1.gameObject,false)
+        NGUITools.SetActive(self.ExpGoodsicon1.gameObject,false)
+        if self.assist_first_win_times == 0 then 
+            --不是协助首胜
+        else
+            --协助首胜次数已满
+            self.lblFriestExp.text = ' '..CommonFunction.GetConstString('STR_ASSIST_TIMES_MAX')
+            self.lblFriestGold.text = self.lblFriestGold.text..' '..CommonFunction.GetConstString('STR_ASSIST_TIMES_MAX')
+        end
     end
     --获得经验
     local maxLevel = GameSystem.Instance.CommonConfig:GetUInt("gPlayerMaxLevel")
@@ -308,10 +396,10 @@ function UIChallengeResult:Start( ... )
         if LuaPlayerData.awards then
             for _, val in ipairs(LuaPlayerData.awards) do
                 if val.id == 5 then --EXP
-                    first_str = string.format(getCommonStr("STR_FIRST_WIN_AWARD2"), val.value)
+                    first_str = string.format(getCommonStr("STR_FIRST_WIN_AWARD1"), val.value)
                     self.expDelta = self.expDelta + val.value
                     self.finalExp = self.expDelta
-                    self.lblFriestExp.text = first_str
+                    self.lblFriestExp.text = first_str..self.lblFriestExp.text 
                     NGUITools.SetActive(self.lblFriestExp.gameObject, true)
                     break
                 end
@@ -325,7 +413,9 @@ function UIChallengeResult:Start( ... )
                 local id = enum.Current.id
                 local value = enum.Current.value
                 if id == 5 and value == 1 then
-                    self.lblExpNumMax.text = uptoStr
+                    self.lblExpNumMax.text = uptoStr                    
+                    NGUITools.SetActive(self.ExpGoodsicon1.gameObject,true)
+                    self.LblExpGoodsicon1.text = ''
                 end
             end
         end
@@ -351,8 +441,7 @@ function UIChallengeResult:Start( ... )
             self.progExp.value = 1
         end
     end
-
-
+  
     self:FriendsBtnManager()
 
     LuaPlayerData.awards = nil
@@ -615,7 +704,9 @@ function UIChallengeResult:OnConfirmClick()
                 end
                 if self.tweenTotalStars then
                     for k, v in pairs(self.tweenTotalStars) do
-                        v.enabled = false
+                        if v ~= nil and v.enabled ~= nil then
+                            v.enabled = false
+                        end
                     end
                 end
             end
@@ -670,7 +761,7 @@ function UIChallengeResult:FriendsBtnManager()
         local home = v.home
 
         if self_id ~= v.roleinfo.acc_id and v.roleinfo.acc_id ~= 0 then
-            local isFri = FriendData.Instance:IsFriend(v.roleinfo.acc_id)
+            local isFri = Friends.IsFriend(v.roleinfo.acc_id)--FriendData.Instance:IsFriend(v.roleinfo.acc_id)
             if isFri then
                 return
             end

@@ -16,7 +16,7 @@ public class AI_Dunk
 	{
 		m_player.m_toSkillInstance = m_player.m_skillSystem.GetValidSkillInMatch(Command.Dunk, true);
 		if (m_player.m_toSkillInstance == null)
-			Logger.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI Dunk");
+			Debug.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI Dunk");
 	}
 
     override public void Update(IM.Number fDeltaTime)

@@ -1,0 +1,13 @@
+package fogs.proto.msg;
+import "Base.proto";
+//---------游戏信息proto
+
+
+//比赛获取资源上限
+message MatchMaxLimitInfo
+{
+	optional uint32 result						= 1;
+	optional uint32 total_gold_num				= 2; //当前比赛获取的金币的总数量（目前只用于对排位赛，常规赛，天梯赛）
+	optional uint32 total_exp_num				= 3; //当前比赛获取的经验的总数量（目前只用于对排位赛，常规赛，天梯赛）
+}
+

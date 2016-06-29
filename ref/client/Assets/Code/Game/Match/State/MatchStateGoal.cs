@@ -21,12 +21,9 @@ public class MatchStateGoal
 		foreach( Player player in GameSystem.Instance.mClient.mPlayerManager )
 		{
 			player.m_enableAction = false;
+            player.m_enablePickupDetector = false;
 			if( player.m_catchHelper != null )
 				player.m_catchHelper.enabled = false;
-
-			if( player.m_aiMgr == null )
-				continue;
-			player.m_aiMgr.m_enable = false;
 		}
  
 		UBasketball ball = m_match.mCurScene.mBall;
@@ -75,9 +72,9 @@ public class MatchStateGoal
 		m_fCurTime = IM.Number.zero;
 	}
 	
-	override public void Update (IM.Number fDeltaTime)
+	override public void GameUpdate (IM.Number fDeltaTime)
 	{
-		base.Update(fDeltaTime);
+		base.GameUpdate(fDeltaTime);
 
 		UBasketball ball = m_match.mCurScene.mBall;
 		if( ball == null )
@@ -100,7 +97,8 @@ public class MatchStateGoal
 		//TODO: bug when goal owner's state is not stand and run.
 		if( m_goalOwner != null 
 		   && ( m_goalOwner.m_StateMachine.m_curState.m_eState == PlayerState.State.eStand
-		    || m_goalOwner.m_StateMachine.m_curState.m_eState == PlayerState.State.eRun )
+		    || m_goalOwner.m_StateMachine.m_curState.m_eState == PlayerState.State.eRun
+            || m_goalOwner.m_StateMachine.m_curState.m_eState == PlayerState.State.eRush)
 		    )
 		{
 			if( ball.m_ballState == BallState.eLoseBall )

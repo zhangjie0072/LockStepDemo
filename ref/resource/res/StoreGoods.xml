@@ -1,4 +1,4 @@
-<Data Count="960">
+<Data Count="962">
   <Line>
     <switch>#</switch>
     <store_id>商店ID</store_id>
@@ -14824,6 +14824,22 @@
     </switch>
     <store_id>2</store_id>
     <is_sell>0</is_sell>
+    <apply_min_level>7</apply_min_level>
+    <apply_max_level>50</apply_max_level>
+    <weight>1</weight>
+    <goods_id>3601</goods_id>
+    <odds>10000</odds>
+    <num_min>1</num_min>
+    <num_max>1</num_max>
+    <consume_type>2</consume_type>
+    <price>
+    </price>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <store_id>2</store_id>
+    <is_sell>0</is_sell>
     <apply_min_level>8</apply_min_level>
     <apply_max_level>50</apply_max_level>
     <weight>1</weight>
@@ -14880,7 +14896,8 @@
     <price>1300</price>
   </Line>
   <Line>
-    <switch>#</switch>
+    <switch>
+    </switch>
     <store_id>2</store_id>
     <is_sell>0</is_sell>
     <apply_min_level>12</apply_min_level>
@@ -14982,6 +14999,22 @@
     <num_max>1</num_max>
     <consume_type>2</consume_type>
     <price>2000</price>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <store_id>2</store_id>
+    <is_sell>0</is_sell>
+    <apply_min_level>19</apply_min_level>
+    <apply_max_level>50</apply_max_level>
+    <weight>1</weight>
+    <goods_id>3602</goods_id>
+    <odds>10000</odds>
+    <num_min>1</num_min>
+    <num_max>1</num_max>
+    <consume_type>2</consume_type>
+    <price>
+    </price>
   </Line>
   <Line>
     <switch>

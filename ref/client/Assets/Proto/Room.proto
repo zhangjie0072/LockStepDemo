@@ -207,6 +207,7 @@ message UserInfo
 	    optional uint32 score				    = 7; //积分
 		optional uint32 role_id					= 8; //选定球员ID
 		optional PlayerData data				= 9;
+        optional uint32 race_type               = 10; //比赛类型  1 正常  2打AI
 	    //optional uint32        role_id 			    = 2; //球员模型ID
 	    //optional uint32        team_side			    = 6; //主/客队
 	    //optional uint32        room_pos			    = 7; //模型在房间内的唯一ID

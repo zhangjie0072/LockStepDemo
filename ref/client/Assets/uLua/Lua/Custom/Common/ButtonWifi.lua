@@ -24,7 +24,13 @@ end
 function ButtonWifi:FixedUpdate()
     if os.time() - self.lastPing > 2.0 then
         self.lastPing = os.time()
-        local latency = GameSystem.Instance.mNetworkManager.m_platConn.m_profiler.m_avgLatency * 1000
+
+        local latency = 0
+        local platConn = GameSystem.Instance.mNetworkManager.m_platConn
+        if platConn and platConn.m_profiler then
+            latency = platConn.m_profiler.m_avgLatency * 1000
+        end
+        
         self.uiMs.text = tostring((latency - latency % 1).."ms")
 
         local green = tonumber(GameSystem.Instance.CommonConfig:GetString("gNetStateGreen"))

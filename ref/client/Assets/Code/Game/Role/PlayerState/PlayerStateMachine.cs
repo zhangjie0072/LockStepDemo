@@ -71,7 +71,7 @@ public class PlayerStateMachine
 		GameMatch	curMatch = GameSystem.Instance.mClient.mCurMatch;
 		if( curMatch == null )
 		{
-			Logger.LogError("Can not create states without game match.");
+			Debug.LogError("Can not create states without game match.");
 			return;
 		}
 
@@ -190,7 +190,7 @@ public class PlayerStateMachine
         /* Trace state transmission
         if (m_curState != null)
         {
-            Logger.Log(string.Format("Player state trans, Team: {0} Player: {1} From state: {2} To state: {3}",
+		//	Debug.Log(string.Format("Team: {0} Player: {1} From state: {2} To state: {3}", m_owner.m_team.m_role, m_owner.m_name, m_curState.m_eState, newState.m_eState));
                 m_owner.m_team.m_role, m_owner.m_name, m_curState.m_eState, newState.m_eState));
         }
         //*/
@@ -198,7 +198,7 @@ public class PlayerStateMachine
 		m_curState = newState;
 		if( m_curState == null )
 		{
-			Logger.LogError( string.Format("Can not find state: {1}", newState.m_eState) );
+			Debug.LogError( string.Format("Can not find state: {1}", newState.m_eState) );
 			return false;
 		}
 		m_curState.OnEnter(lastState);

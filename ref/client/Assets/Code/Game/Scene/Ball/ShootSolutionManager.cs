@@ -16,7 +16,8 @@ public class ShootSolutionManager
     private uint count = 0;
     private bool isLoadFinish = false;
     private static ShootSolutionData shootSolutionData = new ShootSolutionData();
-
+    //test solution use
+    public bool isLock = false;
 	public ShootSolutionManager()
 	{
         Initialize();
@@ -138,11 +139,11 @@ public class ShootSolutionManager
 		int iSector = CalcSectorIdx(shootTarget, pos);
 		if( m_ShootSolutionSectors[iSector].success.Count == 0 && m_ShootSolutionSectors[iSector].fail.Count == 0 )
 		{
-			Logger.LogError("no solution found.");
+			Debug.LogError("no solution found.");
 			return null;
 		}
 
-
+        List<ShootSolution> lockedSolutions = new List<ShootSolution>();
 		List<ShootSolution> validSolutions = new List<ShootSolution>();
 		List<ShootSolution> solutionsByType = new List<ShootSolution>();
 		List<ShootSolution> allSolutions = null;
@@ -159,7 +160,7 @@ public class ShootSolutionManager
 		}
 		if (solutionsByType.Count == 0)
 		{
-			Logger.Log("No corresponding solution of type: " + type + " sector:" + iSector);
+			Debug.Log("No corresponding solution of type: " + type + " sector:" + iSector);
 			solutionsByType = allSolutions;
 		}
 
@@ -169,16 +170,26 @@ public class ShootSolutionManager
 			{
 				if (solution.m_bCleanShot == bCleanShot)
 					validSolutions.Add(solution);
+                if (solution.m_isLock == true)
+                    lockedSolutions.Add(solution);
 			}
 			if (validSolutions.Count == 0)
-				Logger.Log("No clean shot solution, sector: " + iSector);
+				Debug.Log("No clean shot solution, sector: " + iSector);
+            if (lockedSolutions.Count == 0)
+                Debug.Log("there is no locked solution!!");
 		}
 		if (validSolutions.Count == 0)
 			validSolutions = solutionsByType;
 
+       
 		if (bSuccess)
 		{
-			return validSolutions[Random.Range(0, validSolutions.Count)];
+            if (!isLock)
+			    return validSolutions[IM.Random.Range(0, validSolutions.Count)];
+            else
+            {               
+                return lockedSolutions[IM.Random.Range(0, lockedSolutions.Count)];
+            }
 		}
 		else
 		{
@@ -186,20 +197,32 @@ public class ShootSolutionManager
 			List<ShootSolution> heightValidSolutions = new List<ShootSolution>();
 			if (heightRange != null)
 			{
-				//Logger.Log("Solution height rang: " + heightRange.minHeight + ", " + heightRange.maxHeight);
+				//Debug.Log("Solution height rang: " + heightRange.minHeight + ", " + heightRange.maxHeight);
 				foreach (ShootSolution solution in validSolutions)
 				{
 					if (heightRange.minHeight <= solution.m_fMaxHeight && solution.m_fMaxHeight < heightRange.maxHeight)
 						heightValidSolutions.Add(solution);
+                    if (solution.m_isLock == true)
+                        lockedSolutions.Add(solution); 
 				}
 				if (heightValidSolutions.Count == 0)
-					Logger.Log("No solution of height range: " + heightRange.minHeight + " to " + heightRange.maxHeight + ", Sector: " + iSector);
+					Debug.Log("No solution of height range: " + heightRange.minHeight + " to " + heightRange.maxHeight + ", Sector: " + iSector);
+                if (lockedSolutions.Count == 0)
+                    Debug.Log("there is no locked solution!!");
 			}
 			if (heightValidSolutions.Count == 0)
 				heightValidSolutions = validSolutions;
-			ShootSolution selectedSolution = heightValidSolutions[Random.Range(0, heightValidSolutions.Count)];
+
+			ShootSolution selectedSolution;
+            if (!isLock)
+                selectedSolution = heightValidSolutions[IM.Random.Range(0, heightValidSolutions.Count)];
+            else
+                selectedSolution = lockedSolutions[IM.Random.Range(0, lockedSolutions.Count)];
+
 			Debugger.Instance.m_steamer.message += " \nSector:" + iSector + ", Solution height: " + selectedSolution.m_fMaxHeight;
-			return selectedSolution;
+            return selectedSolution;
+            Debug.Log("shootsolution sector:" + iSector);
+            //return m_ShootSolutionSectors[25].success[2];
 		}
 	}
 
@@ -256,7 +279,7 @@ public class ShootSolutionManager
             int actualIndex = CalcSectorIdx(new IM.Vector3(IM.Number.zero, IM.Number.zero, new IM.Number(12,800)), solution.m_vInitPos);
 			if (index != actualIndex)
 			{
-				Logger.Log("Sector mismatching, saved index : " + index + " actual index: " + actualIndex + ". Corrected. Please save again.");
+				Debug.Log("Sector mismatching, saved index : " + index + " actual index: " + actualIndex + ". Corrected. Please save again.");
 				ShootSolutionSector actualSector = m_ShootSolutionSectors.Find((ShootSolutionSector sector) => { return sector.index == actualIndex; });
 				actualSector.AddSolution(solution);
 				solutions.RemoveAt(i);
@@ -353,7 +376,7 @@ public class ShootSolutionManager
         string text = ResourceLoadManager.Instance.GetConfigText(name + "shootsolutionset");
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name + "shootsolutionset");
+            Debug.LogError("LoadConfig failed: " + name + "shootsolutionset");
             return;
         }
 
@@ -395,7 +418,7 @@ public class ShootSolutionManager
         string text = ResourceLoadManager.Instance.GetConfigText(GlobalConst.DIR_XML_SHOOT_SOLUTION + filePath);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name + filePath);
+            Debug.LogError("LoadConfig failed: " + name + filePath);
             return;
         }
         XmlDocument xmlDoc = CommonFunction.LoadXmlConfig(GlobalConst.DIR_XML_SHOOT_SOLUTION + filePath, text);

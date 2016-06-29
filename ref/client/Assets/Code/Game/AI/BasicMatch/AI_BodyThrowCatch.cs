@@ -13,7 +13,7 @@ public class AI_BodyThrowCatch : AIState
 	{
 		m_player.m_toSkillInstance = m_player.m_skillSystem.GetValidSkillInMatch(Command.BodyThrowCatch, true);
 		if (m_player.m_toSkillInstance == null)
-			Logger.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI BodyThrowCatch");
+			Debug.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI BodyThrowCatch");
 	}
 	
 	override public void Update (IM.Number fDeltaTime)

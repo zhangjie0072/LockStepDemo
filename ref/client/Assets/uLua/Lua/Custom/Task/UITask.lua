@@ -69,15 +69,15 @@ UITask = UITask or
 function UITask:Awake( ... )
     local transform = self.transform
 
-    self.uiTitle = transform:FindChild('Top/Title'):GetComponent('MultiLabel')
+    --self.uiTitle = transform:FindChild('Top/Title'):GetComponent('MultiLabel')
     self.uiMain = transform:FindChild('Window1').gameObject
-    self.uiDaily = transform:FindChild('Window2').gameObject
+    --self.uiDaily = transform:FindChild('Window2').gameObject
     self.uiScrollViewAsyncLoadItem = transform:FindChild('Window1/TaskList'):GetComponent("ScrollViewAsyncLoadItem")
 
-    if self.uiDaily then
-        NGUITools.SetActive(self.uiDaily.gameObject,false)
-    end
-    self.uiAnimator = self.transform:GetComponent('Animator')
+    --if self.uiDaily then
+    --    NGUITools.SetActive(self.uiDaily.gameObject,false)
+    --end
+    --self.uiAnimator = self.transform:GetComponent('Animator')
     self.lblAchieved = self.transform:FindChild('Window1/Achieved'):GetComponent('UILabel')
     self.lblRanking = self.transform:FindChild('Window1/Ranking'):GetComponent('UILabel')
     self.lblRankingNum = self.transform:FindChild('Window1/Ranking/Num'):GetComponent('UILabel')
@@ -89,10 +89,10 @@ function UITask:Start( ... )
     --local playerInfo = getLuaComponent(self.uiPlayerProperty.gameObject)
     --playerInfo.isAchievement = true
 
-    self.btnClose1 = createUI('ButtonClose', self.transform:FindChild('Window1/ButtonClose'))
-    self.btnClose2 = createUI('ButtonClose', self.transform:FindChild('Window2/ButtonClose'))
+    self.btnClose1 = createUI('ButtonBack', self.transform:FindChild('TopLeft/ButtonBack'))
+    --self.btnClose2 = createUI('ButtonClose', self.transform:FindChild('Window2/ButtonClose'))
     addOnClick(self.btnClose1.gameObject, self:OnBackClick())
-    addOnClick(self.btnClose2.gameObject, self:OnBackClick())
+    --addOnClick(self.btnClose2.gameObject, self:OnBackClick())
 
     LuaHelper.RegisterPlatMsgHandler(MsgID.NotifyTaskFinishID, self:TaskFinishExitHandler(), self.uiName)
 
@@ -136,13 +136,13 @@ end
 
 function UITask:Refresh( ... )
     -- if self.taskType == 2 then
-        self.uiTitle:SetText(CommonFunction.GetConstString('STR_ACHIEVEMENT'))
+        --self.uiTitle:SetText(CommonFunction.GetConstString('STR_ACHIEVEMENT'))
 
         self.uiListSV = self.uiMain.transform:FindChild('TaskList'):GetComponent('UIScrollView')
         self.uiListGrid = self.uiMain.transform:FindChild('TaskList/Grid'):GetComponent('UIGrid')
 
         -- self.uiDaily:SetActive(false)
-        self.uiMain:SetActive(true)
+        --self.uiMain:SetActive(true)
 
         --self.uiPlayerProperty = self.transform:FindChild('Top/PlayerInfoGrids')
         --local playerInfo = getLuaComponent(self.uiPlayerProperty.gameObject)
@@ -489,6 +489,7 @@ function UITask:CreateItem( index, k, v)
         return go;
     end
 
+    print('not find id='.. v.id)
     return nil;
 end
 
@@ -511,21 +512,29 @@ function UITask:InitTaskList()
         local taskCount = 0;
         local taskArray = {}
 
-        print('@aaa' .. taskCount)
+        --print('@aaa' .. taskCount)
         --CommonFunction.ClearGridChild(self.uiListGrid.transform)
         for k, v in pairs(self.taskList[self.taskType] or {}) do
+            --print('[' .. taskCount ..']k='.. k .. 'v='.. v.id)
+
+                taskArray[taskCount] = { [1] = k, [2] = (v or {}) }
                 taskCount = taskCount + 1
-                taskArray[taskCount] = { k = k, v = v }
         end
 
         print('@bbb' .. taskCount)
         if taskCount > 0 then
             self.uiScrollViewAsyncLoadItem.OnCreateItem = function ( i, parent )
-                local index = i + 1
 
-                print('@b[a]' .. i)
-                local  go = self:CreateItem(i, taskArray[index].k, taskArray[index].v)
-                print('@b[b]' .. go.name)
+                --print('@b[a]' .. i)
+                --print('taskArray[index]'.. taskArray[i])
+                print('taskArray[index].k='.. taskArray[i][1])
+                print('taskArray[index].v='.. taskArray[i][2].id)
+                local  go = self:CreateItem(i, taskArray[i][1], taskArray[i][2])
+
+                -- if go ~= nil then
+                --     print('@b[b]' .. go.name)
+                -- end
+
                 return go;
             end
 

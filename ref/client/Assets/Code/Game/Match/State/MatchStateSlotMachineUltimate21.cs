@@ -30,7 +30,7 @@ public class MatchStateSlotMachineUltimate21 : MatchState
 			player.Hide();
 		}
 
-		match.m_mainRole.m_inputDispatcher.m_enable = false;
+		InputReader.Instance.enabled = false;
 		NGUITools.SetActive(match.slotMachine.gameObject, true);
 		NGUITools.BringForward(match.slotMachine.gameObject);
 		match.slotMachine.onCreateItem += OnCreateSlotMachineItem;
@@ -40,9 +40,9 @@ public class MatchStateSlotMachineUltimate21 : MatchState
 		timerBegin.stop = false;
 	}
 	
-	override public void Update (IM.Number fDeltaTime)
+	override public void GameUpdate (IM.Number fDeltaTime)
 	{
-		base.Update(fDeltaTime);
+		base.GameUpdate(fDeltaTime);
 
 		if (timerBegin != null)
 			timerBegin.Update(fDeltaTime);
@@ -52,7 +52,7 @@ public class MatchStateSlotMachineUltimate21 : MatchState
 
 	public override void OnExit()
 	{
-		match.m_mainRole.m_inputDispatcher.m_enable = true;
+		InputReader.Instance.enabled = true;
 	}
 
 	private void OnCreateSlotMachineItem(GameObject item, int index)

@@ -30,7 +30,8 @@ public class MsgHandler
 		m_noLogMsg.Add(MsgID.BackCompeteID);
 		m_noLogMsg.Add(MsgID.GameMsgID);
 		m_noLogMsg.Add(MsgID.ClientInputID);
-		m_noLogMsg.Add(MsgID.FrameInfoID);
+		m_noLogMsg.Add(MsgID.PlayFrameID);
+		m_noLogMsg.Add(MsgID.CheckFrameID);
     }
 
     public void RegisterHandler(MsgID messageId, Handle handler)
@@ -49,7 +50,7 @@ public class MsgHandler
         }
         else
         {
-            Logger.LogError("Unable to find handler : " + messageId);
+            Debug.LogError("Unable to find handler : " + messageId);
         }
     }
 
@@ -62,13 +63,13 @@ public class MsgHandler
         MsgID msgID = (MsgID)pack.MessageID;
         if (!m_noLogMsg.Contains(msgID))
         {
-            Logger.Log("-------HandleMsg with MessageID: " + msgID);
+            Debug.Log("-------HandleMsg with MessageID: " + msgID);
         }
 
         Handle handler = null;
         if (!m_dict.TryGetValue(msgID, out handler))
         {
-            Logger.Log("Error -- Can't find message handler with MessageID: " + msgID);
+            Debug.Log("Error -- Can't find message handler with MessageID: " + msgID);
             return;
         }
 

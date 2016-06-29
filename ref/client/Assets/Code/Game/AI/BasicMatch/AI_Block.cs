@@ -15,7 +15,7 @@ public class AI_Block
 		m_player.m_toSkillInstance = m_player.m_skillSystem.GetValidSkillInMatch(Command.Block, true);
 		if (m_player.m_toSkillInstance == null)
 		{
-			Logger.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI Block");
+			Debug.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI Block");
 		}
 	}
 	

@@ -45,6 +45,12 @@ function HandlerFunctionSwitchResp()
                 -- 临时开启所有开关
                 -- t[i].opened = 1
                 -------------------
+
+                -- test
+                -- if t[i].id == FSID.players_btn then
+                --     t[i].opened = 0
+                -- end
+
                 fsTb[t[i].id] = t[i].opened
             end
         end

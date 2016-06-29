@@ -51,19 +51,6 @@ public class GameMsgSender
 		GameSystem.Instance.mNetworkManager.m_gameConn.SendPack<GameBeginReq>(0, gameBeginReq, MsgID.GameBeginReqID);
 	}
 
-	public static void SendGameGoal(Player goaler, uint pt, bool bCritical)
-	{
-		if( GameSystem.Instance.mNetworkManager.m_gameConn == null )
-			return;
-
-		GameGoal goal = new GameGoal();
-		goal.index = goaler.m_roomPosId;
-		goal.score = pt;
-		goal.kill_goal = Convert.ToUInt32( bCritical );
-		
-		GameSystem.Instance.mNetworkManager.m_gameConn.SendPack<GameGoal>(0, goal, MsgID.GameGoalID);
-	}
-
 	public static void SendTimeTracer(uint msgId, double dCurTime, NetworkConn server)
 	{
 		if( server == null || !server.IsConnected() )
@@ -95,14 +82,6 @@ public class GameMsgSender
 		GameSystem.Instance.mNetworkManager.m_gameConn.SendPack<PVPLoadComplete>(0, obj, MsgID.PVPLoadCompleteID);
 	}
 
-	public static void SendTipOff()
-	{
-		if( GameSystem.Instance.mNetworkManager.m_gameConn == null )
-			return;
-		BeginTipOffReq obj = new BeginTipOffReq();
-		GameSystem.Instance.mNetworkManager.m_gameConn.SendPack<BeginTipOffReq>(0, obj, MsgID.BeginTipOffReqID);
-	}
-
     public static void SendInput(InputDirection dir, Command cmd)
     {
 		if( GameSystem.Instance.mNetworkManager.m_gameConn == null )
@@ -112,17 +91,42 @@ public class GameMsgSender
         input.dir = (uint)dir;
         input.cmd = (uint)cmd;
 		GameSystem.Instance.mNetworkManager.m_gameConn.SendPack<ClientInput>(0, input, MsgID.ClientInputID);
-        //Logger.Log("SendInput " + dir + " " + cmd);
+        //Debug.Log("SendInput " + dir + " " + cmd);
     }
 
-    //For virtual game server
-    public static void SendTurn(FrameInfo turn)
+    //丢帧请求重发
+    public static void SendMissTurnReq(List<uint> turnIDs)
     {
         NetworkConn conn = GameSystem.Instance.mNetworkManager.m_gameConn;
 		if( conn == null )
 			return;
-		conn.SendPack<FrameInfo>(0, turn, MsgID.FrameInfoID);
-        //Logger.Log("VirtualGameServer, SendTurn " + turn.frameNum);
+        MissFrameReq req = new MissFrameReq();
+        req.acc_id = MainPlayer.Instance.AccountID;
+        req.frame_num.AddRange(turnIDs);
+		conn.SendPack(0, req, MsgID.MissFrameReqID);
+        Debug.Log("Request missed frame, " + turnIDs[0] + " - " + turnIDs[turnIDs.Count - 1]);
+    }
+    //丢帧请求重发
+    public static void SendMissTurnReq(uint turnID)
+    {
+        NetworkConn conn = GameSystem.Instance.mNetworkManager.m_gameConn;
+		if( conn == null )
+			return;
+        MissFrameReq req = new MissFrameReq();
+        req.acc_id = MainPlayer.Instance.AccountID;
+        req.frame_num.Add(turnID);
+		conn.SendPack(0, req, MsgID.MissFrameReqID);
+        Debug.Log("Request missed frame, " + turnID);
+    }
+
+    //For virtual game server
+    public static void SendTurn(PlayFrame turn)
+    {
+        NetworkConn conn = GameSystem.Instance.mNetworkManager.m_gameConn;
+		if( conn == null )
+			return;
+		conn.SendPack<PlayFrame>(0, turn, MsgID.PlayFrameID);
+        //Debug.Log("VirtualGameServer, SendTurn " + turn.frameNum);
 
         //如果使用的是虚拟连接，保证消息立即传回客户端
         if (conn.m_type == NetworkConn.Type.eVirtualServer)
@@ -135,5 +139,21 @@ public class GameMsgSender
 		if( GameSystem.Instance.mNetworkManager.m_gameConn == null )
 			return;
 		GameSystem.Instance.mNetworkManager.m_gameConn.SendPack<GameBeginResp>(0, resp, MsgID.GameBeginRespID);
+    }
+
+    public static void SendTurnCheckData(CheckFrame checkData)
+    {
+        NetworkConn conn = GameSystem.Instance.mNetworkManager.m_gameConn;
+		if( conn == null )
+			return;
+		conn.SendPack(0, checkData, MsgID.CheckFrameID);
+    }
+
+    public static void SendTeamMatchData(TeamMatchData teamData)
+    {
+        NetworkConn conn = GameSystem.Instance.mNetworkManager.m_gameConn;
+		if( conn == null )
+			return;
+		conn.SendPack(0, teamData, MsgID.TeamMatchDataID);
     }
 }

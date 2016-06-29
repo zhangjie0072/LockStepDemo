@@ -57,15 +57,15 @@ public class TourConfig
             return;
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
         ReadTourConfig();
-		Logger.ConfigEnd(name1);
-		Logger.ConfigBegin(name2);
+		
+		Debug.Log("Config reading " + name2);
 		ReadTourResetTimeConfig();
-		Logger.ConfigEnd(name2);
-		Logger.ConfigBegin(name3);
+		
+		Debug.Log("Config reading " + name3);
 		ReadTourResetCostConfig();
-		Logger.ConfigEnd(name3);
+		
     }
 
 	public TourData GetTourData(uint level, uint ID)
@@ -101,7 +101,7 @@ public class TourConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         
@@ -127,7 +127,7 @@ public class TourConfig
 			uint ID = uint.Parse(line.SelectSingleNode("id").InnerText);
 			if (levelTours.ContainsKey(ID))
 			{
-				Logger.LogError("TourConfig, tour config already existed. Level: " + level + " ID: " + ID);
+				Debug.LogError("TourConfig, tour config already existed. Level: " + level + " ID: " + ID);
 			}
 
 			TourData tour = new TourData();
@@ -191,7 +191,7 @@ public class TourConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
         
@@ -216,7 +216,7 @@ public class TourConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name3);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name3);
+            Debug.LogError("LoadConfig failed: " + name3);
             return;
         }
         

@@ -24,11 +24,11 @@ public class AI_Assist_TraceBall : AIState
 		}
 		else
 		{
-			IM.Number dir;
+			int dir;
 			IM.Vector3 vel;
             IM.Number angle = IM.Vector3.FromToAngle(IM.Vector3.forward, vecPlayerToTarget.normalized);
 			GameUtils.AngleToDir(angle, out dir, out vel);
-			m_player.m_dir = (int)((float)dir);
+			m_player.m_dir = dir;
 			m_player.m_moveType = MoveType.eMT_Rush;
 		}
 	}

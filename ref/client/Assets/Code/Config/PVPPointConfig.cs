@@ -44,12 +44,12 @@ public class PVPPointConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
 		ReadLevelInfo();
-		Logger.ConfigBegin(name2);
-		Logger.ConfigEnd(name1);
+		Debug.Log("Config reading " + name2);
+		
 		ReadChargeCost();
-		Logger.ConfigEnd(name2);
+		
     }
 
     public LevelInfo GetLevelInfo(uint vip_level)
@@ -57,7 +57,7 @@ public class PVPPointConfig
         LevelInfo info = null;
         if (!_level_info.TryGetValue(vip_level, out info))
         {
-            Logger.LogError("PVP point config for VIP level " + vip_level + "not found.");
+            Debug.LogError("PVP point config for VIP level " + vip_level + "not found.");
         }
         return info;
     }
@@ -67,7 +67,7 @@ public class PVPPointConfig
         BuyGameTimesConfig cost = new BuyGameTimesConfig();
         if (!_charge_cost.TryGetValue(times, out cost))
         {
-            Logger.Log("PVP charge cost config for times " + times + "not found");
+            Debug.Log("PVP charge cost config for times " + times + "not found");
         }
         return cost;
     }
@@ -77,7 +77,7 @@ public class PVPPointConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         _level_info.Clear();
@@ -113,7 +113,7 @@ public class PVPPointConfig
             }
             else
             {
-                Logger.LogWarning("VIP level " + info.vip_level + "already existed.");
+                Debug.LogWarning("VIP level " + info.vip_level + "already existed.");
             }
         }
     }
@@ -123,7 +123,7 @@ public class PVPPointConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
         _charge_cost.Clear();
@@ -163,7 +163,7 @@ public class PVPPointConfig
             }
             else
             {
-                Logger.LogWarning("PVP point charge cost config for times " + times + "already existed.");
+                Debug.LogWarning("PVP point charge cost config for times " + times + "already existed.");
             }
         }
     }

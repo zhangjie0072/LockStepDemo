@@ -112,11 +112,11 @@ public class AI_Positioning
 		int sectorIdx = 0;
 		int iCol = 0;
 		if( IM.Vector2.Dot(dirRim2Player, IM.Vector2.right) > IM.Number.zero )
-			iCol = Random.Range(0, (int)m_player.m_favorSectors.range.x / 2);
+			iCol = IM.Random.Range(0, (int)m_player.m_favorSectors.range.x / 2);
 		else
-			iCol = Random.Range((int)m_player.m_favorSectors.range.x / 2, (int)m_player.m_favorSectors.range.x);
+			iCol = IM.Random.Range((int)m_player.m_favorSectors.range.x / 2, (int)m_player.m_favorSectors.range.x);
 
-		int iRow = (int)m_player.m_favorSectors.start.y + Random.Range(0, (int)m_player.m_favorSectors.range.y);
+		int iRow = (int)m_player.m_favorSectors.start.y + IM.Random.Range(0, (int)m_player.m_favorSectors.range.y);
 		sectorIdx = colomn * iRow + iCol;
 		
 		RoadPathManager.Sector sector = RoadPathManager.Instance.m_Sectors[sectorIdx];
@@ -130,11 +130,11 @@ public class AI_Positioning
 		if (sectorIdx != -1)
 			sector = RoadPathManager.Instance.m_Sectors[sectorIdx];
 		else
-			Logger.LogError("AI_Positioning, sector(-1). Name:" + m_player.m_name +
+			Debug.LogError("AI_Positioning, sector(-1). Name:" + m_player.m_name +
 				" SectorIdx:" + sector.idx + " Center:" + sector.center + " Dev:" + dev);
 		RoadPathManager.Instance.AddDrawSector( m_player.m_id + "_ToSector", sector );
 
-        return sector.center.xz;
+        return sector.center.x0z;
 	}
 
 	IM.Vector3 GetPositionForPickAndRoll()
@@ -240,7 +240,7 @@ public class AI_Positioning
 			if (m_player.CanLayup())
 			{
 				m_system.SetTransaction(AIState.Type.eLayup);
-				Logger.LogError("Unreasonable layup.");
+				Debug.LogError("Unreasonable layup.");
 				return;
 			}
 		}
@@ -264,11 +264,12 @@ public class AI_Positioning
                     return;
                 }
                 //玩家要球，传给他
-                if (m_match.m_mainRole.m_StateMachine.m_curState.m_eState == PlayerState.State.eRequireBall &&
-                    m_match.m_mainRole.m_team == m_player.m_team)
+                Player mainRole = m_match.GetMainRole(m_player.m_roleInfo.acc_id);
+                if (mainRole != null && mainRole.m_team == m_player.m_team && mainRole != m_player &&
+                    mainRole.m_StateMachine.m_curState.m_eState == PlayerState.State.eRequireBall)
                 {
                     AI_Pass pass = m_system.GetState(Type.ePass) as AI_Pass;
-                    pass.m_toPass = m_match.m_mainRole;
+                    pass.m_toPass = mainRole;
                     m_system.SetTransaction(pass, new IM.Number(100));
                     return;
                 }
@@ -327,16 +328,16 @@ public class AI_Positioning
 				int idx = -1;
 				do
 				{
-					IM.Vector3 pos = targetSector.center.xz + new IM.Vector3(IM.Random.Range(-dev, dev), IM.Number.zero, IM.Random.Range(-dev, dev));
+					IM.Vector3 pos = targetSector.center.x0z + new IM.Vector3(IM.Random.Range(-dev, dev), IM.Number.zero, IM.Random.Range(-dev, dev));
 					idx = RoadPathManager.Instance.CalcSectorIdx(pos);
 				} while (idx == -1 && count++ < 10);
 				if (idx != -1)
 					targetSector = RoadPathManager.Instance.m_Sectors[idx];
 				else
-					Logger.LogError("AI_Positioning, sector(-1). Name:" + m_player.m_name +
+					Debug.LogError("AI_Positioning, sector(-1). Name:" + m_player.m_name +
 						" SectorIdx:" + targetSector.idx + " Center:" + targetSector.center + " Dev:" + dev);
 				RoadPathManager.Instance.AddDrawSector("targetSector", targetSector);
-				m_moveTarget = targetSector.center.xz;
+				m_moveTarget = targetSector.center.x0z;
 				RoadPathManager.Instance.AddDrawSector(m_player.m_id + "_ToSector", targetSector);
 				arriveFirstTarget = false;
 			}
@@ -355,7 +356,7 @@ public class AI_Positioning
 					stillTime += fDeltaTime;
 					if (stillTime > MAX_STILL_TIME)
 					{
-						//Logger.Log("AI_Positioning, " + m_player.m_name + " still time larger than " + MAX_STILL_TIME + " seconds");
+						//Debug.Log("AI_Positioning, " + m_player.m_name + " still time larger than " + MAX_STILL_TIME + " seconds");
 						//arriveFirstTarget = true;
 						//OnTick();
 						m_system.SetTransaction(AIState.Type.ePositioning, new IM.Number(100), true);
@@ -466,7 +467,7 @@ public class AI_Positioning
 	{
 		if (colPlayer.m_team.m_role != m_player.m_team.m_role)
 		{
-			//Logger.Log(m_player.m_name + " Collide rival team member: " + colPlayer.m_name + ", repositioning.");
+			//Debug.Log(m_player.m_name + " Collide rival team member: " + colPlayer.m_name + ", repositioning.");
 			if (!unreasonable)
 			{
 				arriveFirstTarget = true;

@@ -167,7 +167,7 @@ public class PlayerActionEventHandler
 		if( pickupState == null || !pickupState.m_bSuccess )
 			return;
 
-		Logger.Log( m_Owner.m_id + " get ball." );
+		Debug.Log( m_Owner.m_id + " get ball." );
 		m_Owner.GrabBall(ball);
 
 		m_Owner.m_pickupDetector.ballToPickup = null;

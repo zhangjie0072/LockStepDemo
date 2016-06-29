@@ -31,9 +31,10 @@ public class AI_PractiseRebound_Positioning : AIState
 			return new IM.Vector3(new IM.Number(5), IM.Number.zero,new IM.Number(6));
 
         IM.Number angle = IM.Random.Range(new IM.Number(90),new IM.Number(270));
-        IM.Number dist = IM.Random.Range(new IM.Number(4, 500), new IM.Number(700));
+        IM.Number dist = IM.Random.Range(new IM.Number(4, 500), new IM.Number(7));
 		IM.Vector3 dir = IM.Quaternion.AngleAxis(angle, IM.Vector3.up) * IM.Vector3.forward;
-		return basketCenter + dir * dist;
+		IM.Vector3 pos = basketCenter + dir * dist;
+        return pos;
 	}
 
 	void OnTimer()

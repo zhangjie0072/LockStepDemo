@@ -18,6 +18,7 @@ public class fogs_proto_msg_FriendOperationTypeWrap
 		new LuaMethod("FOT_QUERY_APPLY", GetFOT_QUERY_APPLY),
 		new LuaMethod("FOT_QUERY_GIFT", GetFOT_QUERY_GIFT),
 		new LuaMethod("FOT_IGNORE_APPLY", GetFOT_IGNORE_APPLY),
+		new LuaMethod("FOT_APPLY_AGREE", GetFOT_APPLY_AGREE),
 		new LuaMethod("IntToEnum", IntToEnum),
 	};
 
@@ -114,6 +115,13 @@ public class fogs_proto_msg_FriendOperationTypeWrap
 	static int GetFOT_IGNORE_APPLY(IntPtr L)
 	{
 		LuaScriptMgr.Push(L, fogs.proto.msg.FriendOperationType.FOT_IGNORE_APPLY);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int GetFOT_APPLY_AGREE(IntPtr L)
+	{
+		LuaScriptMgr.Push(L, fogs.proto.msg.FriendOperationType.FOT_APPLY_AGREE);
 		return 1;
 	}
 

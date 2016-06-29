@@ -14,7 +14,7 @@ public class HedgingConfig
     public IM.Number factorMax { get; private set; }
     public class hedgeLevelData
     {
-        public float factor;
+        public IM.PrecNumber factor;
         public uint oppositeID;
     }
     public Dictionary<uint, hedgeLevelData> hedgeLevelFactor;
@@ -44,20 +44,20 @@ public class HedgingConfig
 				return resultMin;
 			}
 		}
-		Logger.LogError("HedgingConfig: no " + attr + " in " + func);
+		Debug.LogError("HedgingConfig: no " + attr + " in " + func);
 		return IM.Number.zero;
 	}
-    public IM.BigNumber GetRatio(string attr, string func)
+    public IM.PrecNumber GetRatio(string attr, string func)
     {
         XmlNode ratio = root.SelectSingleNode("ratio");
         XmlNode node = ratio.SelectSingleNode(func);
         if (node != null)
         {
             XmlAttribute attribute = node.Attributes[attr];
-            return IM.BigNumber.Parse(attribute.InnerText);
+            return IM.PrecNumber.Parse(attribute.InnerText);
         }
-        Logger.LogError("hedging ratio: no " + attr + " in " + func);
-        return IM.BigNumber.zero;
+        Debug.LogError("hedging ratio: no " + attr + " in " + func);
+        return IM.PrecNumber.zero;
     }
 
     public hedgeLevelData GetHedgeLevelFactor(uint hedgeLevelID)
@@ -74,11 +74,11 @@ public class HedgingConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name);
+		Debug.Log("Config reading " + name);
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            Debug.LogError("LoadConfig failed: " + name);
             return;
         }
         
@@ -95,12 +95,12 @@ public class HedgingConfig
             {
                 hedgeLevelData data = new hedgeLevelData();
                 uint id = uint.Parse(node.Attributes["id"].InnerText);
-                data.factor = float.Parse(node.Attributes["factor"].InnerText);
+                data.factor = IM.PrecNumber.Parse(node.Attributes["factor"].InnerText);
                 data.oppositeID = uint.Parse(node.Attributes["oppositeID"].InnerText);
                 if (!hedgeLevelFactor.ContainsKey(id))
                     hedgeLevelFactor.Add(id, data);
             }
         }
-		Logger.ConfigEnd(name);
+		
 	}
 }

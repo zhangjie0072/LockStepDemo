@@ -26,44 +26,41 @@ public class Util {
 
 	public static void Log(string str, string stackTrace = "")
 	{
-		if (Logger.EnableLog)
-		{
-			if (ErrorDisplay.Instance != null && ErrorDisplay.Instance.enabled)
-			{
-				Logger.Log(str);
-				ErrorDisplay.Instance.SupplementLastLogStackTrace("\n" + stackTrace);
-			}
-			else
-				Logger.Log(str + "\n" + stackTrace);
-		}
+        if (ErrorDisplay.Instance != null && ErrorDisplay.Instance.enabled)
+        {
+            Debug.Log(str);
+            ErrorDisplay.Instance.SupplementLastLogStackTrace("\n" + stackTrace);
+        }
+        else
+        {
+            Debug.Log(str + "\n" + stackTrace);
+        }
 	}
 
-	public static void LogWarning(string str, string stackTrace = "")
-	{
-		if (Logger.EnableLog)
-		{
-			if (ErrorDisplay.Instance != null && ErrorDisplay.Instance.enabled)
-			{
-				Logger.LogWarning(str);
-				ErrorDisplay.Instance.SupplementLastLogStackTrace("\n" + stackTrace);
-			}
-			else
-				Logger.LogWarning(str + "\n" + stackTrace);
-		}
-	}
+    public static void LogWarning(string str, string stackTrace = "")
+    {
+        if (ErrorDisplay.Instance != null && ErrorDisplay.Instance.enabled)
+        {
+            Debug.LogWarning(str);
+            ErrorDisplay.Instance.SupplementLastLogStackTrace("\n" + stackTrace);
+        }
+        else
+        {
+            Debug.LogWarning(str + "\n" + stackTrace);
+        }
+    }
 
 	public static void LogError(string str, string stackTrace = "")
 	{
-		if (Logger.EnableLog)
-		{
-			if (ErrorDisplay.Instance != null && ErrorDisplay.Instance.enabled)
-			{
-				Logger.LogError(str);
-				ErrorDisplay.Instance.SupplementLastLogStackTrace("\n" + stackTrace);
-			}
-			else
-				Logger.LogError(str + "\n" + stackTrace);
-		}
+        if (ErrorDisplay.Instance != null && ErrorDisplay.Instance.enabled)
+        {
+            Debug.LogError(str);
+            ErrorDisplay.Instance.SupplementLastLogStackTrace("\n" + stackTrace);
+        }
+        else
+        {
+            Debug.LogError(str + "\n" + stackTrace);
+        }
 	}
 
     /// <summary>

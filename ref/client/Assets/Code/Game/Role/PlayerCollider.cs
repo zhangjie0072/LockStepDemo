@@ -103,8 +103,8 @@ public class PlayerCollider
 			match.GetMatchType() != GameMatch.Type.eGrabZone &&
 			match.GetMatchType() != GameMatch.Type.ePractise)
 			return;
-		if( match.m_mainRole != m_Owner && !m_Owner.m_bIsAI )
-			return;
+        //if( match.m_mainRole != m_Owner && !m_Owner.m_bIsAI )
+        //    return;
  
 		if( m_Owner.m_StateMachine.m_curState.m_eState == PlayerState.State.eFallLostBall 
 		   || m_Owner.m_StateMachine.m_curState.m_eState == PlayerState.State.eKnocked )
@@ -141,8 +141,8 @@ public class PlayerCollider
 				Dictionary<string, uint> colPlayerData = player.m_finalAttrs;
 				if( playerData == null || colPlayerData == null)
 				{
-					Logger.LogError("Can not build player: " + m_Owner.m_name + " ,can not fight state by id: " + m_Owner.m_id );
-					Logger.LogError("Can not build player: " + player.m_name + " ,can not fight state by id: " + player.m_id );
+					Debug.LogError("Can not build player: " + m_Owner.m_name + " ,can not fight state by id: " + m_Owner.m_id );
+					Debug.LogError("Can not build player: " + player.m_name + " ,can not fight state by id: " + player.m_id );
 					return;
 				}
 

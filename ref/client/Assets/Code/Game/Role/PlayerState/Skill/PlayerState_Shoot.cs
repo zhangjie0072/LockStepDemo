@@ -44,7 +44,7 @@ public class PlayerState_PrepareToShoot : PlayerState_Skill
 		PlayerAnimAttribute.AnimAttr shootAttr = m_player.m_animAttributes.GetAnimAttrById(Command.Shoot, m_curAction);
 		if( shootAttr == null )
 		{
-			Logger.LogError("Current action: " + m_curAction + " in shoot id: " + m_curExecSkill.skill.id);
+			Debug.LogError("Current action: " + m_curAction + " in shoot id: " + m_curExecSkill.skill.id);
 		}
 
 		if( shootAttr.GetKeyFrame("RotateToBasket") != null )
@@ -106,12 +106,12 @@ public class PlayerState_Shoot : PlayerState_Skill
 	static HedgingHelper shootMiddleHedging = new HedgingHelper("ShootMiddle");
 	static HedgingHelper shootFarHedging = new HedgingHelper("ShootFar");
 
-    static IM.BigNumber shootFarMultiply = GameSystem.Instance.HedgingConfig.GetRatio("multiply", "ShootFar");
-    static IM.BigNumber shootMiddleMultiply = GameSystem.Instance.HedgingConfig.GetRatio("multiply", "ShootMiddle");
-    static IM.BigNumber shootNearMultiply = GameSystem.Instance.HedgingConfig.GetRatio("multiply", "ShootNear");
-    static IM.BigNumber shootFarAdd = GameSystem.Instance.HedgingConfig.GetRatio("add", "ShootFar");
-    static IM.BigNumber shootMiddleAdd = GameSystem.Instance.HedgingConfig.GetRatio("add", "ShootMiddle");
-    static IM.BigNumber shootNearAdd = GameSystem.Instance.HedgingConfig.GetRatio("add", "ShootNear");
+    static IM.PrecNumber shootFarMultiply = GameSystem.Instance.HedgingConfig.GetRatio("multiply", "ShootFar");
+    static IM.PrecNumber shootMiddleMultiply = GameSystem.Instance.HedgingConfig.GetRatio("multiply", "ShootMiddle");
+    static IM.PrecNumber shootNearMultiply = GameSystem.Instance.HedgingConfig.GetRatio("multiply", "ShootNear");
+    static IM.PrecNumber shootFarAdd = GameSystem.Instance.HedgingConfig.GetRatio("add", "ShootFar");
+    static IM.PrecNumber shootMiddleAdd = GameSystem.Instance.HedgingConfig.GetRatio("add", "ShootMiddle");
+    static IM.PrecNumber shootNearAdd = GameSystem.Instance.HedgingConfig.GetRatio("add", "ShootNear");
 
 	public PlayerState_Shoot (PlayerStateMachine owner, GameMatch match):base(owner,match)
 	{
@@ -137,7 +137,7 @@ public class PlayerState_Shoot : PlayerState_Skill
 		}
 
         if (m_curAction.Length == 0)
-            Logger.Log("no shoot animation.");
+			Debug.Log("no shoot animation.");
         else
             m_player.animMgr.Play(m_curAction, true);
 
@@ -175,19 +175,16 @@ public class PlayerState_Shoot : PlayerState_Skill
 		base.OnExit();
 		m_player.m_bForceShoot = false;
 
-		if (m_player.m_InfoVisualizer != null && m_player.m_InfoVisualizer.m_strengthBar != null)
+		if (m_player.shootStrength != null)
             m_player.shootStrength.End();
 	}
 
     public void BeginShoot(uint frameToShoot)
     {
-		if (m_player.m_InfoVisualizer != null && m_player.m_InfoVisualizer.m_strengthBar != null && m_player == m_match.m_mainRole )
-        {
-            IM.Number frameRate = m_player.animMgr.GetFrameRate(m_curAction);
-            IM.Number seconds = frameToShoot / frameRate;
-            m_player.shootStrength.total_seconds = seconds;
-            m_player.shootStrength.Begin(); 
-        }
+        IM.Number frameRate = m_player.animMgr.GetFrameRate(m_curAction);
+        IM.Number seconds = frameToShoot / frameRate;
+        m_player.shootStrength.total_seconds = seconds;
+        m_player.shootStrength.Begin(); 
     }
 
 	public void OnShoot()
@@ -196,14 +193,15 @@ public class PlayerState_Shoot : PlayerState_Skill
 		if(m_player.m_bWithBall )
 		{
 			IM.Number rate_adjustment = IM.Number.zero;
-			if (m_player.m_InfoVisualizer != null && m_player.m_InfoVisualizer.m_strengthBar != null)
+			if (m_player.shootStrength != null)
 			{
 				m_player.shootStrength.Stop();
 				rate_adjustment = m_player.shootStrength.rate_adjustment;
+				Debug.Log("Shoot rate adjustment: " + rate_adjustment);
 			}
 
             IM.Vector3 target = m_basket.m_vShootTarget;
-			IM.BigNumber fShootRate = IM.BigNumber.one;
+			IM.PrecNumber fShootRate = IM.PrecNumber.one;
 			Dictionary<string, uint> data = m_player.m_finalAttrs;
 
 			Player disturber = null;
@@ -221,7 +219,7 @@ public class PlayerState_Shoot : PlayerState_Skill
 			IM.Number fSideEffect = IM.Number.zero;
 			SkillSideEffect effect;
 			if( !m_curExecSkill.skill.side_effects.TryGetValue((int)SkillSideEffect.Type.eShootRate, out effect) )
-				Logger.Log("No side effect data.");
+				Debug.Log("No side effect data.");
 			else
 				fSideEffect = effect.value;
 
@@ -259,7 +257,7 @@ public class PlayerState_Shoot : PlayerState_Skill
                 else
                 {
                     fDisturb = IM.Number.zero;
-                    //Logger.Log("Can't disturb, state: " + disturber.m_StateMachine.m_curState.m_eState);
+					//Debug.Log("Can't disturb, state: " + disturber.m_StateMachine.m_curState.m_eState);
                 }
 			}
 			Debugger.Instance.m_steamer.message = " Disturb: " + fDisturb + " ";
@@ -345,7 +343,7 @@ public class PlayerState_Shoot : PlayerState_Skill
 				solution = m_match.GetShootSolution(m_match.mCurScene.mBasket, m_skillArea, m_player, fShootRate, ShootSolution.Type.Shoot);
 
 			m_ball.m_shootSolution = solution;
-			Logger.Log("shoot ball success: " + solution.m_bSuccess );
+			Debug.Log("shoot ball success: " + solution.m_bSuccess );
 
 			IM.Vector3 vPos = m_ball.position;
 			uint ballId = m_ball.m_id;

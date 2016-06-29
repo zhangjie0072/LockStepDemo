@@ -34,11 +34,11 @@ public class CommonConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name);
+		Debug.Log("Config reading " + name);
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            Debug.LogError("LoadConfig failed: " + name);
             return;
         }
 
@@ -59,7 +59,7 @@ public class CommonConfig
 
             if (configs.ContainsKey(elemDesc.InnerText))
             {
-                Logger.LogWarning(elemDesc.InnerText + " is exist");
+                Debug.LogWarning(elemDesc.InnerText + " is exist");
             }
             else
             {
@@ -67,7 +67,7 @@ public class CommonConfig
             }
 		}
 		ValueToGlobal();
-		Logger.ConfigEnd(name);
+		
     }
 
     private void ValueToGlobal()

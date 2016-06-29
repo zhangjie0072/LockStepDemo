@@ -133,12 +133,12 @@ function UISign:CreateItem(lists, signlists, i)
 
 	-- 调整特效层级
 	local ef = daySign.transform:FindChild("SpecialEffect/Ef_Blink2")
-	ef:GetComponent("ParticleSystemRenderer").material.renderQueue = 3042
+	local queue = self.uiDayGrid.transform.parent:GetComponent("UIPanel").startingRenderQueue + 3
+	print (queue)
+	ef:GetComponent("ParticleSystemRenderer").material.renderQueue = queue
 
 	-- daySignLua:Refresh()
 	-- daySignLua.onClick = self:OnItemClick(i)
-
-	-- print("@@sgin count=".. lists)
 
 	if i <= lists then
 		local needviplevel = GameSystem.Instance.signConfig:GetDaySignData(i).vip_level

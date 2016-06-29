@@ -1,11 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// tip挂的脚本
+/// 1、点击任何区域关闭tips
+/// 2、点击其它区域的按钮，需要执行其它按钮的操作
+/// 3、点击tips只关闭按钮，tips下的按钮不执行任何操作
+/// </summary>
 public class UITips : MonoBehaviour
 {
 	public static UITips tip;
-	public UISprite IgnoreSpriteArea;
-	public UIWidget IgnoreWidgetArea;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -14,78 +19,42 @@ public class UITips : MonoBehaviour
 			Destroy (tip.gameObject);
 		}
 		tip = this;
-		UIEventListener.Get(gameObject).onClick += OnTipClick;
 	}
-	void OnTipClick(GameObject go)
-	{
-		Vector3 touch = IgnoreSpriteArea.transform.position;
-		bool isTouched = false;
-		foreach(Touch tc in Input.touches)
-		{
-			if(tc.phase == TouchPhase.Ended)
-			{
-				Vector2 tcp2 = tc.position;
-				Vector3 tcp3 = UIManager.Instance.m_uiCamera.cachedCamera.ScreenToViewportPoint(tcp2);
-
-				float globalScale = IgnoreSpriteArea.transform.lossyScale.x;
-				float l,r,u,d,w,h;
-				w = IgnoreSpriteArea.width*globalScale;
-				h = IgnoreSpriteArea.height*globalScale;
-				l = IgnoreSpriteArea.transform.position.x-w/2;
-				r = IgnoreSpriteArea.transform.position.x+w/2;
-				u = IgnoreSpriteArea.transform.position.y+h/2;
-				d = IgnoreSpriteArea.transform.position.y-h/2;
-				
-				bool contain = l<tcp3.x && r>tcp3.x && u>tcp3.y && d<tcp3.y;
-
-				if(!contain)
-				{
-					Ray ray = new Ray(tcp3+new Vector3(0,0,-1000),new Vector3(0,0,1000));
-					RaycastHit[] hits =  Physics.RaycastAll(ray);
-					foreach(RaycastHit hit in hits)
-					{
-						if(hit.collider.gameObject!=this.gameObject && hit.collider.gameObject.GetComponent<UIEventListener>())
-						{
-							hit.collider.gameObject.SendMessage("OnClick");
-						}
-					}
-				}
-
-
-			}
-		}
-		if(!isTouched)
-		{
-			Vector3 pos = UIManager.Instance.m_uiCamera.cachedCamera.ScreenToWorldPoint(Input.mousePosition);
-			float globalScale = IgnoreSpriteArea.transform.lossyScale.x;
-
-			float l,r,u,d,w,h;
-			w = IgnoreSpriteArea.width*globalScale;
-			h = IgnoreSpriteArea.height*globalScale;
-			l = IgnoreSpriteArea.transform.position.x-w/2;
-			r = IgnoreSpriteArea.transform.position.x+w/2;
-			u = IgnoreSpriteArea.transform.position.y+h/2;
-			d = IgnoreSpriteArea.transform.position.y-h/2;
-
-			bool contain = l<pos.x && r>pos.x && u>pos.y && d<pos.y;
-
-			if(!contain)
-			{
-				Ray ray = new Ray(pos+new Vector3(0,0,-1000),new Vector3(0,0,1000));
-				RaycastHit[] hits =  Physics.RaycastAll(ray);
-				foreach(RaycastHit hit in hits)
-				{
-					if(hit.collider.gameObject!=this.gameObject && hit.collider.gameObject.GetComponent<UIEventListener>())
-					{
-						hit.collider.gameObject.SendMessage("OnClick");
-					}
-				}
-			}
-		}
-	}
+	
 	void OnDestroy()
 	{
-		UIEventListener.Get(gameObject).onClick = null;
-	}
+		//UIEventListener.Get(gameObject).onClick = null;
+
+        if (tip != null && tip == this)
+        {
+            Destroy(tip.gameObject);
+        }
+    }
+
+    void Update()
+    {
+#if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (tip != null)
+            {
+                Destroy(tip.gameObject);
+                tip = null;
+            }
+        }
+#elif UNITY_IPHONE || UNITY_ANDROID
+        if(Input.touchCount > 0)
+        {
+            if(Input.GetTouch(0).phase == TouchPhase.Ended)
+            {
+                if (tip != null)
+                {
+                    Destroy(tip.gameObject);
+                    tip = null;
+                }
+            }
+        }
+#endif
+    }
 }
 

@@ -25,7 +25,7 @@ public class PractiseBehaviourPass : PractiseBehaviour, PlayerActionEventHandler
 	protected override void OnFirstStart()
 	{
 		base.OnFirstStart();
-		match.m_mainRole.eventHandler.AddEventListener(this);
+		match.mainRole.eventHandler.AddEventListener(this);
 	}
 
     protected override void OnStart()
@@ -46,9 +46,9 @@ public class PractiseBehaviourPass : PractiseBehaviour, PlayerActionEventHandler
 		}
     }
 
-	protected override void OnUpdate()
+	public override void GameUpdate(IM.Number deltaTime)
 	{
-		base.OnUpdate();
+		base.GameUpdate(deltaTime);
 
 		UBasketball ball = match.mCurScene.mBall;
 		if (!passing && ball.m_ballState == BallState.eUseBall_Pass)
@@ -81,7 +81,7 @@ public class PractiseBehaviourPass : PractiseBehaviour, PlayerActionEventHandler
 			case Step.TipRepractise:
 				FinishObjective(true);
 				match.HideGuideTip();
-				match.m_mainRole.m_inputDispatcher.m_enable = true;
+				InputReader.Instance.enabled = true;
 				break;
 		}
 	}
@@ -92,7 +92,7 @@ public class PractiseBehaviourPass : PractiseBehaviour, PlayerActionEventHandler
 		match.ShowGuideTip();
 		match.ShowTipArrow();
 		match.tip = practise.tips[0];
-		match.m_mainRole.m_inputDispatcher.m_enable = false;
+		InputReader.Instance.enabled = false;
 	}
 
 	private void TipPass()
@@ -101,7 +101,7 @@ public class PractiseBehaviourPass : PractiseBehaviour, PlayerActionEventHandler
 		match.ShowGuideTip();
 		match.HideTipArrow();
 		match.tip = practise.tips[1];
-		match.m_mainRole.m_inputDispatcher.m_enable = true;
+		match.mainRole.m_inputDispatcher.m_enable = true;
 	}
 
 	private void TipWellDone()
@@ -111,7 +111,7 @@ public class PractiseBehaviourPass : PractiseBehaviour, PlayerActionEventHandler
 		match.HideTipArrow();
 		match.tip = practise.tips[4];
 		match.ShowIconTip(true);
-		match.m_mainRole.m_inputDispatcher.m_enable = false;
+		match.mainRole.m_inputDispatcher.m_enable = false;
 		timer = new GameUtils.Timer4View(2f, TipRequireIntro);
 	}
 
@@ -122,7 +122,7 @@ public class PractiseBehaviourPass : PractiseBehaviour, PlayerActionEventHandler
 		match.ShowGuideTip();
 		match.ShowTipArrow();
 		match.tip = practise.tips[2];
-		match.m_mainRole.m_inputDispatcher.m_enable = false;
+		match.mainRole.m_inputDispatcher.m_enable = false;
 	}
 
 	private void TipRequire()
@@ -131,7 +131,7 @@ public class PractiseBehaviourPass : PractiseBehaviour, PlayerActionEventHandler
 		match.ShowGuideTip();
 		match.HideTipArrow();
 		match.tip = practise.tips[3];
-		match.m_mainRole.m_inputDispatcher.m_enable = true;
+		match.mainRole.m_inputDispatcher.m_enable = true;
 	}
 
 	private void TipRepractise()
@@ -142,7 +142,7 @@ public class PractiseBehaviourPass : PractiseBehaviour, PlayerActionEventHandler
 		match.ShowGuideTip();
 		match.ShowTipArrow();
 		match.tip = practise.tips[5];
-		match.m_mainRole.m_inputDispatcher.m_enable = false;
+		match.mainRole.m_inputDispatcher.m_enable = false;
 		match.ShowIconTip(true);
 	}
 
@@ -181,8 +181,8 @@ public class PractiseBehaviourPass : PractiseBehaviour, PlayerActionEventHandler
         //GameObject centerOf3PT = ResourceLoadManager.Instance.LoadPrefab("Prefab/DynObject/MatchPoints/3PTCenter") as GameObject;
         //match.m_mainRole.position = new IM.Vector3(centerOf3PT.transform.position);
         //match.m_mainRole.forward = IM.Vector3.forward;
-        match.m_mainRole.position = GameSystem.Instance.MatchPointsConfig.ThreePTCenter.transform.position;
-        match.m_mainRole.forward = IM.Vector3.forward;
+        match.mainRole.position = GameSystem.Instance.MatchPointsConfig.ThreePTCenter.transform.position;
+        match.mainRole.forward = IM.Vector3.forward;
 		return true;
 	}
 
@@ -190,14 +190,14 @@ public class PractiseBehaviourPass : PractiseBehaviour, PlayerActionEventHandler
 	{
 		if (in_tutorial)
 		{
-			if (passer == match.m_mainRole)
+			if (passer == match.mainRole)
 				TipWellDone();
 			else
 				TipRepractise();
 		}
 		else
 		{
-			if (passer == match.m_mainRole)
+			if (passer == match.mainRole)
 				FinishObjective(true);
 		}
 	}

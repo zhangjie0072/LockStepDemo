@@ -130,7 +130,7 @@ public class BaseDataConfig2
                 return 0;
             if (GameSystem.Instance.AttrNameConfigData.IsFactor(attrid))
                 return 0;
-			Logger.LogError("No attr: " + attrid + " role ID: " + roleId);
+			Debug.LogError("No attr: " + attrid + " role ID: " + roleId);
 		}
         return value;
     }
@@ -141,11 +141,11 @@ public class BaseDataConfig2
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name);
+		Debug.Log("Config reading " + name);
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            Debug.LogError("LoadConfig failed: " + name);
             return;
         }
         roleBaseDatas.Clear();
@@ -442,7 +442,7 @@ public class BaseDataConfig2
                 roleBaseDatas[(uint)data.id] = data;
             }
 		}
-		Logger.ConfigEnd(name);
+		
     }
 
     public RoleBaseData2 GetConfigData(uint roleID)

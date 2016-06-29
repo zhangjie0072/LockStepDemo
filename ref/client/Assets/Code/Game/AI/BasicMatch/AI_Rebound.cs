@@ -14,7 +14,7 @@ public class AI_Rebound
 	{
 		m_player.m_toSkillInstance = m_player.m_skillSystem.GetValidSkillInMatch(Command.Rebound, true);
 		if (m_player.m_toSkillInstance == null)
-			Logger.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI Rebound");
+			Debug.LogWarning("AISkillSystem(" + m_player.m_id + "), no skill for AI Rebound");
 	}
 	
 	override public void Update (IM.Number fDeltaTime)

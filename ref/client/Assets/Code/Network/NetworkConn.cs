@@ -98,20 +98,20 @@ public class NetworkConn
 		if( m_client == null || m_client.Client == null )
 			return;
 
-		Logger.Log(m_type + "Enable timeout " + enable);
+		Debug.Log(m_type + "Enable timeout " + enable);
 		m_client.ReceiveTimeout = enable ? m_iReceiveTimeout*1000 : 0;
 //		m_client.Client.ReceiveTimeout = enable ? m_iReceiveTimeout*1000 : 0;
 	}
 
     virtual public void Connect(string ip, int port)
     {
-		Logger.Log("Network.Connect " + m_strName);
+		Debug.Log("Network.Connect " + m_strName);
 		if( m_profiler == null )
 			m_profiler = new NetworkProfiler(this);
 
         if (m_client == null)
         {
-			Logger.Log("New TcpClient " + m_strName);
+			Debug.Log("New TcpClient " + m_strName);
             m_client = new TcpClient();
 
 			m_client.ReceiveTimeout = m_iReceiveTimeout*1000;
@@ -123,13 +123,13 @@ public class NetworkConn
         }
         if (m_client.Connected)
         {
-            Logger.Log("server: " + m_strName + " already connected.");
+            Debug.Log("server: " + m_strName + " already connected.");
             return;
         }
 
-		Logger.Log("Queue _Connect " + m_strName);
+		Debug.Log("Queue _Connect " + m_strName);
         if (!ThreadPool.QueueUserWorkItem(_Connect, new object[2] { ip, port }))
-			Logger.LogError("Queue _Connect failed, " + m_strName);
+			Debug.LogError("Queue _Connect failed, " + m_strName);
     }
 
 	public bool IsConnected()
@@ -151,7 +151,7 @@ public class NetworkConn
 
 	virtual public void Close()
 	{
-		Logger.Log("Close conn:" + m_strName);
+		Debug.Log("Close conn:" + m_strName);
 		if( m_stream == null )
 			return;
 
@@ -171,7 +171,7 @@ public class NetworkConn
 			}
 			catch (SocketException ex)
 			{
-				Logger.LogWarning("Shutdown socket, " + ex.Message);
+				Debug.LogWarning("Shutdown socket, " + ex.Message);
 			}
 		}
 
@@ -195,7 +195,7 @@ public class NetworkConn
         //登录服务器没有心跳机制，取消超时断线
         if (m_beginRead && m_readTimeCounter > m_iReceiveTimeout && m_type != Type.eLoginServer && m_type != Type.eVirtualServer)
         {
-            Logger.Log("Disconnected: can not receive heartbeat data within: " + m_iReceiveTimeout + " sec.");
+            Debug.Log("Disconnected: can not receive heartbeat data within: " + m_iReceiveTimeout + " sec.");
             m_serverDisconnectedFlag_Passive = true;
         }
 
@@ -204,7 +204,7 @@ public class NetworkConn
         //{
         //    if (m_log.Length != 0)
         //    {
-        //        Logger.Log(m_log);
+        //        Debug.Log(m_log);
         //        m_log = "";
         //    }
         //}
@@ -230,16 +230,16 @@ public class NetworkConn
         //    }).Count;
         //    if (countWithOutTimeTracer > 0)
         //    {
-        //        Logger.Log("msg cnt: " + countWithOutTimeTracer);
+        //        Debug.Log("msg cnt: " + countWithOutTimeTracer);
         //        foreach (Pack pack in _msgCache)
         //        {
-        //            Logger.Log("Msg:" + (MsgID)pack.MessageID);
+        //            Debug.Log("Msg:" + (MsgID)pack.MessageID);
         //        }
         //    }
         //}
 
 		//if( (System.DateTime.Now.Ticks - now) * 0.0001f > 10.0f ) 
-		//	Logger.LogError( "out lock .update : " + (System.DateTime.Now.Ticks - now) * 0.0001f );
+		//	Debug.LogError( "out lock .update : " + (System.DateTime.Now.Ticks - now) * 0.0001f );
 
 
 		foreach( Pack pack in _msgCache )
@@ -340,7 +340,7 @@ public class NetworkConn
 						
 						if( sender == null && match is GameMatch_PVP )
 						{
-							Logger.LogError("Can not find sender: " + msg.senderID + " for command: " + msg.eState);
+							Debug.LogError("Can not find sender: " + msg.senderID + " for command: " + msg.eState);
 							break;
 						}
 						{
@@ -349,7 +349,7 @@ public class NetworkConn
 							if( cmd != null && sender.m_smcManager != null )
 							{
 								if( cmd is SMC_BackCompete || cmd is SMC_BackBlock )
-									Logger.Log("SMC: " + cmd + " cnt: " + _recvPacks.Count );
+									Debug.Log("SMC: " + cmd + " cnt: " + _recvPacks.Count );
 								NetworkManager nm = GameSystem.Instance.mNetworkManager;
 								double dConsumeTime = (DateTime.Now.Ticks - msg.curTime) * 0.0001;
 								if( dConsumeTime > 50.0f )
@@ -375,10 +375,16 @@ public class NetworkConn
                             //    CheatingDeath.Instance.mAntiSpeedUp.m_clientTime, data.server_time,
                             //     CheatingDeath.Instance.mAntiSpeedUp.m_clientTime - data.server_time));
                             data.server_time = CheatingDeath.Instance.mAntiSpeedUp.m_clientTime;
+							ErrorDisplay.Instance.HandleLog("watch time: " + data.server_time, "watch", LogType.Log);
+
+							//System.DateTime timenow = System.DateTime.Now;
+							//string strLog = string.Format("({0:D2}:{1:D2}:{2:D2}.{3:D3})", timenow.Hour, timenow.Minute, timenow.Second, timenow.Millisecond);
+							//ErrorDisplay.Instance.HandleLog("system time: " + strLog, "watch", LogType.Log);
                         }
                         else
                         {
-                            CheatingDeath.Instance.mAntiSpeedUp.BeginWatch(data.server_time);
+							if( CheatingDeath.Instance.mAntiSpeedUp.BeginWatch(this, data.server_time) )
+								ErrorDisplay.Instance.HandleLog("Begin watch: " + data.server_time, "watch", LogType.Log);
                         }
                         PlatNetwork.Instance.SendHeartbeatMsg(data);
                        
@@ -430,7 +436,7 @@ public class NetworkConn
 				} 
 				catch (Exception e)
 				{
-					Logger.LogError("Network IO problem " + e.ToString());
+					Debug.LogError("Network IO problem " + e.ToString());
 				}
 			}
 		}
@@ -487,7 +493,7 @@ public class NetworkConn
 				
 				if (_recvPacks.Count != 0)
 				{
-					//Logger.Log("Pack to handle: " + _recvPacks.Count);
+					//Debug.Log("Pack to handle: " + _recvPacks.Count);
 
 					foreach(Pack pack in _recvPacks)
 					{
@@ -496,11 +502,11 @@ public class NetworkConn
 						if( msgID == MsgID.GameMsgID )
 						{
 							GameMsg msg = Serializer.Deserialize<GameMsg>(new MemoryStream(pack.buffer));
-							//Logger.Log( "deserialize time  : " + (System.DateTime.Now.Ticks - now) * 0.0001f );
+							//Debug.Log( "deserialize time  : " + (System.DateTime.Now.Ticks - now) * 0.0001f );
 
 							List<Player> players = GameSystem.Instance.mClient.mPlayerManager.m_Players;
 							Player sender = players.Find( (Player player)=>{ return player.m_roomPosId == msg.senderID; } );
-							//Logger.Log( "find time  : " + (System.DateTime.Now.Ticks - now) * 0.0001f );
+							//Debug.Log( "find time  : " + (System.DateTime.Now.Ticks - now) * 0.0001f );
 
 							GameMatch match = GameSystem.Instance.mClient.mCurMatch;
 							if(match == null)
@@ -508,9 +514,11 @@ public class NetworkConn
 							
 							if( sender == null && match is GameMatch_PVP )
 							{
-								Logger.LogError("Can not find sender: " + msg.senderID + " for command: " + msg.eState);
+								Debug.LogError("Can not find sender: " + msg.senderID + " for command: " + msg.eState);
 								break;
 							}
+								//Debug.Log( "SimulateCommand time  : " + (System.DateTime.Now.Ticks - now) * 0.0001f );
+									//Debug.Log( "Command: " + cmd.m_state + " time consume: " + string.Format("{0:f4}", dConsumeTime) );
 						}
 
 						if( msgID == MsgID.GameBeginRespID )
@@ -544,7 +552,7 @@ public class NetworkConn
 		m_totalBytesRead = stream.Read(m_buffer, 0, m_nBufferSize);
 		m_processed = 0;
 
-		//Logger.Log("numberOfBytesRead=" + m_totalBytesRead);
+		//Debug.Log("numberOfBytesRead=" + m_totalBytesRead);
 		if (m_totalBytesRead > 0)
 		{
 			int processed = 0;
@@ -586,7 +594,7 @@ public class NetworkConn
 
 					processed += restSizeInBuffer;
 
-					Logger.Log("header to combine");
+					Debug.Log("header to combine");
 
 					return processed;
 				}
@@ -611,7 +619,7 @@ public class NetworkConn
 
 					processed += restSizeInBuffer;
 
-					Logger.Log("header to combine");
+					Debug.Log("header to combine");
 
 					return processed;
 				}
@@ -621,7 +629,7 @@ public class NetworkConn
 			restSizeInBuffer -= processed;
 			if( restSizeInBuffer < 0 || restSizeToReceive < 0 )
 			{
-				Logger.LogError("restSizeInBuffer: " + restSizeInBuffer + "restSizeToReceive: " + restSizeToReceive);
+				Debug.LogError("restSizeInBuffer: " + restSizeInBuffer + "restSizeToReceive: " + restSizeToReceive);
 				return 0;
 			}
 
@@ -636,7 +644,7 @@ public class NetworkConn
 #if UNITY_EDITOR
                 MsgID msg_id = (MsgID)pack.MessageID;
                 if (!MsgHandler.m_noLogMsg.Contains(msg_id))
-                    Logger.Log("-------_RecvPack with MessageID22: " + msg_id.ToString());
+                    Debug.Log("-------_RecvPack with MessageID22: " + msg_id.ToString());
 #endif
 
                 outPacks.Add(pack);
@@ -650,14 +658,14 @@ public class NetworkConn
 
 				processed += restSizeInBuffer;
 
-				Logger.Log("body to combine");
+				Debug.Log("body to combine");
 			}
 		}
 		catch (Exception exp)
 		{
 			pack = null;
 			mCurPack = null;
-			Logger.LogError("network conn exception: " + exp.Message);
+			Debug.LogError("network conn exception: " + exp.Message);
 			return 0;
 		}
 
@@ -670,12 +678,12 @@ public class NetworkConn
         {
             if (m_client == null)
             {
-                Logger.LogWarning("The client is null.");
+                Debug.LogWarning("The client is null.");
                 return false;
             }
             if (!m_client.Connected)
             {
-                Logger.LogWarning("The connection is closed.");
+                Debug.LogWarning("The connection is closed.");
                 return false;
             }
         }
@@ -683,14 +691,14 @@ public class NetworkConn
         {
             if (m_stream == null)
             {
-                Logger.LogWarning("Virtual client stream is null");
+                Debug.LogWarning("Virtual client stream is null");
                 return false;
             }
         }
 
         if (!m_stream.CanWrite)
         {
-            Logger.LogWarning("Stream can not write.");
+            Debug.LogWarning("Stream can not write.");
             return false;
         }
         return true;
@@ -700,12 +708,12 @@ public class NetworkConn
 	{
 #if UNITY_EDITOR
         if(!MsgHandler.m_noLogMsg.Contains(msg_id))
-            Logger.Log("-------SendMsg with MessageID: " + msg_id.ToString());
+            Debug.Log("-------SendMsg with MessageID: " + msg_id.ToString());
 #endif
 
         if (!CanSend())
         {
-            Logger.LogError("SendPack failed, Msg: " + msg_id);
+            Debug.LogError("SendPack failed, Msg: " + msg_id);
             return;
         }
 
@@ -746,7 +754,7 @@ public class NetworkConn
         }
         catch (Exception e)
         {
-            Logger.LogError(m_type + " NetworkConn.SendPack, Msg:" + pack.MessageID + " Error: " + e.Message);
+            Debug.LogError(m_type + " NetworkConn.SendPack, Msg:" + pack.MessageID + " Error: " + e.Message);
         }
     }
 
@@ -754,7 +762,7 @@ public class NetworkConn
 	{
 		//lock(m_stream)
 		{
-			//Logger.Log( "send interval : " + (System.DateTime.Now.Ticks - (long)ar.AsyncState) * 0.0001f );
+			//Debug.Log( "send interval : " + (System.DateTime.Now.Ticks - (long)ar.AsyncState) * 0.0001f );
 			m_stream.EndWrite(ar);
 		}
 	}
@@ -765,7 +773,7 @@ public class NetworkConn
 #if UNITY_EDITOR
         var msg_id = (MsgID)msgID;
         if (!MsgHandler.m_noLogMsg.Contains(msg_id))
-            Logger.Log("-------SendMsg with MessageID: " + msg_id.ToString());
+            Debug.Log("-------SendMsg with MessageID: " + msg_id.ToString());
 #endif
 
         NetworkStream ns = m_client.GetStream();
@@ -855,7 +863,7 @@ public class NetworkConn
 
 	public void encrypt(Pack pack)
     {
-        //Logger.Log("<<<encrypt, " + pack.buffer);
+        //Debug.Log("<<<encrypt, " + pack.buffer);
 
         if (enDecrypt(pack.buffer, pack.Length))
         {
@@ -970,7 +978,7 @@ public class VirtualNetworkConn
 	        {
                 m_stream.Seek(0, SeekOrigin.Begin);
                 m_stream.SetLength(0);
-				Logger.LogError(m_type + " NetworkConn.SendPack, Msg:" + pack.MessageID + " Error: " + e.Message);
+				Debug.LogError(m_type + " NetworkConn.SendPack, Msg:" + pack.MessageID + " Error: " + e.Message);
 	        }
 		}
     }
@@ -996,7 +1004,7 @@ public class VirtualNetworkConn
 #if UNITY_EDITOR
                     MsgID msg_id = (MsgID)inPack.MessageID;
                     if (!MsgHandler.m_noLogMsg.Contains(msg_id))
-                        Logger.Log("-------_RecvPack with MessageID11: " + msg_id.ToString());
+                        Debug.Log("-------_RecvPack with MessageID11: " + msg_id.ToString());
 #endif
                     outPacks.Add(inPack);
 				}
@@ -1006,14 +1014,14 @@ public class VirtualNetworkConn
 			catch (Exception exp)
 			{
 				m_curBufferPos = 0;
-				Logger.LogError("network conn exception: " + exp.Message);
+				Debug.LogError("network conn exception: " + exp.Message);
 				stream.Seek(0, SeekOrigin.Begin);
 				stream.SetLength(0);
 
 				return false;
 			}
 		}
-		//Logger.Log("outPacks count " + outPacks.Count);
+		//Debug.Log("outPacks count " + outPacks.Count);
 
 		return outPacks.Count != 0;
 	}

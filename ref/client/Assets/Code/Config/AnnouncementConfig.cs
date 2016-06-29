@@ -51,11 +51,11 @@ public class AnnouncementConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name);
+		Debug.Log("Config reading " + name);
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            Debug.LogError("LoadConfig failed: " + name);
             return;
         }
 
@@ -97,7 +97,7 @@ public class AnnouncementConfig
 
             AnnouncementItems.Add(item);
 		}
-		Logger.ConfigEnd(name);
+		
     }
 
     public AnnouncementItem GetOpenItem()

@@ -154,7 +154,7 @@ public class PlayerStatistics
 		SkillUsageData skillUd = data.skill_data.Find( (SkillUsageData udata)=>{ return skillId == udata.skill_id; } );
 		if( skillUd == null )
 		{
-			Logger.LogError("Add SkillUsageData firstly.");
+			Debug.LogError("Add SkillUsageData firstly.");
 			return;
 		}
 		skillUd.success += 1;
@@ -173,7 +173,7 @@ public class PlayerStatistics
 		else
 			mType = GoalType.eGoalFar;
 
-		//Logger.Log("ready to count");
+		//Debug.Log("ready to count");
 	}
 
 	public void AddUpShoot()
@@ -207,7 +207,7 @@ public class PlayerStatistics
 		if (onStatUpdated != null)
 			onStatUpdated(StatType.Score, this);
 
-		//Logger.Log("add up shoot");
+		//Debug.Log("add up shoot");
 	}
 
 	public uint GetStatValue(StatType type)

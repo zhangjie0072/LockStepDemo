@@ -43,7 +43,7 @@ public class PlayerState_Hold:  PlayerState
 			//turning
 			if( m_player.moveDirection != IM.Vector3.zero )
 				m_player.forward = m_player.moveDirection.normalized;
-			if (m_player == m_match.m_mainRole && !tipShowing)
+			if (m_player == m_match.mainRole && !tipShowing)
 			{
 				m_match.ShowAnimTip("gameInterface_text_lock");
 				tipShowing = true;
@@ -64,7 +64,7 @@ public class PlayerState_Hold:  PlayerState
 	public override void OnExit()
 	{
 		base.OnExit();
-		if (m_player == m_match.m_mainRole && tipShowing)
+		if (m_player == m_match.mainRole && tipShowing)
 			m_match.HideAnimTip("gameInterface_text_lock");
 	}
 }

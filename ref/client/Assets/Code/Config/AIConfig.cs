@@ -71,11 +71,11 @@ public class AIConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name);
+		UnityEngine.Debug.Log("Config reading " + name);
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            UnityEngine.Debug.LogError("LoadConfig failed: " + name);
             return;
         }
         
@@ -104,13 +104,10 @@ public class AIConfig
 			configs.Add(data.ID, data);
 		}
 
-		Logger.ConfigEnd(name);
+		
 		// Read AIName
-		Logger.ConfigBegin(nameAIName);
+		UnityEngine.Debug.Log("Config reading " + nameAIName);
 		ReadAIName();
-		Logger.ConfigEnd(nameAIName);
-
-
 	}
 
     void ReadAIName()
@@ -118,7 +115,7 @@ public class AIConfig
         string text = ResourceLoadManager.Instance.GetConfigText(nameAIName );
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + nameAIName);
+            UnityEngine.Debug.LogError("LoadConfig failed: " + nameAIName);
             return;
         }
         

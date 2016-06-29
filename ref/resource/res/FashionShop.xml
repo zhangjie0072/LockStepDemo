@@ -1,4 +1,4 @@
-<Data Count="112">
+<Data Count="95">
   <Line>
     <switch>#</switch>
     <store_id>
@@ -31,7 +31,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100101</id>
+    <id>1100281</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>405</cost_num>
@@ -48,7 +48,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100681</id>
+    <id>1100371</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>405</cost_num>
@@ -65,7 +65,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1001121</id>
+    <id>1100301</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>825</cost_num>
@@ -82,7 +82,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100041</id>
+    <id>1100471</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>225</cost_num>
@@ -99,7 +99,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100241</id>
+    <id>1200401</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>825</cost_num>
@@ -116,7 +116,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100261</id>
+    <id>1000741</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>405</cost_num>
@@ -133,7 +133,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100021</id>
+    <id>1200201</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>825</cost_num>
@@ -150,7 +150,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100201</id>
+    <id>1000091</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>405</cost_num>
@@ -167,7 +167,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100631</id>
+    <id>1200181</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>825</cost_num>
@@ -184,7 +184,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100801</id>
+    <id>1100181</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>225</cost_num>
@@ -201,7 +201,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100641</id>
+    <id>1200641</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>405</cost_num>
@@ -218,7 +218,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100061</id>
+    <id>1100681</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>405</cost_num>
@@ -235,24 +235,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200101</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>405</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>86</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1200691</id>
+    <id>1200731</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>405</cost_num>
@@ -269,7 +252,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200701</id>
+    <id>1100731</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>825</cost_num>
@@ -286,24 +269,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200041</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>225</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>83</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1200241</id>
+    <id>1200061</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>825</cost_num>
@@ -320,7 +286,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200021</id>
+    <id>1001121</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>405</cost_num>
@@ -337,7 +303,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200401</id>
+    <id>1100811</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>825</cost_num>
@@ -354,7 +320,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200631</id>
+    <id>1200811</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>825</cost_num>
@@ -371,14 +337,14 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200801</id>
+    <id>1200921</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
-    <cost_num>225</cost_num>
+    <cost_num>825</cost_num>
     <is_discount>0</is_discount>
     <discount_cost>0</discount_cost>
     <is_new>0</is_new>
-    <sort_value>77</sort_value>
+    <sort_value>78</sort_value>
     <renew_time_dur>0</renew_time_dur>
     <renew_cost_type>0</renew_cost_type>
     <renew_cost_num>0</renew_cost_num>
@@ -388,31 +354,14 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200641</id>
+    <id>1200861</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
-    <cost_num>405</cost_num>
+    <cost_num>825</cost_num>
     <is_discount>0</is_discount>
     <discount_cost>0</discount_cost>
     <is_new>0</is_new>
-    <sort_value>76</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1200061</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>405</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>75</sort_value>
+    <sort_value>78</sort_value>
     <renew_time_dur>0</renew_time_dur>
     <renew_cost_type>0</renew_cost_type>
     <renew_cost_num>0</renew_cost_num>
@@ -450,7 +399,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100042</id>
+    <id>1200202</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>450</cost_num>
@@ -467,7 +416,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100022</id>
+    <id>1000092</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>450</cost_num>
@@ -484,7 +433,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100072</id>
+    <id>1200182</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>1650</cost_num>
@@ -501,7 +450,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100052</id>
+    <id>1100182</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>1650</cost_num>
@@ -518,7 +467,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100202</id>
+    <id>1100152</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>450</cost_num>
@@ -535,24 +484,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100152</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>810</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>94</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1100142</id>
+    <id>1100052</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>1650</cost_num>
@@ -569,7 +501,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100112</id>
+    <id>1200052</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>810</cost_num>
@@ -586,7 +518,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100632</id>
+    <id>1200802</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>1650</cost_num>
@@ -620,7 +552,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100642</id>
+    <id>1200172</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>810</cost_num>
@@ -654,7 +586,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200042</id>
+    <id>1200072</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>450</cost_num>
@@ -671,7 +603,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200022</id>
+    <id>1100072</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>450</cost_num>
@@ -688,7 +620,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200072</id>
+    <id>1200682</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>1650</cost_num>
@@ -705,7 +637,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200052</id>
+    <id>1200542</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>1650</cost_num>
@@ -722,48 +654,14 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200202</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>450</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>83</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1200152</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>810</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>82</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1200142</id>
+    <id>1200812</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>1650</cost_num>
     <is_discount>0</is_discount>
     <discount_cost>0</discount_cost>
     <is_new>0</is_new>
-    <sort_value>81</sort_value>
+    <sort_value>84</sort_value>
     <renew_time_dur>0</renew_time_dur>
     <renew_cost_type>0</renew_cost_type>
     <renew_cost_num>0</renew_cost_num>
@@ -773,31 +671,14 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200112</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>810</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>80</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1200632</id>
+    <id>1100812</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>1650</cost_num>
     <is_discount>0</is_discount>
     <discount_cost>0</discount_cost>
     <is_new>0</is_new>
-    <sort_value>79</sort_value>
+    <sort_value>84</sort_value>
     <renew_time_dur>0</renew_time_dur>
     <renew_cost_type>0</renew_cost_type>
     <renew_cost_num>0</renew_cost_num>
@@ -807,48 +688,48 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200802</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>810</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>78</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1200642</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>810</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>77</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1200172</id>
+    <id>1100212</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>1650</cost_num>
     <is_discount>0</is_discount>
     <discount_cost>0</discount_cost>
     <is_new>0</is_new>
-    <sort_value>76</sort_value>
+    <sort_value>84</sort_value>
+    <renew_time_dur>0</renew_time_dur>
+    <renew_cost_type>0</renew_cost_type>
+    <renew_cost_num>0</renew_cost_num>
+    <vip>0</vip>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <store_id>3</store_id>
+    <id>1100862</id>
+    <time_dur>0</time_dur>
+    <cost_type>1</cost_type>
+    <cost_num>1650</cost_num>
+    <is_discount>0</is_discount>
+    <discount_cost>0</discount_cost>
+    <is_new>0</is_new>
+    <sort_value>84</sort_value>
+    <renew_time_dur>0</renew_time_dur>
+    <renew_cost_type>0</renew_cost_type>
+    <renew_cost_num>0</renew_cost_num>
+    <vip>0</vip>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <store_id>3</store_id>
+    <id>1200862</id>
+    <time_dur>0</time_dur>
+    <cost_type>1</cost_type>
+    <cost_num>1650</cost_num>
+    <is_discount>0</is_discount>
+    <discount_cost>0</discount_cost>
+    <is_new>0</is_new>
+    <sort_value>84</sort_value>
     <renew_time_dur>0</renew_time_dur>
     <renew_cost_type>0</renew_cost_type>
     <renew_cost_num>0</renew_cost_num>
@@ -886,7 +767,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100043</id>
+    <id>1100373</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>338</cost_num>
@@ -903,7 +784,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100023</id>
+    <id>1100453</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>338</cost_num>
@@ -920,7 +801,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100083</id>
+    <id>1200433</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>1238</cost_num>
@@ -937,24 +818,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100053</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>1238</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>96</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1100203</id>
+    <id>1200503</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>338</cost_num>
@@ -971,24 +835,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100153</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>608</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>94</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1100143</id>
+    <id>1100183</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>1238</cost_num>
@@ -1005,7 +852,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100123</id>
+    <id>1200123</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>608</cost_num>
@@ -1022,7 +869,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100633</id>
+    <id>1200643</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>1238</cost_num>
@@ -1039,7 +886,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100803</id>
+    <id>1100153</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>608</cost_num>
@@ -1056,7 +903,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100643</id>
+    <id>1200103</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>608</cost_num>
@@ -1073,92 +920,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100173</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>1238</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>88</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1200043</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>338</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>87</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1200023</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>338</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>86</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1200083</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>1238</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>85</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1200053</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>1238</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>84</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1200203</id>
+    <id>1100053</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>338</cost_num>
@@ -1175,7 +937,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200153</id>
+    <id>1200053</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>608</cost_num>
@@ -1192,24 +954,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200143</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>1238</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>81</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1200123</id>
+    <id>1200173</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>608</cost_num>
@@ -1226,31 +971,14 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200633</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>1238</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>79</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1200803</id>
+    <id>1100173</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>608</cost_num>
     <is_discount>0</is_discount>
     <discount_cost>0</discount_cost>
     <is_new>0</is_new>
-    <sort_value>78</sort_value>
+    <sort_value>80</sort_value>
     <renew_time_dur>0</renew_time_dur>
     <renew_cost_type>0</renew_cost_type>
     <renew_cost_num>0</renew_cost_num>
@@ -1260,14 +988,14 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200643</id>
+    <id>1100663</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>608</cost_num>
     <is_discount>0</is_discount>
     <discount_cost>0</discount_cost>
     <is_new>0</is_new>
-    <sort_value>77</sort_value>
+    <sort_value>80</sort_value>
     <renew_time_dur>0</renew_time_dur>
     <renew_cost_type>0</renew_cost_type>
     <renew_cost_num>0</renew_cost_num>
@@ -1277,14 +1005,99 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200173</id>
+    <id>1100443</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
-    <cost_num>1238</cost_num>
+    <cost_num>608</cost_num>
     <is_discount>0</is_discount>
     <discount_cost>0</discount_cost>
     <is_new>0</is_new>
-    <sort_value>76</sort_value>
+    <sort_value>80</sort_value>
+    <renew_time_dur>0</renew_time_dur>
+    <renew_cost_type>0</renew_cost_type>
+    <renew_cost_num>0</renew_cost_num>
+    <vip>0</vip>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <store_id>3</store_id>
+    <id>1200543</id>
+    <time_dur>0</time_dur>
+    <cost_type>1</cost_type>
+    <cost_num>608</cost_num>
+    <is_discount>0</is_discount>
+    <discount_cost>0</discount_cost>
+    <is_new>0</is_new>
+    <sort_value>80</sort_value>
+    <renew_time_dur>0</renew_time_dur>
+    <renew_cost_type>0</renew_cost_type>
+    <renew_cost_num>0</renew_cost_num>
+    <vip>0</vip>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <store_id>3</store_id>
+    <id>1200183</id>
+    <time_dur>0</time_dur>
+    <cost_type>1</cost_type>
+    <cost_num>608</cost_num>
+    <is_discount>0</is_discount>
+    <discount_cost>0</discount_cost>
+    <is_new>0</is_new>
+    <sort_value>80</sort_value>
+    <renew_time_dur>0</renew_time_dur>
+    <renew_cost_type>0</renew_cost_type>
+    <renew_cost_num>0</renew_cost_num>
+    <vip>0</vip>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <store_id>3</store_id>
+    <id>1000093</id>
+    <time_dur>0</time_dur>
+    <cost_type>1</cost_type>
+    <cost_num>608</cost_num>
+    <is_discount>0</is_discount>
+    <discount_cost>0</discount_cost>
+    <is_new>0</is_new>
+    <sort_value>80</sort_value>
+    <renew_time_dur>0</renew_time_dur>
+    <renew_cost_type>0</renew_cost_type>
+    <renew_cost_num>0</renew_cost_num>
+    <vip>0</vip>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <store_id>3</store_id>
+    <id>1100863</id>
+    <time_dur>0</time_dur>
+    <cost_type>1</cost_type>
+    <cost_num>608</cost_num>
+    <is_discount>0</is_discount>
+    <discount_cost>0</discount_cost>
+    <is_new>0</is_new>
+    <sort_value>80</sort_value>
+    <renew_time_dur>0</renew_time_dur>
+    <renew_cost_type>0</renew_cost_type>
+    <renew_cost_num>0</renew_cost_num>
+    <vip>0</vip>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <store_id>3</store_id>
+    <id>1200863</id>
+    <time_dur>0</time_dur>
+    <cost_type>1</cost_type>
+    <cost_num>608</cost_num>
+    <is_discount>0</is_discount>
+    <discount_cost>0</discount_cost>
+    <is_new>0</is_new>
+    <sort_value>80</sort_value>
     <renew_time_dur>0</renew_time_dur>
     <renew_cost_type>0</renew_cost_type>
     <renew_cost_num>0</renew_cost_num>
@@ -1322,7 +1135,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100044</id>
+    <id>1100374</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>113</cost_num>
@@ -1339,7 +1152,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100024</id>
+    <id>1100494</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>113</cost_num>
@@ -1356,7 +1169,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100214</id>
+    <id>1100304</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>413</cost_num>
@@ -1373,24 +1186,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100054</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>413</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>97</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1100204</id>
+    <id>1100354</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>113</cost_num>
@@ -1407,7 +1203,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100144</id>
+    <id>1200434</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>203</cost_num>
@@ -1424,7 +1220,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100134</id>
+    <id>1200384</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>413</cost_num>
@@ -1441,7 +1237,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100634</id>
+    <id>1200464</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>203</cost_num>
@@ -1458,7 +1254,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100804</id>
+    <id>1200344</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>413</cost_num>
@@ -1475,7 +1271,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100644</id>
+    <id>1000094</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>203</cost_num>
@@ -1492,7 +1288,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100174</id>
+    <id>1100194</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>203</cost_num>
@@ -1509,7 +1305,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1100724</id>
+    <id>1100184</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>413</cost_num>
@@ -1526,7 +1322,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200044</id>
+    <id>1200104</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>113</cost_num>
@@ -1543,7 +1339,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200024</id>
+    <id>1200634</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>113</cost_num>
@@ -1560,41 +1356,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200214</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>413</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>86</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1200054</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>413</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>85</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1200204</id>
+    <id>1200804</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>113</cost_num>
@@ -1611,7 +1373,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200144</id>
+    <id>1200014</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>203</cost_num>
@@ -1628,7 +1390,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200134</id>
+    <id>1100014</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>413</cost_num>
@@ -1645,7 +1407,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200634</id>
+    <id>1200174</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>203</cost_num>
@@ -1662,7 +1424,7 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200804</id>
+    <id>1100174</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>413</cost_num>
@@ -1679,80 +1441,18 @@
     <switch>
     </switch>
     <store_id>3</store_id>
-    <id>1200644</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>203</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>79</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1200174</id>
-    <time_dur>0</time_dur>
-    <cost_type>1</cost_type>
-    <cost_num>203</cost_num>
-    <is_discount>0</is_discount>
-    <discount_cost>0</discount_cost>
-    <is_new>0</is_new>
-    <sort_value>78</sort_value>
-    <renew_time_dur>0</renew_time_dur>
-    <renew_cost_type>0</renew_cost_type>
-    <renew_cost_num>0</renew_cost_num>
-    <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>
-    </switch>
-    <store_id>3</store_id>
-    <id>1200724</id>
+    <id>1200184</id>
     <time_dur>0</time_dur>
     <cost_type>1</cost_type>
     <cost_num>413</cost_num>
     <is_discount>0</is_discount>
     <discount_cost>0</discount_cost>
     <is_new>0</is_new>
-    <sort_value>77</sort_value>
+    <sort_value>80</sort_value>
     <renew_time_dur>0</renew_time_dur>
     <renew_cost_type>0</renew_cost_type>
     <renew_cost_num>0</renew_cost_num>
     <vip>0</vip>
-  </Line>
-  <Line>
-    <switch>#</switch>
-    <store_id>
-    </store_id>
-    <id>套装</id>
-    <time_dur>
-    </time_dur>
-    <cost_type>
-    </cost_type>
-    <cost_num>
-    </cost_num>
-    <is_discount>
-    </is_discount>
-    <discount_cost>
-    </discount_cost>
-    <is_new>
-    </is_new>
-    <sort_value>
-    </sort_value>
-    <renew_time_dur>
-    </renew_time_dur>
-    <renew_cost_type>
-    </renew_cost_type>
-    <renew_cost_num>
-    </renew_cost_num>
-    <vip>
-    </vip>
   </Line>
   <Line>
     <switch>#</switch>

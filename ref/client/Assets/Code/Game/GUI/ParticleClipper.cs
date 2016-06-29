@@ -61,6 +61,8 @@ public class ParticleClipper : MonoBehaviour
             var ps = particleSystems[i];
             var mat = ps.GetComponent<Renderer>().sharedMaterial;
 
+            if (mat == null) continue;
+
             if (mat.shader.name != ShaderName)
                 mat.shader = m_shader;
 

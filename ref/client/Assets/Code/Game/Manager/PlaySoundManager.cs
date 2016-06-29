@@ -31,14 +31,14 @@ public class PlaySoundManager  : Singleton<PlaySoundManager>
 		MatchSound ms = GameSystem.Instance.matchSoundConfig.GetSounds(evt);
 		if (ms == null)
 		{
-			Logger.Log("No sounds for event:" + evt);
+			Debug.Log("No sounds for event:" + evt);
 			return;
 		}
 
 		if( ms.sounds.Count > 0 )
 		{
 			MatchSound.Item sound = ms.sounds[UnityEngine.Random.Range(0, ms.sounds.Count)];
-			//Logger.Log("Play sound, Event:" + evt + " Sound:" + sound.soundId);
+			//Debug.Log("Play sound, Event:" + evt + " Sound:" + sound.soundId);
 			GameUtils.Timer4View timer = new GameUtils.Timer4View((float)sound.fLag, 
 				()=>
 				{
@@ -46,7 +46,7 @@ public class PlaySoundManager  : Singleton<PlaySoundManager>
 					if (clip != null)
 						AudioManager.Instance.PlaySound(clip, true, 1f, 1f, loop);
 					else
-						Logger.LogWarning("Sound file " + sound + " not found");
+						Debug.LogWarning("Sound file " + sound + " not found");
 				}, 1);
 			m_soundsToPlay.Add(timer);
 			timer.stop = false;
@@ -55,7 +55,7 @@ public class PlaySoundManager  : Singleton<PlaySoundManager>
 		if( ms.narrator_sounds.Count > 0 )
 		{
 			MatchSound.Item sound = ms.narrator_sounds[UnityEngine.Random.Range(0, ms.narrator_sounds.Count)];
-			//Logger.Log("Play narrator sound, Event:" + evt + " Sound:" + sound.soundId);
+			//Debug.Log("Play narrator sound, Event:" + evt + " Sound:" + sound.soundId);
 			GameUtils.Timer4View timer = new GameUtils.Timer4View((float)sound.fLag, 
 				()=>
 				{
@@ -63,7 +63,7 @@ public class PlaySoundManager  : Singleton<PlaySoundManager>
 					if (clip != null)
 						AudioManager.Instance.PlaySound(clip, true, 1f, 1f, loop);
 					else
-						Logger.LogWarning("Sound file " + sound + " not found");
+						Debug.LogWarning("Sound file " + sound + " not found");
 				}, 1);
 			m_soundsToPlay.Add(timer);
 			timer.stop = false;

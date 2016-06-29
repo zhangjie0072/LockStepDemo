@@ -11,9 +11,9 @@ GoodsDetail =  {
 	uiBackType,
 }
 
-local ConsumeSubCategory = 
+local ConsumeSubCategory =
 {
-	'STR_GIFT', 
+	'STR_GIFT',
 	'STR_TREASUREBOX',
 	'STR_EXP',
 	'STR_PREMIUM',
@@ -49,7 +49,7 @@ function GoodsDetail:SetData(goodsArg, goodsid, goodsnum)
 			else
 				self.uiGoodsCategory.text = getCommonStr(ConsumeSubCategory[subCategory])
 			end
-		elseif tostring(GoodsCategory.IntToEnum(goods.category))=='GC_FAVORITE' then 
+		elseif tostring(GoodsCategory.IntToEnum(goods.category))=='GC_FAVORITE' then
 			self.uiGoodsCategory.text = getCommonStr('STR_ROLE_PRORITE')
 		elseif tostring(GoodsCategory.IntToEnum(goods.category))=='GC_MATERIAL' then
 			self.uiGoodsCategory.text = getCommonStr('STR_ROLE_MATERIAL')
@@ -89,10 +89,15 @@ function GoodsDetail:SetData(goodsArg, goodsid, goodsnum)
 			goodsicon.hideNum = true
 		end
 
+		goodsicon.transform:FindChild("SpecialEffect/Ef_Blink2").gameObject:SetActive(false)
+		local eff1 = goodsicon.transform:FindChild("SpecialEffect/Ef_Blink1")
+		eff1:GetComponent("ParticleSystemRenderer").material.renderQueue = 3015
+		eff1.gameObject:SetActive(true)
+
 		if self.uiAttrGrid then
 			CommonFunction.ClearGridChild(self.uiAttrGrid.transform)
 		end
-		if tostring(GoodsCategory.IntToEnum(goods.category))=='GC_EQUIPMENT' then 
+		if tostring(GoodsCategory.IntToEnum(goods.category))=='GC_EQUIPMENT' then
 			local attrNameConfig = GameSystem.Instance.AttrNameConfigData
 			local equipmentConfig = GameSystem.Instance.EquipmentConfigData
 			local itemConfig = equipmentConfig:GetBaseConfig(goodsArg:GetID(), goodsArg:GetLevel())
@@ -121,7 +126,7 @@ function GoodsDetail:SetData(goodsArg, goodsid, goodsnum)
 			else
 				self.uiGoodsCategory.text = getCommonStr(ConsumeSubCategory[subCategory])
 			end
-		elseif tostring(GoodsCategory.IntToEnum(goods.category))=='GC_FAVORITE' then 
+		elseif tostring(GoodsCategory.IntToEnum(goods.category))=='GC_FAVORITE' then
 			self.uiGoodsCategory.text = getCommonStr('STR_ROLE_PRORITE')
 		elseif tostring(GoodsCategory.IntToEnum(goods.category))=='GC_MATERIAL' then
 			self.uiGoodsCategory.text = getCommonStr('STR_ROLE_MATERIAL')

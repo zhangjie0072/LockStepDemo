@@ -18,6 +18,7 @@ public class ScrollViewAsyncLoadItemWrap
 		LuaField[] fields = new LuaField[]
 		{
 			new LuaField("OnCreateItem", get_OnCreateItem, set_OnCreateItem),
+			new LuaField("LoadCountOnce", null, set_LoadCountOnce),
 		};
 
 		LuaScriptMgr.RegisterLib(L, "ScrollViewAsyncLoadItem", typeof(ScrollViewAsyncLoadItem), regs, fields, typeof(MonoBehaviour));
@@ -61,6 +62,29 @@ public class ScrollViewAsyncLoadItemWrap
 
 		LuaScriptMgr.Push(L, obj.OnCreateItem);
 		return 1;
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_LoadCountOnce(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		ScrollViewAsyncLoadItem obj = (ScrollViewAsyncLoadItem)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name LoadCountOnce");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index LoadCountOnce on a nil value");
+			}
+		}
+
+		obj.LoadCountOnce = (int)LuaScriptMgr.GetNumber(L, 3);
+		return 0;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

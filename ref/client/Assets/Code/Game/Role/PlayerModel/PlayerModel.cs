@@ -87,21 +87,21 @@ public class PlayerModel: SparkEffect.ISparkTarget
 	{
 		if( mPlayer.gameObject.GetComponent<Renderer>() == null )
 			return;
-		mPlayer.gameObject.GetComponent<Renderer>().material.SetFloat("_Grey", enable ? 0.9f : 0f);
+		mPlayer.gameObject.GetComponent<Renderer>().material.SetFloat("_Grey", enable ? 0.855f : 0f);
 	}
 
 	public void _DressUp(string strType, uint itemId)
 	{
         if (itemId == 0)
         {
-            Logger.Log("fashion item id is : " + itemId);
+            Debug.Log("fashion item id is : " + itemId);
             return;
         }
 
 		FashionItem item = GameSystem.Instance.FashionConfig.GetConfig(itemId);
 		if( item == null )
 		{
-			Logger.LogError("Can not fashion item: " + itemId);
+			Debug.LogError("Can not fashion item: " + itemId);
 			return;
 		}
 
@@ -157,7 +157,7 @@ public class PlayerModel: SparkEffect.ISparkTarget
         FashionItem item = GameSystem.Instance.FashionConfig.GetConfig(itemId);
         if (item == null)
         {
-            Logger.LogError("Can not fashion item: " + itemId);
+            Debug.LogError("Can not fashion item: " + itemId);
             return;
         }
 
@@ -203,7 +203,7 @@ public class PlayerModel: SparkEffect.ISparkTarget
                 }
                 else
                 {
-                    //Logger.LogError("get rid of skin failed for the skin.name=" + skin.name);
+                    //Debug.LogError("get rid of skin failed for the skin.name=" + skin.name);
                 }
               
             }
@@ -252,13 +252,13 @@ public class PlayerModel: SparkEffect.ISparkTarget
     {
         if (itemId == 0)
         {
-            Logger.Log("FittingUp itemId : " + itemId);
+            Debug.Log("FittingUp itemId : " + itemId);
             return;
         }
         FashionItem item = GameSystem.Instance.FashionConfig.GetConfig(itemId);
         if (item == null)
         {
-            Logger.LogError("Can not fashion item: " + itemId);
+            Debug.LogError("Can not fashion item: " + itemId);
             return;
         }
 
@@ -286,13 +286,13 @@ public class PlayerModel: SparkEffect.ISparkTarget
     {
         if (itemId == 0)
         {
-            Logger.Log("FittingUp itemId : " + itemId);
+            Debug.Log("FittingUp itemId : " + itemId);
             return;
         }
         FashionItem item = GameSystem.Instance.FashionConfig.GetConfig(itemId);
         if (item == null)
         {
-            Logger.LogError("Can not fashion item: " + itemId);
+            Debug.LogError("Can not fashion item: " + itemId);
             return;
         }
 
@@ -306,7 +306,7 @@ public class PlayerModel: SparkEffect.ISparkTarget
         Transform FittingTrans = GameUtils.FindChildRecursive(mPlayer.gameObject.transform, string.Format("{0} Spine2", m_bipName)).FindChild(fMatch.shape_id + "(Clone)");
         if (FittingTrans == null) 
         {
-            Logger.Log("Can't Find Fitting Down Goods");
+            Debug.Log("Can't Find Fitting Down Goods");
             return;
         }
 
@@ -325,14 +325,14 @@ public class PlayerModel: SparkEffect.ISparkTarget
 		if( fashionId == 0 )
 			return;
 
-        Logger.Log("PlayerMode DressOnFashion=" + fashionId + " name=" + GameSystem.Instance.GoodsConfigData.GetgoodsAttrConfig(fashionId).name);
+        Debug.Log("PlayerMode DressOnFashion=" + fashionId + " name=" + GameSystem.Instance.GoodsConfigData.GetgoodsAttrConfig(fashionId).name);
         RoleShape rs = null;
 
         GameSystem.Instance.RoleShapeConfig.configs.TryGetValue(mPlayer.m_roleInfo.id, out rs);
 
         if( rs==null)
         {
-            Logger.LogError("cannot find roleShape in @DressOnFashion");
+            Debug.LogError("cannot find roleShape in @DressOnFashion");
             return;
         }
 
@@ -342,7 +342,7 @@ public class PlayerModel: SparkEffect.ISparkTarget
         fogs.proto.config.GoodsAttrConfig goodsAttr = GameSystem.Instance.GoodsConfigData.GetgoodsAttrConfig(fashionId);
         if (goodsAttr == null)
         {
-            Logger.LogError("cannot find FashionShopConfigItem for fashionID" + fashionId);
+            Debug.LogError("cannot find FashionShopConfigItem for fashionID" + fashionId);
             return;
         }
 
@@ -398,7 +398,7 @@ public class PlayerModel: SparkEffect.ISparkTarget
                     _FittingDown(hideId);
             }
         }
-        //Logger.Log("_DressUp fashionId fashionId=" + fashionId);
+        //Debug.Log("_DressUp fashionId fashionId=" + fashionId);
         if (!isBack)
             _DressUp("", fashionId);
         else
@@ -407,14 +407,14 @@ public class PlayerModel: SparkEffect.ISparkTarget
 
     public void DressDownFashion(uint fashionId)
     {
-        Logger.Log("PlayerMode DressDownFashion=" + fashionId + "name=" + GameSystem.Instance.GoodsConfigData.GetgoodsAttrConfig(fashionId).name);
+        Debug.Log("PlayerMode DressDownFashion=" + fashionId + "name=" + GameSystem.Instance.GoodsConfigData.GetgoodsAttrConfig(fashionId).name);
 
         RoleShape rs = null;
         GameSystem.Instance.RoleShapeConfig.configs.TryGetValue(MainPlayer.Instance.CaptainID, out rs);
 
         if (rs == null)
         {
-            Logger.LogError("cannot find roleShape in @DressOnFashion");
+            Debug.LogError("cannot find roleShape in @DressOnFashion");
             return;
         }
 
@@ -422,7 +422,7 @@ public class PlayerModel: SparkEffect.ISparkTarget
         fogs.proto.config.GoodsAttrConfig goodsAttr = GameSystem.Instance.GoodsConfigData.GetgoodsAttrConfig(fashionId);
         if (goodsAttr == null)
         {
-            Logger.LogError("cannot find FashionShopConfigItem for fashionID" + fashionId);
+            Debug.LogError("cannot find FashionShopConfigItem for fashionID" + fashionId);
             return;
         }
 
@@ -434,7 +434,7 @@ public class PlayerModel: SparkEffect.ISparkTarget
                 fashionTypeA.Add(uint.Parse(types[i]));
         }
 
-        Logger.Log("_DressDown fashionId fashionId=" + fashionId);
+        Debug.Log("_DressDown fashionId fashionId=" + fashionId);
         if (!fashionTypeA.Contains(5))
             _DressDown("", fashionId);
         else

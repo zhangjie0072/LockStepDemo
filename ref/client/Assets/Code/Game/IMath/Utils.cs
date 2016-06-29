@@ -12,7 +12,7 @@
         {
             if (EnableTrace)
             {
-                Logger.Log(message, context);
+                UnityEngine.Debug.Log(message, context);
             }
         }
     }

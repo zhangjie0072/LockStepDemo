@@ -1,3 +1,4 @@
+require "Custom/Chat/ChatCache"
 ChatAttrItem =
 {
 	uiName = 'ChatAttrItem',
@@ -7,36 +8,19 @@ ChatAttrItem =
 	uiChatMessage,
 	uiName,
 	uiBtnJoin,
+	uiBtnChoose,
 	-------------------------
 	accId,
 	name,
 	type,
 	content,
+	msgTime,
 	inChatRoom = false,
 	height,
 	banTwice,
-	waitTime = 1,
 }
 
-local typeName =
-{
-	getCommonStr("WORLD_CHAT"),
-	getCommonStr("SYSTEM_CHAT"),
-	getCommonStr("LEAGUE_CHAT"),
-	getCommonStr("TEAM_CHAT"),
-}
 
-local messageColors =
-{
-	-- '[EE9A49]%s[-]',
-	-- '[FF8C69]%s[-]',
-	-- '[1874CD]%s[-]',
-	-- '[66CD00]%s[-]',
-	Color.New(250/255, 151/255, 45/255, 1),
-	Color.New(250/255, 100/255, 36/255, 1),
-	Color.New(39/255, 128/255, 208/255, 1),
-	Color.New(103/255, 215/255, 78/255, 1),
-}
 
 function ChatAttrItem:Awake()
 	self.uiChatTypeSprite = self.transform:FindChild('ChatTypeIcon'):GetComponent('UISprite')
@@ -44,20 +28,11 @@ function ChatAttrItem:Awake()
 	--self.uiChatMessage = self.transform:FindChild('ValueCur'):GetComponent('UILabel')
 	self.uiName = self.transform:FindChild('Name'):GetComponent('UILabel')
 	self.uiBtnJoin = self.transform:FindChild('ButtonJoin'):GetComponent('UIButton')
+	-- self.uiBtnChoose = self.transform:FindChild('uiBtnChoose'):GetComponent('UIButton')
 end
 
 function ChatAttrItem:Start( ... )
 	NGUITools.SetActive(self.uiBtnJoin.gameObject, false)
-end
-
-function ChatAttrItem:FixedUpdate( ... )
-	if self.banTwice then
-		self.waitTime = self.waitTime - UnityTime.fixedDeltaTime
-	end
-	if self.waitTime <= 0 then
-		self.waitTime = 1
-		self.banTwice = false
-	end
 end
 
 function ChatAttrItem:OnDestroy( ... )
@@ -65,6 +40,7 @@ function ChatAttrItem:OnDestroy( ... )
 	Object.Destroy(self.uiAnimator)
 	Object.Destroy(self.transform)
 	Object.Destroy(self.gameObject)
+	self = nil 
 end
 
 function ChatAttrItem:Refresh( ... )
@@ -75,21 +51,41 @@ function ChatAttrItem:OnClose( ... )
 end
 
 --------------------------------------
-
+local CHAT_TO_ME = CommonFunction.GetConstString("CHAT_TO_ME")--'[%s]对[我]说:' --
+local ME_CHAT_TO = CommonFunction.GetConstString("ME_CHAT_TO")--'[我]对[%s]说:' --
 function ChatAttrItem:SetMessage(message)
 	if not self.inChatRoom then
 		self:EnabledComponentInChildren(self.gameObject, "BoxCollider", self.inChatRoom)
 	end
-
-	self.type = message.type
+	if type(message.type ) ~= 'number' then
+		self.type = enumToInt(message.type)
+	else
+		self.type = message.type
+	end
 	self.accId = message.info.acc_id
 	self.name = message.info.ogri_name
 	self.content = message.info.content
-
+	self.msgTime = message.time
+	warning('ChatAttrItem ',self.type)
 	self.uiChatTypeText.text = typeName[self.type]
 	if IsNil(ChatChannelType.CCT_SYSTEM) == false then
 		if self.type ~= enumToInt(ChatChannelType.CCT_SYSTEM) then
-			self.uiName.text = string.format("[%s]：", self.name)
+			if self.type == enumToInt(ChatChannelType.CCT_PRIVATE) then
+				if message.pos == 1 then
+					self.uiName.text = string.format(ME_CHAT_TO, self.name)
+				else
+					self.uiName.text = string.format(CHAT_TO_ME, self.name)
+					if self.inChatRoom then
+       					ChatCache.ReadFriendMsg(self.accId)	--减少一条未读消息
+       				end
+				end
+			else
+				self.uiName.text = string.format("[%s]：", self.name)
+				if self.accId == MainPlayer.Instance.AccountID then
+					--self.uiChatMessage.color = Color.New(1,1,1,1)
+					self.uiName.color = Color.New(1,1,1,1)
+				end
+			end
 			addOnClick(self.uiName.gameObject, self:ShowPlayerDetailInfo())
 		else
 			self.uiName.text = ""
@@ -99,17 +95,25 @@ function ChatAttrItem:SetMessage(message)
 	if not self.inChatRoom then
 		self.uiName.maxLineCount = 1
 	end
-	self.content = string.gsub(self.content, "%[%w+%]", "")
+	self.content = string.gsub(self.content or "", "%[%w+%]", "")
 	-- print('self.content = ', self.content)
 	--self.uiChatMessage.text = self.content
+
 	self.uiName.text = self.uiName.text .. self.content
 	--self.uiChatMessage.color = messageColors[self.type]
-	self.uiName.color = messageColors[self.type]
-	self.uiChatTypeSprite.color = messageColors[self.type]
-	if self.accId == MainPlayer.Instance.AccountID then
-		--self.uiChatMessage.color = Color.New(1,1,1,1)
-		self.uiName.color = Color.New(1,1,1,1)
+	local color = nil
+	if self.type ~= enumToInt(ChatChannelType.CCT_WORLD) then
+		if message.pos == 1 then
+			--世界频道以外的其他频道，来自我的消息均以统一颜色显示
+			color = messageColors[enumToInt(ChatChannelType.CCT_PRIVATE)+1]
+		end
 	end
+	if not color then 
+		self.uiName.color = messageColors[self.type]
+	else
+		self.uiName.color  = color
+	end
+	self.uiChatTypeSprite.color = messageColors[self.type]
 end
 
 function ChatAttrItem:ShowPlayerDetailInfo( ... )
@@ -119,6 +123,7 @@ function ChatAttrItem:ShowPlayerDetailInfo( ... )
 			return
 		end
 		self.banTwice = true
+		Scheduler.Instance:AddTimer(1,false,self:BanWait())
 		local req =
 		{
 			acc_id = self.accId,
@@ -127,7 +132,13 @@ function ChatAttrItem:ShowPlayerDetailInfo( ... )
 		LuaHelper.SendPlatMsgFromLua(MsgID.QueryPlayerInfoReqID, buffer)
 	end
 end
-
+function ChatAttrItem:BanWait( ... )
+	-- body
+	return function ( ... )
+		-- body
+		self.banTwice = false
+	end
+end
 function ChatAttrItem:EnabledComponentInChildren(go,type,switch)
 	local parentTrans = go.transform
 	if parentTrans then
@@ -138,11 +149,9 @@ function ChatAttrItem:EnabledComponentInChildren(go,type,switch)
 		end
 	end
 end
-
 function ChatAttrItem:GetHeight( ... )
 	self.height = self.uiName.height
 	-- print('self.height = ', self.height)
 	return self.height + 10
 end
-
 return ChatAttrItem

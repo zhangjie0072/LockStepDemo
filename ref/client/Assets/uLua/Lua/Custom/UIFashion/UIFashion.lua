@@ -48,7 +48,6 @@ UIFashion =  {
     uiBtnBack,
     uiPlayerPropertyLua,
     uiWardrobe,
-    uiShop,
     uiShopToggle,
     uiWardrobeToggle,
     uiSelectZone,
@@ -74,7 +73,7 @@ UIFashion =  {
     uiLeftPart = {},
     uiWardrobeTab = {},
     uiFashionStoreTab = {},
-    uiWardrobeTabTips = {},
+    --uiWardrobeTabTips = {},
 
     uiFashionBuyOne,
 }
@@ -83,17 +82,16 @@ UIFashion =  {
 -----------------------------------------------------------------
 function UIFashion:Awake()
     -- self.uiProcessBar = self.transform:FindChild("ProcessBar"):GetComponent("UIProgressBar")
-    self.uiTitle = self.transform:FindChild('Top/Title'):GetComponent('MultiLabel')
-    self.uiBtnMenu = createUI('ButtonMenu', self.transform:FindChild('Top/ButtonMenu'))
-    self.uiBtnBack = createUI('ButtonBack', self.transform:FindChild('Top/ButtonBack'))
-    self.uiWardrobe = self.transform:FindChild('Tab/Wardrobe'):GetComponent('UISprite')
-    self.uiShop = self.transform:FindChild('Tab/Shop'):GetComponent('UISprite')
-    self.uiWardrobeToggle = self.transform:FindChild('Tab/Wardrobe'):GetComponent('UIToggle')
-    self.uiShopToggle = self.transform:FindChild('Tab/Shop'):GetComponent('UIToggle')
+    self.uiTitle = self.transform:FindChild('TopLeft/Title'):GetComponent('MultiLabel')
+    self.uiBtnMenu = createUI('ButtonMenu', self.transform:FindChild('TopRight/ButtonMenu'))
+    self.uiBtnBack = createUI('ButtonBack', self.transform:FindChild('TopLeft/ButtonBack'))
+    self.uiWardrobe = self.transform:FindChild('Top/Tab/Wardrobe'):GetComponent('UISprite')
+    self.uiWardrobeToggle = self.transform:FindChild('Top/Tab/Wardrobe'):GetComponent('UIToggle')
+    self.uiShopToggle = self.transform:FindChild('Top/Tab/Shop'):GetComponent('UIToggle')
     self.uiFashionRedDot = self.transform:FindChild('MyWardrobe/RedDot'):GetComponent('UISprite')
     -----
-    self.uiModel = self.transform:FindChild('Model')
-    self.uiModelShowItem = self.transform:FindChild('Model/ModelShowItem'):GetComponent("ModelShowItem")
+    self.uiModel = self.transform:FindChild('Right/Model')
+    self.uiModelShowItem = self.transform:FindChild('Right/Model/ModelShowItem'):GetComponent("ModelShowItem")
 
     --left
     self.uiLeftKey = self.transform:FindChild('LeftKey')
@@ -105,16 +103,17 @@ function UIFashion:Awake()
     self.uiLeftPart[5] = self.uiLeftKey.transform:FindChild('Special'):GetComponent('UISprite')
 
     --button
-    self.uiBuySelected = self.transform:FindChild('BuySelected')--:GetComponent('UIButton')
-    self.uiSubstitute = self.transform:FindChild('Substitute')--:GetComponent('UIButton')
+    self.uiBuySelected = self.transform:FindChild('Right/BuySelected')--:GetComponent('UIButton')
+    self.uiSubstitute = self.transform:FindChild('Right/Substitute')--:GetComponent('UIButton')
 
     --selectzone
     self.uiSelectZone = self.transform:FindChild('AllZone/SelectZone')
-    self.uiSelectTabGrid = self.transform:FindChild('AllZone/SelectZone/Position1/TabGrid')
+    self.uiSelectTabGrid = self.transform:FindChild('Left/ShopScroll/ShopTabGrid')
     self.uiSelectScrollView = self.transform:FindChild('AllZone/SelectZone/Position1/SelectScrollView'):GetComponent('UIScrollView')
     self.uiSelectSVIncLoad = self.uiSelectScrollView:GetComponent("ScrollViewAsyncLoadItem")
     self.uiSelectGrid = self.transform:FindChild('AllZone/SelectZone/Position1/SelectScrollView/SelectGrid'):GetComponent('UIGrid')
 
+    -- 1 head 2 clothes 3 trouses 4 shoes 5 back 6 suit
     self.uiFashionStoreTab[1] = self.uiSelectTabGrid:FindChild('TabHead'):GetComponent('UIToggle')
     self.uiFashionStoreTab[2] = self.uiSelectTabGrid:FindChild('TabClothes'):GetComponent('UIToggle')
     self.uiFashionStoreTab[3] = self.uiSelectTabGrid:FindChild('TabTrouses'):GetComponent('UIToggle')
@@ -123,12 +122,13 @@ function UIFashion:Awake()
     self.uiFashionStoreTab[6] = self.uiSelectTabGrid:FindChild('TabSuit'):GetComponent('UIToggle')
     --zone
     self.uiZone = self.transform:FindChild('AllZone/MyZone')
-    self.uiZoneTabGrid = self.transform:FindChild('AllZone/MyZone/Position2/TabGrid')
+    self.uiZoneTabGrid = self.transform:FindChild('Left/WardrobeScroll/WardrobeTabGrid')
     self.uiZoneScrollView = self.transform:FindChild('AllZone/MyZone/Position2/SelectScrollView'):GetComponent('UIScrollView')
     self.uiZoneScrollBar = self.transform:FindChild('AllZone/MyZone/Position2/Schedule'):GetComponent('UIScrollBar')
     self.uiZoneSVIncLoad = self.uiZoneScrollView:GetComponent("ScrollViewAsyncLoadItem")
     self.uiZoneGrid = self.transform:FindChild('AllZone/MyZone/Position2/SelectScrollView/SelectGrid'):GetComponent('UIGrid')
     self.uiEmptyText = self.transform:FindChild('AllZone/MyZone/Position2/EmptyText')
+
 
     self.uiWardrobeTab[1] = self.uiZoneTabGrid:FindChild('TabHead'):GetComponent('UIToggle')
     self.uiWardrobeTab[2] = self.uiZoneTabGrid:FindChild('TabClothes'):GetComponent('UIToggle')
@@ -136,12 +136,17 @@ function UIFashion:Awake()
     self.uiWardrobeTab[4] = self.uiZoneTabGrid:FindChild('TabShoes'):GetComponent('UIToggle')
     self.uiWardrobeTab[5] = self.uiZoneTabGrid:FindChild('TabSpecial'):GetComponent('UIToggle')
     self.uiWardrobeTab[6] = self.uiZoneTabGrid:FindChild('TabSuit'):GetComponent('UIToggle')
+    self.uiWardrobeTab[7] = self.uiZoneTabGrid:FindChild('TabAll'):GetComponent('UIToggle')
+
+    --[[
     self.uiWardrobeTabTips[1] = self.uiZoneTabGrid:FindChild('TabHead/Tip'):GetComponent('UISprite')
     self.uiWardrobeTabTips[2] = self.uiZoneTabGrid:FindChild('TabClothes/Tip'):GetComponent('UISprite')
     self.uiWardrobeTabTips[3] = self.uiZoneTabGrid:FindChild('TabTrouses/Tip'):GetComponent('UISprite')
     self.uiWardrobeTabTips[4] = self.uiZoneTabGrid:FindChild('TabShoes/Tip'):GetComponent('UISprite')
     self.uiWardrobeTabTips[5] = self.uiZoneTabGrid:FindChild('TabSpecial/Tip'):GetComponent('UISprite')
     self.uiWardrobeTabTips[6] = self.uiZoneTabGrid:FindChild('TabSuit/Tip'):GetComponent('UISprite')
+    --]]
+
 
     self.uiBuyPos = self.transform:FindChild('BuyPos')
     self.uiAnimator = self.transform:GetComponent('Animator')
@@ -155,14 +160,14 @@ function UIFashion:Start()
     -- self:Refresh()
 
     addOnClick(self.uiBtnBack.gameObject, self:ClickBack())
-    -- addOnClick(self.uiWardrobe.gameObject, self:ChangeWardrobe())
-    addOnClick(self.uiWardrobe.gameObject, self:SwitchWardrobe())
-    addOnClick(self.uiShop.gameObject, self:SwitchShop())
-    self.uiShopToggle.value = true
-    -- self.uiWardrobeToggle.value = false
+    EventDelegate.Add(self.uiWardrobeToggle.onChange, LuaHelper.Callback(self:SwitchWardrobe()))
+    EventDelegate.Add(self.uiShopToggle.onChange, LuaHelper.Callback(self:SwitchShop()))
+
+    for i=1,#self.uiFashionStoreTab do
+        addOnClick(self.uiFashionStoreTab[i].gameObject, self:ClickTab())
+    end
 
     for i=1,#self.uiWardrobeTab do
-        addOnClick(self.uiFashionStoreTab[i].gameObject, self:ClickTab())
         addOnClick(self.uiWardrobeTab[i].gameObject, self:ClickZoneTab())
     end
 
@@ -176,7 +181,7 @@ function UIFashion:Start()
     self.gender = modelConfig.gender
     self.initPosX = self.uiSubstitute.transform.localPosition.x
 
-    local uiPlayerProperty = self.transform:FindChild('Top/PlayerInfoGrids').gameObject
+    local uiPlayerProperty = self.transform:FindChild('TopRight/PlayerInfoGrids').gameObject
     self.uiPlayerPropertyLua = getLuaComponent(uiPlayerProperty)
     -- self:ClickTab()(self.uiFashionStoreTab[1].gameObject)
     -- self:ClickZoneTab()(self.uiWardrobeTab[1].gameObject)
@@ -184,7 +189,9 @@ function UIFashion:Start()
     LuaHelper.RegisterPlatMsgHandler(MsgID.FashionOperationRespID, self:FashionOperationRespHandler(), self.uiName)
 
     NGUITools.SetActive(self.uiSelectZone.gameObject, true);
+    NGUITools.SetActive(self.uiSelectTabGrid.gameObject, true);
     NGUITools.SetActive(self.uiZone.gameObject, false);
+    NGUITools.SetActive(self.uiZoneTabGrid.gameObject, false);
 end
 
 function UIFashion:FixedUpdate()
@@ -383,10 +390,10 @@ end
 --新版时装界面
 function UIFashion:SwitchShop( ... )
     return function ( go )
-        if not self.isWardrobe then
+        if not self.uiShopToggle.value then
             return
         end
-        self.uiShopToggle.value = true
+
         -- self.uiWardrobeToggle.value = false
         -- 修改为tab页后没有动画了
         -- if self.uiChangeAimator and not self.isInitAnimator then
@@ -397,7 +404,9 @@ function UIFashion:SwitchShop( ... )
         -- end
 
         NGUITools.SetActive(self.uiSelectZone.gameObject, true);
+        NGUITools.SetActive(self.uiSelectTabGrid.gameObject, true);
         NGUITools.SetActive(self.uiZone.gameObject, false);
+        NGUITools.SetActive(self.uiZoneTabGrid.gameObject, false);
 
         self.isWardrobe = false
         if self.tabState then
@@ -411,13 +420,12 @@ function UIFashion:SwitchShop( ... )
         NGUITools.SetActive(self.uiFashionRedDot.gameObject, (UpdateRedDotHandler.UpdateState["UIFashion"].Count > 0 and not self.isWardrobe))
         NGUITools.SetActive(self.uiBuySelected.gameObject, not self.isWardrobe)
         local pos = self.uiSubstitute.transform.localPosition
-        pos.x = pos.x - 100
         self.uiSubstitute.transform.localPosition = pos
     end
 end
 function UIFashion:SwitchWardrobe( ... )
     return function (go)
-        if self.isWardrobe then
+        if not self.uiWardrobeToggle.value then
             return
         end
         -- self.uiShopToggle.value = false
@@ -430,27 +438,28 @@ function UIFashion:SwitchWardrobe( ... )
         -- end
 
         NGUITools.SetActive(self.uiSelectZone.gameObject, false);
+        NGUITools.SetActive(self.uiSelectTabGrid.gameObject, false);
         NGUITools.SetActive(self.uiZone.gameObject, true);
+        NGUITools.SetActive(self.uiZoneTabGrid.gameObject, true);
 
-        self.isWardrobe = true
-
-        self:ClickZoneTab()(self.uiWardrobeTab[1].gameObject)
+        self:ClickZoneTab()(self.uiWardrobeTab[7].gameObject)
         self:ResetInitDress()
         if self.zoneTabState then
             self.zoneTabState.value = true
         else
-            self.uiWardrobeTab[1].value = true
-            self.zoneTabState = self.uiWardrobeTab[1]
+            self.uiWardrobeTab[7].value = true
+            self.zoneTabState = self.uiWardrobeTab[7]
         end
         self:UpdateWardrobe()()
         NGUITools.SetActive(self.uiFashionRedDot.gameObject, (UpdateRedDotHandler.UpdateState["UIFashion"].Count > 0 and not self.isWardrobe))
         NGUITools.SetActive(self.uiBuySelected.gameObject, not self.isWardrobe)
         local pos = self.uiSubstitute.transform.localPosition
-        pos.x = pos.x + 100
         self.uiSubstitute.transform.localPosition = pos
     end
 end
 function UIFashion:RefreshFashionGoods(list)
+    print ("UIFashion:RefreshFashionGoods(list)")
+    print (list.Count)
     -- self.tabState.value = true
     self.uiSelectSVIncLoad.OnCreateItem = function (index, parent)
         if index < 0 or index >= list.Count then return nil end
@@ -489,9 +498,14 @@ function UIFashion:RefreshWardrobeGoods(types)
         local enum = goodsCategroy:GetEnumerator()
         while enum:MoveNext() do
             local categroy = enum.Current
-            if types == categroy then
+            if types ~= 7 and types == categroy then
                 table.insert(goodsList, goods)
             end
+
+            if types == 7 then
+                table.insert(goodsList, goods)
+            end
+
             break
         end
     end
@@ -536,20 +550,22 @@ function UIFashion:ClickTab( ... )
         end
         local types = nil
         self.selectedTab = go
-        if go == self.uiFashionStoreTab[1].gameObject then
-            types = 1
-        elseif go == self.uiFashionStoreTab[2].gameObject then
-            types = 2
-        elseif go == self.uiFashionStoreTab[3].gameObject then
-            types = 3
-        elseif go == self.uiFashionStoreTab[4].gameObject then
-            types = 4
-        elseif go == self.uiFashionStoreTab[5].gameObject then
-            types = 5
-        elseif go == self.uiFashionStoreTab[6].gameObject then
-            types = 6
-        end
-        self.tabState = self.uiFashionStoreTab[types]
+        -- 1 head 2 clothes 3 pants 4 shoes 5 back 6 suit
+        -- if go == self.uiFashionStoreTab[1].gameObject then
+        --     types = 1
+        -- elseif go == self.uiFashionStoreTab[2].gameObject then
+        --     types = 2
+        -- elseif go == self.uiFashionStoreTab[3].gameObject then
+        --     types = 3
+        -- elseif go == self.uiFashionStoreTab[4].gameObject then
+        --     types = 4
+        -- elseif go == self.uiFashionStoreTab[5].gameObject then
+        --     types = 5
+        -- elseif go == self.uiFashionStoreTab[6].gameObject then
+        --     types = 6
+        -- end
+        -- self.tabState = self.uiFashionStoreTab[types]
+        self.tabState = go:GetComponent('UIToggle')
         local fashionList = self:GetStoreList(self.tabState)
         self.selecStoreItem = nil
         self:RefreshFashionGoods(fashionList)
@@ -575,7 +591,10 @@ function UIFashion:ClickZoneTab( ... )
             types = 5
         elseif go == self.uiWardrobeTab[6].gameObject then
             types = 0
+        elseif go == self.uiWardrobeTab[7].gameObject then
+            types = 7
         end
+
         if types == 0 then
             self.zoneTabState = self.uiWardrobeTab[6]
         else
@@ -671,6 +690,7 @@ function UIFashion:OnChoosePlayer( ... )
         self:RefreshModel()
         -- if not isDiffer then
             self.selectedTab = nil
+            -- 1 head 2 clothes 3 trouses 4 shoes 5 back 6 suit
             if self.tabState == self.uiFashionStoreTab[1] then
                 self:ClickTab()(self.uiFashionStoreTab[1].gameObject)
             elseif self.tabState == self.uiFashionStoreTab[2] then
@@ -785,25 +805,27 @@ function UIFashion:OnDress(fashionItem)
         if not item and fashionItem then
             item = fashionItem
         end
-        -- if item.belongId ~= 0 then
-            if item.belongId == self.playerId then	--鍗镐笅
-                self:OnDressDown(item)
-                self.selecWardrobeItem = nil
-                return
-            end
-        -- end
-        -- if self.selecWardrobeItem == item then
-        --  return
-        -- end
+
+        -- 角色正穿着
+        if item.belongId == self.playerId then	--鍗镐笅
+            self:OnDressDown(item)
+            self.selecWardrobeItem = nil
+            return
+        end
+
+        -- 性征不一致
         if item.gender ~= self.gender and item.gender ~= 0 then
             CommonFunction.ShowPopupMsg(getCommonStr('UI_FASHION_DRY_DRESSON_FAILED_FOR_GENDER'),nil,nil,nil,nil,nil)
             return
         end
-        --涔嬪墠椤�
+
+        --卸下，选择框去掉
         if self.selecWardrobeItem then
             self.selecWardrobeItem:ChangeState(false)
             self:OnDressDown(self.selecWardrobeItem)
         end
+
+        -- 穿上，选择框开启
         self.selecWardrobeItem = item
         item:ChangeState(true)
         self:OnDressUp(item)
@@ -1153,6 +1175,8 @@ function UIFashion:UpdateWardrobe(list)
                 self:RefreshWardrobeGoods(5)
             elseif self.zoneTabState == self.uiWardrobeTab[6] then
                 self:RefreshWardrobeGoods(0)
+            elseif self.zoneTabState == self.uiWardrobeTab[7] then
+                self:RefreshWardrobeGoods(7)
             end
         end
         if list then
@@ -1188,6 +1212,7 @@ function UIFashion:UpdateFashionStore()
     end
 end
 
+-- 1 head 2 clothes 3 trouses 4 shoes 5 back 6 suit
 function UIFashion:GetStoreList(tab)
     if tab == self.uiFashionStoreTab[1] then
         if self.gender == 1 and not self.reputationStore then
@@ -1335,7 +1360,6 @@ end
 function UIFashion:OnBuyOne(item)
     return function (go)
         if not FunctionSwitchData.CheckSwith(FSID.clothes_ok) then return end
-
         if item.realCostType ~= 1 then
             local ownDiamond = MainPlayer.Instance.DiamondFree + MainPlayer.Instance.DiamondBuy
             if item.cost > ownDiamond then
@@ -1363,6 +1387,7 @@ function UIFashion:OnBuyOne(item)
         else
             storeType = 'ST_FASHION'
         end
+
         local buyStoreGoods = {
             store_id = storeType,	--fashion store
             info = {	},
@@ -1455,8 +1480,7 @@ function UIFashion:ShowBuyTip(type)
         str = getCommonStr("YOUR_DIMAND_LACK_AND_SWITCH_DISABLE")
     elseif type == "BUY_HP" then
         str = string.format(getCommonStr("STR_BUY_THE_COST"),getCommonStr("HP"))
-    end
-    if type == "BUY_DIAMOND" then
+    elseif type == "BUY_DIAMOND" then
         self.msg = CommonFunction.ShowTip(str, nil)
     else
         self.msg = CommonFunction.ShowPopupMsg(str, nil,
@@ -1495,6 +1519,7 @@ function UIFashion:RefreshFashionTips( ... )
     local fashionTipList = UpdateRedDotHandler.UpdateState["UIFashion"]
     --print('fashionTipList = ', fashionTipList == nil)
     --print('fashionTipList.Count = ', fashionTipList.Count > 0)
+    --[[
     for i=1,6 do
         if fashionTipList:Contains(i) then
             NGUITools.SetActive(self.uiWardrobeTabTips[i].gameObject, true)
@@ -1502,6 +1527,7 @@ function UIFashion:RefreshFashionTips( ... )
             NGUITools.SetActive(self.uiWardrobeTabTips[i].gameObject, false)
         end
     end
+    --]]
 end
 
 return UIFashion

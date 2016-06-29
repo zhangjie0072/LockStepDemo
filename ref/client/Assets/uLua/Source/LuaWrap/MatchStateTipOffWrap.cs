@@ -9,7 +9,7 @@ public class MatchStateTipOffWrap
 		{
 			new LuaMethod("OnEnter", OnEnter),
 			new LuaMethod("OnEvent", OnEvent),
-			new LuaMethod("Update", Update),
+			new LuaMethod("GameUpdate", GameUpdate),
 			new LuaMethod("OnExit", OnExit),
 			new LuaMethod("IsCommandValid", IsCommandValid),
 			new LuaMethod("New", _CreateMatchStateTipOff),
@@ -137,12 +137,12 @@ public class MatchStateTipOffWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int Update(IntPtr L)
+	static int GameUpdate(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		MatchStateTipOff obj = (MatchStateTipOff)LuaScriptMgr.GetNetObjectSelf(L, 1, "MatchStateTipOff");
 		IM.Number arg0 = (IM.Number)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Number));
-		obj.Update(arg0);
+		obj.GameUpdate(arg0);
 		return 0;
 	}
 

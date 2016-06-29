@@ -45,9 +45,9 @@ public class ActivityConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name);
+		Debug.Log("Config reading " + name);
 		ReadActivityData();
-		Logger.ConfigEnd(name);
+		
     }
 
     public void ReadActivityData()
@@ -55,7 +55,7 @@ public class ActivityConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name);
+            Debug.LogError("LoadConfig failed: " + name);
             return;
         }
         activityConfig.Clear();

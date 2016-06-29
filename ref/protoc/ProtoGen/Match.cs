@@ -1323,6 +1323,14 @@ namespace fogs.proto.msg
       get { return _aver_time; }
       set { _aver_time = value; }
     }
+    private uint _team_flag = default(uint);
+    [global::ProtoBuf.ProtoMember(11, IsRequired = false, Name=@"team_flag", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint team_flag
+    {
+      get { return _team_flag; }
+      set { _team_flag = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -1377,6 +1385,22 @@ namespace fogs.proto.msg
     {
       get { return _session_id; }
       set { _session_id = value; }
+    }
+    private uint _team_flag = default(uint);
+    [global::ProtoBuf.ProtoMember(7, IsRequired = false, Name=@"team_flag", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint team_flag
+    {
+      get { return _team_flag; }
+      set { _team_flag = value; }
+    }
+    private uint _grade = default(uint);
+    [global::ProtoBuf.ProtoMember(8, IsRequired = false, Name=@"grade", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint grade
+    {
+      get { return _grade; }
+      set { _grade = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -1622,6 +1646,14 @@ namespace fogs.proto.msg
     {
       get { return _flag; }
       set { _flag = value; }
+    }
+    private uint _team_flag = default(uint);
+    [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"team_flag", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(uint))]
+    public uint team_flag
+    {
+      get { return _team_flag; }
+      set { _team_flag = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)

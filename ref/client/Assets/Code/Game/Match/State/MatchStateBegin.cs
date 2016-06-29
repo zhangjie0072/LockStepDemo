@@ -26,17 +26,14 @@ public class MatchStateBegin
 			player.m_enableMovement = false;
 			player.m_bMovedWithBall = false;
 
-			if (player.m_aiMgr != null && player.m_inputDispatcher == null)
-				player.m_aiMgr.m_enable = false;
-
 			if( player.m_catchHelper != null )
 				player.m_catchHelper.enabled = true;
 			
 			player.m_toSkillInstance = null;
 			player.m_StateMachine.SetState(PlayerState.State.eStand, true);
 
-			if( player.m_startPos == FightStatus.FS_MAIN && player.m_team.m_role == GameMatch.MatchRole.eOffense && ball != null )
-				player.GrabBall(ball);
+            //if( player.m_startPos == FightStatus.FS_MAIN && player.m_team.m_role == GameMatch.MatchRole.eOffense && ball != null )
+            //    player.GrabBall(ball);
 			
 			player.m_stamina.ResetStamina();
 		}
@@ -53,7 +50,7 @@ public class MatchStateBegin
                 m_goBeginUI = GameSystem.Instance.mClient.mUIManager.CreateUI("UIBeginCounter");
             if (m_goBeginUI == null)
             {
-                Logger.Log("Error -- can not find ui resource " + "UIBeginCounter");
+                Debug.Log("Error -- can not find ui resource " + "UIBeginCounter");
                 return;
             }
             Animation anim = m_goBeginUI.GetComponentInChildren<Animation>();
@@ -70,7 +67,7 @@ public class MatchStateBegin
 
         if( ball != null && ball.m_owner != null && m_match.m_uiMatch != null && m_match.EnableCounter24())
 		{
-            m_match.m_uiMatch.ShowCounter(true, ball.m_owner.m_team == m_match.m_mainRole.m_team);
+            m_match.m_uiMatch.ShowCounter(true, ball.m_owner.m_team == m_match.m_homeTeam);
             m_match.m_count24TimeStop = true;
 			m_match.m_gameMatchCountStop = true;
 		}
@@ -100,20 +97,15 @@ public class MatchStateBegin
 		}
 	}
 
-	override public void Update (IM.Number fDeltaTime)
+	override public void GameUpdate (IM.Number fDeltaTime)
 	{
-		base.Update(fDeltaTime);
+		base.GameUpdate(fDeltaTime);
 		_StateGuade(fDeltaTime);
 	}
 	
 	override public void OnExit ()
 	{
 		m_fCurTime = IM.Number.zero;
-		foreach (Player player in GameSystem.Instance.mClient.mPlayerManager)
-		{
-			if (player.m_aiMgr != null && player.m_inputDispatcher == null)
-				player.m_aiMgr.m_enable = Debugger.Instance.m_bEnableAI;
-		}
 		PlaySoundManager.Instance.PlaySound(MatchSoundEvent.GameBegin);
 	}
 

@@ -9,7 +9,7 @@ public class MatchStateOpeningWrap
 		LuaMethod[] regs = new LuaMethod[]
 		{
 			new LuaMethod("OnEnter", OnEnter),
-			new LuaMethod("Update", Update),
+			new LuaMethod("ViewUpdate", ViewUpdate),
 			new LuaMethod("OnExit", OnExit),
 			new LuaMethod("OnPress", OnPress),
 			new LuaMethod("OnClick", OnClick),
@@ -66,12 +66,12 @@ public class MatchStateOpeningWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int Update(IntPtr L)
+	static int ViewUpdate(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		MatchStateOpening obj = (MatchStateOpening)LuaScriptMgr.GetNetObjectSelf(L, 1, "MatchStateOpening");
 		float arg0 = (float)LuaScriptMgr.GetNumber(L, 2);
-		obj.Update(arg0);
+		obj.ViewUpdate(arg0);
 		return 0;
 	}
 

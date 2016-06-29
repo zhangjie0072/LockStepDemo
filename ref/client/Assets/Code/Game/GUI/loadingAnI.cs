@@ -14,7 +14,7 @@ public class loadingAnI : MonoBehaviour {
 
     public void FinishAn()
     {
-       // Logger.LogError("FinishAn");
+       // Debug.LogError("FinishAn");
         if( _onFinishAn != null )
         {
             _onFinishAn();

@@ -125,17 +125,6 @@ namespace IM
             this.w = w;
         }
 
-#if UNITY_EDITOR
-        public static Quaternion FromUnity(UnityEngine.Quaternion quat)
-        {
-            Number x = Number.FromUnity(quat.x);
-            Number y = Number.FromUnity(quat.y);
-            Number z = Number.FromUnity(quat.z);
-            Number w = Number.FromUnity(quat.w);
-            return new Quaternion(x, y, z, w);
-        }
-#endif
-
         public static Quaternion operator * (Quaternion lhs, Number rhs)
         {
             Math.CheckLengthRange(rhs);

@@ -107,9 +107,9 @@ public class MatchStateShowRule : MatchState
 		}
 	}
 	
-	override public void Update (IM.Number fDeltaTime)
+	override public void GameUpdate (IM.Number fDeltaTime)
 	{
-		base.Update(fDeltaTime);
+		base.GameUpdate(fDeltaTime);
 
 		if (!NGUITools.GetActive(panel.gameObject) && !GameSystem.Instance.mClient.pause)
 		{

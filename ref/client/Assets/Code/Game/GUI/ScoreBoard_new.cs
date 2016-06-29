@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using fogs.proto.msg;
 
+[System.CLSCompliant(false)]
 public class ScoreBoard_new : MonoBehaviour
 {
 	public string spritePrefix = "gameInterface_figure_black";

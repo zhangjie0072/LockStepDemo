@@ -16,12 +16,13 @@ LadderFriendItem =  {
     uiLadderLvName = nil,
     uiBtn          = nil,
     uiBtnLabel     = nil,
+    uiFirstWinFlag = nil,
 
     -----------------------
     -- Parameters Module --
     -----------------------
-    onClick    = nil,
-    careerIcon = nil,
+    onClick       = nil,
+    careerIcon    = nil,
     -- roleId     = nil,
     state         = nil,
     name          = nil,
@@ -34,6 +35,11 @@ LadderFriendItem =  {
     isMaster      = false,
     inviteStart   = 0,
     inviteWait    = 0,
+    firstWinState = false,
+    firstwinCD    = 0,
+    parent        = nil,    
+    notifyerCallback = nil,
+
 }
 
 -- Button Action.
@@ -57,6 +63,7 @@ end
 
 
 function LadderFriendItem:Start()
+    self.notifyerCallback = self:FriendInfoChangeNotifyer()
     addOnClick(self.gameObject, function() if self.onClick then self:onClick() end end )
     addOnClick(self.uiBtn.gameObject, self:ClickInvite())
     self:Refresh()
@@ -77,7 +84,8 @@ end
 
 
 function LadderFriendItem:OnDestroy()
-
+    Friends.RemoveFriendNotifyer(self.friendInfo.acc_id,self.notifyerCallback)
+    self = nil 
 end
 
 
@@ -99,6 +107,10 @@ function LadderFriendItem:DataRefresh()
     self.uiLadderLvIcon.spriteName = lv.iconSmall
     self.uiLadderLvName.text = lv.name
 
+    local server_time = GameSystem.mTime
+    local firstwinCD = GameSystem.Instance.CommonConfig:GetUInt("gFirstWinLastTime")
+    local diff = firstwinCD * 60 - (server_time - (info.first_win_time or 0))
+    self.firstWinState = ( diff <= 0 )
     self.uiFriendName.text = name
     if not self.careerIcon then
         local t = getLuaComponent(createUI("CareerRoleIcon", self.uiRoleIcon))
@@ -108,6 +120,7 @@ function LadderFriendItem:DataRefresh()
         self.careerIcon = t
     end
     self:UpdateLadderState()
+    Friends.AddFriendNotifyer(info.acc_id,self.notifyerCallback )
 end
 
 function LadderFriendItem:ClickInvite()
@@ -117,13 +130,26 @@ function LadderFriendItem:ClickInvite()
         end
     end
 end
-
+function LadderFriendItem:SetParent( parent )
+    -- body
+    self.parent = parent
+end
+function LadderFriendItem:FriendInfoChangeNotifyer( ... )
+    -- body
+    return function  (info)
+        -- body
+        self.friendInfo = info
+        self:UpdateLadderState()
+        self.parent:RefreshFriendList()
+    end
+end
 function LadderFriendItem:UpdateLadderState()
     local l        = self.uiState
     local ol       = self.friendInfo.online
     local member   = self.isMember
     local inv      = self.isInviting
     local inMatch  = ol == Ladder.PS.MATCH or ol == Ladder.PS.GAME
+    local firstWin = self.firstWinState
 
     print("1927 - <LadderFriendItem> UpdateLadderState self.friendInfo.acc_id, ol, member, inv, inMatch, self.friendInfo.icon=",self.friendInfo.acc_id, ol, member, inv, inMatch, self.friendInfo.icon)
 
@@ -152,8 +178,15 @@ function LadderFriendItem:UpdateLadderState()
         self.careerIcon.disabled = ol == Ladder.PS.OFFLINE
         if ol == Ladder.PS.OFFLINE then
             self.uiLadderLvIcon.color = Color.New(0,1,1,1)
+            self.uiFirstWinFlag:GetComponent("UISprite").color = Color.New(0,1,1,1)
         else
             self.uiLadderLvIcon.color = Color.New(1,1,1,1)
+            --好友在线，显示首胜状态
+            if self.firstWinState then 
+                self.uiFirstWinFlag:GetComponent("UISprite").color = Color.New(1,1,1,1)
+            else
+                self.uiFirstWinFlag:GetComponent("UISprite").color = Color.New(0,1,1,1)
+            end
         end
         self.careerIcon:Refresh()
     end
@@ -278,6 +311,7 @@ function LadderFriendItem:UiParse()
     self.uiLadderLvName       = self.transform:FindChild("Icon/Name"):GetComponent("UILabel")
     self.uiBtn                = self.transform:FindChild("ButtonOK"):GetComponent("UIButton")
     self.uiBtnLabel           = self.transform:FindChild("ButtonOK/Label"):GetComponent("MultiLabel")
+    self.uiFirstWinFlag       = self.transform:FindChild("FirstWin")
 end
 
 return LadderFriendItem

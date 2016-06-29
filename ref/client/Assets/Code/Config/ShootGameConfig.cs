@@ -69,12 +69,12 @@ public class ShootGameConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
 		Read();
-		Logger.ConfigEnd(name1);
-		Logger.ConfigBegin(name2);
+		
+		Debug.Log("Config reading " + name2);
 		ReadConsume();
-		Logger.ConfigEnd(name2);
+		
     }
 
 
@@ -83,7 +83,7 @@ public class ShootGameConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         
@@ -150,7 +150,7 @@ public class ShootGameConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
         
@@ -216,13 +216,13 @@ public class ShootGameConfig
         attr.attrs["bodythrowcatch_distance"] = npcattr.attrs["bodythrowcatch_distance"];
         attr.attrs["bodythrowcatch_prob"] = npcattr.attrs["bodythrowcatch_prob"];
 
-        Logger.Log("shoot_near:" + attr.attrs["shoot_near"]);
-        Logger.Log("shoot_middle:" + attr.attrs["shoot_middle"]);
-        Logger.Log("anti_disturb:" + attr.attrs["anti_disturb"]);
-        Logger.Log("steal:" + attr.attrs["steal"]);
-        Logger.Log("rebound:" + attr.attrs["rebound"]);
-        Logger.Log("disturb:" + attr.attrs["disturb"]);
-        Logger.Log("strength:" + attr.attrs["strength"]);
+        Debug.Log("shoot_near:" + attr.attrs["shoot_near"]);
+        Debug.Log("shoot_middle:" + attr.attrs["shoot_middle"]);
+        Debug.Log("anti_disturb:" + attr.attrs["anti_disturb"]);
+        Debug.Log("steal:" + attr.attrs["steal"]);
+        Debug.Log("rebound:" + attr.attrs["rebound"]);
+        Debug.Log("disturb:" + attr.attrs["disturb"]);
+        Debug.Log("strength:" + attr.attrs["strength"]);
         return attr;
     }
     public ShootGame GetShootInfo(uint id, uint level)

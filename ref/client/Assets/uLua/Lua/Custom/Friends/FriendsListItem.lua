@@ -1,3 +1,4 @@
+require "Custom/Friends/FriendExtraAwardsConfigRes"
 FriendsListItem =  {
 uiName	= "FriendsListItem",
 
@@ -29,14 +30,19 @@ uiBtnDelBlack,
 uiNearyList,
 uiBtnShowInfo,
 uiBtnAdd,
-
+uiSpFaction,	--友好度图片
+uiLblFaction,	--友好度lable
 uiFriInfo,
+uiFirstWin,
+uiFirstWinFlag,
 
 sprGoldArrows,
 sprGoldBg,
 
 tfFriendsList,
-
+actionOnTimer,
+timerAdded = false,
+parent = nil,
 }
 
 function FriendsListItem:Awake()
@@ -64,12 +70,18 @@ function FriendsListItem:Awake()
 	self.uiNearyList = self.transform:FindChild("NearbyList")
 	self.uiBtnShowInfo = getComponentInChild(self.uiNearyList, "btnShowInfo", "UIButton")
 	self.btnAdd = getComponentInChild(self.uiNearyList, "btnAdd", "UIButton")
+	self.uiFirstWin = getComponentInChild(self.transform, "FirstWin/FirstWinCD", "UILabel")
+	self.uiFirstWinFlag = self.transform:FindChild("FirstWin")
+	self.uiSpFaction = self.transform:FindChild("Faction"):GetComponent('UISprite')
+	self.uiLblFaction = self.transform:FindChild("Faction/FactionLabel"):GetComponent('UILabel')
+
+	
 end
 
 function FriendsListItem:Start()
 
 	--addOnClick(self.uiHeadIcon.gameObject, self:FriendsInfo())
-
+	-- self.uiLblFaction.text = ''
 	addOnClick(self.uiBtnDel.gameObject, self:DelFriend())
 	addOnClick(self.uiBtnChat.gameObject, self:OnChat())
 	addOnClick(self.uiBtnGiveGlod.gameObject, self:OnGive())
@@ -81,34 +93,62 @@ function FriendsListItem:Start()
 
 	addOnClick(self.uiBtnShowInfo.gameObject, self:OnShowInfo())
 	addOnClick(self.btnAdd.gameObject, self:OnAddFriends())
-end
-
-function FriendsListItem:Update()
-
-end
-
-function FriendsListItem:FixedUpdate()
-
+    -- NGUITools.SetActive(self.uiFirstWinFlag.gameObject, false)
+    self.actionOnTimer = LuaHelper.Action(self:OnTimer())
 end
 
 function FriendsListItem:OnDestroy()
 
+    Scheduler.Instance:RemoveTimer(self.actionOnTimer)
+    self = nil 
 end
 
 function FriendsListItem:OnClose()
 
 end
+local STR_FIRST_WIN_OK = getCommonStr("STR_FIRST_WIN_OK")
+local STR_FIRST_WIN_TIME = getCommonStr("STR_FIRST_WIN_TIME")
+function FriendsListItem:OnTimer()
+	-- body
+	return function ()
+		-- body
+		if not self.friendData then
+			 Scheduler.Instance:RemoveTimer(self.actionOnTimer) 
+			 return 
+		end
+		if not self.gameObject.activeSelf then return end
+		self.mFirstWinCD  = self.mFirstWinCD - 1
 
+        if self.mFirstWinCD <= 0 then
+            NGUITools.SetActive(self.uiFirstWinFlag.gameObject, false)
+            Scheduler.Instance:RemoveTimer(self.actionOnTimer)
+        else
+			local server_time = GameSystem.mTime
+            local diff = FirstWinCD * 60 - (server_time - self.mFirstWinCD)
+            if diff <= 0 then
+                self.uiFirstWin.text = STR_FIRST_WIN_OK
+                Scheduler.Instance:RemoveTimer(self.actionOnTimer)
+
+            else
+                local timeStr = getTimeStr( diff )
+                self.uiFirstWin.text = string.format(STR_FIRST_WIN_TIME, timeStr)
+				-- Scheduler.Instance:AddTimer(1,false,self:OnTimer())
+
+            end
+        end
+	end
+end
 ----------------------------------------------
 
 function FriendsListItem:setData( msg, lst )
+	if self.friendData == msg then return end
 	self.friendData = msg
 	self.listType = lst
 
 	self:RefreshData()
 end
 
-
+local STR_FACTION_FORMAT = CommonFunction.GetConstString('STR_FACTION_FORMAT')
 function FriendsListItem:RefreshData()
 	if not self.headIconScript then
 		self.headIconScript = getLuaComponent(createUI("CareerRoleIcon", self.uiHeadIcon.transform))
@@ -119,7 +159,7 @@ function FriendsListItem:RefreshData()
 		self.headIconScript.id = tonumber(self.friendData.icon)
 		self.headIconScript:Refresh()
 	end
-
+	warning('friend info ',self.friendData.name,',online',self.friendData.online,'firstwinCD',self.friendData.first_win_time)
 	--self.uiHeadIcon.spriteName = "icon_portrait_"..self.friendData.icon
 	self.uiLabPlayerName.text = self.friendData.name
 	self.uiLabLvNum.text = self.friendData.level
@@ -151,8 +191,25 @@ function FriendsListItem:RefreshData()
 
 	if self.friendData.online == PlayerStateOnLine.OFFLINE then
 		self.uiLabOnline.text = logoutstr
+		NGUITools.SetActive(self.uiFirstWinFlag.gameObject,false)
 	else
-		self.uiLabOnline.text = getCommonStr('STR_ONLINE')
+		local inMatch  = self.friendData.online == 2 or self.friendData.online == 3
+		if inMatch then
+			self.uiLabOnline.text = getCommonStr("STR_IH_GAME")
+		else
+			self.uiLabOnline.text = getCommonStr('STR_ONLINE')
+		end
+		if Friends.IsFriend(self.friendData.acc_id) then
+			Scheduler.Instance:RemoveTimer(self.actionOnTimer)
+			Scheduler.Instance:AddTimer(1,true,self.actionOnTimer)
+
+            NGUITools.SetActive(self.uiFirstWinFlag.gameObject, true)
+			--首胜数据
+			self.mFirstWinCD = self.friendData.first_win_time
+			self:OnTimer()()
+		else
+			NGUITools.SetActive(self.uiFirstWinFlag.gameObject,false)
+		end
 	end
 
 
@@ -204,6 +261,30 @@ function FriendsListItem:RefreshData()
 		NGUITools.SetActive(self.uiApplyList.gameObject, false)
 		NGUITools.SetActive(self.uiBlackList.gameObject, false)
 		NGUITools.SetActive(self.uiNearyList.gameObject, true)
+	end
+	if Friends.IsFriend(self.friendData.acc_id) then
+		NGUITools.SetActive(self.uiSpFaction.gameObject,true)
+		local shinwaka = self.friendData.shinwakan
+		local color_str
+		local extro = 0
+		for _,v in ipairs(FriendExtraAwardsConfigRes) do
+			if shinwaka >= v['shinwakan'] then
+				extro = v['awards_percent']
+				color_str = v['colour']
+			else
+				break
+			end
+		end
+
+		self.uiLblFaction.text = string.format(STR_FACTION_FORMAT,shinwaka,extro)..'%'
+		if color_str then
+			local colors = string.split(color_str,',')
+			if colors then
+				self.uiSpFaction.color = Color.New(colors[1],colors[2],colors[3],1)
+			end
+		end
+	else
+		NGUITools.SetActive(self.uiSpFaction.gameObject,false)
 	end
 end
 
@@ -287,7 +368,7 @@ end
 --赠送好友金币
 function FriendsListItem:OnGive()
 	return function()
-		if not FunctionSwitchData.CheckSwith(FSID.friends_gift) then return end
+		if not FunctionSwitchData.CheckSwith(FSID.friends_gold) then return end
 
 		local gFriendPresendGiftTimes = GameSystem.Instance.CommonConfig:GetUInt("gFriendPresendGiftTimes")
 		if FriendData.Instance.present_times >= gFriendPresendGiftTimes then
@@ -372,7 +453,7 @@ end
 
 function FriendsListItem:OnChat()
 	return function()
-
+		self.parent:ChatToFriend(self.friendData.acc_id)
 	end
 end
 
@@ -384,11 +465,11 @@ function FriendsListItem:OnBtnOK()
 		self.msg = nil
 
 		local req = {
-		type = self.msgType,
-		op_friend = {
-		acc_id = self.friendData.acc_id,
-		plat_id = self.friendData.plat_id,
-		},
+			type = self.msgType,
+			op_friend = {
+				acc_id = self.friendData.acc_id,
+				plat_id = self.friendData.plat_id,
+			},
 		}
 
 		if self.msgType == 'FOT_DEL_FRIEND' then

@@ -210,11 +210,11 @@
     <icon>icon_task_001</icon>
     <index>3</index>
     <title>面对挑战</title>
-    <activity>3星完成生涯1-6</activity>
+    <activity>3星完成生涯1-5</activity>
     <precondition_id1>1</precondition_id1>
     <precondition_value1>1</precondition_value1>
     <condition_id1>49</condition_id1>
-    <condition_value1>10106</condition_value1>
+    <condition_value1>10105</condition_value1>
     <condition_id2>
     </condition_id2>
     <condition_value2>

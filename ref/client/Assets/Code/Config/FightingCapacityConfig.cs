@@ -39,12 +39,12 @@ public class FightingCapacityConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
 		ReadScoreDiff();
-		Logger.ConfigEnd(name1);
-		Logger.ConfigBegin(name2);
+		
+		Debug.Log("Config reading " + name2);
 		ReadEnhance();
-		Logger.ConfigEnd(name2);
+		
     }
 
     void ReadScoreDiff()
@@ -52,7 +52,7 @@ public class FightingCapacityConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         
@@ -73,7 +73,7 @@ public class FightingCapacityConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
         
@@ -92,7 +92,7 @@ public class FightingCapacityConfig
 	public int GetExpectedScoreDiff(IM.Number fcRatio)
 	{
 		if (fcRatio < 1)
-			Logger.LogError("FC ratio can not be smaller than 1.");
+			Debug.LogError("FC ratio can not be smaller than 1.");
 		int diff = 0;
 		foreach (KeyValuePair<IM.Number, int> pair in scoreDiff)
 		{
@@ -110,7 +110,7 @@ public class FightingCapacityConfig
 		level = Mathf.Max(level, -6);
 		IM.Number factor = IM.Number.one;
 		if (!enhanceFactor.TryGetValue(level, out factor))
-			Logger.LogError("Enhance factor of level " + level + " does not exist.");
+			Debug.LogError("Enhance factor of level " + level + " does not exist.");
 		return factor;
 	}
 }

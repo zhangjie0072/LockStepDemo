@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using fogs.proto.msg;
 
 /// <summary>
-/// 球场出现1个点，玩家抢到3个点获得1个球权可以进行投篮。最后分值最高者获胜。
+/// 球场出现1个点，玩家抢到3个点获得1个球权可以进行投篮。最后分值最高者 //速度与激情玩法
 /// </summary>
 public class GameMatch_GrabPoint 
 	: GameMatch
@@ -18,10 +18,12 @@ public class GameMatch_GrabPoint
 	uint totalPointNum;
 
 	GameObject homePointSignal;
-	GameObject clientPointSignal;
-
-    
-
+    GameObject clientPointSignal;
+    public enum ROLE_TYPE{
+        MAIN_ROLE,
+        NPC_ROLE,
+        NONE_ROlE,
+    }
 	public GameMatch_GrabPoint(Config config)
 		: base(config)
 	{
@@ -33,46 +35,50 @@ public class GameMatch_GrabPoint
 		GameSystem.Instance.mNetworkManager.ConnectToGS(config.type, "", 1);
 	}
 
-	override public void OnSceneComplete()
+	protected override void _OnLoadingCompleteImp ()
 	{
-		base.OnSceneComplete();
+		base._OnLoadingCompleteImp ();
 
 		if (m_config == null)
 		{
-			Logger.LogError("Match config file loading failed.");
+			Debug.LogError("Match config file loading failed.");
 			return;
 		}
 
+        //TODO 针对PVP修改
 		//main role
 		PlayerManager pm = GameSystem.Instance.mClient.mPlayerManager;
-		m_mainRole = pm.GetPlayerById( uint.Parse(m_config.MainRole.id) );
-		m_mainRole.m_StateMachine.ReplaceState(new PlayerState_Stand_Simple(m_mainRole.m_StateMachine, this));
-		m_mainRole.m_inputDispatcher = new InputDispatcher(this, m_mainRole);
-		m_mainRole.m_catchHelper = new CatchHelper(m_mainRole);
-		m_mainRole.m_catchHelper.ExtractBallLocomotion();
-		m_mainRole.m_StateMachine.SetState(PlayerState.State.eStand, true);
-		m_mainRole.m_InfoVisualizer.CreateStrengthBar();
-		m_mainRole.m_InfoVisualizer.ShowStaminaBar(true);
-		m_mainRole.m_team.m_role = GameMatch.MatchRole.eOffense;
-		m_mainRole.m_alwaysForbiddenPickup = true;
+		mainRole = pm.GetPlayerById( uint.Parse(m_config.MainRole.id) );
+		mainRole.m_StateMachine.ReplaceState(new PlayerState_Stand_Simple(mainRole.m_StateMachine, this));
+        mainRole.operMode = Player.OperMode.Input;
+		mainRole.m_catchHelper = new CatchHelper(mainRole);
+		mainRole.m_catchHelper.ExtractBallLocomotion();
+		mainRole.m_StateMachine.SetState(PlayerState.State.eStand, true);
+		mainRole.m_team.m_role = GameMatch.MatchRole.eOffense;
+		mainRole.m_alwaysForbiddenPickup = true;
 
 		//npc
-        Team oppoTeam = m_mainRole.m_team.m_side == Team.Side.eAway ? m_homeTeam : m_awayTeam;
+        Team oppoTeam = mainRole.m_team.m_side == Team.Side.eAway ? m_homeTeam : m_awayTeam;
 		npc = oppoTeam.GetMember(0);
 		
 		npc.m_StateMachine.ReplaceState(new PlayerState_Stand_Simple(npc.m_StateMachine, this));
 		npc.m_StateMachine.ReplaceState(new PlayerState_Knocked_NoHold(npc.m_StateMachine, this));
 		if (npc.model != null)
 			npc.model.EnableGrey();
-		npc.m_aiMgr = new AISystem_GrabPoint(this, npc, AIState.Type.eGrabPoint_Init, m_config.NPCs[0].AIID);
 		npc.m_team.m_role = GameMatch.MatchRole.eDefense;
+        npc.operMode = Player.OperMode.AI;
 
 		npc.m_alwaysForbiddenPickup = true;
 
-		_UpdateCamera(m_mainRole);
+		_UpdateCamera(mainRole);
 
 		mCurScene.mBasket.onGoal += OnGoal;
 	}
+
+    public override AISystem CreateAISystem(Player player)
+    {
+		return new AISystem_GrabPoint(this, player, AIState.Type.eGrabPoint_Init, m_config.NPCs[0].AIID);
+    }
 
 	protected override void OnLoadingComplete ()
 	{
@@ -80,7 +86,7 @@ public class GameMatch_GrabPoint
 		m_stateMachine.SetState(m_config.needPlayPlot ? MatchState.State.ePlotBegin : MatchState.State.eShowRule);
 	}
     
-    public override void HandleGameBegin(Pack pack)
+    public override void OnGameBegin(GameBeginResp resp)
     {
         m_stateMachine.SetState(MatchState.State.eBegin);
     }
@@ -134,8 +140,9 @@ public class GameMatch_GrabPoint
 
 	public override void ResetPlayerPos()
 	{
-        m_mainRole.position = GameSystem.Instance.MatchPointsConfig.GrabPointPos.mainRole_transform.position;
-		m_mainRole.forward = IM.Vector3.forward;
+        //TODO 针对PVP修改
+        mainRole.position = GameSystem.Instance.MatchPointsConfig.GrabPointPos.mainRole_transform.position;
+		mainRole.forward = IM.Vector3.forward;
         npc.position = GameSystem.Instance.MatchPointsConfig.GrabPointPos.npc_transform.position;
 		npc.forward = IM.Vector3.forward;
 	}
@@ -158,50 +165,62 @@ public class GameMatch_GrabPoint
 			return base.IsCommandValid(command);
 	}
 
-	public override void Update(IM.Number deltaTime)
+	public override void GameUpdate(IM.Number deltaTime)
 	{
-		base.Update(deltaTime);
-
-		if (m_bTimeUp)
-			npc.m_aiMgr.m_enable = false;
-
-		if (m_stateMachine.m_curState != null && m_stateMachine.m_curState.m_eState == MatchState.State.ePlaying &&
-			Camera.main != null)
-		{
-			if (curPoint == null)
-			{
-				curPoint = CreatePoint();
-				if (curPoint != null)
-				{
-					curPoint.SetActive(true);
-					// if the point is generated at the player's position
-                    //TODO：之前在SphereCollider取得半径，后面获取值的方式要改，暂时定为常量
-                    //float radius = curPoint.GetComponent<SphereCollider>().radius;
-                    IM.Number radius = new IM.Number(0,700);
-					if (GameUtils.HorizonalDistance(curPointPosition, m_mainRole.position) < radius)
-					{
-						if (OnGrabPoint(curPoint.gameObject, m_mainRole.gameObject.GetComponent<Collider>()))
-							Object.Destroy(curPoint);
-					}
-					else if (GameUtils.HorizonalDistance(curPointPosition, npc.position) < radius)
-					{
-						if (OnGrabPoint(curPoint.gameObject, npc.gameObject.GetComponent<Collider>()))
-							Object.Destroy(curPoint);
-					}
-				}
-			}
-		}
-
-		if (m_stateMachine.m_curState != null && m_stateMachine.m_curState.m_eState == MatchState.State.eOver)
-			HideCanShoot();
+		base.GameUpdate(deltaTime);
 	}
+
+    public override void ViewUpdate()
+    {
+        base.ViewUpdate();
+        if (m_bTimeUp)
+            npc.m_aiMgr.m_enable = false;
+
+        if (m_stateMachine.m_curState != null && m_stateMachine.m_curState.m_eState == MatchState.State.ePlaying &&
+            Camera.main != null)
+        {
+            if (curPoint == null)
+            {
+                curPoint = CreatePoint();
+                curPoint.SetActive(true);
+            }
+
+            if (curPoint != null)
+            {
+                // if the point is generated at the player's position
+                //TODO：之前在SphereCollider取得半径，后面获取值的方式要改，暂时定为常量
+                    //TODO 针对PVP修改
+                //float radius = curPoint.GetComponent<SphereCollider>().radius;
+                if (GameUtils.HorizonalDistance(curPointPosition, mainRole.position) < mainRole.m_Radius && mainRolePointNum<3)
+                {
+                    if (OnGrabPoint(ROLE_TYPE.MAIN_ROLE))
+                    {
+                        Object.Destroy(curPoint);
+                        curPoint = null;
+                    }
+                }
+                else if (GameUtils.HorizonalDistance(curPointPosition, npc.position) < npc.m_Radius && npcPointNum < 3)
+                {
+                    if (OnGrabPoint(ROLE_TYPE.NPC_ROLE))
+                    {
+                        Object.Destroy(curPoint);
+                        curPoint = null;
+                    }
+                }
+            }
+        }
+
+        if (m_stateMachine.m_curState != null && m_stateMachine.m_curState.m_eState == MatchState.State.eOver)
+            HideCanShoot();
+    }
 
 	private GameObject CreatePoint()
 	{
 		GameObject point = new GameObject("Point");
         if (totalPointNum++ == 0)
         {
-            point.transform.localPosition = (Vector3)GameSystem.Instance.MatchPointsConfig.FreeThrowCenter.transform.position;
+            curPointPosition = GameSystem.Instance.MatchPointsConfig.FreeThrowCenter.transform.position;
+            point.transform.localPosition = (Vector3)curPointPosition;
             //GameObject freeThrowCenter = ResourceLoadManager.Instance.LoadPrefab("Prefab/DynObject/MatchPoints/GrabPoint_Pos") as GameObject;
             //Transform npc = freeThrowCenter.transform.FindChild("NPC");
             //point.transform.localPosition = npc.position;
@@ -215,18 +234,19 @@ public class GameMatch_GrabPoint
 		GameObject arrow = Object.Instantiate(ResourceLoadManager.Instance.LoadPrefab("Prefab/Indicator/Position")) as GameObject;
 		arrow.transform.parent = point.transform;
 		arrow.transform.localPosition = new Vector3(0f, 0.01f, 0f);
-		SphereCollider collider = point.AddComponent<SphereCollider>();
-		collider.isTrigger = true;
-		collider.radius = 0.7f;
-		SceneTrigger trigger = point.AddComponent<SceneTrigger>();
-		trigger.onTrigger += OnGrabPoint;
-		trigger.oneShot = false;
+        //SphereCollider collider = point.AddComponent<SphereCollider>();
+        //collider.isTrigger = true;
+        //collider.radius = 0.7f;
+        //SceneTrigger trigger = point.AddComponent<SceneTrigger>();
+        //trigger.onTrigger += OnGrabPoint;
+        //trigger.oneShot = false;
 		return point;
 	}
 
 	private IM.Vector3 GeneratePointPosition()
 	{
-        IM.Number mainRoleX = m_mainRole.position.x;
+        //TODO 针对PVP修改
+        IM.Number mainRoleX = mainRole.position.x;
 		IM.Number npcX = npc.position.x;
 		IM.Number selectedX = IM.Random.value <= POINT_CLOSE_TO_ME_RATE ? mainRoleX : npcX;
 		IM.Number xCenter = (mainRoleX + npcX) / 2;
@@ -247,21 +267,21 @@ public class GameMatch_GrabPoint
 	private void OnGoal(UBasketball ball)
 	{
 		int score = GetScore(ball.m_pt);
-		if (ball.m_actor == m_mainRole)
+		if (ball.m_actor == mainRole)
 		{
 			m_homeScore += score;
-			Logger.Log("Main role score: " + m_homeScore);
+			Debug.Log("Main role score: " + m_homeScore);
 		}
 		else if (ball.m_actor == npc)
 		{
 			m_awayScore += score;
-			Logger.Log("NPC score: " + m_awayScore);
+			Debug.Log("NPC score: " + m_awayScore);
 		}
 	}
 
-	private bool OnGrabPoint(GameObject source, Collider collider)
+	private bool OnGrabPoint(ROLE_TYPE roleType)
 	{
-		if (collider.gameObject == m_mainRole.gameObject)
+		if (roleType == ROLE_TYPE.MAIN_ROLE)
 		{
 			if (mainRolePointNum < 3)
 			{
@@ -269,14 +289,14 @@ public class GameMatch_GrabPoint
 				UpdateSignal(homePointSignal, mainRolePointNum);
 				if (mainRolePointNum >= 3)
 				{
-					GainBall(m_mainRole);
+					GainBall(mainRole);
 					ShowCanShoot();
 				}
 			}
 			++m_homeScore;
 			return true;
 		}
-		else if (collider.gameObject == npc.gameObject)
+		else if (roleType == ROLE_TYPE.NPC_ROLE)
 		{
 			if (npcPointNum < 3)
 			{
@@ -310,7 +330,7 @@ public class GameMatch_GrabPoint
 
 	private void OnBallShoot(UBasketball ball)
 	{
-		if (ball.m_actor == m_mainRole)
+		if (ball.m_actor == mainRole)
 		{
 			mainRolePointNum = 0;
 			UpdateSignal(homePointSignal, mainRolePointNum);
@@ -325,7 +345,7 @@ public class GameMatch_GrabPoint
 
 	private void OnBallHitGround(UBasketball ball)
 	{
-		if (m_mainRole.m_StateMachine.m_curState.m_eState == PlayerState.State.eFallLostBall)
+		if (mainRole.m_StateMachine.m_curState.m_eState == PlayerState.State.eFallLostBall)
 		{
 			mainRolePointNum = 0;
 			UpdateSignal(homePointSignal, mainRolePointNum);

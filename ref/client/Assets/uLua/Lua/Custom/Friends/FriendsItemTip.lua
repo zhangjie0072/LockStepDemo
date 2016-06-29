@@ -73,7 +73,7 @@ function FriendsItemTip:setData( acc_id, name, icon, plat_id )
 		self.headIconScript:Refresh()
 	end
 
-    local isFri = FriendData.Instance:IsFriend(acc_id)
+    local isFri = Friends.IsFriend(acc_id)--FriendData.Instance:IsFriend(acc_id)
     self.uiBtnAdd.isEnabled = (isFri==false)
     self.uiBtnBlack.isEnabled = (isFri==false)
 end

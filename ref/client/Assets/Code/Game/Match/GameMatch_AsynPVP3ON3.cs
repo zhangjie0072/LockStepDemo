@@ -38,14 +38,14 @@ public class GameMatch_AsynPVP3ON3 :GameMatch_MultiPlayer
 		return notifyGameStart.rival_data[0].name;
 	}
 
-	override public void OnSceneComplete ()
+	protected override void _OnLoadingCompleteImp ()
 	{
-		base.OnSceneComplete();
+		base._OnLoadingCompleteImp ();
 		UBasketball ball = mCurScene.CreateBall();
 		
 		if( m_config == null )
 		{
-			Logger.LogError("Match config file loading failed.");
+			Debug.LogError("Match config file loading failed.");
 			return;
 		}
 
@@ -54,27 +54,24 @@ public class GameMatch_AsynPVP3ON3 :GameMatch_MultiPlayer
 		foreach (PlayerData data in notifyGameStart.rival_data)
 			_CreateRoomUser(data);
 
-		m_mainRole.m_InfoVisualizer.ShowStaminaBar(true);
+		mainRole.m_InfoVisualizer.ShowStaminaBar(true);
 
 		m_homeTeam.SortMember();
 		m_awayTeam.SortMember();
 		AssumeDefenseTarget();
 
-        Team oppoTeam = m_mainRole.m_team.m_side == Team.Side.eAway ? m_homeTeam : m_awayTeam;
+        Team oppoTeam = mainRole.m_team.m_side == Team.Side.eAway ? m_homeTeam : m_awayTeam;
         foreach (Player member in oppoTeam.members)
         {
             if (member.model != null)
 				member.model.EnableGrey();
         }
 
-        m_mainRole.m_team.m_role = GameMatch.MatchRole.eOffense;
-        if (m_mainRole.m_defenseTarget != null)
-            m_mainRole.m_defenseTarget.m_team.m_role = GameMatch.MatchRole.eDefense;
+        mainRole.m_team.m_role = GameMatch.MatchRole.eOffense;
+        if (mainRole.m_defenseTarget != null)
+            mainRole.m_defenseTarget.m_team.m_role = GameMatch.MatchRole.eDefense;
 
-        _UpdateCamera(m_mainRole);
-
-		m_mainTeam = m_mainRole.m_team;
-
+        _UpdateCamera(mainRole);
 	}
 
 	protected override void OnLoadingComplete ()
@@ -92,7 +89,7 @@ public class GameMatch_AsynPVP3ON3 :GameMatch_MultiPlayer
 		}
 	}
 
-    public override void HandleGameBegin(Pack pack)
+    public override void OnGameBegin(GameBeginResp resp)
     {
 		m_stateMachine.SetState(MatchState.State.eTipOff);
     }
@@ -117,97 +114,6 @@ public class GameMatch_AsynPVP3ON3 :GameMatch_MultiPlayer
 		return player;
 	}
 
-	public override void Update(IM.Number deltaTime)
-	{
-		base.Update(deltaTime);
-
-		UBasketball ball = mCurScene.mBall;
-		if( ball == null )
-			return;
-
-		if( m_uiMatch != null )
-		{
-			if (ball.m_owner == null)
-			{
-				m_uiMatch.leftBall.SetActive(false);
-				m_uiMatch.rightBall.SetActive(false);
-			}
-			else if (ball.m_owner.m_team == m_mainRole.m_team)
-			{
-				m_uiMatch.leftBall.SetActive(true);
-				m_uiMatch.rightBall.SetActive(false);
-			}
-			else
-			{
-				m_uiMatch.leftBall.SetActive(false);
-				m_uiMatch.rightBall.SetActive(true);
-			}
-		}
-
-		if( !initDone )
-			return;
-
-		if( m_stateMachine.m_curState.m_eState != MatchState.State.eOpening && m_stateMachine.m_curState.m_eState != MatchState.State.eOverTime 
-		   && ball != null )
-		{
-			if( ball.m_owner != null )
-			{
-				Player owner = ball.m_owner;
-				SwitchMainrole(owner);
-			}
-			else if( ball.m_ballState == BallState.eUseBall_Pass )
-			{
-				Player interceptor = ball.m_interceptor;
-				if( interceptor == null )
-				{
-					Player owner = ball.m_catcher;
-					SwitchMainrole(owner);
-				}
-				else
-				{
-					if( interceptor.m_team == m_mainRole.m_team )
-						SwitchMainrole(interceptor);
-					else if( interceptor.m_defenseTarget != null )
-						SwitchMainrole(interceptor.m_defenseTarget);
-				}
-			}
-		}
-	}
-	
-	override public void SwitchMainrole( Player target )
-	{
-		if( m_mainRole == target || m_mainTeam != target.m_team )
-			return;
-		if( m_stateMachine.m_curState.m_eState == MatchState.State.eOver )
-			return;
-
-		target.m_inputDispatcher = new InputDispatcher(this, target);
-		target.m_inputDispatcher.TransmitUncontrolInfo(m_mainRole.m_inputDispatcher);
-		m_mainRole.m_inputDispatcher = null;
-		
-		if( m_mainRole.m_aiMgr != null )
-			m_mainRole.m_aiMgr.m_enable = Debugger.Instance.m_bEnableAI;;
-		if (target.m_team.m_role == MatchRole.eDefense)
-			target.m_inputDispatcher.disableAIOnAction = true;
-		else
-			if (target.m_aiMgr != null)
-				target.m_aiMgr.m_enable = false;
-
-		m_mainRole.m_InfoVisualizer.ShowStaminaBar(false);
-		//if( m_mainRole.m_defenseTarget != null )
-		//	m_mainRole.m_defenseTarget.m_AOD.visible = false;
-
-		target.m_InfoVisualizer.ShowStaminaBar(true);
-		//if( target.m_defenseTarget != null )
-		//	target.m_defenseTarget.m_AOD.visible = true;
-
-		m_mainRole = target;
-		_UpdateCamera(m_mainRole);
-		InputReader.Instance.player = m_mainRole;
-
-		//Logger.Log("current main role: " + m_mainRole.m_id);
-	}
-
 	public override bool EnableTakeOver()
 	{
 		return false;
@@ -230,7 +136,7 @@ public class GameMatch_AsynPVP3ON3 :GameMatch_MultiPlayer
 
 	public override bool EnableEnhanceAttr()
 	{
-		return true;
+		return false;
 	}
 
 	public override bool EnableSwitchDefenseTarget()

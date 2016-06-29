@@ -63,15 +63,15 @@ public class NPCDataConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
 		ReadNPCData();
-		Logger.ConfigBegin(name2);
-		Logger.ConfigEnd(name1);
+		Debug.Log("Config reading " + name2);
+		
 		ReadTourNPC();
-		Logger.ConfigBegin(name3);
-		Logger.ConfigEnd(name2);
+		Debug.Log("Config reading " + name3);
+		
 		ReadNPCmodify();
-		Logger.ConfigEnd(name3);
+		
     }
 
     public void ReadNPCData()
@@ -79,7 +79,7 @@ public class NPCDataConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name1);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name1);
+            Debug.LogError("LoadConfig failed: " + name1);
             return;
         }
         NPCDatas.Clear();
@@ -329,7 +329,7 @@ public class NPCDataConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name2);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name2);
+            Debug.LogError("LoadConfig failed: " + name2);
             return;
         }
         TourNpcs.Clear();
@@ -463,7 +463,7 @@ public class NPCDataConfig
         string text = ResourceLoadManager.Instance.GetConfigText(name3);
         if (text == null)
         {
-            Logger.LogError("LoadConfig failed: " + name3);
+            Debug.LogError("LoadConfig failed: " + name3);
             return;
         }
         NPCmodify.Clear();
@@ -506,7 +506,7 @@ public class NPCDataConfig
         else
         {
             string log = string.Format("{0}.xml 没有找到 ID={1}", GlobalConst.DIR_XML_NPC, ID);
-            Logger.LogError(log);
+            Debug.LogError(log);
             return null;
         }
     }
@@ -554,14 +554,14 @@ public class NPCDataConfig
 		attr.attrs["bodythrowcatch_distance"] = npcattr.attrs["bodythrowcatch_distance"];
 		attr.attrs["bodythrowcatch_prob"] = npcattr.attrs["bodythrowcatch_prob"];
 
-        Logger.Log("================================================NPC:" + NPCID);
-        Logger.Log("shoot_near:" +  attr.attrs["shoot_near"]);
-        Logger.Log("shoot_middle:" + attr.attrs["shoot_middle"]);
-        Logger.Log("anti_disturb:" + attr.attrs["anti_disturb"]);
-        Logger.Log("steal:" +  attr.attrs["steal"]);
-        Logger.Log("rebound:" + attr.attrs["rebound"]);
-        Logger.Log("disturb:" + attr.attrs["disturb"]);
-        Logger.Log("strength:" + attr.attrs["strength"]);
+        Debug.Log("================================================NPC:" + NPCID);
+        Debug.Log("shoot_near:" +  attr.attrs["shoot_near"]);
+        Debug.Log("shoot_middle:" + attr.attrs["shoot_middle"]);
+        Debug.Log("anti_disturb:" + attr.attrs["anti_disturb"]);
+        Debug.Log("steal:" +  attr.attrs["steal"]);
+        Debug.Log("rebound:" + attr.attrs["rebound"]);
+        Debug.Log("disturb:" + attr.attrs["disturb"]);
+        Debug.Log("strength:" + attr.attrs["strength"]);
         //return TourNpcs.Find(x => x.position == NPCDatas[NPCID].position && x.level == MainPlayer.Instance.Level).attrs;
         return attr;
     }
@@ -599,13 +599,13 @@ public class NPCDataConfig
 		attr.attrs["bodythrowcatch_distance"] = npcattr.attrs["bodythrowcatch_distance"];
 		attr.attrs["bodythrowcatch_prob"] = npcattr.attrs["bodythrowcatch_prob"];
 
-        Logger.Log("shoot_near:" + attr.attrs["shoot_near"]);
-        Logger.Log("shoot_middle:" + attr.attrs["shoot_middle"]);
-        Logger.Log("anti_disturb:" + attr.attrs["anti_disturb"]);
-        Logger.Log("steal:" + attr.attrs["steal"]);
-        Logger.Log("rebound:" + attr.attrs["rebound"]);
-        Logger.Log("disturb:" + attr.attrs["disturb"]);
-        Logger.Log("strength:" + attr.attrs["strength"]);
+        Debug.Log("shoot_near:" + attr.attrs["shoot_near"]);
+        Debug.Log("shoot_middle:" + attr.attrs["shoot_middle"]);
+        Debug.Log("anti_disturb:" + attr.attrs["anti_disturb"]);
+        Debug.Log("steal:" + attr.attrs["steal"]);
+        Debug.Log("rebound:" + attr.attrs["rebound"]);
+        Debug.Log("disturb:" + attr.attrs["disturb"]);
+        Debug.Log("strength:" + attr.attrs["strength"]);
         //return TourNpcs.Find(x => x.position == NPCDatas[NPCID].position && x.level == MainPlayer.Instance.Level).attrs;
         return attr;
     }

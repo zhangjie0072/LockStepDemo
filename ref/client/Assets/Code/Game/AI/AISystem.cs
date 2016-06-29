@@ -60,6 +60,7 @@ public class AISystem
 						_enable = false;
 				}
 				*/
+                Debug.LogFormat("AISystem.m_enable: {0} {1} {2}", m_player.m_team.m_side, m_player.m_id, value);
 			}
 		}
 	}
@@ -108,7 +109,7 @@ public class AISystem
 	void _RandomInput()
 	{
 		//angle sector from 0 to 16
-		m_player.m_curInputDir = Random.Range(-1, 16);
+		m_player.m_curInputDir = IM.Random.Range(-1, 16);
 	}
 
 	protected virtual void _BuildAIState()
@@ -163,7 +164,7 @@ public class AISystem
 			return null;
 		AIState state = m_arStateList[(int)type];
 		if( state == null )
-			Logger.LogError( "Unsupported state: " + type);
+			Debug.LogError( "Unsupported state: " + type);
 		return state;
 	}
 	
@@ -172,18 +173,18 @@ public class AISystem
 		if( m_curState == newState && !bForceChange)
 			return;
 		//if (m_curState != null && newState != null)
-		//	Logger.Log(m_player.m_name + ": Change AI state from " + m_curState.m_eType + " to " + newState.m_eType);	
+		//	Debug.Log(m_player.m_name + ": Change AI state from " + m_curState.m_eType + " to " + newState.m_eType);	
 		if( m_curState != null )
 			m_curState.OnExit();
 		
 		//if( m_curState != null )
-		//	Logger.Log( string.Format("AIState from state: {0} to state: {1}", m_curState.m_eType, newState.m_eType) );
+		//	Debug.Log( string.Format("AIState from state: {0} to state: {1}", m_curState.m_eType, newState.m_eType) );
 		
 		AIState lastState = m_curState;
 		m_curState = m_arStateList[(int)newState.m_eType];
 		if( m_curState == null )
 		{
-			Logger.LogError( string.Format("Can not find state: {0}", newState.m_eType) );
+			Debug.LogError( string.Format("Can not find state: {0}", newState.m_eType) );
 			return;
 		}
 			
@@ -224,7 +225,7 @@ public class AISystem
             odds = IM.Number.zero;
         }
 
-		//Logger.Log("AISystem, SetTransaction " + newState.m_eType + " " + odds + " " + bForceChange);
+		//Debug.Log("AISystem, SetTransaction " + newState.m_eType + " " + odds + " " + bForceChange);
 		AIStateTransaction newTransaction = new AIStateTransaction(m_curState, newState, odds, bForceChange);
 		AIStateTransaction existTransaction = m_statesCandidates.Find( delegate(AIStateTransaction transaction) {
 			return transaction.m_to == newTransaction.m_to;
@@ -270,11 +271,11 @@ public class AISystem
 		
 		AIState fromState = m_curState;
 
-		//Logger.Log("AI-Trans(" + m_player.m_id + "):Think---------");
+		//Debug.Log("AI-Trans(" + m_player.m_id + "):Think---------");
 		IM.Number totalOdds = IM.Number.zero;
 		foreach( AIStateTransaction transItem in m_statesCandidates )
 		{
-			//Logger.Log("AI-Trans(" + m_player.m_id + "): from " + transItem.m_from.m_eType + " to " + transItem.m_to.m_eType +
+			//Debug.Log("AI-Trans(" + m_player.m_id + "): from " + transItem.m_from.m_eType + " to " + transItem.m_to.m_eType +
 			//	" odds " + transItem.m_odds + " forceChange:" + transItem.m_bForce);
 			KeyValuePair<IM.Number,AIStateTransaction> kv = new KeyValuePair<IM.Number, AIStateTransaction>(transItem.m_odds, transItem);
 			mapStateOdds.Add(kv);
@@ -297,12 +298,12 @@ public class AISystem
 			odds += item.Key / totalOdds;
 			if( finalOdds < odds )
 			{
-				//Logger.Log("AI-Trans(" + m_player.m_id + "):Trans to " + item.Value.m_to.m_eType);
+				//Debug.Log("AI-Trans(" + m_player.m_id + "):Trans to " + item.Value.m_to.m_eType);
 				_SetAIState(item.Value.m_to, item.Value.m_bForce);
 				break;
 			}
 		}
-		//Logger.Log("AI-Trans(" + m_player.m_id + "):Think*********");
+		//Debug.Log("AI-Trans(" + m_player.m_id + "):Think*********");
 
 		m_statesCandidates.Clear();
 	}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 public abstract class ItemBase
 {
@@ -40,17 +41,17 @@ public abstract class ConfigBase
             return;
         isLoadFinish = false;
 
-		Logger.ConfigBegin(name);
+		Debug.Log("Config reading " + name);
         try
         {
             this.ReadConfigParse();
         }
         catch (System.Exception ex)
         {
-            Logger.LogError(ex.Message);        	
+            Debug.LogError(ex.Message);        	
         }
 
-		Logger.ConfigEnd(name);
+		
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
     }
 

@@ -111,12 +111,12 @@ public class GuideConfig
         isLoadFinish = false;
         lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
 		ReadModule();
-		Logger.ConfigBegin(name2);
-		Logger.ConfigEnd(name1);
+		Debug.Log("Config reading " + name2);
+		
 		ReadStep();
-		Logger.ConfigEnd(name2);
+		
     }
 
 	public List<GuideModule> GetModules(string uiName)

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using fogs.proto.msg;
-
+//ÌøÇò
 public class MatchStateTipOff
 	: MatchState
 {
@@ -11,6 +11,7 @@ public class MatchStateTipOff
 	private GameObject m_goBeginUI;
 
 	private static IM.Number fBallInitHeight = new IM.Number(3,500);
+    private static IM.Number INIT_VEl = new IM.Number(5);
 	private GameUtils.Timer mTimer;
 	private GameUtils.Timer mTimerSound;
 
@@ -55,9 +56,6 @@ public class MatchStateTipOff
 			player.m_enableMovement = false;
 			player.m_bMovedWithBall = false;
 
-			if (player.m_aiMgr != null)
-				player.m_aiMgr.m_enable = false;
-			
 			if( player.m_catchHelper != null )
 				player.m_catchHelper.enabled = true;
 			
@@ -77,7 +75,7 @@ public class MatchStateTipOff
 			m_goBeginUI = GameSystem.Instance.mClient.mUIManager.CreateUI("UIBeginCounter");
 		if (m_goBeginUI == null)
 		{
-			Logger.Log("Error -- can not find ui resource " + "UIBeginCounter");
+			Debug.Log("Error -- can not find ui resource " + "UIBeginCounter");
 			return;
 		}
 		Animation anim = m_goBeginUI.GetComponentInChildren<Animation>();
@@ -115,12 +113,6 @@ public class MatchStateTipOff
 		m_match.m_homeTeam.m_role = GameMatch.MatchRole.eNone;
 		m_match.m_awayTeam.m_role = GameMatch.MatchRole.eNone;
 		m_match.m_ruler.m_toCheckBallTeam = null;
-
-		if (m_match is GameMatch_3ON3 || m_match is GameMatch_PracticeVs)
-		{
-			GameMatch_MultiPlayer mul = m_match as GameMatch_MultiPlayer;
-			mul.SwitchMainrole(mul.m_homeTeam.members[0]);
-		}
 	}
 
 	public override void OnEvent (PlayerActionEventHandler.AnimEvent animEvent, Player sender, System.Object context)
@@ -226,7 +218,7 @@ public class MatchStateTipOff
 	protected void _OnCounterDoneImp()
 	{
 		UBasketball ball = m_match.mCurScene.mBall;
-		ball.initVel = IM.Vector3.up * IM.Number.half;
+		ball.initVel = IM.Vector3.up * INIT_VEl;
 		ball.m_fTime = IM.Number.zero;
 		ball.m_ballState = BallState.eRebound;
 		
@@ -245,9 +237,9 @@ public class MatchStateTipOff
         m_match.m_gameMatchCountStop = false;
 	}
 
-	override public void Update (IM.Number fDeltaTime)
+	override public void GameUpdate (IM.Number fDeltaTime)
 	{
-		base.Update(fDeltaTime);
+		base.GameUpdate(fDeltaTime);
 		mTimer.Update(fDeltaTime);
 		mTimerSound.Update(fDeltaTime);
 

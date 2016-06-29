@@ -14,7 +14,7 @@ public class ShootSimulation
 		m_ball = ball;
 	}
 
-	public bool DoSimulate(int sector, IM.Vector3 angleAdjustment, IM.Number speed, ref ShootSolution solution)
+	public bool DoSimulate(int sector, IM.Vector2 angleAdjustment, IM.Number speed, ShootSolution.AnimationType type, IM.Number reductionIndex, ref ShootSolution solution)
 	{
 		if( sector == -1 )
 			return false;
@@ -52,7 +52,7 @@ public class ShootSimulation
 		solution.m_vFinVel  = vecInitVel;
 		solution.m_vStartPos = vecInitPos;
 		
-		_Simulating(vecInitPos, vecInitVel, ref solution);
+		_Simulating(vecInitPos, vecInitVel, type, reductionIndex, ref solution);
 		
 		vecInitPos = solution.m_vInitPos;
 		vecFinPos = solution.m_vFinPos;
@@ -61,7 +61,7 @@ public class ShootSimulation
 		return true;
 	}
 
-	bool _Simulating(IM.Vector3 vecInitPos, IM.Vector3 vecInitVel, ref ShootSolution solution)
+	bool _Simulating(IM.Vector3 vecInitPos, IM.Vector3 vecInitVel, ShootSolution.AnimationType type, IM.Number reductionIndex, ref ShootSolution solution)
 	{
 		solution.ClearCurve();
 
@@ -88,7 +88,10 @@ public class ShootSimulation
 			if(fTime_Rim < fTime_BackBoard && fTime_Rim < fTime_Ground)
 			{
 				shootCurve.fTime = fTime_Rim;
-				_DoCollision_Rim(solution.m_vBounceRimAdjustment, shootCurve, fTime_Rim, ref vecInitPos, ref vecInitVel);
+                //if (solution.m_animationType != ShootSolution.AnimationType.none)
+                //    _DoCollision_Rim(solution.m_vBounceRimAdjustment * reductionIndex, shootCurve, fTime_Rim, ref vecInitPos, ref vecInitVel);
+                //else
+				    _DoCollision_Rim(solution.m_vBounceRimAdjustment, shootCurve, fTime_Rim, ref vecInitPos, ref vecInitVel);
 				
 				if(_CheckShootSuccess(shootCurve, ref fTime_Rim))		
 					bSuccess = true;
@@ -98,7 +101,8 @@ public class ShootSimulation
 				                         shootCurve.fY_a, shootCurve.fY_b, shootCurve.fY_c, shootCurve.fZ_a, shootCurve.fZ_b, shootCurve.fZ_c);
 				
 				solution.m_vFinPos = vecInitPos;
-				solution.m_vFinVel = vecInitVel;
+                solution.m_vFinVel = vecInitVel;       
+               
 			}
 			//collide backboard
 			else if(fTime_BackBoard < fTime_Rim && fTime_BackBoard < fTime_Ground)
@@ -123,7 +127,7 @@ public class ShootSimulation
 				IM.Number fTime_Goal = IM.Number.zero;
 				if(_CheckShootSuccess(shootCurve, ref fTime_Goal))
 				{
-					Logger.Log("goal success");
+					Debug.Log("goal success");
 
 					bSuccess = true;
 					solution.AddCurve(fTime_Goal, shootCurve.fX_a, shootCurve.fX_b, shootCurve.fX_c,
@@ -165,7 +169,7 @@ public class ShootSimulation
 			
 			if(iBoundCount > 100)
 			{
-				Logger.Log("Invalid shoot solution: too many bounds.");
+				Debug.Log("Invalid shoot solution: too many bounds.");
 				//solution.ClearCurve();
 				return false;
 			}
@@ -190,6 +194,25 @@ public class ShootSimulation
 		curve.fZ_b = vecInitVel.z;
 		curve.fZ_c = vecInitPos.z;
 	}
+
+    public void CalculateLineCurve(ref ShootSolution.LineCurve line, IM.Vector3 vecInitPos, IM.Vector3 vecInitVel)
+    {
+        line.dir.x = -vecInitVel.x;
+        line.dir.z = -vecInitVel.z;
+        line.dir.y = IM.Number.zero;
+        line.dir.Normalize();
+        line.x0.x = vecInitPos.x;
+        line.x0.y = vecInitPos.y;
+        line.x0.z = vecInitPos.z;
+        line.mTime = IM.Number.one;
+        line.count = 0;
+        IM.Vector3 x = new IM.Vector3();
+        x.x = IM.Number.zero;
+        x.y = new IM.Number(3, 100);
+        x.z = new IM.Number(12, 800);
+        line.preVec = x;
+        line.midDis = IM.Math.Abs(IM.Vector3.Distance(line.x0, GameSystem.Instance.mClient.mCurMatch.mCurScene.mBasket.m_rim.center));
+    }
 	
 	bool _CheckCollision_Rim(ShootSolution.SShootCurve curve, ref IM.Number fTime)
 	{
@@ -355,7 +378,7 @@ public class ShootSimulation
 			vecForce.x = vecForce.z = IM.Number.zero;
 		}
 		*/
-		IM.Number fDotProd = IM.Number.Raw(IM.Vector3.Dot(vecBallVel, vecForce));
+		IM.Number fDotProd = IM.Vector3.Dot(vecBallVel, vecForce);
 		vecResultVel = vecBallVel -  vecForce * fDotProd;
 
 		vecResultVel.x *= vBounceRim.x;

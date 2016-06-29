@@ -32,7 +32,7 @@ public class PlatNetwork : Singleton<PlatNetwork>
 
             GameSystem.Instance.mNetworkManager.ConnectToPS(serverIP, (int)platPort);
 
-            Logger.Log("--- Connet to PlatServer: " + serverIP + " -- " + platPort);
+            Debug.Log("--- Connet to PlatServer: " + serverIP + " -- " + platPort);
         }
         else
         {
@@ -54,7 +54,7 @@ public class PlatNetwork : Singleton<PlatNetwork>
     //登录PlatServer请求
     public void EnterPlatReq()
     {
-        Logger.Log("---------------------EnterPlatReq");
+        Debug.Log("---------------------EnterPlatReq");
 
         if (verifyCDKeyResp != null)
         {
@@ -80,19 +80,19 @@ public class PlatNetwork : Singleton<PlatNetwork>
 	//进入PlatServer请求回复消息处理
 	public void EnterPlatRespHandle(Pack pack)
 	{
-		Logger.Log("---------------------EnterPlatRespHandle");
-        CheatingDeath.Instance.mAntiSpeedUp.ResetWatch();
+		Debug.Log("---------------------EnterPlatRespHandle");
+        //CheatingDeath.Instance.mAntiSpeedUp.ResetWatch();
 
         plat_entered = true;
 		
 		EnterPlatResp resp = Serializer.Deserialize<EnterPlatResp>(new MemoryStream(pack.buffer));
 		ErrorID err = (ErrorID)resp.result;
-		Logger.Log("result:" + err);
+		Debug.Log("result:" + err);
 		if (err != ErrorID.SUCCESS)
 		{
 			if (err == ErrorID.ACCOUNT_ALREADY_LOGIN)
 			{
-                Logger.Log("ACCOUNT_ALREADY_LOGIN");
+                Debug.Log("ACCOUNT_ALREADY_LOGIN");
                 CommonFunction.ShowTip(CommonFunction.GetConstString("STR_ACCOUNT_ALREAY_LOGIN"), null);
 
                 GameSystem.Instance.mNetworkManager.connPlat = false; // do not reconnect.
@@ -117,7 +117,7 @@ public class PlatNetwork : Singleton<PlatNetwork>
 				CommonFunction.ShowPopupMsg(CommonFunction.GetConstString("SERVER_MAINTENANCE"));
 				return;
 			}
-			Logger.Log("Error -- EnterPlatResp returns error: " + err);
+			Debug.Log("Error -- EnterPlatResp returns error: " + err);
 			CommonFunction.ShowErrorMsg(err);
 			return;
 		}
@@ -127,6 +127,7 @@ public class PlatNetwork : Singleton<PlatNetwork>
 		GameSystem.Instance.mNetworkManager.autoReconnInMatch = false;
 		GameSystem.Instance.mClient.pause = false;
 		NetLoading.Instance.play = false;
+		FriendData.Instance.Init();
 
         if (resp.create_step == 1)
             GameSystem.Instance.isNewPlayer = true;
@@ -146,7 +147,7 @@ public class PlatNetwork : Singleton<PlatNetwork>
     {
         if (respInfo == null)
         {
-            Logger.LogError("Enter game failed with empty info");
+            Debug.LogError("Enter game failed with empty info");
             return;
         }
 
@@ -154,8 +155,8 @@ public class PlatNetwork : Singleton<PlatNetwork>
         MainPlayer.Instance.CreateStep = respInfo.create_step;
         MainPlayer.Instance.SetBaseInfo(respInfo.info);
 
-		Logger.Log("EnterGame, create_step:" + respInfo.create_step);
-		Logger.Log("EnterGame, loadedLevel:" + Application.loadedLevel);
+		Debug.Log("EnterGame, create_step:" + respInfo.create_step);
+		Debug.Log("EnterGame, loadedLevel:" + Application.loadedLevel);
         if (Application.loadedLevelName == GlobalConst.SCENE_STARTUP)	// scene startup
 		{
 			GameSystem.Instance.mClient.Reset();
@@ -194,7 +195,7 @@ public class PlatNetwork : Singleton<PlatNetwork>
             	GameSystem.Instance.mClient.Reset();
 			else	// In match, resend EnterGameReq
 			{
-				Logger.Log("EnterGame, Curr league type:" + curMatch.GetConfig().leagueType);
+				Debug.Log("EnterGame, Curr league type:" + curMatch.GetConfig().leagueType);
 				if (curMatch.GetConfig().leagueType == GameMatch.LeagueType.eQualifying)
 				{
 					GameSystem.Instance.mClient.Reset();
@@ -222,13 +223,6 @@ public class PlatNetwork : Singleton<PlatNetwork>
 					curMatch.leagueType == GameMatch.LeagueType.eQualifyingNew
                     || curMatch.leagueType == GameMatch.LeagueType.ePractise1vs1)
 				{
-					if (curMatch.GetMatchType() == GameMatch.Type.ePVP_1PLUS)
-					{
-						NetworkManager mgr = GameSystem.Instance.mNetworkManager;
-						mgr.m_gameMsgHandler.UnregisterHandler(MsgID.GameOverID, GameMatch_PVP.HandleGameOver);
-						mgr.m_gameMsgHandler.UnregisterHandler(MsgID.GameFaulID, GameMatch_PVP.HandleGameFaul);
-					}
-
                     MatchStateOver over = curMatch.m_stateMachine.m_curState as MatchStateOver;
                     if( over == null)
                     {
@@ -246,7 +240,7 @@ public class PlatNetwork : Singleton<PlatNetwork>
                            (over != null && !over.matchResultSent)
                             )
                         {
-                            Logger.Log("Resend cached EnterGameReq from new");
+                            Debug.Log("Resend cached EnterGameReq from new");
                             MatchType type = GameMatch_PVP.ToMatchType(curMatch.leagueType, curMatch.m_config.type);
                             if (curMatch.leagueType == GameMatch.LeagueType.ePractise1vs1) {
                                 EnterGameReq req = new EnterGameReq();
@@ -258,7 +252,7 @@ public class PlatNetwork : Singleton<PlatNetwork>
                                 req.practice_pve.fight_list = new FightRoleInfo();
                                 req.practice_pve.fight_list.game_mode = fogs.proto.msg.GameMode.GM_Practice1On1;
                                 FightRole fr = new FightRole();
-                                fr.role_id = curMatch.m_mainRole.m_id;
+                                fr.role_id = curMatch.mainRole.m_id;
                                 fr.status = FightStatus.FS_MAIN;
                                 req.practice_pve.fight_list.fighters.Add(fr);
                                 over.SendEnterGamePractise1vs1(req);
@@ -276,7 +270,7 @@ public class PlatNetwork : Singleton<PlatNetwork>
 					if (curMatch.m_stateMachine.m_curState.m_eState != MatchState.State.eOver ||
 						!(curMatch.m_stateMachine.m_curState as MatchStateOver).matchResultSent)
 					{
-						Logger.Log("Resend cached EnterGameReq");
+						Debug.Log("Resend cached EnterGameReq");
 						LuaHelper.SendPlatMsgFromLua((uint)MsgID.EnterGameReqID, PlatNetwork.Instance.cachedEnterGameReq);
 					}
 				}
@@ -305,7 +299,7 @@ public class PlatNetwork : Singleton<PlatNetwork>
     //关卡比赛结束请求
     public void EndSectionMatchReq(EndSectionMatch career)
     {
-        Logger.Log("---------------------EndSectionMatchReq");
+        Debug.Log("---------------------EndSectionMatchReq");
 
         if (GlobalConst.IS_NETWORKING)
         {

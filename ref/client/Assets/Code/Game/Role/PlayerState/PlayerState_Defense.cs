@@ -6,7 +6,10 @@ public class PlayerState_Defense : PlayerState
     IM.Number m_fSpeedDefense = IM.Number.one;
 	
 	private int			m_lastMoveDir;
-	
+
+	private IM.Number		m_defenseRadius = IM.Number.half;
+	private IM.Number		m_defenseDist = IM.Number.half;
+
 	public PlayerState_Defense (PlayerStateMachine owner, GameMatch match):base(owner,match)
 	{
 		m_eState = State.eDefense;
@@ -43,7 +46,32 @@ public class PlayerState_Defense : PlayerState
 
 		m_player.m_moveType = MoveType.eMT_Defense;
 	}
-	
+
+	bool _IsDefended(Player target)
+	{
+		IM.Number fDistance = GameUtils.HorizonalDistance(m_player.position, target.position);
+		if(fDistance > m_defenseDist)
+			return false;
+		PlayerState.State curState = target.m_StateMachine.m_curState.m_eState;
+		if(curState != State.eRun && curState != State.eRush)
+			return false;
+		IM.Vector3 lhs = m_player.position + m_player.right * m_defenseRadius;
+		IM.Vector3 rhs = m_player.position - m_player.right * m_defenseRadius;
+
+		IM.Vector3 playerToLhs = GameUtils.HorizonalNormalized(lhs, target.position);
+		IM.Vector3 playerToRhs = GameUtils.HorizonalNormalized(rhs, target.position);
+
+		if( IM.Vector3.Dot(target.forward, m_player.forward) > IM.Number.zero)
+			return false;
+
+		IM.Number fCrossRet1 = IM.Vector3.Cross(playerToLhs, target.moveDirection).y;
+		IM.Number fCrossRet2 = IM.Vector3.Cross(playerToRhs, target.moveDirection).y;
+		if( fCrossRet1 * fCrossRet2 > IM.Number.zero)
+			return false;
+
+		return true;
+	}
+
 	override public void Update (IM.Number fDeltaTime)
 	{
         if( m_player.m_team.m_role != GameMatch.MatchRole.eDefense || m_ball.m_ballState == BallState.eLoseBall )
@@ -54,7 +82,7 @@ public class PlayerState_Defense : PlayerState
 
         if( m_player.m_toSkillInstance == null || m_player.m_bWithBall )
         {
-            //Logger.Log("defense failed because of skill is null");
+				//Debug.Log("defense failed because of skill is null");
             m_stateMachine.SetState(PlayerState.State.eStand);
             return;
         }
@@ -69,7 +97,14 @@ public class PlayerState_Defense : PlayerState
 		}
 		
 		_GetDefenseAction();
-		
+		Player target = m_ball.m_owner;
+		if( target != null && _IsDefended(target) )
+		{
+			PlayerState_Knocked knocked = target.m_StateMachine.GetState(State.eKnocked) as PlayerState_Knocked;
+			knocked.m_bToHoldBall = false;
+			target.m_StateMachine.SetState(knocked);
+		}
+
 		IM.Vector3 rotToward;
 		if( m_player.m_defenseTarget != null )
 			rotToward = (m_player.m_defenseTarget.position - m_player.position).normalized;

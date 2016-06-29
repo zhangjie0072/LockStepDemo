@@ -59,7 +59,7 @@ public class RootMotionComputer
         //}
 
         //float angleDelta = Mathf.DeltaAngle(m_lastRootLocalRot.eulerAngles.y, m_player.model.root.localRotation.eulerAngles.y);
-        ////Logger.Log("angleDelta: " + angleDelta);
+		//Debug.Log("angleDelta: " + angleDelta);
         //m_lastRootLocalRot = m_player.model.root.localRotation;
 		
         ////m_player.m_root.localRotation = m_initRootLocalRot;
@@ -74,6 +74,6 @@ public class RootMotionComputer
         //    m_player.Move(fDeltaTime, m_initPlayerRot * deltaMove);
         //}
 
-        //Logger.Log(Time.frameCount + " ApplyRootMotion");
+        //Debug.Log(Time.frameCount + " ApplyRootMotion");
 	}
 }

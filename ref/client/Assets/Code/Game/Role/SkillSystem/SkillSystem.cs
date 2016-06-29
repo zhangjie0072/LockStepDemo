@@ -155,7 +155,7 @@ public class SkillSystem
 	public SkillSystem(Player player)
 	{
 		if(player == null)
-			Logger.LogError("no player in skill system");
+			Debug.LogError("no player in skill system");
 
 		m_player = player;
 
@@ -182,7 +182,7 @@ public class SkillSystem
 					SkillEffect sk = null;
 					if( !GameSystem.Instance.SkillConfig.skillEffectItems.TryGetValue(skillEffect, out sk) )
 					{
-						Logger.LogError("Can not find skill effect: " + skillEffect + " in skill: " + action.id);
+						Debug.LogError("Can not find skill effect: " + skillEffect + " in skill: " + action.id);
 						continue;
 					}
 					GameObject goEffect = ResourceLoadManager.Instance.LoadPrefab("prefab/effect/" + sk.effectRes);
@@ -213,7 +213,7 @@ public class SkillSystem
 			SkillEffect sk = null;
 			if( !GameSystem.Instance.SkillConfig.skillEffectItems.TryGetValue(skillEffect, out sk) )
 			{
-				Logger.LogError("Can not find skill effect: " + skillEffect + " in skill: " + skill.curAction.id);
+				Debug.LogError("Can not find skill effect: " + skillEffect + " in skill: " + skill.curAction.id);
 				continue;
 			}
 			Object resEffect = ResourceLoadManager.Instance.LoadPrefab("prefab/effect/" + sk.effectRes);
@@ -360,7 +360,7 @@ public class SkillSystem
         Dictionary<string, uint> data = player.m_finalAttrs;
 		if( data == null )
 		{
-			Logger.LogError("Can not build player: " + player.m_name + " ,can not fight state by id: " + player.m_id );
+			Debug.LogError("Can not build player: " + player.m_name + " ,can not fight state by id: " + player.m_id );
 			return OffenseType.eNone;
 		}
 
@@ -475,6 +475,11 @@ public class SkillSystem
 			if( con == 2 && m_player.m_bWithBall )
 				return false;
 		}
+		return true;
+	}
+
+	bool _MatchSkillSpecParam(SkillInstance skillInstance)
+	{
 
 		Command cmdType = (Command)skillInstance.skill.action_type;
 		if( cmdType == Command.Pass )
@@ -517,6 +522,44 @@ public class SkillSystem
 			}
 		}
 
+		GameMatch match = GameSystem.Instance.mClient.mCurMatch;
+		UBasketball ball = match.mCurScene.mBall;
+		if( cmdType == Command.Block )
+		{
+			Player attacker = ball.m_actor;
+			if( attacker == null )
+				attacker = ball.m_owner;
+			if( attacker == null )
+				return false;
+
+			IM.Number fDistance = GameUtils.HorizonalDistance(attacker.position, m_player.position);
+			IM.Vector3 dirAttackerToPlayer = GameUtils.HorizonalNormalized(m_player.position, attacker.position); 
+			IM.Number ret = IM.Vector3.Dot(attacker.forward, dirAttackerToPlayer);
+			if( ret < IM.Number.zero)
+			{
+				SkillSpec blockBackDist = m_player.GetSkillSpecialAttribute(SkillSpecParam.eBlock_back_dist, skillInstance);
+				if( fDistance > blockBackDist.value )
+					return false;
+			}
+			else
+			{
+				SkillSpec blockFrontDist = m_player.GetSkillSpecialAttribute(SkillSpecParam.eBlock_front_dist, skillInstance);
+				if( fDistance > blockFrontDist.value )
+					return false;
+			}
+		}
+		if( cmdType == Command.Rebound )
+		{
+			IM.Number fDistance = GameUtils.HorizonalDistance(ball.position, m_player.position);
+			IM.Number fHeight = ball.position.y;
+
+			SkillSpec heightSpec = m_player.GetSkillSpecialAttribute(SkillSpecParam.eRebound_height, skillInstance);
+			SkillSpec distSpec = m_player.GetSkillSpecialAttribute(SkillSpecParam.eRebound_dist, skillInstance);
+			if( fHeight > heightSpec.value )
+				return false;
+			if( fDistance > distSpec.value )
+				return false;
+		}
 		return true;
 	}
 
@@ -541,7 +584,7 @@ public class SkillSystem
 		if( matchedActions.Count == 0 )
 			return false;
 
-		int iSelActionIdx = Random.Range( 0, matchedActions.Count );
+		int iSelActionIdx = IM.Random.Range( 0, matchedActions.Count );
 		SkillAction finalAction = matchedActions[iSelActionIdx];
 
 		PlayerState	curState = m_player.m_StateMachine.m_curState;
@@ -552,7 +595,7 @@ public class SkillSystem
 			{
 				if( !curState.m_lstActionId.Contains( interrupt.id ) )
 					continue;
-				Logger.Log("Interrupt action: " + skillInstance.skill.action_type + " , action id: " + finalAction.id );
+				Debug.Log("Interrupt action: " + skillInstance.skill.action_type + " , action id: " + finalAction.id );
 				//matched
 				skillInstance.curAction = finalAction;
 				skillInstance.matchedKeyIdx = iSelActionIdx;
@@ -630,7 +673,7 @@ public class SkillSystem
 
 	static public SkillInstance MatchSkillByWeight(List<SkillInstance> skills)
 	{
-		//Logger.Log("-----------skill weight begin-------------");
+		//Debug.Log("-----------skill weight begin-------------");
 
 		List<KeyValuePair<IM.Number,SkillInstance> > weightedSkills = new List<KeyValuePair<IM.Number,SkillInstance> >();
 		uint totalWeight = 0;
@@ -655,10 +698,10 @@ public class SkillSystem
 			return x.Key.CompareTo(y.Key);
 		});
 		//foreach( KeyValuePair<float,SkillInstance> item in weightedSkills )
-		//	Logger.Log("skill: " + item.Value.curAction.action_id + ", weight: " + item.Key);
+		//	Debug.Log("skill: " + item.Value.curAction.action_id + ", weight: " + item.Key);
 
         IM.Number finalOdds = IM.Random.value;
-		//Logger.Log("final Odds: " + finalOdds);
+		//Debug.Log("final Odds: " + finalOdds);
 
 		IM.Number odds = IM.Number.zero;
 		foreach( KeyValuePair<IM.Number,SkillInstance> item in weightedSkills )
@@ -748,10 +791,10 @@ public class SkillSystem
 					{
 						SkillInstance toRemoveInst = to_skill_list.Find(inSkillInst => inSkillInst.skill == targetSkill);
 						if (to_skill_list.Remove(toRemoveInst))
-							Logger.Log("special skill: " + skill.id + " replace skill: " + toRemoveInst.skill.id);
+							Debug.Log("special skill: " + skill.id + " replace skill: " + toRemoveInst.skill.id);
 					}
 					else
-						Logger.Log("There is no basic skill to be replaced by skill: " + skill.id);
+						Debug.Log("There is no basic skill to be replaced by skill: " + skill.id);
 				}
 				SkillInstance inst = new SkillInstance();
 				inst.skill = skill;
@@ -787,14 +830,16 @@ public class SkillSystem
 				continue;
 			if( !_MatchActionCondition(skillInstance) )
 				continue;
+			if( !_MatchSkillSpecParam(skillInstance) )
+				continue;
 			//has power & has vigour
 			if( !_MatchStamina(skillInstance) )
 			{
-				if (curMatch.m_mainRole == m_player)
+				if (curMatch.mainRole == m_player)
 				{
 					curMatch.ShowTips((Vector3)m_player.position + Vector3.up, CommonFunction.GetConstString("MATCH_TIPS_NOT_ENOUGH_STAMINA"), GlobalConst.MATCH_TIP_COLOR_RED);
 					if (isAI)
-						Logger.Log(string.Format("SkillSystem, no enough stamina for skill: {0} {1}", skillInstance.skill.id, skillInstance.skill.name));
+						Debug.Log(string.Format("SkillSystem, no enough stamina for skill: {0} {1}", skillInstance.skill.id, skillInstance.skill.name));
 				}
 				continue;
 			}
@@ -836,13 +881,13 @@ public class SkillSystem
 				OffenseType type = _CalcOffenseType(m_player, offenses);
 				if( type != OffenseType.eNone )
 				{
-					//Logger.Log("OffenseType : " +  type );
+					//Debug.Log("OffenseType : " +  type );
 					for( int i = matchedSkills.Count - 1; i >= 0; i-- )
 					{
 						SkillInstance skillInstance = matchedSkills[i];
 						if( skillInstance.skill.action_type != (uint)type )
 						{
-							//Logger.Log("Remove action_type : " + skillInstance.skill.action_type + " Type value: " + (uint)skillInstance.skill.action_type);
+							//Debug.Log("Remove action_type : " + skillInstance.skill.action_type + " Type value: " + (uint)skillInstance.skill.action_type);
 							matchedSkills.Remove(skillInstance);
 						}
 					}
@@ -853,10 +898,10 @@ public class SkillSystem
 		/*
 		if( matchedSkills.Count != 0 )
 		{
-			Logger.Log("====matched skill===");
+			Debug.Log("====matched skill===");
 			foreach( SkillInstance instance in matchedSkills )
-				Logger.Log("matched skill: " + instance.curAction.action_id);
-			Logger.Log("====================");
+				Debug.Log("matched skill: " + instance.curAction.action_id);
+			Debug.Log("====================");
 		}
 		*/
 
@@ -864,7 +909,7 @@ public class SkillSystem
 		SkillInstance finalSkill = null;
 		finalSkill = MatchSkillByWeight(matchedSkills);
 		//if( finalSkill != null )
-		//	Logger.Log("final skill: " + finalSkill.curAction.action_id);
+		//	Debug.Log("final skill: " + finalSkill.curAction.action_id);
 
 		//choose a default skill
 		if( finalSkill == null && !bIsSkillState && curCommand != Command.CutIn)	//TODO: 临时针对空切特殊处理，以后修改
@@ -882,7 +927,7 @@ public class SkillSystem
 					continue;
 
 				finalSkill = skillInstance;
-				//Logger.Log("Get basic skill: ");
+				//Debug.Log("Get basic skill: ");
 				break;
 			}
 		}
@@ -910,7 +955,7 @@ public class SkillSystem
 		else if( strActions.Length == 1 )
 			resultAction = actionId;
 		else
-			Logger.LogError("Invalid action input.");
+			Debug.LogError("Invalid action input.");
 		
 		string[] hands = resultAction.Split('&');
 		if( hands.Length > 1 )
@@ -948,14 +993,14 @@ public class SkillSystem
 		Dictionary<string, uint> skillAttr = m_player.GetSkillAttribute();
 		if( skillAttr == null )
 		{
-			//Logger.LogError("No skillAttr for player: " + m_player.m_id);
+			//Debug.LogError("No skillAttr for player: " + m_player.m_id);
 			return;
 		}
 		
 		uint skillAttrValue = 0;
 		if( !skillAttr.TryGetValue(strAttrName, out skillAttrValue) )
 		{
-			//Logger.LogError("Unable to find skill attr by name: " + strAttrName);
+			//Debug.LogError("Unable to find skill attr by name: " + strAttrName);
 			return;
 		}
 		attrValue = skillAttrValue;
@@ -969,7 +1014,7 @@ public class SkillSystem
 		if( attrItem == null )
 			return;
 
-		Logger.Log("Player id: " + m_player.m_id + " attrName: " + strAttrName + " , attrValue0: " + attrValue);
+		Debug.Log("Player id: " + m_player.m_id + " attrName: " + strAttrName + " , attrValue0: " + attrValue);
 
 		if( attrItem.type != AttributeType.HEDGINGLEVEL )
 			return;
@@ -977,16 +1022,16 @@ public class SkillSystem
 		HedgingConfig.hedgeLevelData data = GameSystem.Instance.HedgingConfig.GetHedgeLevelFactor(attrItem.id);
 		if (data != null)
 		{
-			float factor = data.factor;
+			IM.PrecNumber factor = data.factor;
 			uint attrID = data.oppositeID;
 			string symbol = GameSystem.Instance.AttrNameConfigData.GetAttrSymbol(attrID);
 			if (attrData.attrs.ContainsKey(symbol))
 			{
-				Logger.Log("Attr data: " + attrData.attrs[symbol] + " factor: "  + factor);
-				attrValue = (uint)Mathf.Round(attrData.attrs[symbol] * (1 + attrValue * factor));
+				Debug.Log("Attr data: " + attrData.attrs[symbol] + " factor: "  + factor);
+				attrValue = (uint)(attrData.attrs[symbol] * (1 + attrValue * factor)).roundToInt;
 			}
 		}
 
-		Logger.Log("Player id: " + m_player.m_id + " attrName: " + strAttrName + " , attrValue1: " + attrValue);
+		Debug.Log("Player id: " + m_player.m_id + " attrName: " + strAttrName + " , attrValue1: " + attrValue);
 	}
 }

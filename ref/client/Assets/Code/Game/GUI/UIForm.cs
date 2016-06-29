@@ -83,7 +83,7 @@ public class UIForm : MonoBehaviour
     // SDK回调函数
     public void HandleResp(string str)
     {
-        Logger.Log("LoginInterface: transform=" + transform.name + "str=" + str);
+        Debug.Log("LoginInterface: transform=" + transform.name + "str=" + str);
 
 #if ANDROID_SDK || IOS_SDK
         LoginNetwork.Instance.HandleSDKInfo(str, '&', transform.name.Equals("UILogo(Clone)"));

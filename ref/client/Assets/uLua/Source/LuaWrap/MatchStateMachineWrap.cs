@@ -11,8 +11,8 @@ public class MatchStateMachineWrap
 			new LuaMethod("GetEnumerator", GetEnumerator),
 			new LuaMethod("GetState", GetState),
 			new LuaMethod("SetState", SetState),
-			new LuaMethod("ReplaceState", ReplaceState),
-			new LuaMethod("Update", Update),
+			new LuaMethod("GameUpdate", GameUpdate),
+			new LuaMethod("ViewUpdate", ViewUpdate),
 			new LuaMethod("New", _CreateMatchStateMachine),
 			new LuaMethod("GetClassType", GetClassType),
 		};
@@ -180,40 +180,22 @@ public class MatchStateMachineWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int ReplaceState(IntPtr L)
+	static int GameUpdate(IntPtr L)
 	{
 		LuaScriptMgr.CheckArgsCount(L, 2);
 		MatchStateMachine obj = (MatchStateMachine)LuaScriptMgr.GetNetObjectSelf(L, 1, "MatchStateMachine");
-		MatchState arg0 = (MatchState)LuaScriptMgr.GetNetObject(L, 2, typeof(MatchState));
-		MatchState o = obj.ReplaceState(arg0);
-		LuaScriptMgr.PushObject(L, o);
-		return 1;
+		IM.Number arg0 = (IM.Number)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Number));
+		obj.GameUpdate(arg0);
+		return 0;
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int Update(IntPtr L)
+	static int ViewUpdate(IntPtr L)
 	{
-		int count = LuaDLL.lua_gettop(L);
-
-		if (count == 2 && LuaScriptMgr.CheckTypes(L, 1, typeof(MatchStateMachine), typeof(float)))
-		{
-			MatchStateMachine obj = (MatchStateMachine)LuaScriptMgr.GetNetObjectSelf(L, 1, "MatchStateMachine");
-			float arg0 = (float)LuaDLL.lua_tonumber(L, 2);
-			obj.Update(arg0);
-			return 0;
-		}
-		else if (count == 2 && LuaScriptMgr.CheckTypes(L, 1, typeof(MatchStateMachine), typeof(IM.Number)))
-		{
-			MatchStateMachine obj = (MatchStateMachine)LuaScriptMgr.GetNetObjectSelf(L, 1, "MatchStateMachine");
-			IM.Number arg0 = (IM.Number)LuaScriptMgr.GetLuaObject(L, 2);
-			obj.Update(arg0);
-			return 0;
-		}
-		else
-		{
-			LuaDLL.luaL_error(L, "invalid arguments to method: MatchStateMachine.Update");
-		}
-
+		LuaScriptMgr.CheckArgsCount(L, 2);
+		MatchStateMachine obj = (MatchStateMachine)LuaScriptMgr.GetNetObjectSelf(L, 1, "MatchStateMachine");
+		float arg0 = (float)LuaScriptMgr.GetNumber(L, 2);
+		obj.ViewUpdate(arg0);
 		return 0;
 	}
 }

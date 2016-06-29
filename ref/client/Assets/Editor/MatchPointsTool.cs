@@ -82,9 +82,9 @@ public static class MatchPointsTool{
         XmlElement item = doc.CreateElement(trans.name);
         XmlElement pointNode = doc.CreateElement("Point");
         XmlElement rotationNode = doc.CreateElement("Rotation");
-        IM.Vector3 point = IM.Vector3.FromUnity(trans.localPosition);
+        IM.Vector3 point = IM.Editor.Tools.Convert(trans.localPosition);
         pointNode.InnerText = point.ToString();
-        IM.Quaternion rotation = IM.Quaternion.FromUnity(trans.localRotation);
+        IM.Quaternion rotation = IM.Editor.Tools.Convert(trans.localRotation);
         rotationNode.InnerText = rotation.ToString();
         item.AppendChild(pointNode);
         item.AppendChild(rotationNode);

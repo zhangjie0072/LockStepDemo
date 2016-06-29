@@ -1,4 +1,4 @@
-<Data Count="1114">
+<Data Count="1174">
   <Line>
     <switch>#</switch>
     <id>技能ID</id>
@@ -746,7 +746,7 @@
     <addn_attr>11:0</addn_attr>
     <stama>0</stama>
     <weight>100</weight>
-    <special_parameter>18:0&amp;19:1&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -758,7 +758,7 @@
     <addn_attr>11:0</addn_attr>
     <stama>0</stama>
     <weight>100</weight>
-    <special_parameter>18:0&amp;19:1.5&amp;20:2.5</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -770,7 +770,7 @@
     <addn_attr>11:0</addn_attr>
     <stama>0</stama>
     <weight>100</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -1206,7 +1206,7 @@
     <addn_attr>11:0</addn_attr>
     <stama>0</stama>
     <weight>100</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9106,7 +9106,7 @@
     <addn_attr>15:0&amp;55:1</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9117,7 +9117,7 @@
     <addn_attr>15:0&amp;55:2</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9128,7 +9128,7 @@
     <addn_attr>15:0&amp;55:3</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9139,7 +9139,7 @@
     <addn_attr>15:0&amp;55:4</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9150,7 +9150,7 @@
     <addn_attr>15:0&amp;55:5</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9161,7 +9161,7 @@
     <addn_attr>15:0&amp;55:6</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9172,7 +9172,7 @@
     <addn_attr>15:0&amp;55:7</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9183,7 +9183,7 @@
     <addn_attr>15:0&amp;55:8</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9194,7 +9194,7 @@
     <addn_attr>15:0&amp;55:9</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9205,7 +9205,7 @@
     <addn_attr>15:0&amp;55:10</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9216,7 +9216,7 @@
     <addn_attr>15:0&amp;55:11</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9227,7 +9227,7 @@
     <addn_attr>15:0&amp;55:12</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9238,7 +9238,7 @@
     <addn_attr>15:0&amp;55:13</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9249,7 +9249,7 @@
     <addn_attr>15:0&amp;55:14</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9260,7 +9260,7 @@
     <addn_attr>15:0&amp;55:15</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9271,7 +9271,7 @@
     <addn_attr>15:0&amp;55:16</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9282,7 +9282,7 @@
     <addn_attr>15:0&amp;55:17</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9293,7 +9293,7 @@
     <addn_attr>15:0&amp;55:18</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9304,7 +9304,7 @@
     <addn_attr>15:0&amp;55:19</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9315,7 +9315,7 @@
     <addn_attr>15:0&amp;55:20</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9326,7 +9326,7 @@
     <addn_attr>15:0&amp;55:21</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9337,7 +9337,7 @@
     <addn_attr>15:0&amp;55:22</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9348,7 +9348,7 @@
     <addn_attr>15:0&amp;55:23</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9359,7 +9359,7 @@
     <addn_attr>15:0&amp;55:24</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9370,7 +9370,7 @@
     <addn_attr>15:0&amp;55:25</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9381,7 +9381,7 @@
     <addn_attr>15:0&amp;55:26</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9392,7 +9392,7 @@
     <addn_attr>15:0&amp;55:27</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9403,7 +9403,7 @@
     <addn_attr>15:0&amp;55:28</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9414,7 +9414,7 @@
     <addn_attr>15:0&amp;55:29</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9426,7 +9426,7 @@
     <addn_attr>15:0&amp;55:30</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2&amp;17:3.7</special_parameter>
+    <special_parameter>16:2&amp;17:3.9</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9437,7 +9437,7 @@
     <addn_attr>15:0&amp;55:1</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9448,7 +9448,7 @@
     <addn_attr>15:0&amp;55:2</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9459,7 +9459,7 @@
     <addn_attr>15:0&amp;55:3</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9470,7 +9470,7 @@
     <addn_attr>15:0&amp;55:4</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9481,7 +9481,7 @@
     <addn_attr>15:0&amp;55:5</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9492,7 +9492,7 @@
     <addn_attr>15:0&amp;55:6</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9503,7 +9503,7 @@
     <addn_attr>15:0&amp;55:7</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9514,7 +9514,7 @@
     <addn_attr>15:0&amp;55:8</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9525,7 +9525,7 @@
     <addn_attr>15:0&amp;55:9</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9536,7 +9536,7 @@
     <addn_attr>15:0&amp;55:10</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9547,7 +9547,7 @@
     <addn_attr>15:0&amp;55:11</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9558,7 +9558,7 @@
     <addn_attr>15:0&amp;55:12</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9569,7 +9569,7 @@
     <addn_attr>15:0&amp;55:13</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9580,7 +9580,7 @@
     <addn_attr>15:0&amp;55:14</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9591,7 +9591,7 @@
     <addn_attr>15:0&amp;55:15</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9602,7 +9602,7 @@
     <addn_attr>15:0&amp;55:16</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9613,7 +9613,7 @@
     <addn_attr>15:0&amp;55:17</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9624,7 +9624,7 @@
     <addn_attr>15:0&amp;55:18</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9635,7 +9635,7 @@
     <addn_attr>15:0&amp;55:19</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9646,7 +9646,7 @@
     <addn_attr>15:0&amp;55:20</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9657,7 +9657,7 @@
     <addn_attr>15:0&amp;55:21</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9668,7 +9668,7 @@
     <addn_attr>15:0&amp;55:22</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9679,7 +9679,7 @@
     <addn_attr>15:0&amp;55:23</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9690,7 +9690,7 @@
     <addn_attr>15:0&amp;55:24</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9701,7 +9701,7 @@
     <addn_attr>15:0&amp;55:25</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9712,7 +9712,7 @@
     <addn_attr>15:0&amp;55:26</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9723,7 +9723,7 @@
     <addn_attr>15:0&amp;55:27</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9734,7 +9734,7 @@
     <addn_attr>15:0&amp;55:28</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9745,7 +9745,7 @@
     <addn_attr>15:0&amp;55:29</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9757,7 +9757,7 @@
     <addn_attr>15:0&amp;55:30</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>16:2.2&amp;17:3.5</special_parameter>
+    <special_parameter>16:2.3&amp;17:3.6</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9768,7 +9768,7 @@
     <addn_attr>11:0&amp;51:1</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9779,7 +9779,7 @@
     <addn_attr>11:0&amp;51:2</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9790,7 +9790,7 @@
     <addn_attr>11:0&amp;51:3</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9801,7 +9801,7 @@
     <addn_attr>11:0&amp;51:4</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9812,7 +9812,7 @@
     <addn_attr>11:0&amp;51:5</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9823,7 +9823,7 @@
     <addn_attr>11:0&amp;51:6</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9834,7 +9834,7 @@
     <addn_attr>11:0&amp;51:7</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9845,7 +9845,7 @@
     <addn_attr>11:0&amp;51:8</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9856,7 +9856,7 @@
     <addn_attr>11:0&amp;51:9</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9867,7 +9867,7 @@
     <addn_attr>11:0&amp;51:10</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9878,7 +9878,7 @@
     <addn_attr>11:0&amp;51:11</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9889,7 +9889,7 @@
     <addn_attr>11:0&amp;51:12</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9900,7 +9900,7 @@
     <addn_attr>11:0&amp;51:13</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9911,7 +9911,7 @@
     <addn_attr>11:0&amp;51:14</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9922,7 +9922,7 @@
     <addn_attr>11:0&amp;51:15</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9933,7 +9933,7 @@
     <addn_attr>11:0&amp;51:16</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9944,7 +9944,7 @@
     <addn_attr>11:0&amp;51:17</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9955,7 +9955,7 @@
     <addn_attr>11:0&amp;51:18</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9966,7 +9966,7 @@
     <addn_attr>11:0&amp;51:19</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9977,7 +9977,7 @@
     <addn_attr>11:0&amp;51:20</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9988,7 +9988,7 @@
     <addn_attr>11:0&amp;51:21</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -9999,7 +9999,7 @@
     <addn_attr>11:0&amp;51:22</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -10010,7 +10010,7 @@
     <addn_attr>11:0&amp;51:23</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -10021,7 +10021,7 @@
     <addn_attr>11:0&amp;51:24</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -10032,7 +10032,7 @@
     <addn_attr>11:0&amp;51:25</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -10043,7 +10043,7 @@
     <addn_attr>11:0&amp;51:26</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -10054,7 +10054,7 @@
     <addn_attr>11:0&amp;51:27</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -10065,7 +10065,7 @@
     <addn_attr>11:0&amp;51:28</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -10076,7 +10076,7 @@
     <addn_attr>11:0&amp;51:29</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
   </Line>
   <Line>
     <switch>
@@ -10088,7 +10088,669 @@
     <addn_attr>11:0&amp;51:30</addn_attr>
     <stama>0</stama>
     <weight>10000</weight>
-    <special_parameter>18:0&amp;19:0.5&amp;20:2</special_parameter>
+    <special_parameter>18:0&amp;19:0&amp;20:2</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>1</level>
+    <consume>2:60</consume>
+    <addn_attr>11:0&amp;51:1</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>2</level>
+    <consume>2:130</consume>
+    <addn_attr>11:0&amp;51:2</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>3</level>
+    <consume>2:210</consume>
+    <addn_attr>11:0&amp;51:3</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>4</level>
+    <consume>2:310</consume>
+    <addn_attr>11:0&amp;51:4</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>5</level>
+    <consume>2:420</consume>
+    <addn_attr>11:0&amp;51:5</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>6</level>
+    <consume>2:550</consume>
+    <addn_attr>11:0&amp;51:6</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>7</level>
+    <consume>2:700</consume>
+    <addn_attr>11:0&amp;51:7</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>8</level>
+    <consume>2:870</consume>
+    <addn_attr>11:0&amp;51:8</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>9</level>
+    <consume>2:1070</consume>
+    <addn_attr>11:0&amp;51:9</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>10</level>
+    <consume>2:1290</consume>
+    <addn_attr>11:0&amp;51:10</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>11</level>
+    <consume>2:1540</consume>
+    <addn_attr>11:0&amp;51:11</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>12</level>
+    <consume>2:1820</consume>
+    <addn_attr>11:0&amp;51:12</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>13</level>
+    <consume>2:2130</consume>
+    <addn_attr>11:0&amp;51:13</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>14</level>
+    <consume>2:2480</consume>
+    <addn_attr>11:0&amp;51:14</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>15</level>
+    <consume>2:2860</consume>
+    <addn_attr>11:0&amp;51:15</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>16</level>
+    <consume>2:3280</consume>
+    <addn_attr>11:0&amp;51:16</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>17</level>
+    <consume>2:3740</consume>
+    <addn_attr>11:0&amp;51:17</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>18</level>
+    <consume>2:4240</consume>
+    <addn_attr>11:0&amp;51:18</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>19</level>
+    <consume>2:4790</consume>
+    <addn_attr>11:0&amp;51:19</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>20</level>
+    <consume>2:5380</consume>
+    <addn_attr>11:0&amp;51:20</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>21</level>
+    <consume>2:6020</consume>
+    <addn_attr>11:0&amp;51:21</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>22</level>
+    <consume>2:6710</consume>
+    <addn_attr>11:0&amp;51:22</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>23</level>
+    <consume>2:7450</consume>
+    <addn_attr>11:0&amp;51:23</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>24</level>
+    <consume>2:8250</consume>
+    <addn_attr>11:0&amp;51:24</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>25</level>
+    <consume>2:9100</consume>
+    <addn_attr>11:0&amp;51:25</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>26</level>
+    <consume>2:10010</consume>
+    <addn_attr>11:0&amp;51:26</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>27</level>
+    <consume>2:10980</consume>
+    <addn_attr>11:0&amp;51:27</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>28</level>
+    <consume>2:12010</consume>
+    <addn_attr>11:0&amp;51:28</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>29</level>
+    <consume>2:13110</consume>
+    <addn_attr>11:0&amp;51:29</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3601</id>
+    <level>30</level>
+    <consume>
+    </consume>
+    <addn_attr>11:0&amp;51:30</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:0&amp;20:2.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>1</level>
+    <consume>2:60</consume>
+    <addn_attr>11:0&amp;51:1</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>2</level>
+    <consume>2:130</consume>
+    <addn_attr>11:0&amp;51:2</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>3</level>
+    <consume>2:210</consume>
+    <addn_attr>11:0&amp;51:3</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>4</level>
+    <consume>2:310</consume>
+    <addn_attr>11:0&amp;51:4</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>5</level>
+    <consume>2:420</consume>
+    <addn_attr>11:0&amp;51:5</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>6</level>
+    <consume>2:550</consume>
+    <addn_attr>11:0&amp;51:6</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>7</level>
+    <consume>2:700</consume>
+    <addn_attr>11:0&amp;51:7</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>8</level>
+    <consume>2:870</consume>
+    <addn_attr>11:0&amp;51:8</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>9</level>
+    <consume>2:1070</consume>
+    <addn_attr>11:0&amp;51:9</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>10</level>
+    <consume>2:1290</consume>
+    <addn_attr>11:0&amp;51:10</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>11</level>
+    <consume>2:1540</consume>
+    <addn_attr>11:0&amp;51:11</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>12</level>
+    <consume>2:1820</consume>
+    <addn_attr>11:0&amp;51:12</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>13</level>
+    <consume>2:2130</consume>
+    <addn_attr>11:0&amp;51:13</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>14</level>
+    <consume>2:2480</consume>
+    <addn_attr>11:0&amp;51:14</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>15</level>
+    <consume>2:2860</consume>
+    <addn_attr>11:0&amp;51:15</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>16</level>
+    <consume>2:3280</consume>
+    <addn_attr>11:0&amp;51:16</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>17</level>
+    <consume>2:3740</consume>
+    <addn_attr>11:0&amp;51:17</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>18</level>
+    <consume>2:4240</consume>
+    <addn_attr>11:0&amp;51:18</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>19</level>
+    <consume>2:4790</consume>
+    <addn_attr>11:0&amp;51:19</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>20</level>
+    <consume>2:5380</consume>
+    <addn_attr>11:0&amp;51:20</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>21</level>
+    <consume>2:6020</consume>
+    <addn_attr>11:0&amp;51:21</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>22</level>
+    <consume>2:6710</consume>
+    <addn_attr>11:0&amp;51:22</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>23</level>
+    <consume>2:7450</consume>
+    <addn_attr>11:0&amp;51:23</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>24</level>
+    <consume>2:8250</consume>
+    <addn_attr>11:0&amp;51:24</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>25</level>
+    <consume>2:9100</consume>
+    <addn_attr>11:0&amp;51:25</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>26</level>
+    <consume>2:10010</consume>
+    <addn_attr>11:0&amp;51:26</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>27</level>
+    <consume>2:10980</consume>
+    <addn_attr>11:0&amp;51:27</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>28</level>
+    <consume>2:12010</consume>
+    <addn_attr>11:0&amp;51:28</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>29</level>
+    <consume>2:13110</consume>
+    <addn_attr>11:0&amp;51:29</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
+  </Line>
+  <Line>
+    <switch>
+    </switch>
+    <id>3602</id>
+    <level>30</level>
+    <consume>
+    </consume>
+    <addn_attr>11:0&amp;51:30</addn_attr>
+    <stama>0</stama>
+    <weight>10000</weight>
+    <special_parameter>18:0&amp;19:1.5&amp;20:0.5</special_parameter>
   </Line>
   <Line>
     <switch>

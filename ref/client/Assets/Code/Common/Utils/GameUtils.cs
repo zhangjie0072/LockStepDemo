@@ -346,7 +346,7 @@ public class GameUtils{
 		{
 			//StartPos.y = 1.0f;
 			//Debug.DrawLine(StartPos, StartPos + destTo * 3.0f, Color.red);
-			//Logger.Log("vRotAxis: " + vRotAxis );
+			//Debug.Log("vRotAxis: " + vRotAxis );
 		}
 		return destTo;
 	}
@@ -433,7 +433,7 @@ public class GameUtils{
 				Transform trBoneOnRoot = GameUtils.FindChildRecursive(targetSkeleton.transform, tr.gameObject.name);
 				if( trBoneOnRoot == null )
 				{
-					Logger.LogError("No bone: " + tr.gameObject.name + " matchted on item: " + skin.name);
+					Debug.LogError("No bone: " + tr.gameObject.name + " matchted on item: " + skin.name);
 					continue;
 				}
 				trBones.Add(trBoneOnRoot);
@@ -576,18 +576,18 @@ public class GameUtils{
 
 		r.updateWhenOffscreen = true;
 		
-		Logger.Log("combine meshes takes : " + (Time.realtimeSinceStartup - startTime) * 1000 + " ms");
+		Debug.Log("combine meshes takes : " + (Time.realtimeSinceStartup - startTime) * 1000 + " ms");
 		return root;
 	}
 
-	static public void AngleToDir(IM.Number angle, out IM.Number dir, out IM.Vector3 vel)
+	static public void AngleToDir(IM.Number angle, out int dir, out IM.Vector3 vel)
 	{
-		dir = IM.Number.zero;
+		dir = 0;
 		vel = IM.Vector3.zero;
 
 		angle = IM.Math.Abs(angle);
-		dir = (angle / GlobalConst.ROTATE_ANGLE_SEC).floor;
-		vel	= IM.Quaternion.Euler(IM.Number.zero, dir * GlobalConst.ROTATE_ANGLE_SEC, IM.Number.zero) * IM.Vector3.forward;
+		dir = (angle / MoveController.ANGLE_PER_DIR).floorToInt;
+		vel	= IM.Quaternion.Euler(IM.Number.zero, dir * MoveController.ANGLE_PER_DIR, IM.Number.zero) * IM.Vector3.forward;
 	}
 
 	static public void AngleToDir(float fAngle, out EDirection dir, out Vector3 vel)
@@ -753,40 +753,6 @@ public class LuaUtils{
 			return 0;
 		double db = (double)ob;
 		return (int)db;
-	}
-}
-
-public struct ValueRange	{
-	public float v1;
-	public float v2;
-	
-	public void Set( float v1_ )	{
-		v1 = v1_;
-		v2 = v1_;
-	}
-	public void Set( float v1_, float v2_ )	{
-		v1 = v1_;
-		v2 = v2_;
-	}
-	
-	
-	public float RandValue( )	{
-		return Random.Range( v1, v2 );
-	}
-	
-	static public ValueRange Parse( string s, float fDefault )	{
-		ValueRange ret = new ValueRange();
-		float[] arF = GameUtils.String2FloatList( s );
-		if( arF.Length == 1 )	{
-			ret.Set( arF[0] );
-		}
-		else if( arF.Length >=2 )	{
-			ret.Set( arF[0], arF[1] );
-		}
-		else 
-			ret.Set( fDefault );
-		
-		return ret;
 	}
 }
 

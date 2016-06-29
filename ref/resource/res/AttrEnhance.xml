@@ -3,37 +3,37 @@
     <switch>
     </switch>
     <level>6</level>
-    <factor>1</factor>
+    <factor>1.97</factor>
   </Line>
   <Line>
     <switch>
     </switch>
     <level>5</level>
-    <factor>1</factor>
+    <factor>1.76</factor>
   </Line>
   <Line>
     <switch>
     </switch>
     <level>4</level>
-    <factor>1</factor>
+    <factor>1.57</factor>
   </Line>
   <Line>
     <switch>
     </switch>
     <level>3</level>
-    <factor>1</factor>
+    <factor>1.4</factor>
   </Line>
   <Line>
     <switch>
     </switch>
     <level>2</level>
-    <factor>1</factor>
+    <factor>1.25</factor>
   </Line>
   <Line>
     <switch>
     </switch>
     <level>1</level>
-    <factor>1</factor>
+    <factor>1.12</factor>
   </Line>
   <Line>
     <switch>
@@ -45,36 +45,36 @@
     <switch>
     </switch>
     <level>-1</level>
-    <factor>1</factor>
+    <factor>0.88</factor>
   </Line>
   <Line>
     <switch>
     </switch>
     <level>-2</level>
-    <factor>1</factor>
+    <factor>0.76</factor>
   </Line>
   <Line>
     <switch>
     </switch>
     <level>-3</level>
-    <factor>1</factor>
+    <factor>0.64</factor>
   </Line>
   <Line>
     <switch>
     </switch>
     <level>-4</level>
-    <factor>1</factor>
+    <factor>0.52</factor>
   </Line>
   <Line>
     <switch>
     </switch>
     <level>-5</level>
-    <factor>1</factor>
+    <factor>0.4</factor>
   </Line>
   <Line>
     <switch>
     </switch>
     <level>-6</level>
-    <factor>1</factor>
+    <factor>0.28</factor>
   </Line>
 </Data>

@@ -9,7 +9,8 @@ public class MatchStateWrap
 		{
 			new LuaMethod("OnEnter", OnEnter),
 			new LuaMethod("OnEvent", OnEvent),
-			new LuaMethod("Update", Update),
+			new LuaMethod("GameUpdate", GameUpdate),
+			new LuaMethod("ViewUpdate", ViewUpdate),
 			new LuaMethod("OnExit", OnExit),
 			new LuaMethod("IsCommandValid", IsCommandValid),
 			new LuaMethod("New", _CreateMatchState),
@@ -125,29 +126,22 @@ public class MatchStateWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-	static int Update(IntPtr L)
+	static int GameUpdate(IntPtr L)
 	{
-		int count = LuaDLL.lua_gettop(L);
+		LuaScriptMgr.CheckArgsCount(L, 2);
+		MatchState obj = (MatchState)LuaScriptMgr.GetNetObjectSelf(L, 1, "MatchState");
+		IM.Number arg0 = (IM.Number)LuaScriptMgr.GetNetObject(L, 2, typeof(IM.Number));
+		obj.GameUpdate(arg0);
+		return 0;
+	}
 
-		if (count == 2 && LuaScriptMgr.CheckTypes(L, 1, typeof(MatchState), typeof(float)))
-		{
-			MatchState obj = (MatchState)LuaScriptMgr.GetNetObjectSelf(L, 1, "MatchState");
-			float arg0 = (float)LuaDLL.lua_tonumber(L, 2);
-			obj.Update(arg0);
-			return 0;
-		}
-		else if (count == 2 && LuaScriptMgr.CheckTypes(L, 1, typeof(MatchState), typeof(IM.Number)))
-		{
-			MatchState obj = (MatchState)LuaScriptMgr.GetNetObjectSelf(L, 1, "MatchState");
-			IM.Number arg0 = (IM.Number)LuaScriptMgr.GetLuaObject(L, 2);
-			obj.Update(arg0);
-			return 0;
-		}
-		else
-		{
-			LuaDLL.luaL_error(L, "invalid arguments to method: MatchState.Update");
-		}
-
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int ViewUpdate(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 2);
+		MatchState obj = (MatchState)LuaScriptMgr.GetNetObjectSelf(L, 1, "MatchState");
+		float arg0 = (float)LuaScriptMgr.GetNumber(L, 2);
+		obj.ViewUpdate(arg0);
 		return 0;
 	}
 

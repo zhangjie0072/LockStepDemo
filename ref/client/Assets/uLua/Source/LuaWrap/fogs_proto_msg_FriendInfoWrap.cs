@@ -25,6 +25,7 @@ public class fogs_proto_msg_FriendInfoWrap
 			new LuaField("logout_time", get_logout_time, set_logout_time),
 			new LuaField("shinwakan", get_shinwakan, set_shinwakan),
 			new LuaField("pvp_ladder_score", get_pvp_ladder_score, set_pvp_ladder_score),
+			new LuaField("first_win_time", get_first_win_time, set_first_win_time),
 		};
 
 		LuaScriptMgr.RegisterLib(L, "fogs.proto.msg.FriendInfo", typeof(fogs.proto.msg.FriendInfo), regs, fields, typeof(object));
@@ -347,6 +348,30 @@ public class fogs_proto_msg_FriendInfoWrap
 	}
 
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_first_win_time(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		fogs.proto.msg.FriendInfo obj = (fogs.proto.msg.FriendInfo)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name first_win_time");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index first_win_time on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.first_win_time);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int set_acc_id(IntPtr L)
 	{
 		object o = LuaScriptMgr.GetLuaObject(L, 1);
@@ -631,6 +656,30 @@ public class fogs_proto_msg_FriendInfoWrap
 		}
 
 		obj.pvp_ladder_score = (uint)LuaScriptMgr.GetNumber(L, 3);
+		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_first_win_time(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		fogs.proto.msg.FriendInfo obj = (fogs.proto.msg.FriendInfo)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name first_win_time");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index first_win_time on a nil value");
+			}
+		}
+
+		obj.first_win_time = (uint)LuaScriptMgr.GetNumber(L, 3);
 		return 0;
 	}
 }

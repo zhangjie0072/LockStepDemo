@@ -20,7 +20,7 @@ class HandleAndroidMsg : MonoBehaviour
 
     public void SetButtonDown(string i) {
         int flag = int.Parse(i);
-        Logger.Log("recive android msg down" + i);
+        Debug.Log("recive android msg down" + i);
         switch (flag)
         {
             //up
@@ -64,7 +64,7 @@ class HandleAndroidMsg : MonoBehaviour
             case 9:          
                 bool isNgds = GameSystem.Instance.mClient.mInputManager.isNGDS;
                 GameSystem.Instance.mClient.mInputManager.isNGDS = !isNgds;
-                Logger.Log("ReSet ngds state!!:" + GameSystem.Instance.mClient.mInputManager.isNGDS);
+                Debug.Log("ReSet ngds state!!:" + GameSystem.Instance.mClient.mInputManager.isNGDS);
                 break;
         }  
     }
@@ -73,7 +73,7 @@ class HandleAndroidMsg : MonoBehaviour
     public void SetButtonUp(string i)
     {
         int flag = int.Parse(i);
-        Logger.Log("recive android msg up" + i);   
+        Debug.Log("recive android msg up" + i);   
         switch (flag)
         {
             //up
@@ -123,14 +123,14 @@ class HandleAndroidMsg : MonoBehaviour
         float y = float.Parse(temp[1]);
         direction.x = x;
         direction.y = y;
-        Logger.Log("recive android direction x:" + x + "-----y:" + y);
+        Debug.Log("recive android direction x:" + x + "-----y:" + y);
         GameSystem.Instance.mClient.mInputManager.mHVDirection = direction;
     }
 
     public void SendNgdsShock()
     {
 		#if UNITY_ANDROID
-        Logger.Log("send ngds shock to android");
+        Debug.Log("send ngds shock to android");
         GameSystem.Instance.mClient.mInputManager.sendShock = false;
         AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
         AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");

@@ -7,8 +7,6 @@ public class GameMatch_LadderAI
 	:GameMatch_MultiPlayer
 {
 
-	private bool initDone = false;
-
     public GameMatch_LadderAI(Config config)
         : base(config)
     {
@@ -20,14 +18,14 @@ public class GameMatch_LadderAI
 
     public uint _nameIndex = 1;
     
-    override public void OnSceneComplete()
-    {
-        base.OnSceneComplete();
+	protected override void _OnLoadingCompleteImp ()
+	{
+		base._OnLoadingCompleteImp ();
 		mCurScene.CreateBall();
 
         if (m_config == null)
         {
-            Logger.LogError("Match config file loading failed.");
+            Debug.LogError("Match config file loading failed.");
             return;
         }
 
@@ -36,26 +34,21 @@ public class GameMatch_LadderAI
 		{
 			Player player = pm.m_Players[idx];
 
-			player.m_aiMgr = new AISystem_Basic(this, player, AIState.Type.eInit, player.m_config.AIID);
-			player.m_aiMgr.m_enable = true;
+            player.operMode = Player.OperMode.AI;
 			
 			player.m_catchHelper = new CatchHelper(player);
 			player.m_catchHelper.ExtractBallLocomotion();
 			player.m_StateMachine.SetState(PlayerState.State.eStand, true);
-			player.m_InfoVisualizer.CreateStrengthBar();
-			player.m_InfoVisualizer.ShowStaminaBar(false);
 		}
 
-		m_mainRole = pm.GetPlayerById( uint.Parse(m_config.MainRole.id) );
-		m_mainRole.m_aiMgr.m_enable = false;
-		m_mainRole.m_InfoVisualizer.ShowStaminaBar(true);
-		m_mainRole.m_inputDispatcher = new InputDispatcher(this, m_mainRole);
+		mainRole = pm.GetPlayerById( uint.Parse(m_config.MainRole.id) );
+        mainRole.operMode = Player.OperMode.Input;
 
 		if( !Debugger.Instance.m_bEnableDefenderAction )
 		{
 			foreach(Player member in GameSystem.Instance.mClient.mPlayerManager)
 			{
-				if( member.m_team == m_mainRole.m_team )
+				if( member.m_team == mainRole.m_team )
 					continue;
 				member.m_enableAction = false;
 				member.m_enableMovement = false;
@@ -67,35 +60,36 @@ public class GameMatch_LadderAI
 
         AssumeDefenseTarget();
 
-        Team oppoTeam = m_mainRole.m_team.m_side == Team.Side.eAway ? m_homeTeam : m_awayTeam;
+        Team oppoTeam = mainRole.m_team.m_side == Team.Side.eAway ? m_homeTeam : m_awayTeam;
         foreach (Player member in oppoTeam.members)
         {
             if (member.model != null)
 				member.model.EnableGrey();
         }
 
-        m_mainRole.m_team.m_role = GameMatch.MatchRole.eOffense;
-        if (m_mainRole.m_defenseTarget != null)
+        mainRole.m_team.m_role = GameMatch.MatchRole.eOffense;
+        if (mainRole.m_defenseTarget != null)
         {
-            m_mainRole.m_defenseTarget.m_team.m_role = GameMatch.MatchRole.eDefense;
+            mainRole.m_defenseTarget.m_team.m_role = GameMatch.MatchRole.eDefense;
         }
-
-        _UpdateCamera(m_mainRole);
 
 		/*
         _CreateGUI();
         m_uiMatch.SetMyTeamSide(m_mainRole.m_team.m_side);
 		*/
         
-		m_mainTeam = m_mainRole.m_team;
 
 		m_needTipOff = true;
+    }
+
+    public override AISystem CreateAISystem(Player player)
+    {
+        return new AISystem_Basic(this, player, AIState.Type.eInit, player.m_config.AIID);
     }
 
 	protected override void OnLoadingComplete ()
 	{
 		base.OnLoadingComplete ();
-		initDone = true;
 
 		if (m_config.needPlayPlot)
 		{
@@ -107,64 +101,10 @@ public class GameMatch_LadderAI
 		}
 	}
 
-    public override void HandleGameBegin(Pack pack)
+    public override void OnGameBegin(GameBeginResp resp)
     {
         m_stateMachine.SetState(MatchState.State.eTipOff);
     }
-
-	public override void Update()
-	{
-		base.Update();
-
-		UBasketball ball = mCurScene.mBall;
-		if( m_uiMatch != null )
-		{
-			if (ball.m_owner == null)
-			{
-				m_uiMatch.leftBall.SetActive(false);
-				m_uiMatch.rightBall.SetActive(false);
-			}
-			else if (ball.m_owner.m_team == m_mainRole.m_team)
-			{
-				m_uiMatch.leftBall.SetActive(true);
-				m_uiMatch.rightBall.SetActive(false);
-			}
-			else
-			{
-				m_uiMatch.leftBall.SetActive(false);
-				m_uiMatch.rightBall.SetActive(true);
-			}
-		}
-
-		if( !initDone )
-			return;
-
-		if( m_stateMachine.m_curState.m_eState != MatchState.State.eOpening && m_stateMachine.m_curState.m_eState != MatchState.State.eOverTime 
-		   && ball != null )
-		{
-			if( ball.m_owner != null )
-			{
-				Player owner = ball.m_owner;
-				SwitchMainrole(owner);
-			}
-			else if( ball.m_ballState == BallState.eUseBall_Pass )
-			{
-				Player interceptor = ball.m_interceptor;
-				if( interceptor == null )
-				{
-					Player owner = ball.m_catcher;
-					SwitchMainrole(owner);
-				}
-				else
-				{
-					if( interceptor.m_team == m_mainRole.m_team )
-						SwitchMainrole(interceptor);
-					else if( interceptor.m_defenseTarget != null )
-						SwitchMainrole(interceptor.m_defenseTarget);
-				}
-			}
-		}
-	}
 
 	public override bool IsCommandValid(Command command)
 	{
@@ -196,10 +136,6 @@ public class GameMatch_LadderAI
 		m_b24TimeUp = false;
 	}
 
-	override public void SwitchMainrole( Player target )
-	{
-	}
-
 	public override bool EnableTakeOver()
 	{
 		return false;
@@ -207,7 +143,7 @@ public class GameMatch_LadderAI
 
 	public override bool EnableEnhanceAttr()
 	{
-		return true;
+		return false;
 	}
 
 	public override bool EnableSwitchDefenseTarget()

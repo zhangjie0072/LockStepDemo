@@ -54,7 +54,7 @@ public class PlayerState_DefenseCross : PlayerState
 		dirMove = vecPlayerToTarget.normalized;
 		speed = vecPlayerToTarget.magnitude / time;
 		
-		if (IM.Vector3.DotForNumber(m_player.right, dirMove) > IM.Number.zero)	//right
+		if (IM.Vector3.Dot(m_player.right, dirMove) > IM.Number.zero)	//right
 			m_animType = AnimType.N_TYPE_1;
 		else
 			m_animType = AnimType.N_TYPE_0;
@@ -63,7 +63,7 @@ public class PlayerState_DefenseCross : PlayerState
 
 	override public void OnEnter ( PlayerState lastState )
 	{
-		//Logger.Log("Defense crossed Anim type: " + m_animType);
+		//Debug.Log("Defense crossed Anim type: " + m_animType);
 		m_curAction = m_mapAnimType[m_animType];
 		m_player.animMgr.Play(m_curAction, speed * new IM.Number(0,250), false);
 
@@ -89,8 +89,8 @@ public class PlayerState_DefenseCross : PlayerState
 				Dictionary<string, uint> defenderData = m_player.m_finalAttrs;
 				if( crosserData == null || defenderData == null)
 				{
-					Logger.LogError("Can not build player: " + m_player.m_name + " ,can not fight state by id: " + m_player.m_id );
-					Logger.LogError("Can not build player: " + crosser.m_name + " ,can not fight state by id: " + crosser.m_id );
+					Debug.LogError("Can not build player: " + m_player.m_name + " ,can not fight state by id: " + m_player.m_id );
+					Debug.LogError("Can not build player: " + crosser.m_name + " ,can not fight state by id: " + crosser.m_id );
 					return;
 				}
 				

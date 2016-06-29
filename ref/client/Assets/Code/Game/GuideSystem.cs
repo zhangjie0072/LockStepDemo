@@ -124,7 +124,7 @@ public class GuideSystem : Singleton<GuideSystem>
 			GameMatch_Practise match = GameSystem.Instance.mClient.mCurMatch as GameMatch_Practise;
 			if (match != null)
 			{
-				PractiseBehaviourBaseGuide behaviour = match.practise_behaviour as PractiseBehaviourBaseGuide;
+				PractiseBehaviourGuide behaviour = match.practise_behaviour as PractiseBehaviourGuide;
 				if (behaviour != null)
 				{
 					Transform tmBasePanel = GameSystem.Instance.mClient.mUIManager.m_uiRootBasePanel.transform;
@@ -192,7 +192,7 @@ public class GuideSystem : Singleton<GuideSystem>
                     {
                         if (ConditionValidator.Instance.Validate(module.skipConditions, module.skipConditionParams, true))
                         {
-                            Logger.Log("Skip guide: " + module.ID);
+                            Debug.Log("Skip guide: " + module.ID);
                             ReqBeginGuide(module.ID);
                             return;
                         }
@@ -200,7 +200,7 @@ public class GuideSystem : Singleton<GuideSystem>
 
 					curStep = GameSystem.Instance.GuideConfig.GetStep(00001);
 					if (curStep == null)
-						Logger.LogError("GuideSystem: missing special step(00001) config.");
+						Debug.LogError("GuideSystem: missing special step(00001) config.");
 					HighlightControls(curStep);
 					ShowTip(curStep);
 					return;
@@ -220,22 +220,22 @@ public class GuideSystem : Singleton<GuideSystem>
 
 	public bool ReqBeginGuide(uint id, bool debug = false)
 	{
-		Logger.Log("Request to begin guide module " + id);
+		Debug.Log("Request to begin guide module " + id);
 		if (curModule != null && curModule.nextModule != id)
 		{
-			Logger.Log("Request to begin guide module " + id + " but a guide is running ID: " + curModule.ID);
+			Debug.Log("Request to begin guide module " + id + " but a guide is running ID: " + curModule.ID);
 			return false;
 		}
 		if (!debug)
 		{
 			if (MainPlayer.Instance.IsGuideCompleted(id))
 			{
-				Logger.Log("Request to begin guide module " + id + " but this guide is completed.");
+				Debug.Log("Request to begin guide module " + id + " but this guide is completed.");
 				return false;
 			}
 			GuideModule module = GameSystem.Instance.GuideConfig.GetModule(id);
 			if (module == null)
-				Logger.LogError("Guide module " + id + " not found.");
+				Debug.LogError("Guide module " + id + " not found.");
 			//if (module.skipConditions.Count > 0)
 			//{
 			//	if (ConditionValidator.Instance.Validate(module.skipConditions, module.skipConditionParams))
@@ -261,7 +261,7 @@ public class GuideSystem : Singleton<GuideSystem>
 			req.module_id = id;
 			req.debug = debug ? 1u : 0u;
 			GameSystem.Instance.mNetworkManager.m_platConn.SendPack(0, req, MsgID.BeginGuideReqID);
-			Logger.Log("Send begin guide req " + id);
+			Debug.Log("Send begin guide req " + id);
 			CommonFunction.ShowWaitMask();
 			requestingBeingGuide = true;
 		}
@@ -281,10 +281,10 @@ public class GuideSystem : Singleton<GuideSystem>
 	public void ReqEndGuide(uint id)
 	{
 		if (MainPlayer.Instance.IsGuideCompleted(id))
-			Logger.LogError("Can not request to end a completed guide. ID: " + id);
+			Debug.LogError("Can not request to end a completed guide. ID: " + id);
 		if (IS_NETWORKING)
 		{
-			Logger.Log("Send end guide req, ID: " + id);
+			Debug.Log("Send end guide req, ID: " + id);
 			EndGuideModuleReq req = new EndGuideModuleReq();
 			req.module_id = id;
 			GameSystem.Instance.mNetworkManager.m_platConn.SendPack(0, req, MsgID.EndGuideReqID);
@@ -303,7 +303,7 @@ public class GuideSystem : Singleton<GuideSystem>
 		ErrorID err = (ErrorID)resp.result;
 		if (err == ErrorID.SUCCESS)
 		{
-			Logger.Log("Begin guide " + resp.module_id + " from server.");
+			Debug.Log("Begin guide " + resp.module_id + " from server.");
 			isDebugging = (resp.debug == 1);
 			if (curModule == null)
 			{
@@ -311,12 +311,12 @@ public class GuideSystem : Singleton<GuideSystem>
 			}
 			else if (curModule.ID != resp.module_id)
 			{
-				Logger.Log("Guide module: " + curModule.ID + " is still running. Wait it end.");
+				Debug.Log("Guide module: " + curModule.ID + " is still running. Wait it end.");
 				readyModuleID = resp.module_id;
 			}
 			else
 			{
-				Logger.Log("Guide module: " + curModule.ID + " is already running. Ignore this time.");
+				Debug.Log("Guide module: " + curModule.ID + " is already running. Ignore this time.");
 			}
 		}
 		else
@@ -350,7 +350,7 @@ public class GuideSystem : Singleton<GuideSystem>
 		}
 		if (!isRestart && !IsUIVisible(module.uiName))	// UI visible is not required by restarted guide module
 		{
-			Logger.Log("Begin guide, UI not visible, ID: " + module.ID + " UI: " + module.uiName);
+			Debug.Log("Begin guide, UI not visible, ID: " + module.ID + " UI: " + module.uiName);
 			return;
 		}
 		if (!debug)
@@ -359,7 +359,7 @@ public class GuideSystem : Singleton<GuideSystem>
 			{
 				if (ConditionValidator.Instance.Validate(module.skipConditions, module.skipConditionParams, true))
 				{
-					Logger.Log("Skip guide: " + module.ID);
+					Debug.Log("Skip guide: " + module.ID);
 					ReqEndGuide(module.ID);
 					return;
 				}
@@ -374,7 +374,7 @@ public class GuideSystem : Singleton<GuideSystem>
 
 	void EndGuide(uint moduleID, List<KeyValueData> awards = null)
 	{
-		Logger.Log("End guide " + moduleID);
+		Debug.Log("End guide " + moduleID);
 		MainPlayer.Instance.SetGuideCompleted(moduleID);
 		if (awards != null && awards.Count > 0)
 			ShowAwardsAcquire(awards);
@@ -406,7 +406,7 @@ public class GuideSystem : Singleton<GuideSystem>
 				Transform button = basePanel.FindChild(checkCoverButton);
 				if (button == null)
 				{
-					Logger.Log("Button not found: " + checkCoverButton);
+					Debug.Log("Button not found: " + checkCoverButton);
 					return false;
 				}
 				Camera cam = UICamera.currentCamera;
@@ -439,13 +439,13 @@ public class GuideSystem : Singleton<GuideSystem>
 						else
 						{
 							shutter = hit.collider;
-							Logger.Log("Guide, shuttered by " + shutter.name);
+							Debug.Log("Guide, shuttered by " + shutter.name);
 							return false;
 						}
 					}
 					else
 					{
-						//Logger.LogError("Guide, ray cast failed on highlight button: " + checkCoverButton);
+						//Debug.LogError("Guide, ray cast failed on highlight button: " + checkCoverButton);
 						return false;
 					}
 				}
@@ -510,7 +510,7 @@ public class GuideSystem : Singleton<GuideSystem>
 
 	void RunStep(GuideStep step)
 	{
-		Logger.Log("Run guide step " + step.ID);
+		Debug.Log("Run guide step " + step.ID);
 		curStep = step;
 		if (string.IsNullOrEmpty(step.specialFunc))
 		{
@@ -572,7 +572,7 @@ public class GuideSystem : Singleton<GuideSystem>
 		if (tip != null)
 		{
 			NGUITools.Destroy(tip);
-			Logger.Log("Clear tip, " + (curStep != null ? curStep.ID.ToString() : "NULL"));
+			Debug.Log("Clear tip, " + (curStep != null ? curStep.ID.ToString() : "NULL"));
 			tip = null;
 		}
 		if (panelInstructor != null)
@@ -618,7 +618,7 @@ public class GuideSystem : Singleton<GuideSystem>
 	{
 		if (step.highlightCtrls.Count == 0)
 		{
-			Logger.Log("Create full screen tip, " + step.ID.ToString());
+			Debug.Log("Create full screen tip, " + step.ID.ToString());
 			UIPanel maskPanel = NGUITools.AddChild<UIPanel>(basePanel.gameObject);
 			GameObject mask = maskPanel.gameObject;
 			//mask.AddComponent<UIManagedPanel>();
@@ -651,9 +651,9 @@ public class GuideSystem : Singleton<GuideSystem>
 			string highlightCtrl = step.highlightCtrls[0];
 			Transform tmHLCtrl = basePanel.FindChild(highlightCtrl);
 			if (tmHLCtrl == null)
-				Logger.LogError("Highlight control not found: " + highlightCtrl);
+				Debug.LogError("Highlight control not found: " + highlightCtrl);
 			if (tmHLCtrl.GetComponent<UIWidget>() == null)
-				Logger.LogError("Highlight control not widget: " + highlightCtrl);
+				Debug.LogError("Highlight control not widget: " + highlightCtrl);
 			Bounds bounds = tmHLCtrl.GetComponent<UIWidget>().CalculateBounds(basePanel);
 			//Mask top
 			GameObject maskTop = CommonFunction.InstantiateObject(prefabMask, maskPanel.transform);
@@ -806,7 +806,7 @@ public class GuideSystem : Singleton<GuideSystem>
 			{
 				Transform tmHLBtn = basePanel.FindChild(step.highlightButton);
 				if (tmHLBtn == null)
-					Logger.LogError("Highlight control not found: " + step.highlightButton);
+					Debug.LogError("Highlight control not found: " + step.highlightButton);
 				GameObject effectNode = new GameObject("EffectNode");
 				effectNode.layer = LayerMask.NameToLayer("GUI");
 				effectNode.transform.parent = maskPanel.transform;
@@ -829,7 +829,7 @@ public class GuideSystem : Singleton<GuideSystem>
 				if (step.conditions.Contains(GuideStep.CompleteCondition.ClickHighlightButton))
 				{
 					if (tmHLBtn.GetComponent<BoxCollider>() == null)
-						Logger.LogError("Guide: Highlight button have no BoxCollider. " + step.highlightButton);
+						Debug.LogError("Guide: Highlight button have no BoxCollider. " + step.highlightButton);
 					UIEventListener.Get(tmHLBtn.gameObject).onClick += OnFinishStepClick;
 					listenedFinishButton.Add(tmHLBtn.gameObject);
                     UIDragScrollView component = tmHLBtn.GetComponent<UIDragScrollView>();
@@ -842,9 +842,9 @@ public class GuideSystem : Singleton<GuideSystem>
 		{
 			Transform tmHLBtn = basePanel.FindChild(step.highlightButton);
 			if (tmHLBtn == null)
-				Logger.LogError("Highlight control not found: " + step.highlightButton);
+				Debug.LogError("Highlight control not found: " + step.highlightButton);
 			if (tmHLBtn.GetComponent<BoxCollider>() == null)
-				Logger.LogError("Guide: Highlight button have no BoxCollider. " + step.highlightButton);
+				Debug.LogError("Guide: Highlight button have no BoxCollider. " + step.highlightButton);
 			UIEventListener.Get(tmHLBtn.gameObject).onClick += OnFinishStepClick;
 			listenedFinishButton.Add(tmHLBtn.gameObject);
 		}
@@ -862,7 +862,7 @@ public class GuideSystem : Singleton<GuideSystem>
 		{
 			Transform tm = basePanel.FindChild(disabledButton);
 			if (tm == null)
-				Logger.LogError("Disabled button not found: " + disabledButton);
+				Debug.LogError("Disabled button not found: " + disabledButton);
 			BoxCollider collider = tm.GetComponent<BoxCollider>();
 			buttonStates.Add(disabledButton, collider.enabled);
 			collider.enabled = false;
@@ -1113,7 +1113,7 @@ public class GuideSystem : Singleton<GuideSystem>
 				break;
 		}
 		if (role_id == 0)
-			Logger.LogError("BeginSkillCastGuide, there is no role who has specific skill");
+			Debug.LogError("BeginSkillCastGuide, there is no role who has specific skill");
 		practise.self_id = role_id;
 		GameSystem.Instance.mClient.CreateMatch(practise, 0L);
 	}

@@ -105,7 +105,7 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
 
 #if UNITY_EDITOR
     static readonly string streamingAssetsPath = "file:///" + Application.streamingAssetsPath;
-#elif UNITY_IOS
+#elif UNITY_IPHONE
      static readonly string streamingAssetsPath = "file://" + Application.streamingAssetsPath;
 #elif UNITY_ANDROID
     static readonly string streamingAssetsPath = Application.streamingAssetsPath;
@@ -128,8 +128,8 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
     public VersionUpdateManager()
     {
         localVersion = VersionUpdateManager.VersionTag;  //本地版本号
-        Logger.Log("persistentDataPath:" + persistentDataPath);
-        Logger.Log("localVersion:" + localVersion);
+        Debug.Log("persistentDataPath:" + persistentDataPath);
+        Debug.Log("localVersion:" + localVersion);
     }
 
     /// <summary>
@@ -168,11 +168,11 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
                         {
                             this.onUpdateFaild();
                         }
-                        Logger.LogError("Download Error!!!" + url);
+                        Debug.LogError("Download Error!!!" + url);
                         return;
                     }
 
-                    Logger.Log("Download over!!!");
+                    Debug.Log("Download over!!!");
 
                     //解压已下载的资源包
                     fileCount = ver.Value.file_num;
@@ -201,7 +201,7 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
         }
         catch (Exception ex)
         {
-            Logger.Log(ex.StackTrace);
+            Debug.Log(ex.StackTrace);
 
             if (this.onUpdateFaild != null)
                 this.onUpdateFaild();
@@ -233,7 +233,7 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex.StackTrace);
+            Debug.LogError(ex.StackTrace);
         }
     }
 
@@ -247,7 +247,7 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
 
             if (!string.IsNullOrEmpty(wwwVer.error))
             {
-                Logger.LogWarning("StreamAssetCopyToPersistentDataPath version!!! " + wwwVer.error);
+                Debug.LogWarning("StreamAssetCopyToPersistentDataPath version!!! " + wwwVer.error);
                 //if (this.onUpdateFaild != null)
                 //    this.onUpdateFaild();
 
@@ -258,7 +258,7 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
             {
                 //资源版本号@zip压缩包中的文件数@被拆分的文件流数量
                 var list = SplitString(wwwVer.text, '@');
-                Logger.Log("version.txt => " + wwwVer.text);
+                Debug.Log("version.txt => " + wwwVer.text);
                 if (list != null && list.Count == 3)
                 {
                     streamAssetVersionInfo.ver = list[0];
@@ -302,8 +302,8 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
                 if (!string.IsNullOrEmpty(www.error))
                 {
                     isOk = false;
-                    Logger.LogWarning(srcPath);
-                    Logger.LogError("StreamAssetCopyToPersistentDataPath Error!!! " + www.error);
+                    Debug.LogWarning(srcPath);
+                    Debug.LogError("StreamAssetCopyToPersistentDataPath Error!!! " + www.error);
                     if (this.onUpdateFaild != null)
                         this.onUpdateFaild();
 
@@ -341,7 +341,7 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
 
         if (!string.IsNullOrEmpty(wwwVerList.error))
         {
-            Logger.Log("网络故障或没有找到更新列表文件=>" + urlRoot + "/version_list.txt");
+            Debug.Log("网络故障或没有找到更新列表文件=>" + urlRoot + "/version_list.txt");
             if (this.onUpdateFaild != null)
                 this.onUpdateFaild();
 
@@ -352,7 +352,7 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
             verList.Clear();
 
             //版本描述信息 版本号@文件数 换行
-            Logger.Log("version_list:" + wwwVerList.text);
+            Debug.Log("version_list:" + wwwVerList.text);
             byte[] strBytes = Encoding.UTF8.GetBytes(wwwVerList.text);
             MemoryStream stream = new MemoryStream(strBytes);
             StreamReader reader = new StreamReader(stream);
@@ -412,7 +412,7 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
                 }
                 else
                 {
-                    Logger.Log("已是最新版本，无需要更新游戏");
+                    Debug.Log("已是最新版本，无需要更新游戏");
                     if (this.onUpdateFinished != null)
                         this.onUpdateFinished(localVersion);
                 }
@@ -422,7 +422,7 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
                 if (!isRetry)
                 {
                     UpdateVersionScript.SetLogoActive(false);
-                    Logger.Log("提示玩家是否现在更新");
+                    Debug.Log("提示玩家是否现在更新");
                     if (onUpdateTips != null)
                         onUpdateTips(UpdateVersionTipsScript.TipsMessageType.VersionUpdateSmall, iUpdateTotalSize);
                 }
@@ -436,7 +436,7 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
 
     public void StartUpdate()
     {
-        Logger.Log("本地版本小于服务器版本，需要网络下载更新");
+        Debug.Log("本地版本小于服务器版本，需要网络下载更新");
         Thread thread = new Thread(new ThreadStart(DownLoadAndUpdateVersion));
         thread.Start();
     }
@@ -445,8 +445,8 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
     public IEnumerator CheckVersion()
     {
         localVersion = VersionUpdateManager.VersionTag;  //本地版本号
-        Logger.Log("persistentDataPath:" + persistentDataPath);
-        Logger.Log("localVersion:" + localVersion);
+        Debug.Log("persistentDataPath:" + persistentDataPath);
+        Debug.Log("localVersion:" + localVersion);
 
         #region 填充更新列表
         
@@ -470,13 +470,13 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
                 if (onUpdateTips != null)
                     onUpdateTips(false);
 
-                Logger.Log("本地版本小于服务器版本，需要网络下载更新");
+                Debug.Log("本地版本小于服务器版本，需要网络下载更新");
                 Thread thread = new Thread(new ThreadStart(DownLoadAndUpdateVersion));
                 thread.Start();
             }
             #endregion
 
-            Logger.Log("已是最新版本，无需要更新游戏");
+            Debug.Log("已是最新版本，无需要更新游戏");
             if (this.onUpdateFinished != null)
                 this.onUpdateFinished(localVersion);
         }
@@ -490,13 +490,13 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
             yield return wwwVer;
             if (!string.IsNullOrEmpty(wwwVer.error))
             {
-                Logger.LogError("StreamAssetCopyToPersistentDataPath version!!! " + wwwVer.error);
+                Debug.LogError("StreamAssetCopyToPersistentDataPath version!!! " + wwwVer.error);
             }
             else
             {
                 //资源版本号@zip压缩包中的文件数@被拆分的文件流数量
                 var list = SplitString(wwwVer.text, '@');
-                Logger.Log("version.txt => " + wwwVer.text);
+                Debug.Log("version.txt => " + wwwVer.text);
                 if (list != null && list.Count == 3)
                 {
                     param.ver = list[0];
@@ -527,8 +527,8 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
                 if (!string.IsNullOrEmpty(www.error))
                 {
                     isOk = false;
-                    Logger.LogWarning(srcPath);
-                    Logger.LogError("StreamAssetCopyToPersistentDataPath Error!!! " + www.error);
+                    Debug.LogWarning(srcPath);
+                    Debug.LogError("StreamAssetCopyToPersistentDataPath Error!!! " + www.error);
                     break;
                 }
                 else
@@ -566,10 +566,10 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
             string dir = string.Format("{0}/{1}/", persistentDataPath, GamePlat);
             string path = string.Format("{0}dell_list.txt", dir);
             
-            Logger.Log("version path=>" + path);
+            Debug.Log("version path=>" + path);
             if (!File.Exists(path))
             {
-                Logger.Log("没有需要删除的文件!!! dell_list.txt为空！");
+                Debug.Log("没有需要删除的文件!!! dell_list.txt为空！");
                 return;
             }
 
@@ -581,17 +581,17 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
                 {
                     path = dir + lineInfo;
                     path = path.Replace('\\', '/');
-                    Logger.Log("dell file" + path);
+                    Debug.Log("dell file" + path);
 
                     if (File.Exists(path))
                         File.Delete(path);
                     else
-                        Logger.LogWarning("file is not exists:" + path);
+                        Debug.LogWarning("file is not exists:" + path);
                 }
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex.StackTrace);
+                Debug.LogError(ex.StackTrace);
             }
             finally
             {
@@ -601,7 +601,7 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
         }
         catch(Exception ex)
         {
-            Logger.LogError(ex.StackTrace);
+            Debug.LogError(ex.StackTrace);
         }
     }
 
@@ -645,7 +645,7 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
             }
             catch(Exception ex)
             {
-                Logger.LogError(ex.StackTrace);
+                Debug.LogError(ex.StackTrace);
             }
         }
     }
@@ -736,12 +736,12 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
     {
         fileCompletedCount = 0;
 
-        Logger.Log("filePath=>" + zipFilePath);
-        Logger.Log("targetDirectory=>" + targetDirectory);
+        Debug.Log("filePath=>" + zipFilePath);
+        Debug.Log("targetDirectory=>" + targetDirectory);
 
         if (!File.Exists(zipFilePath))
         {
-            Logger.LogError("zip file is not exists!!!");
+            Debug.LogError("zip file is not exists!!!");
             return false;
         }
         if (!Directory.Exists(targetDirectory))
@@ -796,7 +796,7 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
         }
         catch (Exception ex)
         {
-            Logger.LogError("error:" + ex.ToString());
+            Debug.LogError("error:" + ex.ToString());
             return false;
         }
         finally
@@ -818,7 +818,7 @@ public class VersionUpdateManager : Singleton<VersionUpdateManager>
             GC.Collect();
             GC.Collect(1);
 
-            Logger.Log("GC.Collect!!!");
+            Debug.Log("GC.Collect!!!");
         }
     }
 

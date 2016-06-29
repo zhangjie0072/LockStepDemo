@@ -206,6 +206,12 @@ public class MainPlayerWrap
 			new LuaField("onAnnounce", get_onAnnounce, set_onAnnounce),
 			new LuaField("AnnouncementList", get_AnnouncementList, set_AnnouncementList),
 			new LuaField("onNewChatMessage", get_onNewChatMessage, set_onNewChatMessage),
+			new LuaField("onFriendChatMessage", get_onFriendChatMessage, set_onFriendChatMessage),
+			new LuaField("OnTeamChatMessage", get_OnTeamChatMessage, set_OnTeamChatMessage),
+			new LuaField("OnLeagueChatMessage", get_OnLeagueChatMessage, set_OnLeagueChatMessage),
+			new LuaField("FriendChatMessage", get_FriendChatMessage, null),
+			new LuaField("TeamChatMessage", get_TeamChatMessage, null),
+			new LuaField("LeagueChatMessage", get_LeagueChatMessage, null),
 			new LuaField("ChatWordsNum", get_ChatWordsNum, set_ChatWordsNum),
 			new LuaField("WorldChatList", get_WorldChatList, set_WorldChatList),
 			new LuaField("MapIDInfo", get_MapIDInfo, set_MapIDInfo),
@@ -250,6 +256,7 @@ public class MainPlayerWrap
 			new LuaField("NewGoodsTabData", get_NewGoodsTabData, null),
 			new LuaField("NewGiftTabData", get_NewGiftTabData, null),
 			new LuaField("NewBadgeTabData", get_NewBadgeTabData, null),
+			new LuaField("assist_first_win_times",get_assist_first_win_times,null),
 		};
 
 		LuaScriptMgr.RegisterLib(L, "MainPlayer", typeof(MainPlayer), regs, fields, typeof(Singleton<MainPlayer>));
@@ -328,6 +335,30 @@ public class MainPlayerWrap
 		}
 
 		LuaScriptMgr.Push(L, obj.onDataChanged);
+		return 1;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_assist_first_win_times(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MainPlayer obj = (MainPlayer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name assist_first_win_times");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index assist_first_win_times on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.assist_first_win_times);
 		return 1;
 	}
 
@@ -2179,6 +2210,141 @@ public class MainPlayerWrap
 		return 1;
 	}
 
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_onFriendChatMessage(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MainPlayer obj = (MainPlayer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name onNewChatMessage");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index onNewChatMessage on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.onFriendChatMessage);
+		return 1;
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_OnTeamChatMessage(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MainPlayer obj = (MainPlayer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name onNewChatMessage");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index onNewChatMessage on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.OnTeamChatMessage);
+		return 1;
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int get_OnLeagueChatMessage(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MainPlayer obj = (MainPlayer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name onNewChatMessage");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index onNewChatMessage on a nil value");
+			}
+		}
+
+		LuaScriptMgr.Push(L, obj.OnLeagueChatMessage);
+		return 1;
+	}
+	static int get_FriendChatMessage(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MainPlayer obj = (MainPlayer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name onNewChatMessage");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index onNewChatMessage on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushObject(L, obj.FriendChatMessage);
+		return 1;
+	}
+	static int get_TeamChatMessage(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MainPlayer obj = (MainPlayer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name onNewChatMessage");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index onNewChatMessage on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushObject(L, obj.TeamChatMessage);
+		return 1;
+	}
+	static int get_LeagueChatMessage(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MainPlayer obj = (MainPlayer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name onNewChatMessage");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index onNewChatMessage on a nil value");
+			}
+		}
+
+		LuaScriptMgr.PushObject(L, obj.LeagueChatMessage);
+		return 1;
+	}
 	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 	static int get_ChatWordsNum(IntPtr L)
 	{
@@ -5083,6 +5249,114 @@ public class MainPlayerWrap
 		{
 			LuaFunction func = LuaScriptMgr.ToLuaFunction(L, 3);
 			obj.onNewChatMessage = () =>
+			{
+				func.Call();
+			};
+		}
+		return 0;
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_onFriendChatMessage(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MainPlayer obj = (MainPlayer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name onNewChatMessage");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index onNewChatMessage on a nil value");
+			}
+		}
+
+		LuaTypes funcType = LuaDLL.lua_type(L, 3);
+
+		if (funcType != LuaTypes.LUA_TFUNCTION)
+		{
+			obj.onFriendChatMessage = (Action)LuaScriptMgr.GetNetObject(L, 3, typeof(Action));
+		}
+		else
+		{
+			LuaFunction func = LuaScriptMgr.ToLuaFunction(L, 3);
+			obj.onFriendChatMessage = () =>
+			{
+				func.Call();
+			};
+		}
+		return 0;
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_OnTeamChatMessage(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MainPlayer obj = (MainPlayer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name onNewChatMessage");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index onNewChatMessage on a nil value");
+			}
+		}
+
+		LuaTypes funcType = LuaDLL.lua_type(L, 3);
+
+		if (funcType != LuaTypes.LUA_TFUNCTION)
+		{
+			obj.OnTeamChatMessage = (Action)LuaScriptMgr.GetNetObject(L, 3, typeof(Action));
+		}
+		else
+		{
+			LuaFunction func = LuaScriptMgr.ToLuaFunction(L, 3);
+			obj.OnTeamChatMessage = () =>
+			{
+				func.Call();
+			};
+		}
+		return 0;
+	}
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int set_OnLeagueChatMessage(IntPtr L)
+	{
+		object o = LuaScriptMgr.GetLuaObject(L, 1);
+		MainPlayer obj = (MainPlayer)o;
+
+		if (obj == null)
+		{
+			LuaTypes types = LuaDLL.lua_type(L, 1);
+
+			if (types == LuaTypes.LUA_TTABLE)
+			{
+				LuaDLL.luaL_error(L, "unknown member name onNewChatMessage");
+			}
+			else
+			{
+				LuaDLL.luaL_error(L, "attempt to index onNewChatMessage on a nil value");
+			}
+		}
+
+		LuaTypes funcType = LuaDLL.lua_type(L, 3);
+
+		if (funcType != LuaTypes.LUA_TFUNCTION)
+		{
+			obj.OnLeagueChatMessage = (Action)LuaScriptMgr.GetNetObject(L, 3, typeof(Action));
+		}
+		else
+		{
+			LuaFunction func = LuaScriptMgr.ToLuaFunction(L, 3);
+			obj.OnLeagueChatMessage = () =>
 			{
 				func.Call();
 			};

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 using LuaInterface;
 
 public class DynamicStringManagerWrap
@@ -8,6 +10,7 @@ public class DynamicStringManagerWrap
 		LuaMethod[] regs = new LuaMethod[]
 		{
 			new LuaMethod("Init", Init),
+			new LuaMethod("getActivityLuaTable", getActivityLuaTable),
 			new LuaMethod("New", _CreateDynamicStringManager),
 			new LuaMethod("GetClassType", GetClassType),
 		};
@@ -125,6 +128,16 @@ public class DynamicStringManagerWrap
 		DynamicStringManager obj = (DynamicStringManager)LuaScriptMgr.GetNetObjectSelf(L, 1, "DynamicStringManager");
 		obj.Init();
 		return 0;
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int getActivityLuaTable(IntPtr L)
+	{
+		LuaScriptMgr.CheckArgsCount(L, 1);
+		DynamicStringManager obj = (DynamicStringManager)LuaScriptMgr.GetNetObjectSelf(L, 1, "DynamicStringManager");
+		LuaInterface.LuaTable o = obj.getActivityLuaTable();
+		LuaScriptMgr.Push(L, o);
+		return 1;
 	}
 }
 

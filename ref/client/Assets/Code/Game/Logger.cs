@@ -1,132 +1,65 @@
-﻿
-#if ENABLE_LOG
-
-#undef ENABLE_LOG
-
-#endif
-
-#define ENABLE_LOG
-
-using System.Collections;
+﻿using System;
 using UnityEngine;
 
-
-public class Logger
+/// <summary>
+/// Unity Debug.Log 输出时的回调实现
+/// </summary>
+public class LoggerHandler
 {
+    public static void Init()
+    {
+        Debug.logger.logEnabled = true;
+        Application.logMessageReceivedThreaded += HandleLog;
+    }
 
-	#if (ENABLE_LOG)
-		static private bool _EnableLog = true;
-	#else
-		static private bool _EnableLog = false;
-	#endif
-	static public bool EnableLog{
-		get{
-			return _EnableLog;
-		}
-		set{
-			_EnableLog = value;
-			Debug.LogWarning("it's not suggested to set log switch!");
-		}
-	}
-    static public bool EnableTimeTrace = false;
-    
-	static public void Log(object message)
-	{
-#if DEBUG_TIME
-        if( !message.ToString().StartsWith("【Time】"))
-            return;
-#endif
-	#if(ENABLE_LOG)
-		if(_EnableLog)
-			Log(message, null);
-	#endif
-	}
-	static public void Log(object message, Object context)
-	{
-	#if(ENABLE_LOG)
-		if(_EnableLog)
-		{
-            if (EnableTimeTrace)  
-            {
-                System.DateTime now = System.DateTime.Now;
-                string log = string.Format("{0:D2}:{1:D2}:{2:D2}.{3:D3} | {4}",
-                    now.Hour, now.Minute, now.Second, now.Millisecond, message);
-                Debug.Log(log, context);
-            }
-            else
-                Debug.Log(message, context);
-		}
-	#endif
-	}
-	static public void LogError(object message)
-	{
-	#if(ENABLE_LOG)
-		if(_EnableLog)
-		{
-			LogError(message, null);
-		}
-	#endif
-	}
-	static public void LogError(object message, Object context)
-	{
-	#if(ENABLE_LOG)
-		if(_EnableLog)
-		{
-            if (EnableTimeTrace)
-            {
-                System.DateTime now = System.DateTime.Now;
-                string log = string.Format("{0:D2}:{1:D2}:{2:D2}.{3:D3} | {4}",
-                    now.Hour, now.Minute, now.Second, now.Millisecond, message);
-                Debug.LogError(log, context);
-            }
-            else
-                Debug.LogError(message, context);
-		}
-	#endif
-	}
-	static public void LogWarning(object message)
-	{
-	#if(ENABLE_LOG)
+    private static void HandleLog(string logString, string stackTrace, LogType type)
+    {
+        LoggerHandler.WriteLog(logString, stackTrace, type);
+    }
 
-		if(_EnableLog)
-		{
-			LogWarning(message, null);
-		}
-	#endif
-	}
-	static public void LogWarning(object message, Object context)
-	{
-	#if(ENABLE_LOG)
-		if(_EnableLog)
-		{
-            if (EnableTimeTrace)
-            {
-                System.DateTime now = System.DateTime.Now;
-                string log = string.Format("{0:D2}:{1:D2}:{2:D2}.{3:D3} | {4}",
-                    now.Hour, now.Minute, now.Second, now.Millisecond, message);
-                Debug.LogWarning(log, context);
-            }
-            else
-                Debug.LogWarning(message, context);
-		}
-	#endif
-	}
-	static public void ConfigBegin(string name)
-	{
-	#if(ENABLE_LOG)
-		if(_EnableLog)
-		{
-			Debug.Log("Config reading "+name+" ...");
-		}
-	#endif
-	}
-	static public void ConfigEnd(string name)
-	{
-	#if(ENABLE_LOG)
-//		if(_EnableLog)
-//		{
-//			Debug.Log("Config "+name+" end...");
-//		}
-	#endif
-	}
+    private static void WriteLog(string logString, string stackTrace, LogType type)
+    {
+        string log = string.Format("[{0}][{1}] {2} \n {3} \n",
+                                        type.ToString(),
+                                        System.DateTime.Now.ToString("HH:mm:ss"),
+                                        logString,
+                                        stackTrace);
+
+        if (LoggerNet.receiveThread != null)
+        {
+            LoggerNet.mutex.WaitOne();
+            LoggerNet.log_list.Enqueue(log);
+            LoggerNet.mutex.ReleaseMutex();
+        }
+    }
 }
+
+//public class Debug
+//{
+//    public static void LogWarning(object message)
+//    {
+//        Debug.LogWarning(message);
+//    }
+
+//    public static void LogError(object message)
+//    {
+//        Debug.LogError(message);
+//    }
+
+//    /// <summary>
+//    /// 输出配置文件加载日志(开始解析)
+//    /// </summary>
+//    /// <param name="name"></param>
+//	public static void ConfigBegin(string name)
+//    {
+//        Debug.Log("Config reading " + name + " ...");
+//    }
+//    /// <summary>
+//    /// 输出配置文件加载日志(结束解析)
+//    /// </summary>
+//    /// <param name="name"></param>
+//    public static void ConfigEnd(string name)
+//    {
+//        //LoggerHandler.WriteLog("Config reading " + name + " end...", LogType.LOG);
+//    }
+//}

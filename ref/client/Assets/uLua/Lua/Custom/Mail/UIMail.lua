@@ -42,6 +42,10 @@ UIMail = UIMail or
 
 	sprBgIcon,
 	MailOpenNotify = nil,
+	uiFastBtn,
+
+	isFast = false,
+	getMailList = {}
 }
 
 
@@ -63,10 +67,19 @@ function UIMail:Awake( ... )
 	self.sprBgIcon = transform:FindChild('Window/BgIcon'):GetComponent('UISprite')
 
 	self.uiAnimator = self.transform:GetComponent('Animator')
+
+	self.uiFastBtn = self.transform:FindChild("Window/GetMailFastBtn"):GetComponent("UIButton")
+	addOnClick(self.uiFastBtn.gameObject, self:GetMailsFast())
 end
 
 --Start
 function UIMail:Start( ... )
+	if #self.mailList < 1 then
+		self.uiFastBtn.gameObject:SetActive(false)
+	else
+		self.uiFastBtn.gameObject:SetActive(true)
+	end
+
 	--body
 	NGUITools.BringForward(self.gameObject)
 	--关闭
@@ -114,29 +127,27 @@ function UIMail:SetMailList(mailList)
 end
 
 --
-function UIMail:InitMailList( ... )
+function UIMail:InitMailList()
 	--排序
 	self:SortingMails()
+
+	-- for k,v in pairs(self.mailList) do
+	-- 	print ("----mail-----")
+	-- 	print (v.uuid)
+	-- 	print (v.send_time)
+	-- end
+
 	--清除实例化控件
 	CommonFunction.ClearGridChild(self.uiListGrid.transform)
 	--初始化邮件列表
 	for k, v in pairs(self.mailList) do
 		local go = CommonFunction.InstantiateObject('Prefab/GUI/MailUnreadItem', self.uiListGrid.transform)
 		local itemicon = go.transform:FindChild('Icon'):GetComponent('UISprite')
-		--local itemSprite = go.transform:GetComponent('UISprite')
+
 		if v.state == MailState.UNREAD then
 			itemicon.spriteName = 'mail_icon_close'
-			--local r, g, b = 241, 217, 165
-			--itemSprite.color = Color.New(r/255, g/255, b/255, 1)
 		else
 			itemicon.spriteName = 'mail_icon_open'
-			-- if v.state == MailState.READ_GET then
-			-- 	itemicon.spriteName = 'mail_icon_open'
-			-- elseif v.state == MailState.READ_NOT_GET then
-			-- 	itemicon.spriteName = 'mail_icon_close'
-			-- end
-			--local r, g, b = 255, 255, 255
-			--itemSprite.color = Color.New(r/255, g/255, b/255, 1)
 		end
 
 		local item =getLuaComponent(go)
@@ -145,7 +156,6 @@ function UIMail:InitMailList( ... )
 		item:SetDragSV(self.uiListSV)
 		item.isOpen = false
 		addOnClick(go.gameObject, item:OnOperClick())
-
 	end
 	self.uiListGrid.repositionNow = true
 	self.uiListSV:ResetPosition()
@@ -202,6 +212,69 @@ function UIMail:ReadMail(uuid)
 			return v
 		end
 	end
+
+	return nil
+end
+
+-- -- 快速领取邮件
+-- function UIMail:GetMailsFast( ... )
+-- 	return function(btn_go)
+-- 		print ("快速领取邮件")
+
+-- 		local mail_info = nil
+-- 		for k, v in pairs(self.mailList) do
+-- 			mail_info = v
+-- 			break
+-- 		end
+-- 		self.isFast = true
+
+-- 		local req = {mail_id = mail_info.uuid}
+-- 		local msg = protobuf.encode("fogs.proto.msg.GetAttachment", req)
+-- 		LuaHelper.SendPlatMsgFromLua(MsgID.GetAttachmentID, msg)
+-- 		CommonFunction.ShowWait()
+-- 		LuaHelper.RegisterPlatMsgHandler(MsgID.GetAttachmentRespID, self:GetAttachmentResp(), self.uiName)
+-- 	end
+-- end
+
+-- 批量领取邮件
+function UIMail:GetMailsFast()
+	return function(btn_go)
+		local is_find = false
+		local id_list = {}
+		for name,info in pairs(self.mailList) do
+			table.insert(id_list,info.uuid)
+			-- print ("================")
+			-- print (info.uuid)
+			for k,v in pairs(info.attachment.attachment) do
+				local data = GameSystem.Instance.GoodsConfigData:GetgoodsAttrConfig(v.id)
+
+				-- 需要开启的4 消耗品 1 宝箱， 2 礼包
+				if data.category == 4 then
+					-- print (data.category)
+					-- print (data.sub_category)
+					if data.sub_category == 1 or tonumber(data.sub_category) == 2 then
+						is_find = true
+					end
+				end
+
+				-- 球员
+				if data.category == 9 then
+					id_find = true
+				end
+			end
+			if is_find then break end
+		end
+
+		-- for i=1,#id_list do
+		-- 	print(id_list[i])
+		-- end
+
+		local req = {mailid_list = id_list}
+		local msg = protobuf.encode("fogs.proto.msg.GetBulkAttachment", req)
+		LuaHelper.SendPlatMsgFromLua(MsgID.GetBulkAttachmentID,msg)
+		CommonFunction.ShowWait()
+		LuaHelper.RegisterPlatMsgHandler(MsgID.GetBulkAttachmentRespID, self:GetBulkAttachmentResp(), self.uiName)
+	end
 end
 
 --由id读取邮件改成从服务器直接获取信息
@@ -212,7 +285,7 @@ function UIMail:ReadMailResp()
 		local resp, err = protobuf.decode('fogs.proto.msg.ReadMailResp', message)
 		if resp == nil then
 			Debugger.LogError('------ReadMailResp error: ', err)
-			if self.MailOpenNotify then 
+			if self.MailOpenNotify then
 				self.MailOpenNotify()
 			end
 			return
@@ -221,7 +294,7 @@ function UIMail:ReadMailResp()
 		if resp.result ~= 0 then
 			print('error --  ReadMailResp return failed: ', resp.result)
 			CommonFunction.ShowErrorMsg(ErrorID.IntToEnum(resp.result),nil)
-			if self.MailOpenNotify then 
+			if self.MailOpenNotify then
 				self.MailOpenNotify()
 			end
 			return
@@ -229,8 +302,8 @@ function UIMail:ReadMailResp()
 		local data = self:ReadMail(resp.mail_id)
 		if data then
 			self:OnOpenMail(data, resp.mail_id)
-		else			
-			if self.MailOpenNotify then 
+		else
+			if self.MailOpenNotify then
 				self.MailOpenNotify()
 			end
 		end
@@ -294,8 +367,8 @@ function UIMail:OnOpenMail(data, mail_id)
 		or data.state == MailState.READ_WITHOUT then
 		NGUITools.Destroy(detail.uiAwardBtn.gameObject)
 	end
-	
-	if self.MailOpenNotify then 
+
+	if self.MailOpenNotify then
 		self.MailOpenNotify()
 	end
 end
@@ -325,9 +398,14 @@ function UIMail:GetAttachment(uuid)
 		end
 	end
 	self.mailList = list
+	if #self.mailList < 1 then
+		self.uiFastBtn.gameObject:SetActive(false)
+	else
+		self.uiFastBtn.gameObject:SetActive(true)
+	end
 end
 
---
+
 function UIMail:GetAttachmentResp()
 	return function (message)
 		if self.banTwice then
@@ -348,22 +426,155 @@ function UIMail:GetAttachmentResp()
 		end
 		self.banTwice = true
 		local data = self:ReadMail(resp.mail_id)
-		local getGoods = getLuaComponent(createUI('GoodsAcquirePopup', self.transform))
-		for i,v in ipairs(data.attachment.attachment) do
-			getGoods:SetGoodsData(v.id, v.value)
+
+		local roleConfig = nil
+		local mayBePlayer = false
+		warning('data size ',#data.attachment.attachment)
+		if #data.attachment.attachment == 1 then
+			mayBePlayer = true
 		end
-		getGoods.onClose = function ( ... )
-			self.banTwice = false
+		if mayBePlayer then
+			-- warning('data id ',data.attachment.attachment[1].id)
+			roleConfig = GameSystem.Instance.RoleBaseConfigData2:GetConfigData(data.attachment.attachment[1].id)
 		end
+		if roleConfig then
+			warning('roleConfig id ',roleConfig)
+			local roleAcquireLua = getLuaComponent(createUI('RoleAcquirePopupNew')) --TopPanelManager:ShowPanel("RoleAcquirePopupNew", nil, {id = awardConfig.awards:get_Item(0).award_id})
+			roleAcquireLua.id = data.attachment.attachment[1].id
+			roleAcquireLua:SetData(data.attachment.attachment[1].id)
+			roleAcquireLua.onBack = function ( )
+					local getGoods = getLuaComponent(createUI('GoodsAcquirePopup', self.transform))
+					for i,v in ipairs(data.attachment.attachment) do
+						getGoods:SetGoodsData(v.id, v.value)
+					end
+					getGoods.onClose = function ( ... )
+						self.banTwice = false
+					end
+			end
+
+		else
+			local getGoods = getLuaComponent(createUI('GoodsAcquirePopup', self.transform))
+			for i,v in ipairs(data.attachment.attachment) do
+				getGoods:SetGoodsData(v.id, v.value)
+			end
+			getGoods.onClose = function ( ... )
+				self.banTwice = false
+			end
+		end
+
+	
 
 		self:GetAttachment(resp.mail_id)
 		MainPlayer.Instance:GetMailAttachment(resp.mail_id)
-		self:OnDetailCloseClick()()
 
+		self:OnDetailCloseClick()()
 		UpdateRedDotHandler.MessageHandler("Mail")
 		-- self.parent:RefreshMailTip(self.mailList)
 		--CommonFunction.ShowPopupMsg(getCommonStr("RECEIVE_SUCCESS"),nil,nil,nil,nil,nil)
 	end
+end
+
+
+function UIMail:GetBulkAttachmentResp()
+	return function(message)
+		LuaHelper.UnRegisterPlatMsgHandler(MsgID.GetBulkAttachmentRespID, UIMail.uiName)
+		CommonFunction.StopWait()
+
+		local resp, err = protobuf.decode('fogs.proto.msg.GetBulkAttachmentResp', message)
+
+		if resp == nil then
+			Debugger.LogError('------GetBulkAttachmentResp error: ', err)
+			return
+		end
+
+		for i,v in ipairs(resp.resp_list) do
+			if v.result == 0 then
+				table.insert(UIMail.getMailList, v.mail_id)
+			end
+		end
+
+		local mail_id = self.getMailList[1]
+		local data = self:ReadMail(mail_id)
+
+		if data then
+			self:ShowAwardLayer(data)
+			self:GetAttachment(mail_id)
+			MainPlayer.Instance:GetMailAttachment(mail_id)
+
+			UpdateRedDotHandler.MessageHandler("Mail")
+
+			self:InitMailList()
+		end
+	end
+end
+
+function UIMail:ShowAwardLayer(data)
+
+	local roleConfig = nil
+	local mayBePlayer = false
+	warning('data size ',#data.attachment.attachment)
+	if #data.attachment.attachment == 1 then
+		mayBePlayer = true
+	end
+	if mayBePlayer then
+		warning('data id ',data.attachment.attachment[1].id)
+		roleConfig = GameSystem.Instance.RoleBaseConfigData2:GetConfigData(data.attachment.attachment[1].id)
+	end
+	if roleConfig then
+		warning('roleConfig id ',roleConfig)
+		local roleAcquireLua = getLuaComponent(createUI('RoleAcquirePopupNew')) --TopPanelManager:ShowPanel("RoleAcquirePopupNew", nil, {id = awardConfig.awards:get_Item(0).award_id})
+		roleAcquireLua.id = data.attachment.attachment[1].id
+		roleAcquireLua:SetData(data.attachment.attachment[1].id)
+		roleAcquireLua.onBack = function ( )
+			-- NGUITools.Destroy(go)
+			-- remove last item
+			if #self.getMailList > 0 then
+				table.remove(self.getMailList,1)
+			end
+
+			if #self.getMailList > 0 then
+				local mail_id = UIMail.getMailList[1]
+				self:ShowAwardLayer(UIMail:ReadMail(mail_id))
+
+
+				self:GetAttachment(mail_id)
+				MainPlayer.Instance:GetMailAttachment(mail_id)
+
+				UpdateRedDotHandler.MessageHandler("Mail")
+
+				self:InitMailList()
+			end
+		end
+
+	else
+		warning('getGoods id ')
+		local getGoods = getLuaComponent(createUI('GoodsAcquirePopup', self.transform))
+
+		for i,v in ipairs(data.attachment.attachment) do
+			getGoods:SetGoodsData(v.id, v.value)
+		end
+
+		getGoods.onClose = function ()
+			-- remove last item
+			if #self.getMailList > 0 then
+				table.remove(self.getMailList,1)
+			end
+
+			if #self.getMailList > 0 then
+				local mail_id = UIMail.getMailList[1]
+				self:ShowAwardLayer(UIMail:ReadMail(mail_id))
+
+
+				self:GetAttachment(mail_id)
+				MainPlayer.Instance:GetMailAttachment(mail_id)
+
+				UpdateRedDotHandler.MessageHandler("Mail")
+
+				self:InitMailList()
+			end
+		end
+	end
+
 end
 
 

@@ -44,7 +44,7 @@ public class MatchState: PlayerActionEventHandler.Listener
     /**动作上的事件触发执行*/
 	virtual public void OnEvent (PlayerActionEventHandler.AnimEvent animEvent, Player sender, System.Object context)
 	{
-        //Logger.Log("match state on event:" + animEvent);
+        //Debug.Log("match state on event:" + animEvent);
         if (animEvent == PlayerActionEventHandler.AnimEvent.ePass)
         {
             UBasketball ball = m_match.mCurScene.mBall;
@@ -55,14 +55,14 @@ public class MatchState: PlayerActionEventHandler.Listener
 	}
 
     //逻辑层
-	virtual public void Update(IM.Number fDeltaTime)
+	virtual public void GameUpdate(IM.Number fDeltaTime)
 	{
         //设置主角脚下环颜色
         SetRoleCirleColor();
 	}
 
     //显示层
-    virtual public void Update(float deltaTime)
+    virtual public void ViewUpdate(float deltaTime)
     {
 
     }
@@ -78,15 +78,17 @@ public class MatchState: PlayerActionEventHandler.Listener
 
     protected void SetRoleCirleColor()
     {
-        if (m_match.m_mainRole != null)
+        if (m_match.mainRole != null)
         {
-            if (m_match.mCurScene.mGround.In3PointRange(m_match.m_mainRole.position.xz, IM.Number.zero))
+            if (m_match.mCurScene.mGround.In3PointRange(m_match.mainRole.position.xz, IM.Number.zero))
             {
-                m_match.m_mainRole.UpdateIndicator(Color.yellow);
-            }
+                Color yellow = new Color(1f, 252f / 255, 10f / 255, 1);
+                m_match.mainRole.UpdateIndicator(yellow);
+            } 
             else
             {
-                m_match.m_mainRole.UpdateIndicator(Color.red);
+                Color blue = new Color(10f / 255, 228f / 255, 1, 1);
+                m_match.mainRole.UpdateIndicator(blue);
             }
         }
     }

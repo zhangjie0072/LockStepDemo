@@ -54,7 +54,7 @@ public class MatchMsgConfig
 		isLoadFinish = false;
 		lock (LockObject) { GameSystem.Instance.readConfigCnt += 1; }
 
-		Logger.ConfigBegin(name1);
+		Debug.Log("Config reading " + name1);
 		string text = ResourceLoadManager.Instance.GetConfigText(name1);
 		if (text == null)
 		{
@@ -95,8 +95,8 @@ public class MatchMsgConfig
 		}
 		catch( XmlException cep )
 		{
-			Logger.LogError("Parse matchmsgconfig failed: " + cep);
+			Debug.LogError("Parse matchmsgconfig failed: " + cep);
 		}
-		Logger.ConfigEnd(name1);
+		
 	}
 }

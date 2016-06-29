@@ -33,8 +33,8 @@ public class PractiseBehaviourBlock : PractiseBehaviour, PlayerActionEventHandle
 	{
 		base.OnMatchSetted();
 
-		match.m_mainRole.eventHandler.AddEventListener(this);
-		match.m_mainRole.m_alwaysForbiddenPickup = true;
+		match.mainRole.eventHandler.AddEventListener(this);
+		match.mainRole.m_alwaysForbiddenPickup = true;
 		attacker = match.m_awayTeam.GetMember(0);
 		attacker.eventHandler.AddEventListener(this);
 		attacker.m_alwaysForbiddenPickup = true;
@@ -45,8 +45,8 @@ public class PractiseBehaviourBlock : PractiseBehaviour, PlayerActionEventHandle
 	{
 		IM.Vector3 basketCenter = match.mCurScene.mBasket.m_vShootTarget;
 		basketCenter.y = IM.Number.zero;
-		match.m_mainRole.position = basketCenter - IM.Vector3.forward * IM.Number.half;
-		match.m_mainRole.forward = -IM.Vector3.forward;
+		match.mainRole.position = basketCenter - IM.Vector3.forward * IM.Number.half;
+		match.mainRole.forward = -IM.Vector3.forward;
 		IM.Number angle = IM.Random.Range(new IM.Number(90), new IM.Number(270));
 		IM.Vector3 dir = IM.Quaternion.AngleAxis(angle, IM.Vector3.up) * IM.Vector3.forward;
 		attacker.position = basketCenter + dir * new IM.Number(4,500);
@@ -63,7 +63,7 @@ public class PractiseBehaviourBlock : PractiseBehaviour, PlayerActionEventHandle
 		return AIState.Type.ePractiseBlock_Idle;
 	}
 
-    public override IM.BigNumber AdjustShootRate(Player shooter, IM.BigNumber rate)
+    public override IM.PrecNumber AdjustShootRate(Player shooter, IM.PrecNumber rate)
 	{
 		if (!blocked)
             return IM.Number.one;
@@ -102,17 +102,23 @@ public class PractiseBehaviourBlock : PractiseBehaviour, PlayerActionEventHandle
 		}
 	}
 
-	protected override void OnUpdate()
-	{
-		base.OnUpdate();
-
-		if (step == Step.Run && EnterBlockTiming())
-			Tip1();
+    public override void ViewUpdate(float deltaTime)
+    {
+        base.ViewUpdate(deltaTime);
 
 #if !UNITY_IPHONE && !UNITY_ANDROID
 		if (in_tutorial && step == Step.Tip1 && Input.GetKey(KeyCode.J))
 			Pause(false);
 #endif
+    }
+
+	public override void GameUpdate(IM.Number deltaTime)
+	{
+		base.GameUpdate(deltaTime);
+
+		if (step == Step.Run && EnterBlockTiming())
+			Tip1();
+
 		//for block with ball
 		Player owner = match.mCurScene.mBall.m_owner;
 		if (owner != null && owner != attacker && owner.m_StateMachine.m_curState.m_eState == PlayerState.State.eStand)
@@ -127,7 +133,7 @@ public class PractiseBehaviourBlock : PractiseBehaviour, PlayerActionEventHandle
 		if (attacker.m_StateMachine.m_curState.m_eState != PlayerState.State.eLayup)
 			return false;
 
-		if (attacker.m_AOD.GetStateByPos(match.m_mainRole.position) == AOD.Zone.eInvalid)
+		if (attacker.m_AOD.GetStateByPos(match.mainRole.position) == AOD.Zone.eInvalid)
 			return false;
 		
 		//Dictionary<string, PlayerAnimAttribute.AnimAttr> blocks = match.m_mainRole.m_animAttributes.m_block;
@@ -148,7 +154,7 @@ public class PractiseBehaviourBlock : PractiseBehaviour, PlayerActionEventHandle
 
 	public void OnEvent(PlayerActionEventHandler.AnimEvent animEvent, Player sender, System.Object context)
 	{
-		if (animEvent == PlayerActionEventHandler.AnimEvent.eBlock && sender == match.m_mainRole)
+		if (animEvent == PlayerActionEventHandler.AnimEvent.eBlock && sender == match.mainRole)
 			OnBlock();
 	}
 
@@ -164,10 +170,10 @@ public class PractiseBehaviourBlock : PractiseBehaviour, PlayerActionEventHandle
 		//}
 		//else
 		//{
-		//	Logger.LogError("Not Shooting when blocked");
+		//	Debug.LogError("Not Shooting when blocked");
 		//	while (attackerAnim.Count > 0)
 		//	{
-		//		Logger.LogError(attackerAnim.Pop().ToString());
+		//		Debug.LogError(attackerAnim.Pop().ToString());
 		//	}
 		//}
 	}
@@ -202,14 +208,14 @@ public class PractiseBehaviourBlock : PractiseBehaviour, PlayerActionEventHandle
 		match.tip = practise.tips[0];
 		match.ShowGuideTip();
 		match.ShowTipArrow();
-		match.m_mainRole.m_inputDispatcher.m_enable = false;
+        InputReader.Instance.enabled = false;
 	}
 
 	private void Run()
 	{
 		step = Step.Run;
 		match.HideGuideTip();
-		match.m_mainRole.m_inputDispatcher.m_enable = false;
+        InputReader.Instance.enabled = false;
 	}
 
 	private void Tip1()
@@ -230,7 +236,7 @@ public class PractiseBehaviourBlock : PractiseBehaviour, PlayerActionEventHandle
 		match.tip = practise.tips[2];
 		match.ShowGuideTip();
 		match.ShowTipArrow();
-		match.m_mainRole.m_inputDispatcher.m_enable = false;
+		InputReader.Instance.enabled = false;
 	}
 
 	private void OnTipClick(GameObject go)
@@ -243,7 +249,7 @@ public class PractiseBehaviourBlock : PractiseBehaviour, PlayerActionEventHandle
 			case Step.Tip2:
 				FinishObjective(true);
 				match.HideGuideTip();
-				match.m_mainRole.m_inputDispatcher.m_enable = true;
+                InputReader.Instance.enabled = true;
 				break;
 		}
 	}
